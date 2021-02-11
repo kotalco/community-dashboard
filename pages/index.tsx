@@ -1,4 +1,5 @@
 import Typography from '@components/atoms/Typgraphy/Typography';
+import Button from '@components/atoms/Button/Button';
 
 export default function Home() {
   return (
@@ -384,12 +385,7 @@ export default function Home() {
                 Nodes
               </h1>
               <a href="create-new-node.html">
-                <button
-                  type="button"
-                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  Create New Node
-                </button>
+                <Button>Create New Node</Button>
               </a>
             </div>
             <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
