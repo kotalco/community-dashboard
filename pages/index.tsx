@@ -52,7 +52,12 @@ export default function Home() {
                 </svg>
               </button>
             </div>
-            <Typography>Kotal</Typography>
+            <div className="flex-shrink-0 flex items-center px-4">
+              <Typography className="text-4xl font-nunito font-bold">
+                Kotal
+              </Typography>
+            </div>
+
             <div className="mt-5 flex-1 h-0 overflow-y-auto">
               <nav className="px-2 space-y-1">
                 {/* <!-- Current: "bg-gray-100 text-gray-900", Default: "text-gray-600 hover:bg-gray-50 hover:text-gray-900" --> */}
@@ -381,9 +386,9 @@ export default function Home() {
         >
           <div className="py-6">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 flex">
-              <h1 className="text-2xl font-semibold text-gray-900 flex-grow">
+              <Typography className="text-2xl font-semibold text-gray-900 flex-grow">
                 Nodes
-              </h1>
+              </Typography>
               <a href="create-new-node.html">
                 <Button>Create New Node</Button>
               </a>
