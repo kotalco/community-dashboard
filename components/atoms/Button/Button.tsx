@@ -1,4 +1,4 @@
-const Button = ({ children }) => {
+const Button: React.FC = ({ children }) => {
   return (
     <button
       type="button"
