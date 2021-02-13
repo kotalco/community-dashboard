@@ -3,6 +3,7 @@ import Button from '@components/atoms/Button/Button';
 import SearchIcon from '@components/Icons/SearchIcon/SearchIcon';
 import Input from '@components/atoms/Input/Input';
 import BellIcon from '@components/Icons/BellIcon/BellIcon';
+import IconButton from '@components/atoms/IconButton/IconButton';
 
 export default function Home() {
   return (
@@ -346,10 +347,9 @@ export default function Home() {
               </form>
             </div>
             <div className="ml-4 flex items-center md:ml-6">
-              <button className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                <span className="sr-only">View notifications</span>
+              <IconButton srOnly="View notification">
                 <BellIcon />
-              </button>
+              </IconButton>
             </div>
           </div>
         </div>
@@ -430,7 +430,7 @@ export default function Home() {
                               aria-hidden="true"
                             >
                               <path
-                                fill-rule="evenodd"
+                                fillRule="evenodd"
                                 d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                                 clipRule="evenodd"
                               />
@@ -498,7 +498,7 @@ export default function Home() {
                               aria-hidden="true"
                             >
                               <path
-                                fill-rule="evenodd"
+                                fillRule="evenodd"
                                 d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                                 clipRule="evenodd"
                               />
@@ -569,7 +569,7 @@ export default function Home() {
                               aria-hidden="true"
                             >
                               <path
-                                fill-rule="evenodd"
+                                fillRule="evenodd"
                                 d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
                                 clipRule="evenodd"
                               />
