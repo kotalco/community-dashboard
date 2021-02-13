@@ -1,9 +1,8 @@
 import Typography from '@components/atoms/Typgraphy/Typography';
 import Button from '@components/atoms/Button/Button';
-import SearchIcon from '@components/Icons/SearchIcon/SearchIcon';
-import Input from '@components/atoms/Input/Input';
 import BellIcon from '@components/Icons/BellIcon/BellIcon';
 import IconButton from '@components/atoms/IconButton/IconButton';
+import SearchForm from '@components/molecules/SearchForm/SearchForm';
 
 export default function Home() {
   return (
@@ -337,22 +336,7 @@ export default function Home() {
           </button>
           <div className="flex-1 px-4 flex justify-between">
             <div className="flex-1 flex">
-              <form className="w-full flex md:ml-0" action="#" method="GET">
-                <label htmlFor="search_field" className="sr-only">
-                  Search
-                </label>
-                <div className="relative w-full text-gray-400 focus-within:text-gray-600">
-                  <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none">
-                    <SearchIcon />
-                  </div>
-                  <Input
-                    id="search_field"
-                    placeholder="search"
-                    type="search"
-                    name="search"
-                  />
-                </div>
-              </form>
+              <SearchForm />
             </div>
             <div className="ml-4 flex items-center md:ml-6">
               <IconButton srOnly="View notification">
