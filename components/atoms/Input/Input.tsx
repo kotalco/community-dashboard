@@ -1,4 +1,11 @@
-const Input = ({ id, placeholder, type, name }) => {
+interface Props {
+  id?: string;
+  placeholder?: string;
+  type: string;
+  name: string;
+}
+
+const Input: React.FC<Props> = ({ id, placeholder, type, name }) => {
   return (
     <input
       id="search_field"
