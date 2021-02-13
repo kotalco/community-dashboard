@@ -57,7 +57,10 @@ export default function Home() {
               </button>
             </div>
             <div className="flex-shrink-0 flex items-center px-4">
-              <Typography className="text-4xl font-nunito font-bold">
+              <Typography
+                variant="p"
+                className="text-4xl font-nunito font-bold"
+              >
                 Kotal
               </Typography>
             </div>
@@ -188,7 +191,12 @@ export default function Home() {
           {/* <!-- Sidebar component, swap this element with another sidebar if you like --> */}
           <div className="flex flex-col flex-grow border-r border-gray-200 pt-5 pb-4 bg-white overflow-y-auto">
             <div className="flex items-center flex-shrink-0 px-4">
-              <h1 className="text-4xl font-nunito font-bold">Kotal</h1>
+              <Typography
+                variant="p"
+                className="text-4xl font-nunito font-bold"
+              >
+                Kotal
+              </Typography>
             </div>
             <div className="mt-5 flex-grow flex flex-col">
               <nav className="flex-1 px-2 bg-white space-y-1">
@@ -360,7 +368,10 @@ export default function Home() {
         >
           <div className="py-6">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 flex">
-              <Typography className="text-2xl font-semibold text-gray-900 flex-grow">
+              <Typography
+                variant="h1"
+                className="text-2xl font-semibold text-gray-900 flex-grow"
+              >
                 Nodes
               </Typography>
               <a href="create-new-node.html">
