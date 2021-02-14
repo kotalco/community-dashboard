@@ -7,6 +7,7 @@ import SearchForm from '@components/molecules/SearchForm/SearchForm';
 import CloseIcon from '@components/Icons/CloseIcon/CloseIcon';
 import NavLinks from '@components/molecules/NavLinks/NavLinks';
 import MenuOverlay from '@components/atoms/MenuOverlay/MenuOverlay';
+import Logo from '@components/molecules/Logo/Logo';
 
 export default function Home() {
   return (
@@ -36,14 +37,7 @@ export default function Home() {
                 <CloseIcon />
               </IconButton>
             </div>
-            <div className="flex-shrink-0 flex items-center px-4">
-              <Typography
-                variant="p"
-                className="text-4xl font-nunito font-bold"
-              >
-                Kotal
-              </Typography>
-            </div>
+            <Logo />
 
             <div className="mt-5 flex-1 h-0 overflow-y-auto">
               <NavLinks />
