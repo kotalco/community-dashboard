@@ -36,10 +36,12 @@ export default function Home() {
           --> */}
           <div className="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-white">
             <div className="absolute top-0 right-0 -mr-12 pt-2">
-              <button className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                <span className="sr-only">Close sidebar</span>
+              <IconButton
+                srOnly="Close sidebar"
+                className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              >
                 <CloseIcon />
-              </button>
+              </IconButton>
             </div>
             <div className="flex-shrink-0 flex items-center px-4">
               <Typography
@@ -325,7 +327,10 @@ export default function Home() {
               <SearchForm />
             </div>
             <div className="ml-4 flex items-center md:ml-6">
-              <IconButton srOnly="View notification">
+              <IconButton
+                srOnly="View notification"
+                className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
                 <BellIcon />
               </IconButton>
             </div>
