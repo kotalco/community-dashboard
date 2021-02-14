@@ -3,6 +3,7 @@ import Button from '@components/atoms/Button/Button';
 import BellIcon from '@components/Icons/BellIcon/BellIcon';
 import IconButton from '@components/atoms/IconButton/IconButton';
 import SearchForm from '@components/molecules/SearchForm/SearchForm';
+import CloseIcon from '@components/Icons/CloseIcon/CloseIcon';
 
 export default function Home() {
   return (
@@ -37,22 +38,7 @@ export default function Home() {
             <div className="absolute top-0 right-0 -mr-12 pt-2">
               <button className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
                 <span className="sr-only">Close sidebar</span>
-                {/* <!-- Heroicon name: x --> */}
-                <svg
-                  className="h-6 w-6 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
+                <CloseIcon />
               </button>
             </div>
             <div className="flex-shrink-0 flex items-center px-4">
