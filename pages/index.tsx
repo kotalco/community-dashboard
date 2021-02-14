@@ -4,6 +4,9 @@ import BellIcon from '@components/Icons/BellIcon/BellIcon';
 import IconButton from '@components/atoms/IconButton/IconButton';
 import SearchForm from '@components/molecules/SearchForm/SearchForm';
 import CloseIcon from '@components/Icons/CloseIcon/CloseIcon';
+import CubeIcon from '@components/Icons/CubeIcon/CubeIcon';
+import CursorClickIcon from '@components/Icons/CursorClickIcon/CursorClickIcon';
+import KeyIcon from '@components/Icons/KeyIcon/KeyIcon';
 
 export default function Home() {
   return (
@@ -60,22 +63,7 @@ export default function Home() {
                   className="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md"
                 >
                   {/* <!-- Current: "text-gray-500", Default: "text-gray-400 group-hover:text-gray-500" --> */}
-                  {/* <!-- Heroicon name: home --> */}
-                  <svg
-                    className="text-gray-500 mr-4 h-6 w-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                    xmlnsXlink="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                    />
-                  </svg>
+                  <CubeIcon />
                   Nodes
                 </a>
 
@@ -83,20 +71,7 @@ export default function Home() {
                   href="endpoints.html"
                   className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md"
                 >
-                  <svg
-                    className="text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"
-                    />
-                  </svg>
+                  <CursorClickIcon />
                   Endpoints
                 </a>
 
@@ -104,20 +79,7 @@ export default function Home() {
                   href="#"
                   className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md"
                 >
-                  <svg
-                    className="text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"
-                    />
-                  </svg>
+                  <KeyIcon />
                   Keys
                 </a>
 
