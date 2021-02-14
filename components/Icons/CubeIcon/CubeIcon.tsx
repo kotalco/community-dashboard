@@ -1,8 +1,12 @@
-const CubeIcon: React.FC = () => {
+interface Props {
+  className?: string;
+}
+
+const CubeIcon: React.FC<Props> = ({ className }) => {
   return (
     // Heroicon name: cube
     <svg
-      className="text-gray-500 mr-4 h-6 w-6"
+      className={`${className} mr-4 h-6 w-6`}
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/2000/svg"
       fill="none"

@@ -1,8 +1,12 @@
-const BookIconIcon: React.FC = () => {
+interface Props {
+  className?: string;
+}
+
+const BookIconIcon: React.FC<Props> = ({ className }) => {
   return (
     // Heroicon name: book-open
     <svg
-      className="text-gray-400 group-hover:text-gray-500 mr-4 h-6 w-6"
+      className={`${className} mr-4 h-6 w-6`}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"

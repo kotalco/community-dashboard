@@ -8,7 +8,8 @@ import CubeIcon from '@components/Icons/CubeIcon/CubeIcon';
 import CursorClickIcon from '@components/Icons/CursorClickIcon/CursorClickIcon';
 import KeyIcon from '@components/Icons/KeyIcon/KeyIcon';
 import DocumentTextIcon from '@components/Icons/DocumentTextIcon/DocumentTextIcon';
-import BookIconIcon from '@components/Icons/BookOpenIcon/BookOpenIcon';
+import BookOpenIcon from '@components/Icons/BookOpenIcon/BookOpenIcon';
+import NavLink from '@components/atoms/NavLink/NavLink';
 
 export default function Home() {
   return (
@@ -59,47 +60,21 @@ export default function Home() {
 
             <div className="mt-5 flex-1 h-0 overflow-y-auto">
               <nav className="px-2 space-y-1">
-                {/* <!-- Current: "bg-gray-100 text-gray-900", Default: "text-gray-600 hover:bg-gray-50 hover:text-gray-900" --> */}
-                <a
-                  href="#"
-                  className="bg-gray-100 text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md"
-                >
-                  {/* <!-- Current: "text-gray-500", Default: "text-gray-400 group-hover:text-gray-500" --> */}
-                  <CubeIcon />
+                <NavLink url="/" Icon={CubeIcon}>
                   Nodes
-                </a>
-
-                <a
-                  href="endpoints.html"
-                  className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md"
-                >
-                  <CursorClickIcon />
+                </NavLink>
+                <NavLink url="/endpoints" Icon={CursorClickIcon}>
                   Endpoints
-                </a>
-
-                <a
-                  href="#"
-                  className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md"
-                >
-                  <KeyIcon />
+                </NavLink>
+                <NavLink url="/keys" Icon={KeyIcon}>
                   Keys
-                </a>
-
-                <a
-                  href="#"
-                  className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md"
-                >
-                  <DocumentTextIcon />
+                </NavLink>
+                <NavLink url="/contracts" Icon={DocumentTextIcon}>
                   Contracts
-                </a>
-
-                <a
-                  href="#"
-                  className="text-gray-600 hover:bg-gray-50 hover:text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md"
-                >
-                  <BookIconIcon />
+                </NavLink>
+                <NavLink url="/addressbook" Icon={BookOpenIcon}>
                   Address Book
-                </a>
+                </NavLink>
               </nav>
             </div>
           </div>

@@ -1,8 +1,12 @@
-const DocumentTextIcon: React.FC = () => {
+interface Props {
+  className?: string;
+}
+
+const DocumentTextIcon: React.FC<Props> = ({ className }) => {
   return (
     // Heroicon name: document-text
     <svg
-      className="text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6"
+      className={`${className} mr-4 h-6 w-6`}
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
