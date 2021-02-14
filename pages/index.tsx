@@ -1,15 +1,12 @@
+import { Transition } from '@headlessui/react';
 import Typography from '@components/atoms/Typgraphy/Typography';
 import Button from '@components/atoms/Button/Button';
 import BellIcon from '@components/Icons/BellIcon/BellIcon';
 import IconButton from '@components/atoms/IconButton/IconButton';
 import SearchForm from '@components/molecules/SearchForm/SearchForm';
 import CloseIcon from '@components/Icons/CloseIcon/CloseIcon';
-import CubeIcon from '@components/Icons/CubeIcon/CubeIcon';
-import CursorClickIcon from '@components/Icons/CursorClickIcon/CursorClickIcon';
-import KeyIcon from '@components/Icons/KeyIcon/KeyIcon';
-import DocumentTextIcon from '@components/Icons/DocumentTextIcon/DocumentTextIcon';
-import BookOpenIcon from '@components/Icons/BookOpenIcon/BookOpenIcon';
-import NavLink from '@components/atoms/NavLink/NavLink';
+import NavLinks from '@components/molecules/NavLinks/NavLinks';
+import MenuOverlay from '@components/atoms/MenuOverlay/MenuOverlay';
 
 export default function Home() {
   return (
@@ -17,19 +14,9 @@ export default function Home() {
       {/* <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. --> */}
       <div className="md:hidden">
         <div className="fixed inset-0 flex z-40">
-          {/* <!--
-            Off-canvas menu overlay, show/hide based on off-canvas menu state.
-    
-            Entering: "transition-opacity ease-linear duration-300"
-              From: "opacity-0"
-              To: "opacity-100"
-            Leaving: "transition-opacity ease-linear duration-300"
-              From: "opacity-100"
-              To: "opacity-0"
-          --> */}
-          <div className="fixed inset-0" aria-hidden="true">
-            <div className="absolute inset-0 bg-gray-600 opacity-75"></div>
-          </div>
+          <Transition show={true}>
+            <MenuOverlay />
+          </Transition>
           {/* <!--
             Off-canvas menu, show/hide based on off-canvas menu state.
     
@@ -59,23 +46,7 @@ export default function Home() {
             </div>
 
             <div className="mt-5 flex-1 h-0 overflow-y-auto">
-              <nav className="px-2 space-y-1">
-                <NavLink url="/" Icon={CubeIcon}>
-                  Nodes
-                </NavLink>
-                <NavLink url="/endpoints" Icon={CursorClickIcon}>
-                  Endpoints
-                </NavLink>
-                <NavLink url="/keys" Icon={KeyIcon}>
-                  Keys
-                </NavLink>
-                <NavLink url="/contracts" Icon={DocumentTextIcon}>
-                  Contracts
-                </NavLink>
-                <NavLink url="/addressbook" Icon={BookOpenIcon}>
-                  Address Book
-                </NavLink>
-              </nav>
+              <NavLinks />
             </div>
           </div>
           <div className="flex-shrink-0 w-14" aria-hidden="true">
