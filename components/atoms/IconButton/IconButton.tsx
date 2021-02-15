@@ -1,16 +1,18 @@
 interface Props {
   srOnly?: string;
   className?: string;
+  onClick: () => void;
 }
 
-const IconButton: React.FC<Props> = ({ srOnly, className, children }) => {
+const IconButton: React.FC<Props> = (props) => {
+  const { srOnly, className, onClick, children } = props;
+
   return (
-    <button className={className}>
+    <button className={className} onClick={onClick}>
       {srOnly && <span className="sr-only">{srOnly}</span>}
       {children}
     </button>
   );
 };
-const asjkh =
-  'ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white';
+
 export default IconButton;

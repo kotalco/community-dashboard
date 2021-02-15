@@ -6,10 +6,19 @@ import Logo from '@components/atoms/Logo/Logo';
 import NavLinks from '@components/molecules/NavLinks/NavLinks';
 import CloseIcon from '@components/Icons/CloseIcon/CloseIcon';
 
-const SidebarMobile: React.FC = () => {
+interface Props {
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const SidebarMobile: React.FC<Props> = ({ isOpen, setIsOpen }) => {
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
+
   return (
     <div className="md:hidden">
-      <Transition show={true} className="fixed inset-0 flex z-40">
+      <Transition show={isOpen} className="fixed inset-0 flex z-40">
         <Transition.Child
           enter="transition-opacity ease-linear duration-300"
           enterFrom="opacity-0"
@@ -35,6 +44,7 @@ const SidebarMobile: React.FC = () => {
             <IconButton
               srOnly="Close sidebar"
               className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+              onClick={closeMenu}
             >
               <CloseIcon />
             </IconButton>

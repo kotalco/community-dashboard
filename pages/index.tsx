@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Typography from '@components/atoms/Typgraphy/Typography';
 import Button from '@components/atoms/Button/Button';
 import BellIcon from '@components/Icons/BellIcon/BellIcon';
@@ -7,9 +7,12 @@ import SearchForm from '@components/molecules/SearchForm/SearchForm';
 import SidebarMobile from '@components/organisms/SidebarMobile.tsx/SidebarMobile';
 
 export default function Home() {
+  // State for sidebar menu in mobile view
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div className="h-screen flex overflow-hidden bg-gray-100">
-      <SidebarMobile />
+      <SidebarMobile isOpen={isOpen} setIsOpen={setIsOpen} />
 
       {/* <!-- Static sidebar for desktop --> */}
       <div className="hidden md:flex md:flex-shrink-0">
@@ -169,6 +172,7 @@ export default function Home() {
               <IconButton
                 srOnly="View notification"
                 className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                onClick={() => {}}
               >
                 <BellIcon />
               </IconButton>
