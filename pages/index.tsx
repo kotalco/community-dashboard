@@ -16,7 +16,16 @@ export default function Home() {
       <div className="md:hidden">
         <div className="fixed inset-0 flex z-40">
           <Transition show={true}>
-            <MenuOverlay />
+            <Transition.Child
+              enter="transition-opacity ease-linear duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="transition-opacity ease-linear duration-300"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <MenuOverlay />
+            </Transition.Child>
           </Transition>
           {/* <!--
             Off-canvas menu, show/hide based on off-canvas menu state.
