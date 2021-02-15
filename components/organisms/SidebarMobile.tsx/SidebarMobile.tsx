@@ -8,14 +8,10 @@ import CloseIcon from '@components/Icons/CloseIcon/CloseIcon';
 
 interface Props {
   isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  toggleSidebar: () => void;
 }
 
-const SidebarMobile: React.FC<Props> = ({ isOpen, setIsOpen }) => {
-  const closeMenu = () => {
-    setIsOpen(false);
-  };
-
+const SidebarMobile: React.FC<Props> = ({ isOpen, toggleSidebar }) => {
   return (
     <div className="md:hidden">
       <Transition show={isOpen} className="fixed inset-0 flex z-40">
@@ -44,7 +40,7 @@ const SidebarMobile: React.FC<Props> = ({ isOpen, setIsOpen }) => {
             <IconButton
               srOnly="Close sidebar"
               className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-              onClick={closeMenu}
+              onClick={toggleSidebar}
             >
               <CloseIcon />
             </IconButton>

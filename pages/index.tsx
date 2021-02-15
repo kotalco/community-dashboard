@@ -9,37 +9,23 @@ import Logo from '@components/atoms/Logo/Logo';
 import NavLinks from '@components/molecules/NavLinks/NavLinks';
 import SidebarDesktop from '@components/organisms/SidebarDesktop/SidebarDesktop';
 import MenuIcon from '@components/Icons/MenuIcon/MenuIcon';
+import Navbar from '@components/organisms/Navbar/Navbar';
 
 export default function Home() {
   // State for sidebar menu in mobile view
   const [isOpen, setIsOpen] = useState(true);
 
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+
   return (
     <div className="h-screen flex overflow-hidden bg-gray-100">
-      <SidebarMobile isOpen={isOpen} setIsOpen={setIsOpen} />
+      <SidebarMobile isOpen={isOpen} toggleSidebar={toggleSidebar} />
       <SidebarDesktop />
 
       <div className="flex flex-col w-0 flex-1 overflow-hidden">
-        <div className="relative z-10 flex-shrink-0 flex h-16 bg-white shadow">
-          <button className="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden">
-            <span className="sr-only">Open sidebar</span>
-            <MenuIcon />
-          </button>
-          <div className="flex-1 px-4 flex justify-between">
-            <div className="flex-1 flex">
-              <SearchForm />
-            </div>
-            <div className="ml-4 flex items-center md:ml-6">
-              <IconButton
-                srOnly="View notification"
-                className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                onClick={() => {}}
-              >
-                <BellIcon />
-              </IconButton>
-            </div>
-          </div>
-        </div>
+        <Navbar toggleSidebar={toggleSidebar} />
 
         <main
           className="flex-1 relative overflow-y-auto focus:outline-none"
