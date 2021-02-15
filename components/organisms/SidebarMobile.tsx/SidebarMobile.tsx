@@ -2,7 +2,7 @@ import { Transition } from '@headlessui/react';
 
 import MenuOverlay from '@components/atoms/MenuOverlay/MenuOverlay';
 import IconButton from '@components/atoms/IconButton/IconButton';
-import Logo from '@components/molecules/Logo/Logo';
+import Logo from '@components/atoms/Logo/Logo';
 import NavLinks from '@components/molecules/NavLinks/NavLinks';
 import CloseIcon from '@components/Icons/CloseIcon/CloseIcon';
 
