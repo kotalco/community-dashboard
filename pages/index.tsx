@@ -3,8 +3,7 @@ import Link from 'next/link';
 import Typography from '@components/atoms/Typgraphy/Typography';
 import Layout from '@components/templates/Layout/Layout';
 
-import { NODES } from '../src/data/nodes';
-import NodeItem from '@components/molecules/NodeItem/NodeItem';
+import NodesList from '@components/organisms/NodesList/NodesList';
 
 export default function Home() {
   return (
@@ -26,17 +25,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
           <div className="py-4">
             <div className="bg-white shadow overflow-hidden sm:rounded-md">
-              <ul className="divide-y divide-gray-200">
-                {NODES.map((node) => (
-                  <NodeItem
-                    key={node.id}
-                    id={node.id}
-                    name={node.name}
-                    client={node.client}
-                    server={node.server}
-                  />
-                ))}
-              </ul>
+              <NodesList />
             </div>
           </div>
         </div>
