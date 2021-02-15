@@ -51,7 +51,7 @@ const SidebarMobile: React.FC<Props> = ({ isOpen, setIsOpen }) => {
           </div>
           <Logo />
           <div className="mt-5 flex-1 h-0 overflow-y-auto">
-            <NavLinks />
+            <NavLinks textSize="text-base" />
           </div>
         </Transition.Child>
         <div className="flex-shrink-0 w-14" aria-hidden="true">

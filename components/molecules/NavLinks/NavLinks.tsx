@@ -5,9 +5,13 @@ import KeyIcon from '@components/Icons/KeyIcon/KeyIcon';
 import DocumentTextIcon from '@components/Icons/DocumentTextIcon/DocumentTextIcon';
 import BookOpenIcon from '@components/Icons/BookOpenIcon/BookOpenIcon';
 
-const NavLinks: React.FC = () => {
+interface Props {
+  textSize?: string;
+}
+
+const NavLinks: React.FC<Props> = ({ textSize }) => {
   return (
-    <nav className="px-2 space-y-1">
+    <nav className={`px-2 space-y-1 ${textSize}`}>
       <NavLink url="/" Icon={CubeIcon}>
         Nodes
       </NavLink>
