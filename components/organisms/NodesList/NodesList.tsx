@@ -1,4 +1,4 @@
-import { NODES } from '../../../src/data/nodes';
+import { NODES } from '../../../src/data/data';
 import NodeItem from '@components/molecules/NodeItem/NodeItem';
 
 const NodesList: React.FC = () => {
