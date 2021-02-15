@@ -1,62 +1,15 @@
-import { Transition } from '@headlessui/react';
+import React from 'react';
 import Typography from '@components/atoms/Typgraphy/Typography';
 import Button from '@components/atoms/Button/Button';
 import BellIcon from '@components/Icons/BellIcon/BellIcon';
 import IconButton from '@components/atoms/IconButton/IconButton';
 import SearchForm from '@components/molecules/SearchForm/SearchForm';
-import CloseIcon from '@components/Icons/CloseIcon/CloseIcon';
-import NavLinks from '@components/molecules/NavLinks/NavLinks';
-import MenuOverlay from '@components/atoms/MenuOverlay/MenuOverlay';
-import Logo from '@components/molecules/Logo/Logo';
+import SidebarMobile from '@components/organisms/SidebarMobile.tsx/SidebarMobile';
 
 export default function Home() {
   return (
     <div className="h-screen flex overflow-hidden bg-gray-100">
-      {/* <!-- Off-canvas menu for mobile, show/hide based on off-canvas menu state. --> */}
-      <div className="md:hidden">
-        <div className="fixed inset-0 flex z-40">
-          <Transition show={true}>
-            <Transition.Child
-              enter="transition-opacity ease-linear duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="transition-opacity ease-linear duration-300"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <MenuOverlay />
-            </Transition.Child>
-          </Transition>
-          {/* <!--
-            Off-canvas menu, show/hide based on off-canvas menu state.
-    
-            Entering: "transition ease-in-out duration-300 transform"
-              From: "-translate-x-full"
-              To: "translate-x-0"
-            Leaving: "transition ease-in-out duration-300 transform"
-              From: "translate-x-0"
-              To: "-translate-x-full"
-          --> */}
-          <div className="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-white">
-            <div className="absolute top-0 right-0 -mr-12 pt-2">
-              <IconButton
-                srOnly="Close sidebar"
-                className="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
-              >
-                <CloseIcon />
-              </IconButton>
-            </div>
-            <Logo />
-
-            <div className="mt-5 flex-1 h-0 overflow-y-auto">
-              <NavLinks />
-            </div>
-          </div>
-          <div className="flex-shrink-0 w-14" aria-hidden="true">
-            {/* <!-- Dummy element to force sidebar to shrink to fit close icon --> */}
-          </div>
-        </div>
-      </div>
+      <SidebarMobile />
 
       {/* <!-- Static sidebar for desktop --> */}
       <div className="hidden md:flex md:flex-shrink-0">
