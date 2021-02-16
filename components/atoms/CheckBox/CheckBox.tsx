@@ -16,7 +16,7 @@ const CheckBox: React.FC<Props> = ({ id, name, label }) => {
         />
       </div>
       <div className="ml-3 text-sm">
-        <label htmlFor="server" className="font-medium text-gray-700">
+        <label htmlFor={id} className="font-medium text-gray-700">
           {label}
         </label>
       </div>

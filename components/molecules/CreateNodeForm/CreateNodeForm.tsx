@@ -1,12 +1,19 @@
 import React, { useState } from 'react';
+import Router from 'next/router';
 
 import Typography from '@components/atoms/Typgraphy/Typography';
 import Input from '@components/atoms/Input/Input';
 import InputLabel from '@components/atoms/InputLabel/InputLabel';
 import Select from '@components/molecules/Select/Select';
+import CheckBox from '@components/atoms/CheckBox/CheckBox';
+import Button from '@components/atoms/Button/Button';
 
 const CreateNodeForm: React.FC = () => {
   const [showAdvanced, setShowAdvanced] = useState(false);
+
+  const submitForm = () => {
+    Router.push('/');
+  };
 
   return (
     <form>
@@ -79,206 +86,35 @@ const CreateNodeForm: React.FC = () => {
                 Configuration Profiles
               </Typography>
               <div className="max-w-lg space-y-2 mt-1">
-                <div className="relative flex items-start">
-                  <div className="flex items-center h-5">
-                    <input
-                      id="server"
-                      name="server"
-                      type="checkbox"
-                      className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                    />
-                  </div>
-                  <div className="ml-3 text-sm">
-                    <label
-                      htmlFor="server"
-                      className="font-medium text-gray-700"
-                    >
-                      server
-                    </label>
-                    {/* <!-- <p className="text-gray-500">Get notified when someones posts a comment on a posting.</p> --> */}
-                  </div>
-                </div>
-
-                <div>
-                  <div className="relative flex items-start">
-                    <div className="flex items-center h-5">
-                      <input
-                        id="randomports"
-                        name="randomports"
-                        type="checkbox"
-                        className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                      />
-                    </div>
-                    <div className="ml-3 text-sm">
-                      <label
-                        htmlFor="randomports"
-                        className="font-medium text-gray-700"
-                      >
-                        randomports
-                      </label>
-                      {/* <!-- <p className="text-gray-500">Get notified when a candidate applies for a job.</p> --> */}
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="relative flex items-start">
-                    <div className="flex items-center h-5">
-                      <input
-                        id="default-datastore"
-                        name="default-datastore"
-                        type="checkbox"
-                        className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                      />
-                    </div>
-                    <div className="ml-3 text-sm">
-                      <label
-                        htmlFor="default-datastore"
-                        className="font-medium text-gray-700"
-                      >
-                        default-datastore
-                      </label>
-                      {/* <!-- <p className="text-gray-500">Get notified when a candidate accepts or rejects an offer.</p> --> */}
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="relative flex items-start">
-                    <div className="flex items-center h-5">
-                      <input
-                        id="local-discovery"
-                        name="local-discovery"
-                        type="checkbox"
-                        className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                      />
-                    </div>
-                    <div className="ml-3 text-sm">
-                      <label
-                        htmlFor="local-discovery"
-                        className="font-medium text-gray-700"
-                      >
-                        local-discovery
-                      </label>
-                      {/* <!-- <p className="text-gray-500">Get notified when a candidate accepts or rejects an offer.</p> --> */}
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="relative flex items-start">
-                    <div className="flex items-center h-5">
-                      <input
-                        id="test"
-                        name="test"
-                        type="checkbox"
-                        className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                      />
-                    </div>
-                    <div className="ml-3 text-sm">
-                      <label
-                        htmlFor="test"
-                        className="font-medium text-gray-700"
-                      >
-                        test
-                      </label>
-                      {/* <!-- <p className="text-gray-500">Get notified when a candidate accepts or rejects an offer.</p> --> */}
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="relative flex items-start">
-                    <div className="flex items-center h-5">
-                      <input
-                        id="default-networking"
-                        name="default-networking"
-                        type="checkbox"
-                        className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                      />
-                    </div>
-                    <div className="ml-3 text-sm">
-                      <label
-                        htmlFor="default-networking"
-                        className="font-medium text-gray-700"
-                      >
-                        default-networking
-                      </label>
-                      {/* <!-- <p className="text-gray-500">Get notified when a candidate accepts or rejects an offer.</p> --> */}
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="relative flex items-start">
-                    <div className="flex items-center h-5">
-                      <input
-                        id="flatfs"
-                        name="flatfs"
-                        type="checkbox"
-                        className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                      />
-                    </div>
-                    <div className="ml-3 text-sm">
-                      <label
-                        htmlFor="flatfs"
-                        className="font-medium text-gray-700"
-                      >
-                        flatfs
-                      </label>
-                      {/* <!-- <p className="text-gray-500">Get notified when a candidate accepts or rejects an offer.</p> --> */}
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="relative flex items-start">
-                    <div className="flex items-center h-5">
-                      <input
-                        id="badgerds"
-                        name="badgerds"
-                        type="checkbox"
-                        className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                      />
-                    </div>
-                    <div className="ml-3 text-sm">
-                      <label
-                        htmlFor="badgerds"
-                        className="font-medium text-gray-700"
-                      >
-                        badgerds
-                      </label>
-                      {/* <!-- <p className="text-gray-500">Get notified when a candidate accepts or rejects an offer.</p> --> */}
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <div className="relative flex items-start">
-                    <div className="flex items-center h-5">
-                      <input
-                        id="lowpower"
-                        name="lowpower"
-                        type="checkbox"
-                        className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
-                      />
-                    </div>
-                    <div className="ml-3 text-sm">
-                      <label
-                        htmlFor="lowpower"
-                        className="font-medium text-gray-700"
-                      >
-                        lowpower
-                      </label>
-                      {/* <!-- <p className="text-gray-500">Get notified when a candidate accepts or rejects an offer.</p> --> */}
-                    </div>
-                  </div>
-                </div>
+                <CheckBox id="server" name="server" label="server" />
+                <CheckBox
+                  id="randomports"
+                  name="randomports"
+                  label="randomports"
+                />
+                <CheckBox
+                  id="default-datastore"
+                  name="default-datastore"
+                  label="default-datastore"
+                />
+                <CheckBox
+                  id="local-discovery"
+                  name="local-discovery"
+                  label="local-discovery"
+                />
+                <CheckBox id="test" name="test" label="test" />
+                <CheckBox
+                  id="default-networking"
+                  name="default-networking"
+                  label="default-networking"
+                />
+                <CheckBox id="flatfs" name="flatfs" label="flatfs" />
+                <CheckBox id="bodgerds" name="bodgerds" label="bodgerds" />
+                <CheckBox id="lowpower" name="lowpower" label="lowpower" />
               </div>
             </div>
-            {/* <!-- end: configuration profiles -->
 
-                                            <!-- Resources Options --> */}
+            {/* Resources Options */}
             <div className="relative mt-8">
               <div
                 className="absolute inset-0 flex items-center"
@@ -298,19 +134,17 @@ const CreateNodeForm: React.FC = () => {
               <div className="w-48 mt-4">
                 <div>
                   <div>
-                    <label
+                    <InputLabel
                       htmlFor="required_cpu"
                       className="block text-sm font-medium text-gray-700"
                     >
                       Required CPU Cores
-                    </label>
+                    </InputLabel>
                     <div className="mt-1 relative rounded-md shadow-sm">
-                      <input
+                      <Input
                         type="text"
                         name="required_cpu"
                         id="required_cpu"
-                        className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-12 sm:text-sm border-gray-300 rounded-md"
-                        value="2"
                         aria-describedby="required_cpu"
                       />
                       <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -329,19 +163,17 @@ const CreateNodeForm: React.FC = () => {
               <div className="w-48 mt-4">
                 <div>
                   <div>
-                    <label
+                    <InputLabel
                       htmlFor="limited_cpu"
                       className="block text-sm font-medium text-gray-700"
                     >
                       Maximum CPU Cores
-                    </label>
+                    </InputLabel>
                     <div className="mt-1 relative rounded-md shadow-sm">
-                      <input
+                      <Input
                         type="text"
                         name="limited_cpu"
                         id="limited_cpu"
-                        className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-12 sm:text-sm border-gray-300 rounded-md"
-                        value="4"
                         aria-describedby="limited_cpu"
                       />
                       <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -360,19 +192,17 @@ const CreateNodeForm: React.FC = () => {
               <div className="w-48 mt-4">
                 <div>
                   <div>
-                    <label
+                    <InputLabel
                       htmlFor="required_memory"
                       className="block text-sm font-medium text-gray-700"
                     >
                       Required Memory
-                    </label>
+                    </InputLabel>
                     <div className="mt-1 relative rounded-md shadow-sm">
-                      <input
+                      <Input
                         type="text"
                         name="required_memory"
                         id="required_memory"
-                        className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-12 sm:text-sm border-gray-300 rounded-md"
-                        value="4"
                         aria-describedby="required_memory"
                       />
                       <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -391,19 +221,17 @@ const CreateNodeForm: React.FC = () => {
               <div className="w-48 mt-4">
                 <div>
                   <div>
-                    <label
+                    <InputLabel
                       htmlFor="limited_memory"
                       className="block text-sm font-medium text-gray-700"
                     >
                       Maximum Memory
-                    </label>
+                    </InputLabel>
                     <div className="mt-1 relative rounded-md shadow-sm">
-                      <input
+                      <Input
                         type="text"
                         name="limited_memory"
                         id="limited_memory"
-                        className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-12 sm:text-sm border-gray-300 rounded-md"
-                        value="8"
                         aria-describedby="limited_memory"
                       />
                       <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -422,19 +250,17 @@ const CreateNodeForm: React.FC = () => {
               <div className="w-48 mt-4">
                 <div>
                   <div>
-                    <label
+                    <InputLabel
                       htmlFor="required_storage"
                       className="block text-sm font-medium text-gray-700"
                     >
                       Disk Storage
-                    </label>
+                    </InputLabel>
                     <div className="mt-1 relative rounded-md shadow-sm">
-                      <input
+                      <Input
                         type="text"
                         name="required_storage"
                         id="required_storage"
-                        className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-12 sm:text-sm border-gray-300 rounded-md"
-                        value="500"
                         aria-describedby="required_storage"
                       />
                       <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -455,12 +281,7 @@ const CreateNodeForm: React.FC = () => {
           {/* <!-- end: content here --> */}
         </div>
         <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-          <a
-            href="index-new.html"
-            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            Create
-          </a>
+          <Button onClick={submitForm}>Create</Button>
         </div>
       </div>
     </form>
