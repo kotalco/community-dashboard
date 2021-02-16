@@ -57,30 +57,27 @@ const CreateNodeForm: React.FC = () => {
 
           <div className={`${showAdvanced ? 'block' : 'hidden'}`}>
             <div className="mt-4">
-              <label
+              <InputLabel
                 htmlFor="client"
                 className="block text-sm font-medium text-gray-700"
               >
                 IPFS Client
-              </label>
-              <select
-                id="client"
+              </InputLabel>
+              <Select
+                options={['go-ipfs', 'disabled>js-ipfs']}
                 name="client"
-                className="mt-1 block w-48 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-              >
-                <option>go-ipfs</option>
-                <option disabled>js-ipfs</option>
-              </select>
+                id="client"
+              />
             </div>
 
             {/* <!-- configuration profiles --> */}
             <div className="mt-4">
-              <label
-                htmlFor="server"
+              <Typography
+                variant="p"
                 className="block text-sm font-medium text-gray-700"
               >
                 Configuration Profiles
-              </label>
+              </Typography>
               <div className="max-w-lg space-y-2 mt-1">
                 <div className="relative flex items-start">
                   <div className="flex items-center h-5">
@@ -131,7 +128,6 @@ const CreateNodeForm: React.FC = () => {
                         id="default-datastore"
                         name="default-datastore"
                         type="checkbox"
-                        checked
                         className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
                       />
                     </div>
