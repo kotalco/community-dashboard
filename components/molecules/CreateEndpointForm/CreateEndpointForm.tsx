@@ -2,6 +2,7 @@ import Router from 'next/router';
 
 import Input from '@components/atoms/Input/Input';
 import InputLabel from '@components/atoms/InputLabel/InputLabel';
+import Select from '@components/molecules/Select/Select';
 import Button from '@components/atoms/Button/Button';
 
 const CreateEndpoint: React.FC = () => {
@@ -39,16 +40,15 @@ const CreateEndpoint: React.FC = () => {
             >
               Node
             </InputLabel>
-            <select
-              id="node"
+            <Select
+              options={[
+                'my-beacon-node',
+                'my-ipfs-node',
+                'my-filecoin-node',
+                'my-ethereum-node',
+              ]}
               name="node"
-              className="mt-1 block w-48 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
-            >
-              <option>my-beacon-node</option>
-              <option>my-ipfs-node</option>
-              <option>my-filecoin-node</option>
-              <option>my-ethereum-node</option>
-            </select>
+            />
           </div>
         </div>
         <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
