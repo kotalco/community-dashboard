@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import SidebarMobile from '@components/organisms/SidebarMobile.tsx/SidebarMobile';
+import SidebarMobile from '@components/organisms/SidebarMobile/SidebarMobile';
 import SidebarDesktop from '@components/organisms/SidebarDesktop/SidebarDesktop';
 import Navbar from '@components/organisms/Navbar/Navbar';
 
