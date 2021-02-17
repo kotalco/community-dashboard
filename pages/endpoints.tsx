@@ -22,8 +22,10 @@ const Endpoints: React.FC = () => {
             </a>
           </Link>
         </div>
-        <div className="bg-white shadow overflow-hidden sm:rounded-md mt-4">
-          <EndPointsList />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+          <div className="bg-white shadow overflow-hidden sm:rounded-md mt-4">
+            <EndPointsList />
+          </div>
         </div>
       </div>
     </Layout>
