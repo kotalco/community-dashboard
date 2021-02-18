@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import Router from 'next/router';
 
 import Typography from '@components/atoms/Typgraphy/Typography';
-import Input from '@components/atoms/Input/Input';
+import TextInput from '@components/atoms/TextInput/TextInput';
 import InputLabel from '@components/atoms/InputLabel/InputLabel';
 import Select from '@components/molecules/Select/Select';
 import CheckBox from '@components/atoms/CheckBox/CheckBox';
 import Button from '@components/atoms/Button/Button';
+import Separator from '@components/atoms/Separator/Separator';
+import UnitTextInput from '../UnitTextInput/UnitTextInput';
 
 const CreateNodeForm: React.FC = () => {
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -20,40 +22,20 @@ const CreateNodeForm: React.FC = () => {
       <div>
         <div className="px-4 py-5 sm:p-6">
           {/* Node Name */}
-          <div>
-            <InputLabel
-              htmlFor="node_name"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Node Name
-            </InputLabel>
-            <div className="mt-1">
-              <Input
-                type="text"
-                name="node_name"
-                id="node_name"
-                placeholder="Node Name"
-                // className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-96 sm:text-sm border-gray-300 rounded-md"
-              />
-            </div>
-          </div>
+          <TextInput name="node_name" id="node_name" label="Node Name" />
 
           {/* Blockchain Protocol */}
-          <div className="mt-4">
-            <InputLabel
-              htmlFor="protocol"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Blockchain Protocol
-            </InputLabel>
-            <Select
-              options={['Ethereum', 'Ethereum 2.0', 'Filecoin', 'IPFS']}
-              name="protocol"
-            />
-          </div>
+          <Select
+            label="Blockchain Protocol"
+            options={['Ethereum', 'Ethereum 2.0', 'Filecoin', 'IPFS']}
+            name="protocol"
+          />
 
+          {/* Show Advanced Setting */}
           <div
-            className="block mt-4 text-red-500 cursor-pointer hover:text-red-600"
+            className={`block mt-4 text-red-500 cursor-pointer hover:text-red-600 ${
+              showAdvanced ? 'hidden' : ''
+            }`}
             onClick={() => setShowAdvanced(true)}
           >
             Show Advanced Settings
@@ -63,19 +45,13 @@ const CreateNodeForm: React.FC = () => {
           </div>
 
           <div className={`${showAdvanced ? 'block' : 'hidden'}`}>
-            <div className="mt-4">
-              <InputLabel
-                htmlFor="client"
-                className="block text-sm font-medium text-gray-700"
-              >
-                IPFS Client
-              </InputLabel>
-              <Select
-                options={['go-ipfs', 'disabled>js-ipfs']}
-                name="client"
-                id="client"
-              />
-            </div>
+            {/* IPFS Client */}
+            <Select
+              label="IPFS Client"
+              options={['go-ipfs', 'js-ipfs']}
+              name="client"
+              id="client"
+            />
 
             {/* <!-- configuration profiles --> */}
             <div className="mt-4">
@@ -115,166 +91,53 @@ const CreateNodeForm: React.FC = () => {
             </div>
 
             {/* Resources Options */}
-            <div className="relative mt-8">
-              <div
-                className="absolute inset-0 flex items-center"
-                aria-hidden="true"
-              >
-                <div className="w-full border-t border-gray-100"></div>
-              </div>
-              <div className="relative flex justify-center">
-                <span className="px-2 bg-white text-sm text-gray-300">
-                  Node Resources Options
-                </span>
-              </div>
-            </div>
-            {/* <!-- end: Resources Options --> */}
+            <Separator label="Node Resources Options" />
 
             <div>
-              <div className="w-48 mt-4">
-                <div>
-                  <div>
-                    <InputLabel
-                      htmlFor="required_cpu"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Required CPU Cores
-                    </InputLabel>
-                    <div className="mt-1 relative rounded-md shadow-sm">
-                      <Input
-                        type="text"
-                        name="required_cpu"
-                        id="required_cpu"
-                        aria-describedby="required_cpu"
-                      />
-                      <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                        <span
-                          className="text-gray-500 sm:text-sm"
-                          id="required_cpu_unit"
-                        >
-                          Core
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {/* Required CPU Cores */}
+              <UnitTextInput
+                label="Required CPU Cores"
+                id="required_cpu"
+                name="required_cpu"
+                value="2"
+                unit="Core"
+              />
 
-              <div className="w-48 mt-4">
-                <div>
-                  <div>
-                    <InputLabel
-                      htmlFor="limited_cpu"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Maximum CPU Cores
-                    </InputLabel>
-                    <div className="mt-1 relative rounded-md shadow-sm">
-                      <Input
-                        type="text"
-                        name="limited_cpu"
-                        id="limited_cpu"
-                        aria-describedby="limited_cpu"
-                      />
-                      <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                        <span
-                          className="text-gray-500 sm:text-sm"
-                          id="limited_cpu_unit"
-                        >
-                          Core
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {/* Maximum CPU Cores */}
+              <UnitTextInput
+                label="Maximum CPU Cores"
+                id="limited_cpu"
+                name="limited_cpu"
+                value="4"
+                unit="Core"
+              />
 
-              <div className="w-48 mt-4">
-                <div>
-                  <div>
-                    <InputLabel
-                      htmlFor="required_memory"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Required Memory
-                    </InputLabel>
-                    <div className="mt-1 relative rounded-md shadow-sm">
-                      <Input
-                        type="text"
-                        name="required_memory"
-                        id="required_memory"
-                        aria-describedby="required_memory"
-                      />
-                      <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                        <span
-                          className="text-gray-500 sm:text-sm"
-                          id="required_memory_unit"
-                        >
-                          Gigabyte
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {/* Required Memory */}
+              <UnitTextInput
+                label="Required Memory"
+                id="required_memory"
+                name="required_memory"
+                value="4"
+                unit="Gigabyte"
+              />
 
-              <div className="w-48 mt-4">
-                <div>
-                  <div>
-                    <InputLabel
-                      htmlFor="limited_memory"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Maximum Memory
-                    </InputLabel>
-                    <div className="mt-1 relative rounded-md shadow-sm">
-                      <Input
-                        type="text"
-                        name="limited_memory"
-                        id="limited_memory"
-                        aria-describedby="limited_memory"
-                      />
-                      <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                        <span
-                          className="text-gray-500 sm:text-sm"
-                          id="limited_memory_unit"
-                        >
-                          Gigabyte
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {/* Maximum Memory */}
+              <UnitTextInput
+                label="Maximum Memory"
+                id="limited_memory"
+                name="limited_memory"
+                value="8"
+                unit="Gigabyte"
+              />
 
-              <div className="w-48 mt-4">
-                <div>
-                  <div>
-                    <InputLabel
-                      htmlFor="required_storage"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      Disk Storage
-                    </InputLabel>
-                    <div className="mt-1 relative rounded-md shadow-sm">
-                      <Input
-                        type="text"
-                        name="required_storage"
-                        id="required_storage"
-                        aria-describedby="required_storage"
-                      />
-                      <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                        <span
-                          className="text-gray-500 sm:text-sm"
-                          id="required_storage_unit"
-                        >
-                          Gigabyte
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              {/* Disk Storage */}
+              <UnitTextInput
+                label="Disk Storage"
+                id="required_storage"
+                name="required_storage"
+                value="500"
+                unit="Gigabyte"
+              />
             </div>
           </div>
 

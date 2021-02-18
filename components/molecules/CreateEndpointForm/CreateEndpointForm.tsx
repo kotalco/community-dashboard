@@ -1,7 +1,6 @@
 import Router from 'next/router';
 
 import TextInput from '@components/atoms/TextInput/TextInput';
-import InputLabel from '@components/atoms/InputLabel/InputLabel';
 import Select from '@components/molecules/Select/Select';
 import Button from '@components/atoms/Button/Button';
 
@@ -17,23 +16,16 @@ const CreateEndpoint: React.FC = () => {
           {/* Endpoint name */}
           <TextInput name="node_name" id="node_name" label="Endpoint Name" />
           {/* Node name */}
-          <div className="mt-4">
-            <InputLabel
-              htmlFor="node"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Node
-            </InputLabel>
-            <Select
-              options={[
-                'my-beacon-node',
-                'my-ipfs-node',
-                'my-filecoin-node',
-                'my-ethereum-node',
-              ]}
-              name="node"
-            />
-          </div>
+          <Select
+            options={[
+              'my-beacon-node',
+              'my-ipfs-node',
+              'my-filecoin-node',
+              'my-ethereum-node',
+            ]}
+            name="node"
+            label="Node"
+          />
         </div>
         <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
           <Button
