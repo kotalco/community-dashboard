@@ -15,17 +15,7 @@ const CreateEndpoint: React.FC = () => {
       <div>
         <div className="px-4 py-5 sm:p-6">
           {/* Endpoint name */}
-          <div>
-            <InputLabel
-              htmlFor="node_name"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Endpoint Name
-            </InputLabel>
-            <div className="mt-1">
-              <TextInput name="node_name" id="node_name" />
-            </div>
-          </div>
+          <TextInput name="node_name" id="node_name" label="Endpoint Name" />
           {/* Node name */}
           <div className="mt-4">
             <InputLabel
