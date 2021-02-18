@@ -1,6 +1,6 @@
 import Router from 'next/router';
 
-import Input from '@components/atoms/Input/Input';
+import TextInput from '@components/atoms/TextInput/TextInput';
 import InputLabel from '@components/atoms/InputLabel/InputLabel';
 import Select from '@components/molecules/Select/Select';
 import Button from '@components/atoms/Button/Button';
@@ -23,15 +23,9 @@ const CreateEndpoint: React.FC = () => {
               Endpoint Name
             </InputLabel>
             <div className="mt-1">
-              <Input
-                type="text"
-                name="node_name"
-                id="node_name"
-                placeholder="Endpoint Name"
-              />
+              <TextInput name="node_name" id="node_name" />
             </div>
           </div>
-
           {/* Node name */}
           <div className="mt-4">
             <InputLabel

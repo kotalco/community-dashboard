@@ -1,6 +1,5 @@
 import InputLabel from '@components/atoms/InputLabel/InputLabel';
 import SearchIcon from '@components/Icons/SearchIcon/SearchIcon';
-import Input from '@components/atoms/Input/Input';
 
 const SearchForm: React.FC = () => {
   return (
