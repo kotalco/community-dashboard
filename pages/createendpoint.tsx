@@ -1,7 +1,7 @@
 import React from 'react';
 import Typography from '@components/atoms/Typgraphy/Typography';
 import Layout from '@components/templates/Layout/Layout';
-import CreateEndpointForm from '@components/molecules/CreateEndpointForm/CreateEndpointForm';
+import CreateEndpointForm from '@components/organisms/CreateEndpointForm/CreateEndpointForm';
 
 const CreateEndpoint: React.FC = () => {
   return (

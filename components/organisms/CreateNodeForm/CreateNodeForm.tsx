@@ -2,13 +2,12 @@ import React, { useState } from 'react';
 import Router from 'next/router';
 
 import Typography from '@components/atoms/Typgraphy/Typography';
-import TextInput from '@components/atoms/TextInput/TextInput';
-import InputLabel from '@components/atoms/InputLabel/InputLabel';
+import TextInput from '@components/molecules/TextInput/TextInput';
 import Select from '@components/molecules/Select/Select';
-import CheckBox from '@components/atoms/CheckBox/CheckBox';
+import CheckBox from '@components/molecules/CheckBox/CheckBox';
 import Button from '@components/atoms/Button/Button';
 import Separator from '@components/atoms/Separator/Separator';
-import UnitTextInput from '../UnitTextInput/UnitTextInput';
+import UnitTextInput from '@components/molecules/UnitTextInput/UnitTextInput';
 
 const CreateNodeForm: React.FC = () => {
   const [showAdvanced, setShowAdvanced] = useState(false);

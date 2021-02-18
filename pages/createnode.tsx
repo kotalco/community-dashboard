@@ -1,7 +1,7 @@
 import React from 'react';
 import Typography from '@components/atoms/Typgraphy/Typography';
 import Layout from '@components/templates/Layout/Layout';
-import CreateNodeForm from '@components/molecules/CreateNodeForm/CreateNodeForm';
+import CreateNodeForm from '@components/organisms/CreateNodeForm/CreateNodeForm';
 
 const CreateNode: React.FC = () => {
   return (

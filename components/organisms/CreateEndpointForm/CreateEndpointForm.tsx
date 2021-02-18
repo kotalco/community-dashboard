@@ -1,6 +1,6 @@
 import Router from 'next/router';
 
-import TextInput from '@components/atoms/TextInput/TextInput';
+import TextInput from '@components/molecules/TextInput/TextInput';
 import Select from '@components/molecules/Select/Select';
 import Button from '@components/atoms/Button/Button';
 
