@@ -11,7 +11,7 @@ const Select: React.FC<Props> = ({ options, name, id, label }) => {
   return (
     <div className="mt-4">
       <InputLabel
-        htmlFor="node"
+        htmlFor={name}
         className="block text-sm font-medium text-gray-700"
       >
         {label}
