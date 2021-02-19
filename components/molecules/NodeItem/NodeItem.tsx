@@ -17,7 +17,7 @@ const NodeItem: React.FC<Props> = (props) => {
 
   return (
     <li>
-      <Link href={`/node/${id}`}>
+      <Link href={`/nodes/${id}`}>
         <a className="block hover:bg-gray-50">
           <div className="px-4 py-4 flex items-center sm:px-6">
             <div className="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
