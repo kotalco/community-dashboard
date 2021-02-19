@@ -1,23 +1,9 @@
-import { useState } from 'react';
 import PageDetailsHeader from '@components/molecules/PageDetailsHeader/PageDetailsHeader';
 import StatsComponent from '@components/molecules/Stats/Stats';
+import TabsHeader from '@components/organisms/TabsHeader/TabsHeader';
 import Layout from '@components/templates/Layout/Layout';
-import TabsDesktopView from '@components/molecules/TabsDesktopView/TabsDesktopView';
-import TabsMobileView from '@components/molecules/TabsMobileView/TabsMobileView';
-
-const TAB_TITLES = [
-  'Protocol',
-  'Networking',
-  'API',
-  'Whitelisting',
-  'Mining',
-  'Resources',
-  'Dangerous Zone',
-];
 
 const NodeDetails: React.FC = () => {
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
-
   return (
     <Layout>
       <div className="py-6">
@@ -39,18 +25,7 @@ const NodeDetails: React.FC = () => {
           {/* Tabs */}
           <div className="bg-white overflow-hidden shadow rounded-lg divided-y divided-gray-200 mt-4">
             <div className="px-4 py-5 sm:px-6">
-              <div>
-                <TabsMobileView
-                  setActiveTabIndex={setActiveTabIndex}
-                  tabs={TAB_TITLES}
-                  activeTabIndex={activeTabIndex}
-                />
-                <TabsDesktopView
-                  setActiveTabIndex={setActiveTabIndex}
-                  tabs={TAB_TITLES}
-                  activeTabIndex={activeTabIndex}
-                />
-              </div>
+              <TabsHeader />
             </div>
           </div>
         </div>
