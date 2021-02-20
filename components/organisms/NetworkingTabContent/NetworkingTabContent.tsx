@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import TextInputWithButton from '@components/molecules/TextInputWithButton/TextInputWithButton';
 import Toggle from '@components/molecules/Toggle/Toggle';
+import Textarea from '@components/molecules/Textarea/Textarea';
 
 const NetworkingTabContent: React.FC = () => {
   const [isChecked, setIsChecked] = useState(false);
@@ -21,6 +22,22 @@ const NetworkingTabContent: React.FC = () => {
             label="Bootnode"
             checked={isChecked}
             onClick={() => setIsChecked(!isChecked)}
+          />
+        </div>
+
+        <div className="mt-4">
+          <Textarea
+            id="bootnodes"
+            helperText="One Ethereum node URL per line."
+            label="Bootnodes"
+          />
+        </div>
+
+        <div className="mt-4">
+          <Textarea
+            id="staticnodes"
+            helperText="One Ethereum node URL per line."
+            label="Static nodes"
           />
         </div>
       </div>
