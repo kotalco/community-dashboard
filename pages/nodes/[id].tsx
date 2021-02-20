@@ -1,6 +1,6 @@
 import PageDetailsHeader from '@components/molecules/PageDetailsHeader/PageDetailsHeader';
 import StatsComponent from '@components/molecules/Stats/Stats';
-import TabsHeader from '@components/organisms/TabsHeader/TabsHeader';
+import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
 
 const NodeDetails: React.FC = () => {
@@ -22,11 +22,8 @@ const NodeDetails: React.FC = () => {
             </dl>
           </div>
 
-          {/* Tabs */}
           <div className="bg-white overflow-hidden shadow rounded-lg divided-y divided-gray-200 mt-4">
-            <div className="px-4 py-5 sm:px-6">
-              <TabsHeader />
-            </div>
+            <Tabs />
           </div>
         </div>
       </div>
