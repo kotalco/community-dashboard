@@ -2,9 +2,8 @@ import { useState } from 'react';
 
 import TabsMobileView from '@components/molecules/TabsMobileView/TabsMobileView';
 import TabsDesktopView from '@components/molecules/TabsDesktopView/TabsDesktopView';
-import Select from '@components/molecules/Select/Select';
-import Button from '@components/atoms/Button/Button';
-import ProtocolTabContent from '../ProtocolTabContent/ProtocolTabContent';
+import ProtocolTabContent from '@components/organisms/ProtocolTabContent/ProtocolTabContent';
+import NetworkingTabContent from '@components/organisms/NetworkingTabContent/NetworkingTabContent';
 
 const TAB_TITLES = [
   'Protocol',
@@ -39,7 +38,7 @@ const Tabs = () => {
 
       {/* Content */}
       {activeTabIndex === 0 && <ProtocolTabContent />}
-      {activeTabIndex === 1 && <ProtocolTabContent />}
+      {activeTabIndex === 1 && <NetworkingTabContent />}
       {activeTabIndex === 0 && <ProtocolTabContent />}
       {activeTabIndex === 0 && <ProtocolTabContent />}
       {activeTabIndex === 0 && <ProtocolTabContent />}
