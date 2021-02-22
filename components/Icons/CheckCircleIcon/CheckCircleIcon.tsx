@@ -1,12 +1,7 @@
-interface Props {
-  className: string;
-}
-
-const CloseIcon: React.FC<Props> = ({ className }) => {
+const CheckCircleIcon: React.FC = () => {
   return (
-    // Heroicon name: x
     <svg
-      className={className}
+      className="h-6 w-6 text-green-400"
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
@@ -17,10 +12,10 @@ const CloseIcon: React.FC<Props> = ({ className }) => {
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="2"
-        d="M6 18L18 6M6 6l12 12"
+        d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
       />
     </svg>
   );
 };
 
-export default CloseIcon;
+export default CheckCircleIcon;

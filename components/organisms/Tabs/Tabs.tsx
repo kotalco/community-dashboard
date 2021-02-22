@@ -39,11 +39,11 @@ const Tabs = () => {
       {/* Content */}
       {activeTabIndex === 0 && <ProtocolTabContent />}
       {activeTabIndex === 1 && <NetworkingTabContent />}
-      {activeTabIndex === 0 && <ProtocolTabContent />}
-      {activeTabIndex === 0 && <ProtocolTabContent />}
-      {activeTabIndex === 0 && <ProtocolTabContent />}
-      {activeTabIndex === 0 && <ProtocolTabContent />}
-      {activeTabIndex === 0 && <ProtocolTabContent />}
+      {activeTabIndex === 2 && <ProtocolTabContent />}
+      {activeTabIndex === 3 && <ProtocolTabContent />}
+      {activeTabIndex === 4 && <ProtocolTabContent />}
+      {activeTabIndex === 5 && <ProtocolTabContent />}
+      {activeTabIndex === 6 && <ProtocolTabContent />}
     </>
   );
 };

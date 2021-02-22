@@ -4,6 +4,7 @@ import Typography from '@components/atoms/Typgraphy/Typography';
 import Layout from '@components/templates/Layout/Layout';
 
 import NodesList from '@components/organisms/NodesList/NodesList';
+import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
 
 const Home: React.FC = () => {
   return (
@@ -30,6 +31,11 @@ const Home: React.FC = () => {
           </div>
         </div>
       </div>
+      <NotificationPanel
+        title="Node has been created successfully!"
+        name="my-ipfs-node"
+        type="IPFS node"
+      />
     </Layout>
   );
 };
