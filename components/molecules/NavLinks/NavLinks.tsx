@@ -1,12 +1,12 @@
-import NavLink from '@components/atoms/NavLink/NavLink';
-import CubeIcon from '@components/Icons/CubeIcon/CubeIcon';
-import CursorClickIcon from '@components/Icons/CursorClickIcon/CursorClickIcon';
-import KeyIcon from '@components/Icons/KeyIcon/KeyIcon';
-import DocumentTextIcon from '@components/Icons/DocumentTextIcon/DocumentTextIcon';
-import BookOpenIcon from '@components/Icons/BookOpenIcon/BookOpenIcon';
+import NavLink from '@components/atoms/NavLink/NavLink'
+import CubeIcon from '@components/Icons/CubeIcon/CubeIcon'
+import CursorClickIcon from '@components/Icons/CursorClickIcon/CursorClickIcon'
+import KeyIcon from '@components/Icons/KeyIcon/KeyIcon'
+import DocumentTextIcon from '@components/Icons/DocumentTextIcon/DocumentTextIcon'
+import BookOpenIcon from '@components/Icons/BookOpenIcon/BookOpenIcon'
 
 interface Props {
-  textSize?: string;
+  textSize?: string
 }
 
 const NavLinks: React.FC<Props> = ({ textSize }) => {
@@ -28,7 +28,7 @@ const NavLinks: React.FC<Props> = ({ textSize }) => {
         Address Book
       </NavLink>
     </nav>
-  );
-};
+  )
+}
 
-export default NavLinks;
+export default NavLinks

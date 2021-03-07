@@ -1,5 +1,5 @@
-import InputLabel from '@components/atoms/InputLabel/InputLabel';
-import SearchIcon from '@components/Icons/SearchIcon/SearchIcon';
+import InputLabel from '@components/atoms/InputLabel/InputLabel'
+import SearchIcon from '@components/Icons/SearchIcon/SearchIcon'
 
 const SearchForm: React.FC = () => {
   return (
@@ -20,7 +20,7 @@ const SearchForm: React.FC = () => {
         />
       </div>
     </form>
-  );
-};
+  )
+}
 
-export default SearchForm;
+export default SearchForm

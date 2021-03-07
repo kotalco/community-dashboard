@@ -1,6 +1,6 @@
 interface Props {
-  nodeName: string;
-  date: string;
+  nodeName: string
+  date: string
 }
 
 const PageDetailsHeader: React.FC<Props> = ({ nodeName, date }) => {
@@ -9,7 +9,7 @@ const PageDetailsHeader: React.FC<Props> = ({ nodeName, date }) => {
       <h1 className="text-2xl font-semibold">{nodeName}</h1>
       <span className="text-xs text-gray-500">Last Updated on {date}</span>
     </div>
-  );
-};
+  )
+}
 
-export default PageDetailsHeader;
+export default PageDetailsHeader

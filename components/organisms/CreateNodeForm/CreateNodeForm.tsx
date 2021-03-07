@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
-import Router from 'next/router';
+import React, { useState } from 'react'
+import Router from 'next/router'
 
-import Typography from '@components/atoms/Typgraphy/Typography';
-import TextInput from '@components/molecules/TextInput/TextInput';
-import Select from '@components/molecules/Select/Select';
-import CheckBox from '@components/molecules/CheckBox/CheckBox';
-import Button from '@components/atoms/Button/Button';
-import Separator from '@components/atoms/Separator/Separator';
-import UnitTextInput from '@components/molecules/UnitTextInput/UnitTextInput';
+import Typography from '@components/atoms/Typgraphy/Typography'
+import TextInput from '@components/molecules/TextInput/TextInput'
+import Select from '@components/molecules/Select/Select'
+import CheckBox from '@components/molecules/CheckBox/CheckBox'
+import Button from '@components/atoms/Button/Button'
+import Separator from '@components/atoms/Separator/Separator'
+import UnitTextInput from '@components/molecules/UnitTextInput/UnitTextInput'
 
 const CreateNodeForm: React.FC = () => {
-  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false)
 
   const submitForm = () => {
-    Router.push('/');
-  };
+    Router.push('/')
+  }
 
   return (
     <form>
@@ -147,7 +147,7 @@ const CreateNodeForm: React.FC = () => {
         </div>
       </div>
     </form>
-  );
-};
+  )
+}
 
-export default CreateNodeForm;
+export default CreateNodeForm

@@ -1,10 +1,10 @@
-import BellIcon from '@components/Icons/BellIcon/BellIcon';
-import IconButton from '@components/atoms/IconButton/IconButton';
-import SearchForm from '@components/molecules/SearchForm/SearchForm';
-import MenuIcon from '@components/Icons/MenuIcon/MenuIcon';
+import BellIcon from '@components/Icons/BellIcon/BellIcon'
+import IconButton from '@components/atoms/IconButton/IconButton'
+import SearchForm from '@components/molecules/SearchForm/SearchForm'
+import MenuIcon from '@components/Icons/MenuIcon/MenuIcon'
 
 interface Props {
-  toggleSidebar: () => void;
+  toggleSidebar: () => void
 }
 
 const Navbar: React.FC<Props> = ({ toggleSidebar }) => {
@@ -33,7 +33,7 @@ const Navbar: React.FC<Props> = ({ toggleSidebar }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Navbar;
+export default Navbar

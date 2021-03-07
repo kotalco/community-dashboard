@@ -14,7 +14,7 @@ const ChevronRightIcon: React.FC = () => {
         clipRule="evenodd"
       />
     </svg>
-  );
-};
+  )
+}
 
-export default ChevronRightIcon;
+export default ChevronRightIcon

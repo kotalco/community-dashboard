@@ -1,5 +1,5 @@
 interface Props {
-  label: string;
+  label: string
 }
 
 const Separator: React.FC<Props> = ({ label }) => {
@@ -12,7 +12,7 @@ const Separator: React.FC<Props> = ({ label }) => {
         <span className="px-2 bg-white text-sm text-gray-300">{label}</span>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Separator;
+export default Separator

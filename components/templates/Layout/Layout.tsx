@@ -1,16 +1,16 @@
-import { useState } from 'react';
+import { useState } from 'react'
 
-import SidebarMobile from '@components/organisms/SidebarMobile/SidebarMobile';
-import SidebarDesktop from '@components/organisms/SidebarDesktop/SidebarDesktop';
-import Navbar from '@components/organisms/Navbar/Navbar';
+import SidebarMobile from '@components/organisms/SidebarMobile/SidebarMobile'
+import SidebarDesktop from '@components/organisms/SidebarDesktop/SidebarDesktop'
+import Navbar from '@components/organisms/Navbar/Navbar'
 
 const Layout: React.FC = ({ children }) => {
   // State for sidebar menu in mobile view
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(true)
 
   const toggleSidebar = () => {
-    setIsOpen(!isOpen);
-  };
+    setIsOpen(!isOpen)
+  }
 
   return (
     <div className="h-screen flex overflow-hidden bg-gray-100">
@@ -28,7 +28,7 @@ const Layout: React.FC = ({ children }) => {
         </main>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Layout;
+export default Layout

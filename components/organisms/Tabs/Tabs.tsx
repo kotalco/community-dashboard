@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useState } from 'react'
 
-import TabsMobileView from '@components/molecules/TabsMobileView/TabsMobileView';
-import TabsDesktopView from '@components/molecules/TabsDesktopView/TabsDesktopView';
-import ProtocolTabContent from '@components/organisms/ProtocolTabContent/ProtocolTabContent';
-import NetworkingTabContent from '@components/organisms/NetworkingTabContent/NetworkingTabContent';
+import TabsMobileView from '@components/molecules/TabsMobileView/TabsMobileView'
+import TabsDesktopView from '@components/molecules/TabsDesktopView/TabsDesktopView'
+import ProtocolTabContent from '@components/organisms/ProtocolTabContent/ProtocolTabContent'
+import NetworkingTabContent from '@components/organisms/NetworkingTabContent/NetworkingTabContent'
 
 const TAB_TITLES = [
   'Protocol',
@@ -13,10 +13,10 @@ const TAB_TITLES = [
   'Mining',
   'Resources',
   'Dangerous Zone',
-];
+]
 
 const Tabs = () => {
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
+  const [activeTabIndex, setActiveTabIndex] = useState(0)
 
   return (
     <>
@@ -45,7 +45,7 @@ const Tabs = () => {
       {activeTabIndex === 5 && <ProtocolTabContent />}
       {activeTabIndex === 6 && <ProtocolTabContent />}
     </>
-  );
-};
+  )
+}
 
-export default Tabs;
+export default Tabs

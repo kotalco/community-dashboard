@@ -1,7 +1,7 @@
 interface Props {
-  active: boolean;
-  danger?: boolean;
-  onClick: () => void;
+  active: boolean
+  danger?: boolean
+  onClick: () => void
 }
 
 const Tab: React.FC<Props> = ({ active, danger, onClick, children }) => {
@@ -15,7 +15,7 @@ const Tab: React.FC<Props> = ({ active, danger, onClick, children }) => {
       >
         {children}
       </span>
-    );
+    )
   }
 
   return (
@@ -29,7 +29,7 @@ const Tab: React.FC<Props> = ({ active, danger, onClick, children }) => {
     >
       {children}
     </span>
-  );
-};
+  )
+}
 
-export default Tab;
+export default Tab

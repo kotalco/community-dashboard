@@ -1,25 +1,25 @@
-import Link from 'next/link';
-import { useRouter } from 'next/router';
+import Link from 'next/link'
+import { useRouter } from 'next/router'
 
 interface IconProps {
-  className?: string;
+  className?: string
 }
 
 interface Props {
-  url: string;
-  Icon?: React.ComponentType<IconProps>;
+  url: string
+  Icon?: React.ComponentType<IconProps>
 }
 
 const NavLink: React.FC<Props> = ({ children, url, Icon }) => {
-  const { pathname } = useRouter();
+  const { pathname } = useRouter()
   const activeClassNames = {
     link: 'bg-gray-100 text-gray-900',
     icon: 'text-gray-500',
-  };
+  }
   const defaultClassNames = {
     link: 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
     icon: 'text-gray-400 group-hover:text-gray-500',
-  };
+  }
 
   return (
     // Current: "bg-gray-100 text-gray-900", Default: "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
@@ -40,7 +40,7 @@ const NavLink: React.FC<Props> = ({ children, url, Icon }) => {
         {children}
       </a>
     </Link>
-  );
-};
+  )
+}
 
-export default NavLink;
+export default NavLink

@@ -1,12 +1,12 @@
-import { useState } from 'react';
+import { useState } from 'react'
 
-import TextInputWithButton from '@components/molecules/TextInputWithButton/TextInputWithButton';
-import Toggle from '@components/molecules/Toggle/Toggle';
-import Textarea from '@components/molecules/Textarea/Textarea';
-import Button from '@components/atoms/Button/Button';
+import TextInputWithButton from '@components/molecules/TextInputWithButton/TextInputWithButton'
+import Toggle from '@components/molecules/Toggle/Toggle'
+import Textarea from '@components/molecules/Textarea/Textarea'
+import Button from '@components/atoms/Button/Button'
 
 const NetworkingTabContent: React.FC = () => {
-  const [isChecked, setIsChecked] = useState(false);
+  const [isChecked, setIsChecked] = useState(false)
 
   return (
     <div>
@@ -47,7 +47,7 @@ const NetworkingTabContent: React.FC = () => {
         <Button onClick={() => {}}>Save</Button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default NetworkingTabContent;
+export default NetworkingTabContent

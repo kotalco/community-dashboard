@@ -16,7 +16,7 @@ const MenuIcon: React.FC = () => {
         d="M4 6h16M4 12h16M4 18h7"
       />
     </svg>
-  );
-};
+  )
+}
 
-export default MenuIcon;
+export default MenuIcon

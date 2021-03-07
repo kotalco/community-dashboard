@@ -1,5 +1,5 @@
 interface Props {
-  className: string;
+  className: string
 }
 
 const CloseIcon: React.FC<Props> = ({ className }) => {
@@ -20,7 +20,7 @@ const CloseIcon: React.FC<Props> = ({ className }) => {
         d="M6 18L18 6M6 6l12 12"
       />
     </svg>
-  );
-};
+  )
+}
 
-export default CloseIcon;
+export default CloseIcon

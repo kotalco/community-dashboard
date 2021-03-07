@@ -1,10 +1,10 @@
-import InputLabel from '@components/atoms/InputLabel/InputLabel';
+import InputLabel from '@components/atoms/InputLabel/InputLabel'
 
 interface Props {
-  options: string[];
-  name: string;
-  id?: string;
-  label: string;
+  options: string[]
+  name: string
+  id?: string
+  label: string
 }
 
 const Select: React.FC<Props> = ({ options, name, id, label }) => {
@@ -26,7 +26,7 @@ const Select: React.FC<Props> = ({ options, name, id, label }) => {
         ))}
       </select>
     </div>
-  );
-};
+  )
+}
 
-export default Select;
+export default Select

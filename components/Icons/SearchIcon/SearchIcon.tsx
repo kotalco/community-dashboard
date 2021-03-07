@@ -14,7 +14,7 @@ const SearchIcon = () => {
         clipRule="evenodd"
       />
     </svg>
-  );
-};
+  )
+}
 
-export default SearchIcon;
+export default SearchIcon

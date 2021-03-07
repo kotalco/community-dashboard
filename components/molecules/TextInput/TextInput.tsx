@@ -1,9 +1,9 @@
-import InputLabel from '@components/atoms/InputLabel/InputLabel';
+import InputLabel from '@components/atoms/InputLabel/InputLabel'
 
 interface Props {
-  id?: string;
-  name: string;
-  label: string;
+  id?: string
+  name: string
+  label: string
 }
 
 const TextInput: React.FC<Props> = ({ id, name, label }) => {
@@ -24,7 +24,7 @@ const TextInput: React.FC<Props> = ({ id, name, label }) => {
         />
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default TextInput;
+export default TextInput

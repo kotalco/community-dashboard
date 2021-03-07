@@ -1,14 +1,14 @@
-import { Transition } from '@headlessui/react';
+import { Transition } from '@headlessui/react'
 
-import MenuOverlay from '@components/atoms/MenuOverlay/MenuOverlay';
-import IconButton from '@components/atoms/IconButton/IconButton';
-import Logo from '@components/atoms/Logo/Logo';
-import NavLinks from '@components/molecules/NavLinks/NavLinks';
-import CloseIcon from '@components/Icons/CloseIcon/CloseIcon';
+import MenuOverlay from '@components/atoms/MenuOverlay/MenuOverlay'
+import IconButton from '@components/atoms/IconButton/IconButton'
+import Logo from '@components/atoms/Logo/Logo'
+import NavLinks from '@components/molecules/NavLinks/NavLinks'
+import CloseIcon from '@components/Icons/CloseIcon/CloseIcon'
 
 interface Props {
-  isOpen: boolean;
-  toggleSidebar: () => void;
+  isOpen: boolean
+  toggleSidebar: () => void
 }
 
 const SidebarMobile: React.FC<Props> = ({ isOpen, toggleSidebar }) => {
@@ -55,7 +55,7 @@ const SidebarMobile: React.FC<Props> = ({ isOpen, toggleSidebar }) => {
         </div>
       </Transition>
     </div>
-  );
-};
+  )
+}
 
-export default SidebarMobile;
+export default SidebarMobile

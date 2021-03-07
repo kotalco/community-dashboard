@@ -1,7 +1,7 @@
-import PageDetailsHeader from '@components/molecules/PageDetailsHeader/PageDetailsHeader';
-import StatsComponent from '@components/molecules/Stats/Stats';
-import Tabs from '@components/organisms/Tabs/Tabs';
-import Layout from '@components/templates/Layout/Layout';
+import PageDetailsHeader from '@components/molecules/PageDetailsHeader/PageDetailsHeader'
+import StatsComponent from '@components/molecules/Stats/Stats'
+import Tabs from '@components/organisms/Tabs/Tabs'
+import Layout from '@components/templates/Layout/Layout'
 
 const NodeDetails: React.FC = () => {
   return (
@@ -28,7 +28,7 @@ const NodeDetails: React.FC = () => {
         </div>
       </div>
     </Layout>
-  );
-};
+  )
+}
 
-export default NodeDetails;
+export default NodeDetails

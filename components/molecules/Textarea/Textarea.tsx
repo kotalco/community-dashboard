@@ -1,9 +1,9 @@
-import Typography from '@components/atoms/Typgraphy/Typography';
+import Typography from '@components/atoms/Typgraphy/Typography'
 
 interface Props {
-  label: string;
-  id: string;
-  helperText: string;
+  label: string
+  id: string
+  helperText: string
 }
 
 const Textarea: React.FC<Props> = ({ id, label, helperText }) => {
@@ -22,7 +22,7 @@ const Textarea: React.FC<Props> = ({ id, label, helperText }) => {
         {helperText}
       </Typography>
     </>
-  );
-};
+  )
+}
 
-export default Textarea;
+export default Textarea

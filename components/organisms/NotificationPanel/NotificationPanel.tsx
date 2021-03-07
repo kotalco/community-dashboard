@@ -1,19 +1,19 @@
-import { useState } from 'react';
-import { Transition } from '@headlessui/react';
+import { useState } from 'react'
+import { Transition } from '@headlessui/react'
 
-import CheckCircleIcon from '@components/Icons/CheckCircleIcon/CheckCircleIcon';
-import IconButton from '@components/atoms/IconButton/IconButton';
-import Typography from '@components/atoms/Typgraphy/Typography';
-import CloseIcon from '@components/Icons/CloseIcon/CloseIcon';
+import CheckCircleIcon from '@components/Icons/CheckCircleIcon/CheckCircleIcon'
+import IconButton from '@components/atoms/IconButton/IconButton'
+import Typography from '@components/atoms/Typgraphy/Typography'
+import CloseIcon from '@components/Icons/CloseIcon/CloseIcon'
 
 interface Props {
-  title?: string;
-  name: string;
-  type: string;
+  title?: string
+  name: string
+  type: string
 }
 
 const NotificationPanel: React.FC<Props> = ({ title, name, type }) => {
-  const [show, setShow] = useState(true);
+  const [show, setShow] = useState(true)
 
   return (
     <div className="z-30 fixed inset-0 flex items-end justify-center px-4 py-6 pointer-events-none sm:-6 sm:items-start sm:justify-end">
@@ -60,7 +60,7 @@ const NotificationPanel: React.FC<Props> = ({ title, name, type }) => {
         </div>
       </Transition>
     </div>
-  );
-};
+  )
+}
 
-export default NotificationPanel;
+export default NotificationPanel

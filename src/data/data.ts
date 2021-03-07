@@ -17,7 +17,7 @@ export const NODES = [
     client: 'Rinkeby',
     server: 'Hyperledger Besu',
   },
-];
+]
 
 export const ENDPOINTS = [
   {
@@ -35,4 +35,4 @@ export const ENDPOINTS = [
     name: 'rinkeby-endpoint',
     nodeName: 'my-ethereum-node',
   },
-];
+]

@@ -1,7 +1,7 @@
 interface Props {
-  srOnly?: boolean;
-  htmlFor: string;
-  className?: string;
+  srOnly?: boolean
+  htmlFor: string
+  className?: string
 }
 
 const InputLabel: React.FC<Props> = ({
@@ -17,7 +17,7 @@ const InputLabel: React.FC<Props> = ({
     >
       {children}
     </label>
-  );
-};
+  )
+}
 
-export default InputLabel;
+export default InputLabel

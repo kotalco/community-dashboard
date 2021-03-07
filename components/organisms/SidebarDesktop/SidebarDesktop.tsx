@@ -1,5 +1,5 @@
-import Logo from '@components/atoms/Logo/Logo';
-import NavLinks from '@components/molecules/NavLinks/NavLinks';
+import Logo from '@components/atoms/Logo/Logo'
+import NavLinks from '@components/molecules/NavLinks/NavLinks'
 
 const SidebarDesktop: React.FC = () => {
   return (
@@ -13,7 +13,7 @@ const SidebarDesktop: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SidebarDesktop;
+export default SidebarDesktop

@@ -1,5 +1,5 @@
-import { ENDPOINTS } from '../../../src/data/data';
-import EndpointItem from '@components/molecules/EndpointItem/EndpointItem';
+import { ENDPOINTS } from '../../../src/data/data'
+import EndpointItem from '@components/molecules/EndpointItem/EndpointItem'
 
 const EndpointsList: React.FC = () => {
   return (
@@ -8,7 +8,7 @@ const EndpointsList: React.FC = () => {
         <EndpointItem key={id} name={name} nodeName={nodeName} />
       ))}
     </ul>
-  );
-};
+  )
+}
 
-export default EndpointsList;
+export default EndpointsList

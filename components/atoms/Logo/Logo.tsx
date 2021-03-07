@@ -1,4 +1,4 @@
-import Typography from '@components/atoms/Typgraphy/Typography';
+import Typography from '@components/atoms/Typgraphy/Typography'
 
 const Logo: React.FC = () => {
   return (
@@ -7,7 +7,7 @@ const Logo: React.FC = () => {
         Kotal
       </Typography>
     </div>
-  );
-};
+  )
+}
 
-export default Logo;
+export default Logo

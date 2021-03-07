@@ -1,5 +1,5 @@
-import { NODES } from '../../../src/data/data';
-import NodeItem from '@components/molecules/NodeItem/NodeItem';
+import { NODES } from '../../../src/data/data'
+import NodeItem from '@components/molecules/NodeItem/NodeItem'
 
 const NodesList: React.FC = () => {
   return (
@@ -14,7 +14,7 @@ const NodesList: React.FC = () => {
         />
       ))}
     </ul>
-  );
-};
+  )
+}
 
-export default NodesList;
+export default NodesList

@@ -1,7 +1,7 @@
 interface Props {
-  id?: string;
-  name?: string;
-  label: string;
+  id?: string
+  name?: string
+  label: string
 }
 
 const CheckBox: React.FC<Props> = ({ id, name, label }) => {
@@ -21,7 +21,7 @@ const CheckBox: React.FC<Props> = ({ id, name, label }) => {
         </label>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CheckBox;
+export default CheckBox

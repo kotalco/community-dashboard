@@ -1,11 +1,11 @@
-import Link from 'next/link';
+import Link from 'next/link'
 
-import Typography from '@components/atoms/Typgraphy/Typography';
-import CubeIcon from '@components/Icons/CubeIcon/CubeIcon';
+import Typography from '@components/atoms/Typgraphy/Typography'
+import CubeIcon from '@components/Icons/CubeIcon/CubeIcon'
 
 interface Props {
-  name: string;
-  nodeName: string;
+  name: string
+  nodeName: string
 }
 
 const EndpointItem: React.FC<Props> = ({ name, nodeName }) => {
@@ -37,7 +37,7 @@ const EndpointItem: React.FC<Props> = ({ name, nodeName }) => {
         </a>
       </Link>
     </li>
-  );
-};
+  )
+}
 
-export default EndpointItem;
+export default EndpointItem

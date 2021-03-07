@@ -1,5 +1,5 @@
-import Button from '@components/atoms/Button/Button';
-import Select from '@components/molecules/Select/Select';
+import Button from '@components/atoms/Button/Button'
+import Select from '@components/molecules/Select/Select'
 
 const ProtocolTabContent = () => {
   return (
@@ -37,7 +37,7 @@ const ProtocolTabContent = () => {
         <Button onClick={() => {}}>Save</Button>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default ProtocolTabContent;
+export default ProtocolTabContent

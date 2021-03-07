@@ -1,10 +1,10 @@
-import React from 'react';
-import Link from 'next/link';
-import Typography from '@components/atoms/Typgraphy/Typography';
-import Layout from '@components/templates/Layout/Layout';
+import React from 'react'
+import Link from 'next/link'
+import Typography from '@components/atoms/Typgraphy/Typography'
+import Layout from '@components/templates/Layout/Layout'
 
-import NodesList from '@components/organisms/NodesList/NodesList';
-import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
+import NodesList from '@components/organisms/NodesList/NodesList'
+import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel'
 
 const Home: React.FC = () => {
   return (
@@ -37,7 +37,7 @@ const Home: React.FC = () => {
         type="IPFS node"
       />
     </Layout>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

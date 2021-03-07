@@ -1,10 +1,10 @@
-import CopyIcon from '@components/Icons/CopyIcon/CopyIcon';
+import CopyIcon from '@components/Icons/CopyIcon/CopyIcon'
 
 interface Props {
-  id: string;
-  label: string;
-  name: string;
-  value: string;
+  id: string
+  label: string
+  name: string
+  value: string
 }
 
 const TextInputWithButton: React.FC<Props> = ({ id, label, name, value }) => {
@@ -30,7 +30,7 @@ const TextInputWithButton: React.FC<Props> = ({ id, label, name, value }) => {
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default TextInputWithButton;
+export default TextInputWithButton

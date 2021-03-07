@@ -1,9 +1,9 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react'
 
 interface Props {
-  setActiveTabIndex: Dispatch<SetStateAction<number>>;
-  tabs: string[];
-  activeTabIndex: number;
+  setActiveTabIndex: Dispatch<SetStateAction<number>>
+  tabs: string[]
+  activeTabIndex: number
 }
 
 const TabsMobileView: React.FC<Props> = ({
@@ -30,7 +30,7 @@ const TabsMobileView: React.FC<Props> = ({
         ))}
       </select>
     </div>
-  );
-};
+  )
+}
 
-export default TabsMobileView;
+export default TabsMobileView

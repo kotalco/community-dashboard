@@ -1,11 +1,11 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from 'react'
 
-import Tab from '@components/atoms/Tab/Tab';
+import Tab from '@components/atoms/Tab/Tab'
 
 interface Props {
-  setActiveTabIndex: Dispatch<SetStateAction<number>>;
-  tabs: string[];
-  activeTabIndex: number;
+  setActiveTabIndex: Dispatch<SetStateAction<number>>
+  tabs: string[]
+  activeTabIndex: number
 }
 
 const Tabs: React.FC<Props> = ({ tabs, activeTabIndex, setActiveTabIndex }) => {
@@ -24,7 +24,7 @@ const Tabs: React.FC<Props> = ({ tabs, activeTabIndex, setActiveTabIndex }) => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Tabs;
+export default Tabs

@@ -1,6 +1,6 @@
 interface Props {
-  title: string;
-  content: string;
+  title: string
+  content: string
 }
 
 const Stats: React.FC<Props> = ({ title, content }) => {
@@ -11,7 +11,7 @@ const Stats: React.FC<Props> = ({ title, content }) => {
         <dd className="mt-1 text-3xl font-semibold text-gray-900">{content}</dd>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Stats;
+export default Stats

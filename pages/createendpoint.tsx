@@ -1,7 +1,7 @@
-import React from 'react';
-import Typography from '@components/atoms/Typgraphy/Typography';
-import Layout from '@components/templates/Layout/Layout';
-import CreateEndpointForm from '@components/organisms/CreateEndpointForm/CreateEndpointForm';
+import React from 'react'
+import Typography from '@components/atoms/Typgraphy/Typography'
+import Layout from '@components/templates/Layout/Layout'
+import CreateEndpointForm from '@components/organisms/CreateEndpointForm/CreateEndpointForm'
 
 const CreateEndpoint: React.FC = () => {
   return (
@@ -22,7 +22,7 @@ const CreateEndpoint: React.FC = () => {
         </div>
       </div>
     </Layout>
-  );
-};
+  )
+}
 
-export default CreateEndpoint;
+export default CreateEndpoint

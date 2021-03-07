@@ -1,5 +1,5 @@
 interface Props {
-  onClick: () => void;
+  onClick: () => void
 }
 
 const Button: React.FC<Props> = ({ children, onClick }) => {
@@ -11,7 +11,7 @@ const Button: React.FC<Props> = ({ children, onClick }) => {
     >
       {children}
     </button>
-  );
-};
+  )
+}
 
-export default Button;
+export default Button

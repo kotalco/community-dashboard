@@ -1,8 +1,8 @@
 interface Props {
-  id: string;
-  label: string;
-  checked: boolean;
-  onClick: () => void;
+  id: string
+  label: string
+  checked: boolean
+  onClick: () => void
 }
 
 const Toggle: React.FC<Props> = ({ id, label, checked, onClick }) => {
@@ -31,7 +31,7 @@ const Toggle: React.FC<Props> = ({ id, label, checked, onClick }) => {
         </button>
       </div>
     </>
-  );
-};
+  )
+}
 
-export default Toggle;
+export default Toggle

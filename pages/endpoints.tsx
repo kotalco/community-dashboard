@@ -1,9 +1,9 @@
-import React from 'react';
-import Link from 'next/link';
+import React from 'react'
+import Link from 'next/link'
 
-import Typography from '@components/atoms/Typgraphy/Typography';
-import Layout from '@components/templates/Layout/Layout';
-import EndPointsList from '@components/organisms/EndpointsList/EndpointsList';
+import Typography from '@components/atoms/Typgraphy/Typography'
+import Layout from '@components/templates/Layout/Layout'
+import EndPointsList from '@components/organisms/EndpointsList/EndpointsList'
 
 const Endpoints: React.FC = () => {
   return (
@@ -29,7 +29,7 @@ const Endpoints: React.FC = () => {
         </div>
       </div>
     </Layout>
-  );
-};
+  )
+}
 
-export default Endpoints;
+export default Endpoints

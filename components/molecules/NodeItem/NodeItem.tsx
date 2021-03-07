@@ -1,19 +1,19 @@
-import Link from 'next/link';
+import Link from 'next/link'
 
-import Typography from '@components/atoms/Typgraphy/Typography';
-import GlobeIcon from '@components/Icons/GlobeIcon/GlobeIcon';
-import ChipIcon from '@components/Icons/ChipIcon/ChipIcon';
-import ChevronRightIcon from '@components/Icons/ChevronRightIcon/ChevronRightIcon';
+import Typography from '@components/atoms/Typgraphy/Typography'
+import GlobeIcon from '@components/Icons/GlobeIcon/GlobeIcon'
+import ChipIcon from '@components/Icons/ChipIcon/ChipIcon'
+import ChevronRightIcon from '@components/Icons/ChevronRightIcon/ChevronRightIcon'
 
 interface Props {
-  id: number;
-  name: string;
-  client: string;
-  server: string;
+  id: number
+  name: string
+  client: string
+  server: string
 }
 
 const NodeItem: React.FC<Props> = (props) => {
-  const { id, name, client, server } = props;
+  const { id, name, client, server } = props
 
   return (
     <li>
@@ -42,7 +42,7 @@ const NodeItem: React.FC<Props> = (props) => {
         </a>
       </Link>
     </li>
-  );
-};
+  )
+}
 
-export default NodeItem;
+export default NodeItem

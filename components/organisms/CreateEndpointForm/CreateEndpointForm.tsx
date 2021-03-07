@@ -1,13 +1,13 @@
-import Router from 'next/router';
+import Router from 'next/router'
 
-import TextInput from '@components/molecules/TextInput/TextInput';
-import Select from '@components/molecules/Select/Select';
-import Button from '@components/atoms/Button/Button';
+import TextInput from '@components/molecules/TextInput/TextInput'
+import Select from '@components/molecules/Select/Select'
+import Button from '@components/atoms/Button/Button'
 
 const CreateEndpoint: React.FC = () => {
   const submitForm = () => {
-    Router.push('/endpoints');
-  };
+    Router.push('/endpoints')
+  }
 
   return (
     <form>
@@ -37,7 +37,7 @@ const CreateEndpoint: React.FC = () => {
         </div>
       </div>
     </form>
-  );
-};
+  )
+}
 
-export default CreateEndpoint;
+export default CreateEndpoint
