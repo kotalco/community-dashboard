@@ -1,4 +1,6 @@
-const SearchIcon = () => {
+import { ReactElement } from 'react'
+
+const SearchIcon = (): ReactElement => {
   return (
     // Heroicon name: search
     <svg

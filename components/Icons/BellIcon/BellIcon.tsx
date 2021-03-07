@@ -1,4 +1,6 @@
-const BellIcon = () => {
+import { ReactElement } from 'react'
+
+const BellIcon = (): ReactElement => {
   return (
     // Heroicon name: bell
     <svg

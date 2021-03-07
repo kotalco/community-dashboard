@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { ReactElement, useState } from 'react'
 
 import TabsMobileView from '@components/molecules/TabsMobileView/TabsMobileView'
 import TabsDesktopView from '@components/molecules/TabsDesktopView/TabsDesktopView'
@@ -15,7 +15,7 @@ const TAB_TITLES = [
   'Dangerous Zone',
 ]
 
-const Tabs = () => {
+const Tabs = (): ReactElement => {
   const [activeTabIndex, setActiveTabIndex] = useState(0)
 
   return (

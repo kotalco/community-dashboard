@@ -8,6 +8,11 @@ interface Props {
 }
 
 const Navbar: React.FC<Props> = ({ toggleSidebar }) => {
+  const handleClick = () => {
+    // eslint-disable-next-line no-console
+    console.log('Clicked')
+  }
+
   return (
     <div className="relative z-10 flex-shrink-0 flex h-16 bg-white shadow">
       <IconButton
@@ -26,7 +31,7 @@ const Navbar: React.FC<Props> = ({ toggleSidebar }) => {
           <IconButton
             srOnly="View notification"
             className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            onClick={() => {}}
+            onClick={handleClick}
           >
             <BellIcon />
           </IconButton>

@@ -8,6 +8,11 @@ import Button from '@components/atoms/Button/Button'
 const NetworkingTabContent: React.FC = () => {
   const [isChecked, setIsChecked] = useState(false)
 
+  const handleClick = () => {
+    // eslint-disable-next-line no-console
+    console.log('Clicked')
+  }
+
   return (
     <div>
       <div className="px-4 py-5 sm:p-6">
@@ -44,7 +49,7 @@ const NetworkingTabContent: React.FC = () => {
         </div>
       </div>
       <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-        <Button onClick={() => {}}>Save</Button>
+        <Button onClick={handleClick}>Save</Button>
       </div>
     </div>
   )

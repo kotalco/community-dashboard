@@ -1,7 +1,13 @@
 import Button from '@components/atoms/Button/Button'
 import Select from '@components/molecules/Select/Select'
+import { ReactElement } from 'react'
 
-const ProtocolTabContent = () => {
+const ProtocolTabContent = (): ReactElement => {
+  const handleClick = () => {
+    // eslint-disable-next-line no-console
+    console.log('Clicked')
+  }
+
   return (
     <>
       <div className="px-4 py-5 sm:p-6">
@@ -34,7 +40,7 @@ const ProtocolTabContent = () => {
         </div>
       </div>
       <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-        <Button onClick={() => {}}>Save</Button>
+        <Button onClick={handleClick}>Save</Button>
       </div>
     </>
   )
