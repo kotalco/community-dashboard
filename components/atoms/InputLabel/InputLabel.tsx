@@ -2,6 +2,7 @@ interface Props {
   srOnly?: boolean
   htmlFor: string
   className?: string
+  children: string
 }
 
 const InputLabel: React.FC<Props> = ({
