@@ -11,6 +11,7 @@ const KeyIcon: React.FC<Props> = ({ className }) => {
       fill="none"
       viewBox="0 0 24 24"
       stroke="currentColor"
+      data-testid="icon"
     >
       <path
         strokeLinecap="round"
