@@ -1,7 +1,10 @@
+import { ReactElement } from 'react'
+
 interface Props {
   srOnly?: string
   className?: string
   onClick: () => void
+  children: ReactElement
 }
 
 const IconButton: React.FC<Props> = (props) => {
