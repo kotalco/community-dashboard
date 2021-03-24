@@ -1,12 +1,17 @@
 import React from 'react'
 import Link from 'next/link'
+import { GetStaticProps, InferGetStaticPropsType } from 'next'
+
 import Typography from '@components/atoms/Typgraphy/Typography'
 import Layout from '@components/templates/Layout/Layout'
-
 import NodesList from '@components/organisms/NodesList/NodesList'
 import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel'
+import { getAllNodes } from '@utils/requests'
+import { AxiosGetAllResponse, EthereumNode } from '@interfaces/Node'
 
-const Home: React.FC = () => {
+const Home: React.FC = ({
+  nodes,
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
   return (
     <Layout>
       <div className="py-6">
@@ -23,21 +28,31 @@ const Home: React.FC = () => {
             </a>
           </Link>
         </div>
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
           <div className="py-4">
             <div className="bg-white shadow overflow-hidden sm:rounded-md">
-              <NodesList />
+              <NodesList nodes={nodes} />
             </div>
           </div>
         </div>
       </div>
-      <NotificationPanel
+      {/* <NotificationPanel
         title="Node has been created successfully!"
         name="my-ipfs-node"
         type="IPFS node"
-      />
+      /> */}
     </Layout>
   )
+}
+
+export const getStaticProps: GetStaticProps = async () => {
+  const nodes = await getAllNodes('ethereum')
+
+  return {
+    props: { nodes },
+    revalidate: 20,
+  }
 }
 
 export default Home

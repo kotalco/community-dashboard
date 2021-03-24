@@ -1,16 +1,19 @@
-import { NODES } from '../../../src/data/data'
 import NodeItem from '@components/molecules/NodeItem/NodeItem'
+import { EthereumNode } from '@interfaces/Node'
 
-const NodesList: React.FC = () => {
+interface Props {
+  nodes: EthereumNode[]
+}
+
+const NodesList: React.FC<Props> = ({ nodes }) => {
   return (
     <ul className="divide-y divide-gray-200">
-      {NODES.map((node) => (
+      {nodes.map((node) => (
         <NodeItem
-          key={node.id}
-          id={node.id}
+          key={node.name}
           name={node.name}
           client={node.client}
-          server={node.server}
+          network={node.network}
         />
       ))}
     </ul>

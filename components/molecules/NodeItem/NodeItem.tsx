@@ -6,18 +6,17 @@ import ChipIcon from '@components/Icons/ChipIcon/ChipIcon'
 import ChevronRightIcon from '@components/Icons/ChevronRightIcon/ChevronRightIcon'
 
 interface Props {
-  id: number
   name: string
   client: string
-  server: string
+  network: string
 }
 
 const NodeItem: React.FC<Props> = (props) => {
-  const { id, name, client, server } = props
+  const { name, client, network } = props
 
   return (
     <li>
-      <Link href={`/nodes/${id}`}>
+      <Link href={`/nodes/${name}`}>
         <a className="block hover:bg-gray-50">
           <div className="px-4 py-4 flex items-center sm:px-6">
             <div className="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
@@ -30,7 +29,7 @@ const NodeItem: React.FC<Props> = (props) => {
                     <GlobeIcon />
                     <Typography variant="p">{client}</Typography>
                     <ChipIcon />
-                    <Typography variant="p">{server}</Typography>
+                    <Typography variant="p">{network}</Typography>
                   </div>
                 </div>
               </div>
