@@ -5,9 +5,8 @@ import { GetStaticProps, InferGetStaticPropsType } from 'next'
 import Typography from '@components/atoms/Typgraphy/Typography'
 import Layout from '@components/templates/Layout/Layout'
 import NodesList from '@components/organisms/NodesList/NodesList'
-import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel'
+// import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel'
 import { getAllNodes } from '@utils/requests'
-import { AxiosGetAllResponse, EthereumNode } from '@interfaces/Node'
 
 const Home: React.FC = ({
   nodes,

@@ -1,35 +1,88 @@
 import React, { useState } from 'react'
-import Router from 'next/router'
+import { useRouter } from 'next/router'
+import { useForm } from 'react-hook-form'
 
-import Typography from '@components/atoms/Typgraphy/Typography'
+// import Typography from '@components/atoms/Typgraphy/Typography'
 import TextInput from '@components/molecules/TextInput/TextInput'
 import Select from '@components/molecules/Select/Select'
 import Button from '@components/atoms/Button/Button'
-import CreateIPFSNodeForm from '@components/organisms/CreateIPFSNodeForm/CreateIPFSNodeForm'
+// import CreateIPFSNodeForm from '@components/organisms/CreateIPFSNodeForm/CreateIPFSNodeForm'
+import { protocolSelectOptions, ethereumNodeClientsOptions } from '@data/data'
+import { Protocol } from '@enums/Protocol'
+import { createNode } from '@utils/requests'
+
+type FormData = {
+  name: string
+  protocol: string
+  network: string
+  client: string
+}
+
+const defaultValues = {
+  protocol: Protocol.ethereum,
+}
 
 const CreateNodeForm: React.FC = () => {
-  const [showAdvanced, setShowAdvanced] = useState(false)
+  // const [showAdvanced, setShowAdvanced] = useState(false)
+  const [submitError, setSubmitError] = useState('')
+  const router = useRouter()
+  const { register, handleSubmit, watch, formState } = useForm<FormData>({
+    defaultValues,
+  })
+  const { protocol } = watch(['protocol'])
+  const clients = protocol === 'ethereum' ? ethereumNodeClientsOptions : []
 
-  const submitForm = () => {
-    Router.push('/')
+  const onSubmit = async (data: FormData) => {
+    const { name, protocol, network, client } = data
+    const body = { name, network, client }
+
+    try {
+      setSubmitError('')
+      await createNode(protocol, body)
+      router.push('/')
+    } catch (e) {
+      setSubmitError(e.response.data.error)
+    }
   }
-
   return (
     <form>
       <div>
         <div className="px-4 py-5 sm:p-6">
           {/* Node Name */}
-          <TextInput name="node_name" id="node_name" label="Node Name" />
+          <TextInput
+            name="name"
+            label="Node Name"
+            ref={register({ required: 'Please provide a node name.' })}
+            error={formState.errors.name?.message}
+          />
 
           {/* Blockchain Protocol */}
           <Select
             label="Blockchain Protocol"
-            options={['Ethereum', 'Ethereum 2.0', 'Filecoin', 'IPFS']}
+            options={protocolSelectOptions}
             name="protocol"
+            ref={register}
+          />
+
+          {/* Client */}
+          <Select
+            label="Client"
+            options={clients}
+            name="client"
+            ref={register}
+          />
+
+          {/* Network */}
+          <TextInput
+            className="mt-5"
+            name="network"
+            label="Network"
+            ref={register({ required: 'Please provide a network name.' })}
+            error={formState.errors.network?.message}
           />
 
           {/* Show Advanced Setting */}
-          <div
+          {/* <div
             className={`block mt-4 text-red-500 cursor-pointer hover:text-red-600 ${
               showAdvanced ? 'hidden' : ''
             }`}
@@ -39,14 +92,17 @@ const CreateNodeForm: React.FC = () => {
             <Typography variant="p" className="text-black">
               I know what I am doing
             </Typography>
-          </div>
+          </div> */}
 
-          <CreateIPFSNodeForm showAdvanced={showAdvanced} />
+          {/* <CreateIPFSNodeForm showAdvanced={showAdvanced} /> */}
 
           {/* <!-- end: content here --> */}
         </div>
+        {submitError && (
+          <p className="text-center text-red-500 mb-5">{submitError}</p>
+        )}
         <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-          <Button onClick={submitForm}>Create</Button>
+          <Button onClick={handleSubmit(onSubmit)}>Create</Button>
         </div>
       </div>
     </form>

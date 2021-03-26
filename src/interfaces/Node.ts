@@ -4,6 +4,10 @@ export interface EthereumNode {
   client: string
 }
 
-export interface AxiosGetAllResponse {
+export interface AxiosGetAllNodesResponse {
   nodes: EthereumNode[]
+}
+
+export interface AxiosCreateNodeResponse {
+  node: EthereumNode
 }
