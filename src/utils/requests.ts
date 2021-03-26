@@ -34,3 +34,16 @@ export const getNode = async (
   )
   return data.node
 }
+
+// Update node by its name
+export const updateNode = async (
+  body: { client: string },
+  name: string,
+  protocol: string
+): Promise<EthereumNode> => {
+  const { data } = await axios.put<AxiosNodeResponse>(
+    `/${protocol}/nodes/${name}`,
+    body
+  )
+  return data.node
+}
