@@ -7,11 +7,12 @@ interface Props {
   options: SelectOption[]
   name: string
   label: string
+  defaultValue?: string
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void
 }
 
 const Select = React.forwardRef<HTMLSelectElement, Props>(
-  ({ options, name, label, onChange }, ref) => {
+  ({ options, name, label, onChange, defaultValue }, ref) => {
     return (
       <div className="mt-4">
         <InputLabel
@@ -21,6 +22,7 @@ const Select = React.forwardRef<HTMLSelectElement, Props>(
           {label}
         </InputLabel>
         <select
+          defaultValue={defaultValue}
           id={name}
           name={name}
           ref={ref}

@@ -1,11 +1,26 @@
+import { useRouter } from 'next/router'
+import { useForm } from 'react-hook-form'
+
 import Button from '@components/atoms/Button/Button'
 import Select from '@components/molecules/Select/Select'
-import { ReactElement } from 'react'
+import { EthereumNode } from '@interfaces/Node'
+import { ethereumNodeClientsOptions } from '@data/data'
+import { Protocol } from '@enums/Protocol'
 
-const ProtocolTabContent = (): ReactElement => {
-  const handleClick = () => {
+interface Props {
+  node: EthereumNode
+}
+
+const ProtocolTabContent: React.FC<Props> = ({ node }) => {
+  const router = useRouter()
+  const { register, handleSubmit } = useForm()
+  const { protocol } = router.query
+  const clients =
+    protocol === Protocol.ethereum ? ethereumNodeClientsOptions : []
+
+  const onSubmit = (data: { client: string }) => {
     // eslint-disable-next-line no-console
-    console.log('Clicked')
+    console.log(data)
   }
 
   return (
@@ -14,7 +29,7 @@ const ProtocolTabContent = (): ReactElement => {
         <dl>
           <dt className="block text-sm font-medium text-gray-700">Protocol</dt>
           <dd className="mt-1">
-            <span className="text-gray-500 text-sm">Ethereum</span>
+            <span className="text-gray-500 text-sm">{protocol}</span>
           </dd>
         </dl>
         <dl>
@@ -22,25 +37,21 @@ const ProtocolTabContent = (): ReactElement => {
             Chain
           </dt>
           <dd className="mt-1">
-            <span className="text-gray-500 text-sm">Rinkeby</span>
+            <span className="text-gray-500 text-sm">{node.network}</span>
           </dd>
         </dl>
         <div className="mt-4">
           <Select
-            options={[
-              'Go Ethereum',
-              'Hyperledger Besu',
-              'Open Ethereum',
-              'Nethermind',
-            ]}
-            name="location"
+            ref={register}
+            options={clients}
+            defaultValue={node.client}
+            name="client"
             label="Client Software"
-            id="location"
           />
         </div>
       </div>
       <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-        <Button onClick={handleClick}>Save</Button>
+        <Button onClick={handleSubmit(onSubmit)}>Save</Button>
       </div>
     </>
   )

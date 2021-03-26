@@ -1,6 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
-import { GetStaticProps, InferGetStaticPropsType } from 'next'
+import { InferGetStaticPropsType } from 'next'
 
 import Typography from '@components/atoms/Typgraphy/Typography'
 import Layout from '@components/templates/Layout/Layout'
@@ -8,9 +8,9 @@ import NodesList from '@components/organisms/NodesList/NodesList'
 // import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel'
 import { getAllNodes } from '@utils/requests'
 
-const Home: React.FC = ({
+function Home({
   nodes,
-}: InferGetStaticPropsType<typeof getStaticProps>) => {
+}: InferGetStaticPropsType<typeof getStaticProps>): React.ReactElement {
   return (
     <Layout>
       <div className="py-6">
@@ -45,7 +45,8 @@ const Home: React.FC = ({
   )
 }
 
-export const getStaticProps: GetStaticProps = async () => {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export const getStaticProps = async () => {
   const nodes = await getAllNodes('ethereum')
 
   return {

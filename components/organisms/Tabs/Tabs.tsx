@@ -4,6 +4,7 @@ import TabsMobileView from '@components/molecules/TabsMobileView/TabsMobileView'
 import TabsDesktopView from '@components/molecules/TabsDesktopView/TabsDesktopView'
 import ProtocolTabContent from '@components/organisms/ProtocolTabContent/ProtocolTabContent'
 import NetworkingTabContent from '@components/organisms/NetworkingTabContent/NetworkingTabContent'
+import { EthereumNode } from '@interfaces/Node'
 
 const TAB_TITLES = [
   'Protocol',
@@ -15,7 +16,11 @@ const TAB_TITLES = [
   'Dangerous Zone',
 ]
 
-const Tabs = (): ReactElement => {
+interface Props {
+  node: EthereumNode
+}
+
+const Tabs: React.FC<Props> = ({ node }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0)
 
   return (
@@ -37,7 +42,7 @@ const Tabs = (): ReactElement => {
       </div>
 
       {/* Content */}
-      {activeTabIndex === 0 && <ProtocolTabContent />}
+      {activeTabIndex === 0 && <ProtocolTabContent node={node} />}
       {activeTabIndex === 1 && <NetworkingTabContent />}
       {activeTabIndex === 2 && <ProtocolTabContent />}
       {activeTabIndex === 3 && <ProtocolTabContent />}
