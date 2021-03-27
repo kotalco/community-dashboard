@@ -1,9 +1,10 @@
-import { ReactElement, useState } from 'react'
+import { useState } from 'react'
 
 import TabsMobileView from '@components/molecules/TabsMobileView/TabsMobileView'
 import TabsDesktopView from '@components/molecules/TabsDesktopView/TabsDesktopView'
 import ProtocolTabContent from '@components/organisms/ProtocolTabContent/ProtocolTabContent'
 import NetworkingTabContent from '@components/organisms/NetworkingTabContent/NetworkingTabContent'
+import DangerousZoneContent from '@components/organisms/DangerousZoneContent/DangerousZoneContent'
 import { EthereumNode } from '@interfaces/Node'
 
 const TAB_TITLES = [
@@ -44,11 +45,11 @@ const Tabs: React.FC<Props> = ({ node }) => {
       {/* Content */}
       {activeTabIndex === 0 && <ProtocolTabContent node={node} />}
       {activeTabIndex === 1 && <NetworkingTabContent />}
-      {activeTabIndex === 2 && <ProtocolTabContent />}
-      {activeTabIndex === 3 && <ProtocolTabContent />}
-      {activeTabIndex === 4 && <ProtocolTabContent />}
-      {activeTabIndex === 5 && <ProtocolTabContent />}
-      {activeTabIndex === 6 && <ProtocolTabContent />}
+      {activeTabIndex === 2 && <div />}
+      {activeTabIndex === 3 && <div />}
+      {activeTabIndex === 4 && <div />}
+      {activeTabIndex === 5 && <div />}
+      {activeTabIndex === 6 && <DangerousZoneContent nodeName={node.name} />}
     </>
   )
 }

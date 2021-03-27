@@ -47,3 +47,11 @@ export const updateNode = async (
   )
   return data.node
 }
+
+// Delete node by its name
+export const deleteNode = async (
+  protocol: string,
+  name: string
+): Promise<void> => {
+  await axios.delete(`/${protocol}/nodes/${name}`)
+}
