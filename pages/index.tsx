@@ -30,9 +30,13 @@ function Home({
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
           <div className="py-4">
-            <div className="bg-white shadow overflow-hidden sm:rounded-md">
-              <NodesList nodes={nodes} />
-            </div>
+            {nodes.length !== 0 ? (
+              <div className="bg-white shadow overflow-hidden sm:rounded-md">
+                <NodesList nodes={nodes} />
+              </div>
+            ) : (
+              <Typography variant="p">There is no nodes created</Typography>
+            )}
           </div>
         </div>
       </div>
