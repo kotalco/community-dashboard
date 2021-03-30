@@ -1,10 +1,19 @@
+import SpinnerIcon from '@components/Icons/SpinnerIcon/SpinnerIcon'
+
 interface Props {
   onClick: () => void
   alert?: boolean
   disabled?: boolean
+  loading?: boolean
 }
 
-const Button: React.FC<Props> = ({ children, onClick, alert, disabled }) => {
+const Button: React.FC<Props> = ({
+  children,
+  onClick,
+  alert,
+  disabled,
+  loading,
+}) => {
   return (
     <button
       onClick={onClick}
@@ -16,9 +25,15 @@ const Button: React.FC<Props> = ({ children, onClick, alert, disabled }) => {
           : 'bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-600 focus:ring-indigo-500'
       }`}
     >
+      <SpinnerIcon />
       {children}
     </button>
   )
+}
+
+Button.defaultProps = {
+  disabled: false,
+  loading: false,
 }
 
 export default Button
