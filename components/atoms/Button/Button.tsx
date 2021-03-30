@@ -25,7 +25,7 @@ const Button: React.FC<Props> = ({
           : 'bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-600 focus:ring-indigo-500'
       }`}
     >
-      <SpinnerIcon />
+      {loading && <SpinnerIcon />}
       {children}
     </button>
   )
