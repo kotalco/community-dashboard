@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 
@@ -10,6 +10,8 @@ import { ethereumNodeClientsOptions } from '@data/data'
 import { Protocol } from '@enums/Protocol'
 import { updateNode } from '@utils/requests'
 import { setLaodingState } from '@store/slices/loadingSlice/loadingSlice'
+import { setNotificationState } from '@store/slices/notificationSlice/notificationSlice'
+import NotificationPanel from '../NotificationPanel/NotificationPanel'
 
 interface Props {
   node: EthereumNode
@@ -20,16 +22,31 @@ const ProtocolTabContent: React.FC<Props> = ({ node }) => {
   const router = useRouter()
   const dispatch = useAppDispatch()
   const loadingState = useAppSelector(({ loading }) => loading.state)
-  const { register, handleSubmit } = useForm()
+  const notificationState = useAppSelector(
+    ({ notification }) => notification.state
+  )
+  const { register, handleSubmit, setValue } = useForm({
+    defaultValues: { client: node.client },
+  })
   const { protocol } = router.query
   const clients =
     protocol === Protocol.ethereum ? ethereumNodeClientsOptions : []
+
+  useEffect(() => {
+    return closeNotification
+  }, [])
+
+  const closeNotification = () => {
+    dispatch(setNotificationState(false))
+  }
 
   const onSubmit = async (data: { client: string }) => {
     setSubmitError('')
     dispatch(setLaodingState(true))
     try {
-      await updateNode(data, node.name, protocol as string)
+      const updatedNode = await updateNode(data, node.name, protocol as string)
+      setValue('client', updatedNode.client)
+      dispatch(setNotificationState(true))
     } catch (e) {
       setSubmitError(e.response.data.error)
     }
@@ -57,7 +74,6 @@ const ProtocolTabContent: React.FC<Props> = ({ node }) => {
           <Select
             ref={register}
             options={clients}
-            defaultValue={node.client}
             name="client"
             label="Client Software"
           />
@@ -75,6 +91,13 @@ const ProtocolTabContent: React.FC<Props> = ({ node }) => {
           Save
         </Button>
       </div>
+      <NotificationPanel
+        show={notificationState}
+        close={closeNotification}
+        title="Node has been updated successfully"
+        name={node.name}
+        type="Ethereum Node"
+      />
     </>
   )
 }

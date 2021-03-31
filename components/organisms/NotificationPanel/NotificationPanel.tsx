@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Transition } from '@headlessui/react'
 
 import CheckCircleIcon from '@components/Icons/CheckCircleIcon/CheckCircleIcon'
