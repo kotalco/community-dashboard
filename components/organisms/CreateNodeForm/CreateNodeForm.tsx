@@ -2,11 +2,9 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 
-// import Typography from '@components/atoms/Typgraphy/Typography'
 import TextInput from '@components/molecules/TextInput/TextInput'
 import Select from '@components/molecules/Select/Select'
 import Button from '@components/atoms/Button/Button'
-// import CreateIPFSNodeForm from '@components/organisms/CreateIPFSNodeForm/CreateIPFSNodeForm'
 import { protocolSelectOptions, ethereumNodeClientsOptions } from '@data/data'
 import { Protocol } from '@enums/Protocol'
 import { createNode } from '@utils/requests'
@@ -23,14 +21,12 @@ const defaultValues = {
 }
 
 const CreateNodeForm: React.FC = () => {
-  // const [showAdvanced, setShowAdvanced] = useState(false)
   const [submitError, setSubmitError] = useState('')
   const router = useRouter()
   const { register, handleSubmit, watch, formState } = useForm<FormData>({
     defaultValues,
   })
   const { protocol } = watch(['protocol'])
-  const clients = protocol === 'ethereum' ? ethereumNodeClientsOptions : []
 
   const onSubmit = async (data: FormData) => {
     const { name, protocol, network, client } = data
@@ -64,22 +60,25 @@ const CreateNodeForm: React.FC = () => {
             ref={register}
           />
 
-          {/* Client */}
-          <Select
-            label="Client"
-            options={clients}
-            name="client"
-            ref={register}
-          />
-
-          {/* Network */}
-          <TextInput
-            className="mt-5"
-            name="network"
-            label="Network"
-            ref={register({ required: 'Please provide a network name.' })}
-            error={formState.errors.network?.message}
-          />
+          {protocol === Protocol.ethereum && (
+            <>
+              {/* Client */}
+              <Select
+                label="Client"
+                options={ethereumNodeClientsOptions}
+                name="client"
+                ref={register}
+              />
+              {/* Network */}
+              <TextInput
+                className="mt-5"
+                name="network"
+                label="Network"
+                ref={register({ required: 'Please provide a network name.' })}
+                error={formState.errors.network?.message}
+              />
+            </>
+          )}
 
           {/* Show Advanced Setting */}
           {/* <div
