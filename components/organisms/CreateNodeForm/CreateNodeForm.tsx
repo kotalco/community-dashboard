@@ -34,7 +34,8 @@ const CreateNodeForm: React.FC = () => {
 
     try {
       setSubmitError('')
-      await createNode(protocol, body)
+      const node = await createNode(protocol, body)
+      localStorage.setItem('node', JSON.stringify(node))
       router.push('/')
     } catch (e) {
       setSubmitError(e.response.data.error)

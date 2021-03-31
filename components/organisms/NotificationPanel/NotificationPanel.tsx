@@ -7,14 +7,20 @@ import Typography from '@components/atoms/Typgraphy/Typography'
 import CloseIcon from '@components/Icons/CloseIcon/CloseIcon'
 
 interface Props {
+  show: boolean
+  close: () => void
   title?: string
   name: string
   type: string
 }
 
-const NotificationPanel: React.FC<Props> = ({ title, name, type }) => {
-  const [show, setShow] = useState(true)
-
+const NotificationPanel: React.FC<Props> = ({
+  show,
+  title,
+  name,
+  type,
+  close,
+}) => {
   return (
     <div className="z-30 fixed inset-0 flex items-end justify-center px-4 py-6 pointer-events-none sm:-6 sm:items-start sm:justify-end">
       <Transition
@@ -51,7 +57,7 @@ const NotificationPanel: React.FC<Props> = ({ title, name, type }) => {
               <IconButton
                 className="bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 srOnly="Close"
-                onClick={() => setShow(false)}
+                onClick={close}
               >
                 <CloseIcon className="h-5 w-5" />
               </IconButton>

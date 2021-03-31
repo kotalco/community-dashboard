@@ -1,16 +1,42 @@
-import React from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { InferGetStaticPropsType } from 'next'
 
 import Typography from '@components/atoms/Typgraphy/Typography'
 import Layout from '@components/templates/Layout/Layout'
 import NodesList from '@components/organisms/NodesList/NodesList'
-// import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel'
+import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel'
 import { getAllNodes } from '@utils/requests'
+import { EthereumNode } from '@interfaces/Node'
+import { setNotificationState } from '@store/slices/notificationSlice/notificationSlice'
+import { useAppDispatch, useAppSelector } from '@hooks/hooks'
 
 function Home({
   nodes,
 }: InferGetStaticPropsType<typeof getStaticProps>): React.ReactElement {
+  const [node, setNode] = useState<EthereumNode>()
+  const dispatch = useAppDispatch()
+  const showNotification = useAppSelector(
+    ({ notification }) => notification.state
+  )
+
+  useEffect(() => {
+    let node: EthereumNode
+    const storedNode = localStorage.getItem('node')
+    if (storedNode) {
+      node = JSON.parse(storedNode)
+      setNode(node)
+      localStorage.removeItem('node')
+      dispatch(setNotificationState(true))
+    }
+
+    return closeNotification
+  }, [])
+
+  const closeNotification = (): void => {
+    dispatch(setNotificationState(false))
+  }
+
   return (
     <Layout>
       <div className="py-6">
@@ -40,11 +66,15 @@ function Home({
           </div>
         </div>
       </div>
-      {/* <NotificationPanel
-        title="Node has been created successfully!"
-        name="my-ipfs-node"
-        type="IPFS node"
-      /> */}
+      {node && (
+        <NotificationPanel
+          show={showNotification}
+          close={closeNotification}
+          title="Node has been created successfully!"
+          name={node.name}
+          type="Ethereum Node"
+        />
+      )}
     </Layout>
   )
 }

@@ -1,10 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 
 import loadingReducer from '@store/slices/loadingSlice/loadingSlice'
+import notificationReducer from '@store/slices/notificationSlice/notificationSlice'
 
 const store = configureStore({
   reducer: {
     loading: loadingReducer,
+    notification: notificationReducer,
   },
 })
 
