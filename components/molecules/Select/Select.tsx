@@ -7,14 +7,15 @@ interface Props {
   options: SelectOption[]
   name: string
   label: string
+  rounded?: string
   defaultValue?: string
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void
 }
 
 const Select = React.forwardRef<HTMLSelectElement, Props>(
-  ({ options, name, label, onChange, defaultValue }, ref) => {
+  ({ options, name, label, onChange, defaultValue, rounded }, ref) => {
     return (
-      <div className="mt-4">
+      <div className="mt-4 max-w-xs">
         <InputLabel
           htmlFor={name}
           className="block text-sm font-medium text-gray-700"
@@ -27,7 +28,9 @@ const Select = React.forwardRef<HTMLSelectElement, Props>(
           name={name}
           ref={ref}
           onChange={onChange}
-          className="mt-1 block w-48 pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"
+          className={`mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
+            rounded ? rounded : 'rounded-md '
+          }`}
         >
           {options.map((option, i) => (
             <option key={i} value={option.value}>

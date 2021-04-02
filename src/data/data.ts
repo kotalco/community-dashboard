@@ -22,7 +22,6 @@ export const ethereumNodeNetworkOptions: SelectOption[] = [
   { label: 'Rinkeby', value: EthereumNetwork.rinkeby },
   { label: 'Ropsten', value: EthereumNetwork.ropsten },
   { label: 'Goerli', value: EthereumNetwork.goerli },
-  { label: 'Other', value: EthereumNetwork.other },
 ]
 
 export const ENDPOINTS = [
