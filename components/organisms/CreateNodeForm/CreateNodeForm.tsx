@@ -21,16 +21,15 @@ const CreateNodeForm: React.FC = () => {
     mode: 'onTouched',
     defaultValues,
   })
-  const { protocol, name } = watch(['protocol', 'name'])
+  const [protocol, name] = watch(['protocol', 'name'])
 
   return (
     <form>
       <div className="px-4 pt-6 sm:px-6">
         {/* Node Name */}
         <TextInput
-          name="name"
+          {...register('name', { required: 'Please provide a node name.' })}
           label="Node Name"
-          ref={register({ required: 'Please provide a node name.' })}
           error={formState.errors.name?.message}
         />
 
@@ -38,8 +37,7 @@ const CreateNodeForm: React.FC = () => {
         <Select
           label="Blockchain Protocol"
           options={protocolSelectOptions}
-          name="protocol"
-          ref={register}
+          {...register('protocol')}
         />
       </div>
 

@@ -25,7 +25,7 @@ const CreateEthereumNodeForm: React.FC<Props> = ({ nodeName }) => {
   const [submitError, setSubmitError] = useState('')
   const router = useRouter()
   const { register, handleSubmit, watch } = useForm<FormData>()
-  const { selectNetwork } = watch(['selectNetwork', 'textNetwork'])
+  const [selectNetwork] = watch(['selectNetwork'])
 
   const onSubmit = async ({ client, selectNetwork, textNetwork }: FormData) => {
     if (!nodeName) return
@@ -50,8 +50,7 @@ const CreateEthereumNodeForm: React.FC<Props> = ({ nodeName }) => {
         <Select
           label="Client"
           options={ethereumNodeClientsOptions}
-          name="client"
-          ref={register}
+          {...register('client')}
         />
         {/* Network */}
         <Select
@@ -61,13 +60,11 @@ const CreateEthereumNodeForm: React.FC<Props> = ({ nodeName }) => {
             ...ethereumNodeNetworkOptions,
             { label: 'Other', value: '' },
           ]}
-          name="selectNetwork"
-          ref={register}
+          {...register('selectNetwork')}
         />
         <TextInput
           rounded="rounded-none rounded-b-md"
-          name="textNetwork"
-          ref={register}
+          {...register('textNetwork')}
           // error={formState.errors.network?.message}
           disabled={selectNetwork !== ''}
         />

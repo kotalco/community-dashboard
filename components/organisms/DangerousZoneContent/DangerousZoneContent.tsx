@@ -22,7 +22,7 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
   const router = useRouter()
   const { register, watch, handleSubmit } = useForm<FormData>()
   const { protocol } = router.query
-  const name = watch('name')
+  const [name] = watch(['name'])
 
   const onSubmit = async () => {
     setError('')
@@ -87,7 +87,7 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
           Please type the node name (
           <span className="font-bold">{nodeName}</span>) to confirm
         </Typography>
-        <TextInput name="name" ref={register} />
+        <TextInput {...register('name')} />
       </Modal>
     </>
   )

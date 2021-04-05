@@ -53,53 +53,46 @@ const ProtocolTabContent: React.FC<Props> = ({ node }) => {
     dispatch(setLaodingState(false))
   }
 
-  return (
-    <>
-      <div className="px-4 py-5 sm:p-6">
-        <dl>
-          <dt className="block text-sm font-medium text-gray-700">Protocol</dt>
-          <dd className="mt-1">
-            <span className="text-gray-500 text-sm">{protocol}</span>
-          </dd>
-        </dl>
-        <dl>
-          <dt className="block text-sm font-medium text-gray-700 mt-4">
-            Chain
-          </dt>
-          <dd className="mt-1">
-            <span className="text-gray-500 text-sm">{node.network}</span>
-          </dd>
-        </dl>
-        <div className="mt-4">
-          <Select
-            ref={register}
-            options={clients}
-            name="client"
-            label="Client Software"
-          />
-        </div>
+  return <>
+    <div className="px-4 py-5 sm:p-6">
+      <dl>
+        <dt className="block text-sm font-medium text-gray-700">Protocol</dt>
+        <dd className="mt-1">
+          <span className="text-gray-500 text-sm">{protocol}</span>
+        </dd>
+      </dl>
+      <dl>
+        <dt className="block text-sm font-medium text-gray-700 mt-4">
+          Chain
+        </dt>
+        <dd className="mt-1">
+          <span className="text-gray-500 text-sm">{node.network}</span>
+        </dd>
+      </dl>
+      <div className="mt-4">
+        <Select options={clients} {...register('client')} label="Client Software" />
       </div>
-      {submitError && (
-        <p className="text-center text-red-500 mb-5">{submitError}</p>
-      )}
-      <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-        <Button
-          disabled={loadingState}
-          loading={loadingState}
-          onClick={handleSubmit(onSubmit)}
-        >
-          Save
-        </Button>
-      </div>
-      <NotificationPanel
-        show={notificationState}
-        close={closeNotification}
-        title="Node has been updated successfully"
-        name={node.name}
-        type="Ethereum Node"
-      />
-    </>
-  )
+    </div>
+    {submitError && (
+      <p className="text-center text-red-500 mb-5">{submitError}</p>
+    )}
+    <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
+      <Button
+        disabled={loadingState}
+        loading={loadingState}
+        onClick={handleSubmit(onSubmit)}
+      >
+        Save
+      </Button>
+    </div>
+    <NotificationPanel
+      show={notificationState}
+      close={closeNotification}
+      title="Node has been updated successfully"
+      name={node.name}
+      type="Ethereum Node"
+    />
+  </>;
 }
 
 export default ProtocolTabContent
