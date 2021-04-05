@@ -14,18 +14,9 @@ const CreateEndpoint: React.FC = () => {
       <div>
         <div className="px-4 py-5 sm:p-6">
           {/* Endpoint name */}
-          <TextInput name="node_name" id="node_name" label="Endpoint Name" />
+          <TextInput name="node_name" label="Endpoint Name" />
           {/* Node name */}
-          <Select
-            options={[
-              'my-beacon-node',
-              'my-ipfs-node',
-              'my-filecoin-node',
-              'my-ethereum-node',
-            ]}
-            name="node"
-            label="Node"
-          />
+          <Select options={[]} name="node" label="Node" />
         </div>
         <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
           <Button

@@ -14,12 +14,7 @@ const CreateIPFSNodeForm: React.FC<Props> = ({ showAdvanced }) => {
   return (
     <div className={`${showAdvanced ? 'block' : 'hidden'}`}>
       {/* IPFS Client */}
-      <Select
-        label="IPFS Client"
-        options={['go-ipfs', 'js-ipfs']}
-        name="client"
-        id="client"
-      />
+      <Select label="IPFS Client" options={[]} name="client" />
 
       {/* <!-- configuration profiles --> */}
       <div className="mt-4">

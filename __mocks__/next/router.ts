@@ -19,4 +19,6 @@ export const useRouter = (): NextRouter => ({
   },
   isFallback: false,
   isReady: true,
+  isLocaleDomain: true,
+  isPreview: false,
 })
