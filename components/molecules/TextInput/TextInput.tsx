@@ -11,8 +11,8 @@ interface Props {
   disabled?: boolean
   rounded?: string
   error?: string
-  onBlur?: (e: React.FocusEvent<HTMLInputElement>) => void
-  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onBlur: (e: React.FocusEvent<HTMLInputElement>) => void
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 const TextInput = React.forwardRef<HTMLInputElement, Props>(
@@ -25,6 +25,7 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>(
       disabled = false,
       placeholder = '',
       onBlur,
+      onChange,
       error,
     },
     ref
@@ -41,6 +42,7 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>(
         )}
         <div className="relative max-w-xs">
           <input
+            onChange={onChange}
             onBlur={onBlur}
             placeholder={placeholder}
             ref={ref}
