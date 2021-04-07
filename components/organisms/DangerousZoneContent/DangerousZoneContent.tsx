@@ -20,7 +20,12 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
   const [error, setError] = useState('')
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const router = useRouter()
-  const { register, watch, handleSubmit } = useForm<FormData>()
+  const {
+    register,
+    watch,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<FormData>()
   const { protocol } = router.query
   const [name] = watch(['name'])
 
@@ -73,7 +78,8 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
           <Button
             alert
             onClick={handleSubmit(onSubmit)}
-            disabled={name !== nodeName}
+            disabled={name !== nodeName || isSubmitting}
+            loading={isSubmitting}
           >
             I understand the consequnces, delete this node
           </Button>
