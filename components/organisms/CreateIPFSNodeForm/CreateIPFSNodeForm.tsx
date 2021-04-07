@@ -1,7 +1,7 @@
 import React from 'react'
 
 import Typography from '@components/atoms/Typgraphy/Typography'
-import Select from '@components/molecules/Select/Select'
+// import Select from '@components/molecules/Select/Select'
 import CheckBox from '@components/molecules/CheckBox/CheckBox'
 import Separator from '@components/atoms/Separator/Separator'
 import UnitTextInput from '@components/molecules/UnitTextInput/UnitTextInput'
@@ -14,7 +14,7 @@ const CreateIPFSNodeForm: React.FC<Props> = ({ showAdvanced }) => {
   return (
     <div className={`${showAdvanced ? 'block' : 'hidden'}`}>
       {/* IPFS Client */}
-      <Select label="IPFS Client" options={[]} name="client" />
+      {/* <Select label="IPFS Client" options={[]} name="client" /> */}
 
       {/* <!-- configuration profiles --> */}
       <div className="mt-4">

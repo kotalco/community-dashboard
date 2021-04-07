@@ -49,13 +49,6 @@ const NodeDetails: React.FC<Props> = ({ node }) => {
   )
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {
-    paths: [],
-    fallback: true,
-  }
-}
-
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   let node: EthereumNode
   try {
@@ -64,7 +57,15 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   } catch (e) {
     return { notFound: true }
   }
-  return { props: { node }, revalidate: 20 }
+
+  return { props: { node }, revalidate: 1 }
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return {
+    paths: [],
+    fallback: true,
+  }
 }
 
 export default NodeDetails

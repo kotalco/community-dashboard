@@ -85,7 +85,7 @@ export const getStaticProps = async () => {
 
   return {
     props: { nodes },
-    revalidate: 20,
+    revalidate: 1,
   }
 }
 
