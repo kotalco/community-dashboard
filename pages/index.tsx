@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { InferGetStaticPropsType } from 'next'
+import useSWR from 'swr'
 
 import Typography from '@components/atoms/Typgraphy/Typography'
 import Layout from '@components/templates/Layout/Layout'
@@ -20,6 +21,12 @@ function Home({
     ({ notification }) => notification.state
   )
 
+  const { data, error } = useSWR('ethereum', getAllNodes, {
+    initialData: nodes,
+    revalidateOnMount: true,
+    refreshInterval: 5000,
+  })
+
   useEffect(() => {
     let node: EthereumNode
     const storedNode = localStorage.getItem('node')
@@ -36,6 +43,8 @@ function Home({
   const closeNotification = (): void => {
     dispatch(setNotificationState(false))
   }
+
+  if (error) return <Typography variant="p">failed to load</Typography>
 
   return (
     <Layout>
@@ -56,9 +65,9 @@ function Home({
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
           <div className="py-4">
-            {nodes.length !== 0 ? (
+            {data && data.length !== 0 ? (
               <div className="bg-white shadow overflow-hidden sm:rounded-md">
-                <NodesList nodes={nodes} />
+                <NodesList nodes={data} />
               </div>
             ) : (
               <Typography variant="p">There is no nodes created</Typography>
