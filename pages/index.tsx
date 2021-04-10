@@ -24,7 +24,6 @@ function Home({
   const { data, error } = useSWR('ethereum', getAllNodes, {
     initialData: nodes,
     revalidateOnMount: true,
-    refreshInterval: 5000,
   })
 
   useEffect(() => {

@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
+import useSWR, { mutate } from 'swr'
 
 import { useAppDispatch, useAppSelector } from '@hooks/hooks'
 import Button from '@components/atoms/Button/Button'
 import Select from '@components/molecules/Select/Select'
 import { EthereumNode } from '@interfaces/Node'
 import { ethereumNodeClientsOptions } from '@data/data'
-import { updateNode } from '@utils/requests'
+import { updateNode, getNode } from '@utils/requests'
 import { setNotificationState } from '@store/slices/notificationSlice/notificationSlice'
 import NotificationPanel from '../NotificationPanel/NotificationPanel'
 
@@ -22,15 +23,19 @@ const ProtocolTabContent: React.FC<Props> = ({ node }) => {
   const notificationState = useAppSelector(
     ({ notification }) => notification.state
   )
+
+  const { protocol, nodeName } = router.query
+  const { data } = useSWR([protocol, nodeName], getNode, {
+    initialData: node,
+  })
+
   const {
     register,
     handleSubmit,
-    setValue,
     formState: { isDirty, isSubmitting },
   } = useForm({
-    defaultValues: { client: node.client },
+    defaultValues: { client: data?.client },
   })
-  const { protocol } = router.query
 
   useEffect(() => {
     return closeNotification
@@ -43,8 +48,11 @@ const ProtocolTabContent: React.FC<Props> = ({ node }) => {
   const onSubmit = async (data: { client: string }) => {
     setSubmitError('')
     try {
-      const updatedNode = await updateNode(data, node.name, protocol as string)
-      setValue('client', updatedNode.client)
+      mutate([protocol, nodeName], { ...node, client: data.client }, false)
+      mutate(
+        [protocol, nodeName],
+        updateNode(data, node.name, protocol as string)
+      )
       dispatch(setNotificationState(true))
     } catch (e) {
       setSubmitError(e.response.data.error)
