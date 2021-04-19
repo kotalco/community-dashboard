@@ -1,16 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 import useSWR, { mutate } from 'swr'
 
-import { useAppDispatch, useAppSelector } from '@hooks/hooks'
+import { useAppDispatch } from '@hooks/hooks'
 import Button from '@components/atoms/Button/Button'
 import Select from '@components/molecules/Select/Select'
 import { EthereumNode } from '@interfaces/Node'
 import { ethereumNodeClientsOptions } from '@data/data'
 import { updateNode, getNode } from '@utils/requests'
 import { setNotificationState } from '@store/slices/notificationSlice/notificationSlice'
-import NotificationPanel from '../NotificationPanel/NotificationPanel'
 
 interface Props {
   node: EthereumNode
@@ -20,9 +19,6 @@ const ProtocolTabContent: React.FC<Props> = ({ node }) => {
   const [submitError, setSubmitError] = useState('')
   const router = useRouter()
   const dispatch = useAppDispatch()
-  const notificationState = useAppSelector(
-    ({ notification }) => notification.state
-  )
 
   const { protocol, nodeName } = router.query
   const { data } = useSWR([protocol, nodeName], getNode, {
@@ -36,14 +32,6 @@ const ProtocolTabContent: React.FC<Props> = ({ node }) => {
   } = useForm({
     defaultValues: { client: data?.client },
   })
-
-  useEffect(() => {
-    return closeNotification
-  }, [])
-
-  const closeNotification = () => {
-    dispatch(setNotificationState(false))
-  }
 
   const onSubmit = async (data: { client: string }) => {
     setSubmitError('')
@@ -98,13 +86,6 @@ const ProtocolTabContent: React.FC<Props> = ({ node }) => {
           Save
         </Button>
       </div>
-      <NotificationPanel
-        show={notificationState}
-        close={closeNotification}
-        title="Node has been updated successfully"
-        name={node.name}
-        type="Ethereum Node"
-      />
     </>
   )
 }

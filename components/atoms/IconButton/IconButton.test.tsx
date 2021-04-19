@@ -6,7 +6,7 @@ import BellIcon from '../../Icons/BellIcon/BellIcon'
 
 test('Render sr-only text', () => {
   render(
-    <IconButton onClick={jest.fn()} srOnly="setting">
+    <IconButton onClick={jest.fn()} srText="setting">
       <BellIcon />
     </IconButton>
   )
@@ -16,7 +16,7 @@ test('Render sr-only text', () => {
 test('Button handles click correctly', () => {
   const handleClick = jest.fn()
   render(
-    <IconButton onClick={handleClick}>
+    <IconButton srText="setting" onClick={handleClick}>
       <BellIcon />
     </IconButton>
   )

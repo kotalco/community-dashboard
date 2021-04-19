@@ -17,7 +17,7 @@ const Navbar: React.FC<Props> = ({ toggleSidebar }) => {
     <div className="relative z-10 flex-shrink-0 flex h-16 bg-white shadow">
       <IconButton
         className="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
-        srOnly="Open sidebar"
+        srText="Open sidebar"
         onClick={toggleSidebar}
       >
         <MenuIcon />
@@ -29,7 +29,7 @@ const Navbar: React.FC<Props> = ({ toggleSidebar }) => {
         </div>
         <div className="ml-4 flex items-center md:ml-6">
           <IconButton
-            srOnly="View notification"
+            srText="View notification"
             className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             onClick={handleClick}
           >

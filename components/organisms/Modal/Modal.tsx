@@ -52,7 +52,7 @@ const Modal: React.FC<Props> = ({ close, title, children, show, action }) => {
           <div className="hidden sm:block absolute top-0 right-0 pt-4 pr-4">
             <IconButton
               onClick={close}
-              srOnly="Close"
+              srText="Close"
               className="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
               <CloseIcon className="h-6 w-6" />
