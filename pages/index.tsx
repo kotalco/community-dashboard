@@ -8,17 +8,11 @@ import NodesList from '@components/organisms/NodesList/NodesList'
 import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel'
 import { getAllNodes } from '@utils/requests'
 import { EthereumNode } from '@interfaces/Node'
-import { setNotificationState } from '@store/slices/notificationSlice/notificationSlice'
-import { useAppDispatch, useAppSelector } from '@hooks/hooks'
 
 function Home({
   nodes,
 }: InferGetStaticPropsType<typeof getStaticProps>): React.ReactElement {
   const [node, setNode] = useState<EthereumNode>()
-  const dispatch = useAppDispatch()
-  const showNotification = useAppSelector(
-    ({ notification }) => notification.state
-  )
 
   const { data, error } = useSWR('ethereum', getAllNodes, {
     initialData: nodes,
@@ -32,15 +26,8 @@ function Home({
       node = JSON.parse(storedNode)
       setNode(node)
       localStorage.removeItem('node')
-      dispatch(setNotificationState(true))
     }
-
-    return closeNotification
   }, [])
-
-  const closeNotification = (): void => {
-    dispatch(setNotificationState(false))
-  }
 
   if (error) return <p>failed to load nodes</p>
 
@@ -70,8 +57,6 @@ function Home({
       </div>
       {node && (
         <NotificationPanel
-          show={showNotification}
-          close={closeNotification}
           title="Node has been created successfully!"
           name={node.name}
           type="Ethereum Node"
