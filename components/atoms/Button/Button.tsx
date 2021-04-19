@@ -1,31 +1,39 @@
+import Link from 'next/link'
 import SpinnerIcon from '@components/Icons/SpinnerIcon/SpinnerIcon'
 
 interface Props {
-  onClick: () => void
+  onClick?: () => void
   alert?: boolean
   disabled?: boolean
   loading?: boolean
+  className?: string
+  href?: string
 }
 
 const Button: React.FC<Props> = ({
   children,
   onClick,
-  alert,
   disabled,
   loading,
+  className,
+  href,
 }) => {
+  if (href) {
+    return (
+      <Link href={href}>
+        <a className={className}>{children}</a>
+      </Link>
+    )
+  }
+
   return (
     <button
       onClick={onClick}
       disabled={disabled}
       type="button"
-      className={`inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-        alert
-          ? 'bg-red-600 hover:bg-red-700 disabled:bg-red-600 focus:ring-red-500'
-          : 'bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-600 focus:ring-indigo-500'
-      }`}
+      className={className}
     >
-      {loading && <SpinnerIcon />}
+      {loading && <SpinnerIcon className="-ml-1 mr-3 h-5 w-5 text-white" />}
       {children}
     </button>
   )

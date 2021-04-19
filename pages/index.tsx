@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
-import Link from 'next/link'
 import { InferGetStaticPropsType } from 'next'
 import useSWR from 'swr'
 
-import Typography from '@components/atoms/Typgraphy/Typography'
+import Button from '@components/atoms/Button/Button'
 import Layout from '@components/templates/Layout/Layout'
 import NodesList from '@components/organisms/NodesList/NodesList'
 import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel'
@@ -43,23 +42,18 @@ function Home({
     dispatch(setNotificationState(false))
   }
 
-  if (error) return <Typography variant="p">failed to load</Typography>
+  if (error) return <p>failed to load nodes</p>
 
   return (
     <Layout>
       <div className="py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 flex">
-          <Typography
-            variant="h1"
-            className="text-2xl font-semibold text-gray-900 flex-grow"
-          >
+          <h1 className="text-2xl font-semibold text-gray-900 flex-grow">
             Nodes
-          </Typography>
-          <Link href="/createnode">
-            <a className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-              Create New Node
-            </a>
-          </Link>
+          </h1>
+          <Button href="/createnode" className="btn btn-primary">
+            Create New Node
+          </Button>
         </div>
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
@@ -69,7 +63,7 @@ function Home({
                 <NodesList nodes={data} />
               </div>
             ) : (
-              <Typography variant="p">There is no nodes created</Typography>
+              <p>There is no nodes created</p>
             )}
           </div>
         </div>

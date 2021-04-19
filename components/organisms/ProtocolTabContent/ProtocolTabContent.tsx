@@ -53,6 +53,7 @@ const ProtocolTabContent: React.FC<Props> = ({ node }) => {
         [protocol, nodeName],
         updateNode(data, node.name, protocol as string)
       )
+
       dispatch(setNotificationState(true))
     } catch (e) {
       setSubmitError(e.response.data.error)
@@ -89,6 +90,7 @@ const ProtocolTabContent: React.FC<Props> = ({ node }) => {
       )}
       <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
         <Button
+          className="btn btn-primary"
           disabled={!isDirty || isSubmitting}
           loading={isSubmitting}
           onClick={handleSubmit(onSubmit)}

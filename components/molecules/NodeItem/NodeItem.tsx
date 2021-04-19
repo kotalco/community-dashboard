@@ -1,9 +1,6 @@
 import Link from 'next/link'
-
-import Typography from '@components/atoms/Typgraphy/Typography'
-import GlobeIcon from '@components/Icons/GlobeIcon/GlobeIcon'
-import ChipIcon from '@components/Icons/ChipIcon/ChipIcon'
-import ChevronRightIcon from '@components/Icons/ChevronRightIcon/ChevronRightIcon'
+import { GlobeAltIcon, ChevronRightIcon } from '@heroicons/react/solid'
+import { ChipIcon } from '@heroicons/react/outline'
 
 interface Props {
   name: string
@@ -22,20 +19,20 @@ const NodeItem: React.FC<Props> = (props) => {
             <div className="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
               <div>
                 <div className="flex text-sm font-medium text-indigo-600 truncate">
-                  <Typography variant="p">{name}</Typography>
+                  <p>{name}</p>
                 </div>
                 <div className="mt-2 flex">
                   <div className="flex items-center text-sm text-gray-500">
-                    <GlobeIcon />
-                    <Typography variant="p">{client}</Typography>
-                    <ChipIcon />
-                    <Typography variant="p">{network}</Typography>
+                    <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
+                    <p>{client}</p>
+                    <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
+                    <p>{network}</p>
                   </div>
                 </div>
               </div>
             </div>
             <div className="ml-5 flex-shrink-0">
-              <ChevronRightIcon />
+              <ChevronRightIcon className="h-5 w-5 text-gray-400" />
             </div>
           </div>
         </a>
