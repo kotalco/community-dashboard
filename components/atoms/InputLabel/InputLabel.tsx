@@ -1,20 +1,13 @@
 interface Props {
-  srOnly?: boolean
   htmlFor: string
-  className?: string
   children: string
 }
 
-const InputLabel: React.FC<Props> = ({
-  srOnly,
-  children,
-  htmlFor,
-  className,
-}) => {
+const InputLabel: React.FC<Props> = ({ children, htmlFor }) => {
   return (
     <label
       htmlFor={htmlFor}
-      className={`${srOnly ? 'sr-only' : ''} ${className ? className : ''}`}
+      className={`block text-sm font-medium text-gray-700 mb-1`}
     >
       {children}
     </label>

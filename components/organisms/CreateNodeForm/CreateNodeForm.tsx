@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
+import { joiResolver } from '@hookform/resolvers/joi'
 
 import TextInput from '@components/molecules/TextInput/TextInput'
 import Select from '@components/molecules/Select/Select'
@@ -12,6 +13,7 @@ import {
 } from '@data/data'
 import { Protocol } from '@enums/Protocol'
 import { createNode } from '@utils/requests'
+import { schema } from '@schemas/createNode'
 
 export type FormData = {
   name: string
@@ -29,7 +31,7 @@ const CreateNodeForm: React.FC = () => {
     watch,
     formState: { errors, isSubmitted, isValid, isSubmitting },
     handleSubmit,
-  } = useForm<FormData>()
+  } = useForm<FormData>({ resolver: joiResolver(schema) })
   const [protocol, selectNetwork] = watch(['protocol', 'selectNetwork'])
 
   const onSubmit = async ({
@@ -40,7 +42,6 @@ const CreateNodeForm: React.FC = () => {
     textNetwork,
   }: FormData) => {
     const network = selectNetwork === 'other' ? textNetwork : selectNetwork
-
     const body = { name, client, network }
 
     try {
@@ -58,20 +59,22 @@ const CreateNodeForm: React.FC = () => {
       <div className="px-4 py-5 sm:p-6">
         {/* Node Name */}
         <TextInput
-          {...register('name', { required: 'Please provide a node name' })}
+          {...register('name')}
           label="Node Name"
+          className="rounded-md"
           error={errors.name?.message}
         />
 
         {/* Blockchain Protocol */}
         <Select
           label="Blockchain Protocol"
+          className="rounded-md"
           error={errors.protocol?.message}
           options={[
             { label: 'Choose a protocol...', value: '' },
             ...protocolSelectOptions,
           ]}
-          {...register('protocol', { required: 'Please choose a protocol' })}
+          {...register('protocol')}
         />
 
         {/* Ask for CLIENT and NETWORK in case of PROTOCOL is ETHEREUM */}
@@ -81,17 +84,19 @@ const CreateNodeForm: React.FC = () => {
             <Select
               label="Client"
               error={errors.client?.message}
+              className="rounded-md"
               options={[
                 { label: 'Choose a client...', value: '' },
                 ...ethereumNodeClientsOptions,
               ]}
-              {...register('client', { required: 'Please choose a protocol' })}
+              {...register('client')}
             />
             {/* Network */}
             <Select
               label="Network"
-              rounded={
-                selectNetwork === 'other' ? 'rounded-none rounded-t-md' : ''
+              error={errors.selectNetwork?.message}
+              className={
+                selectNetwork === 'other' ? 'rounded-t-md' : 'rounded-md'
               }
               options={[
                 { label: 'Choose a network...', value: '' },
@@ -102,23 +107,25 @@ const CreateNodeForm: React.FC = () => {
             />
             {selectNetwork === 'other' && (
               <TextInput
+                error={errors.textNetwork?.message}
                 placeholder="Network Name"
-                rounded="rounded-none rounded-b-md"
+                className="rounded-none rounded-b-md"
                 {...register('textNetwork')}
               />
             )}
 
             {/* Show if there is an error from server */}
             {submitError && (
-              <p className="text-center text-red-500 my-5">{submitError}</p>
+              <p className="text-center text-red-500 mt-5">{submitError}</p>
             )}
           </>
         )}
       </div>
 
       {/* <!-- end: content here --> */}
-      <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
+      <div className="flex px-4 py-3 bg-gray-50 text-right sm:px-6">
         <Button
+          className="btn btn-primary"
           disabled={(isSubmitted && !isValid) || isSubmitting}
           onClick={handleSubmit(onSubmit)}
           loading={isSubmitting}

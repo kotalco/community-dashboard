@@ -21,7 +21,8 @@
       "@enums/*": ["src/enums/*"],
       "@data/*": ["src/data/*"],
       "@store/*": ["src/store/*"],
-      "@hooks/*": ["src/hooks/*"]
+      "@hooks/*": ["src/hooks/*"],
+      "@schemas/*": ["src/schemas/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

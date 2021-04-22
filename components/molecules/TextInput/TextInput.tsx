@@ -1,45 +1,23 @@
 import React from 'react'
+import { ExclamationCircleIcon } from '@heroicons/react/solid'
 
 import InputLabel from '@components/atoms/InputLabel/InputLabel'
-import ExclamationCircleIcon from '@components/Icons/ExclamationCircleIcon/ExclamationCircleIcon'
 
 interface Props {
   name: string
   placeholder?: string
   className?: string
   label?: string
-  disabled?: boolean
-  rounded?: string
   error?: string
   onBlur: (e: React.FocusEvent<HTMLInputElement>) => void
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 const TextInput = React.forwardRef<HTMLInputElement, Props>(
-  (
-    {
-      label,
-      name,
-      rounded,
-      className = '',
-      disabled = false,
-      placeholder = '',
-      onBlur,
-      onChange,
-      error,
-    },
-    ref
-  ) => {
+  ({ label, name, className, placeholder, onBlur, onChange, error }, ref) => {
     return (
       <div>
-        {label && (
-          <InputLabel
-            htmlFor={name}
-            className={`block text-sm font-medium text-gray-700 mb-1 ${className}`}
-          >
-            {label}
-          </InputLabel>
-        )}
+        {label && <InputLabel htmlFor={name}>{label}</InputLabel>}
         <div className="relative max-w-xs">
           <input
             onChange={onChange}
@@ -47,27 +25,28 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>(
             placeholder={placeholder}
             ref={ref}
             name={name}
-            disabled={disabled}
             type="text"
             id={name}
-            className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 ${
-              disabled ? 'bg-gray-200' : 'bg-transparent'
-            } ${rounded ? rounded : 'rounded-md '}`}
+            className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 ${className}`}
           />
           {error && (
             <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-              <ExclamationCircleIcon />
+              <ExclamationCircleIcon
+                className="h-5 w-5 text-red-500"
+                aria-hidden="true"
+              />
             </div>
           )}
         </div>
-        {error && (
-          <p className="mt-2 text-sm text-red-600" id="email-error">
-            {error}
-          </p>
-        )}
+        {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
       </div>
     )
   }
 )
+
+TextInput.defaultProps = {
+  className: '',
+  placeholder: '',
+}
 
 export default TextInput
