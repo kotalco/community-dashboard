@@ -38,7 +38,10 @@ function EthereumNodes({
           <h1 className="text-2xl font-semibold text-gray-900 flex-grow">
             Nodes
           </h1>
-          <Button href="/createnode" className="btn btn-primary">
+          <Button
+            href="/deployments/ethereum/nodes/create"
+            className="btn btn-primary"
+          >
             Create New Node
           </Button>
         </div>
