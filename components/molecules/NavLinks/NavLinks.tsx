@@ -1,32 +1,56 @@
+import {
+  HomeIcon,
+  CubeIcon,
+  CursorClickIcon,
+  KeyIcon,
+  DocumentTextIcon,
+  BookOpenIcon,
+} from '@heroicons/react/outline'
+
 import NavLink from '@components/atoms/NavLink/NavLink'
-import CubeIcon from '@components/Icons/CubeIcon/CubeIcon'
-import CursorClickIcon from '@components/Icons/CursorClickIcon/CursorClickIcon'
-import KeyIcon from '@components/Icons/KeyIcon/KeyIcon'
-import DocumentTextIcon from '@components/Icons/DocumentTextIcon/DocumentTextIcon'
-import BookOpenIcon from '@components/Icons/BookOpenIcon/BookOpenIcon'
+
+const navigation = [
+  { name: 'Dashboard', icon: HomeIcon, href: '/' },
+  {
+    name: 'Deployments',
+    icon: CubeIcon,
+    children: [
+      { name: 'Ethereum Nodes', href: '/deployments/ethereum/nodes' },
+      { name: 'IPFS Peers', href: '/deployments/ipfs/peers' },
+    ],
+  },
+  {
+    name: 'Endpoints',
+    icon: CursorClickIcon,
+    href: '/endpoints',
+  },
+  { name: 'Keys', icon: KeyIcon, href: '/keys' },
+  {
+    name: 'Contracts',
+    icon: DocumentTextIcon,
+    href: '/contracts',
+  },
+  {
+    name: 'Address Book',
+    icon: BookOpenIcon,
+    href: '/address-book',
+  },
+]
 
 interface Props {
-  textSize?: string
+  className?: string
 }
 
-const NavLinks: React.FC<Props> = ({ textSize }) => {
+const NavLinks: React.FC<Props> = ({ className }) => {
   return (
-    <nav className={`px-2 space-y-1 ${textSize}`}>
-      <NavLink url="/" Icon={CubeIcon}>
-        Nodes
-      </NavLink>
-      <NavLink url="/endpoints" Icon={CursorClickIcon}>
-        Endpoints
-      </NavLink>
-      <NavLink url="/keys" Icon={KeyIcon}>
-        Keys
-      </NavLink>
-      <NavLink url="/contracts" Icon={DocumentTextIcon}>
-        Contracts
-      </NavLink>
-      <NavLink url="/addressbook" Icon={BookOpenIcon}>
-        Address Book
-      </NavLink>
+    <nav className={className} aria-label="Sidebar">
+      <div className="px-2 space-y-1">
+        {navigation.map(({ name, icon, href, children }) => (
+          <NavLink key={name} Icon={icon} url={href} subLinks={children}>
+            {name}
+          </NavLink>
+        ))}
+      </div>
     </nav>
   )
 }

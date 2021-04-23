@@ -1,39 +1,40 @@
-import BellIcon from '@components/Icons/BellIcon/BellIcon'
+import { Dispatch, SetStateAction } from 'react'
+import { MenuAlt1Icon, BellIcon } from '@heroicons/react/outline'
+
 import IconButton from '@components/atoms/IconButton/IconButton'
 import SearchForm from '@components/molecules/SearchForm/SearchForm'
-import MenuIcon from '@components/Icons/MenuIcon/MenuIcon'
 
 interface Props {
-  toggleSidebar: () => void
+  setIsOpen: Dispatch<SetStateAction<boolean>>
 }
 
-const Navbar: React.FC<Props> = ({ toggleSidebar }) => {
+const Navbar: React.FC<Props> = ({ setIsOpen }) => {
   const handleClick = () => {
     // eslint-disable-next-line no-console
     console.log('Clicked')
   }
 
   return (
-    <div className="relative z-10 flex-shrink-0 flex h-16 bg-white shadow">
+    <div className="relative z-10 flex-shrink-0 flex h-16 bg-white border-b border-gray-200 md:border-none">
       <IconButton
-        className="px-4 border-r border-gray-200 text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500 md:hidden"
+        className="px-4 border-r border-gray-200 text-gray-400 md:hidden"
         srText="Open sidebar"
-        onClick={toggleSidebar}
+        onClick={() => setIsOpen(true)}
       >
-        <MenuIcon />
+        <MenuAlt1Icon className="h-6 w-6" aria-hidden="true" />
       </IconButton>
 
-      <div className="flex-1 px-4 flex justify-between">
+      <div className="flex-1 px-4 flex justify-between sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
         <div className="flex-1 flex">
           <SearchForm />
         </div>
         <div className="ml-4 flex items-center md:ml-6">
           <IconButton
             srText="View notification"
-            className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500"
             onClick={handleClick}
           >
-            <BellIcon />
+            <BellIcon className="h-6 w-6" />
           </IconButton>
         </div>
       </div>
