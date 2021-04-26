@@ -1,14 +1,6 @@
 import { SelectOption } from '@interfaces/SelectOption'
-import { Protocol } from '@enums/Protocol'
 import { EthereumClient } from '@enums/EthereumClient'
 import { EthereumNetwork } from '@enums/EthereumNetwork'
-
-export const protocolSelectOptions: SelectOption[] = [
-  { label: 'Ethereum', value: Protocol.ethereum },
-  { label: 'Ethereum 2.0', value: Protocol.ethereum2 },
-  { label: 'Filecoin', value: Protocol.filecoin },
-  { label: 'IPFS', value: Protocol.ipfs },
-]
 
 export const ethereumNodeClientsOptions: SelectOption[] = [
   { label: 'Go Ethereum', value: EthereumClient.geth },

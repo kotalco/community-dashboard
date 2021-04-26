@@ -5,22 +5,31 @@ export const schema = Joi.object({
     'string.empty': `Please provide a name for your node`,
     'string.pattern.base': `Node name shouldn't contain whitespaces`,
   }),
-  protocol: Joi.string().required().messages({
-    'string.empty': `Please choose your protocol`,
-  }),
-  client: Joi.string().required().messages({
-    'string.empty': `Please choose your client`,
-    'any.required': `Please choose your client`,
-  }),
-  selectNetwork: Joi.string().required().messages({
-    'string.empty': `Please choose your network`,
-    'any.required': `Please choose your network`,
-  }),
-  textNetwork: Joi.string().allow(''),
-}).custom((values) => {
-  if (values.selectNetwork === 'other' && values.textNetwork === '') {
-    throw new Error('Please provide a network for your node')
-  }
-  return values
+  client: Joi.string()
+    .required()
+    .valid('geth', 'besu', 'parity', 'nethermind')
+    .messages({
+      'string.empty': `Please choose your client`,
+      'any.required': `Please choose your client`,
+      'any.only': `Please choose your client`,
+    }),
+  selectNetwork: Joi.string()
+    .required()
+    .valid('mainnet', 'rinkeby', 'ropsten', 'goerli', 'other')
+    .messages({
+      'string.empty': `Please choose your network`,
+      'any.required': `Please choose your network`,
+      'any.only': `Please choose your network`,
+    }),
+  textNetwork: Joi.string()
+    .when('selectNetwork', {
+      is: Joi.valid('other'),
+      then: Joi.string().required(),
+      otherwise: Joi.string().allow(''),
+    })
+    .messages({
+      'string.empty': `Please provide a network name`,
+      'any.required': `Please provide a network name`,
+    }),
 })
 export default schema

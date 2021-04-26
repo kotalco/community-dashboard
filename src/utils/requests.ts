@@ -12,14 +12,10 @@ export const getAllNodes = async (protocol = ''): Promise<EthereumNode[]> => {
 }
 
 // Create new node
-export const createNode = async (
-  protocol: string,
+export const createEthereumNode = async (
   body: EthereumNode
 ): Promise<EthereumNode> => {
-  const { data } = await axios.post<AxiosNodeResponse>(
-    `/${protocol}/nodes`,
-    body
-  )
+  const { data } = await axios.post<AxiosNodeResponse>(`/ethereum/nodes`, body)
 
   return data.node
 }

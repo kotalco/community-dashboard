@@ -7,17 +7,14 @@ import TextInput from '@components/molecules/TextInput/TextInput'
 import Select from '@components/molecules/Select/Select'
 import Button from '@components/atoms/Button/Button'
 import {
-  protocolSelectOptions,
   ethereumNodeClientsOptions,
   ethereumNodeNetworkOptions,
 } from '@data/data'
-import { Protocol } from '@enums/Protocol'
-import { createNode } from '@utils/requests'
+import { createEthereumNode } from '@utils/requests'
 import { schema } from '@schemas/createNode'
 
 export type FormData = {
   name: string
-  protocol: string
   client: string
   selectNetwork: string
   textNetwork: string
@@ -32,11 +29,14 @@ const CreateNodeForm: React.FC = () => {
     formState: { errors, isSubmitted, isValid, isSubmitting },
     handleSubmit,
   } = useForm<FormData>({ resolver: joiResolver(schema) })
-  const [protocol, selectNetwork] = watch(['protocol', 'selectNetwork'])
+  const [selectNetwork] = watch(['selectNetwork'])
 
+  /**
+   * Submit create ethereum node form
+   * @param nodeData the data required to create new node
+   */
   const onSubmit = async ({
     name,
-    protocol,
     client,
     selectNetwork,
     textNetwork,
@@ -46,9 +46,9 @@ const CreateNodeForm: React.FC = () => {
 
     try {
       setSubmitError('')
-      const node = await createNode(protocol, body)
+      const node = await createEthereumNode(body)
       localStorage.setItem('node', JSON.stringify(node))
-      router.push('/')
+      router.push('/deployments/ethereum/nodes')
     } catch (e) {
       setSubmitError(e.response.data.error)
     }
@@ -65,65 +65,41 @@ const CreateNodeForm: React.FC = () => {
           error={errors.name?.message}
         />
 
-        {/* Blockchain Protocol */}
+        {/* Client */}
         <Select
-          label="Blockchain Protocol"
+          label="Client"
+          error={errors.client?.message}
           className="rounded-md"
-          error={errors.protocol?.message}
           options={[
-            { label: 'Choose a protocol...', value: '' },
-            ...protocolSelectOptions,
+            { label: 'Choose a client...', value: '' },
+            ...ethereumNodeClientsOptions,
           ]}
-          {...register('protocol')}
+          {...register('client')}
         />
-
-        {/* Ask for CLIENT and NETWORK in case of PROTOCOL is ETHEREUM */}
-        {protocol === Protocol.ethereum && (
-          <>
-            {/* Client */}
-            <Select
-              label="Client"
-              error={errors.client?.message}
-              className="rounded-md"
-              options={[
-                { label: 'Choose a client...', value: '' },
-                ...ethereumNodeClientsOptions,
-              ]}
-              {...register('client')}
-            />
-            {/* Network */}
-            <Select
-              label="Network"
-              error={errors.selectNetwork?.message}
-              className={
-                selectNetwork === 'other' ? 'rounded-t-md' : 'rounded-md'
-              }
-              options={[
-                { label: 'Choose a network...', value: '' },
-                ...ethereumNodeNetworkOptions,
-                { label: 'Other', value: 'other' },
-              ]}
-              {...register('selectNetwork')}
-            />
-            {selectNetwork === 'other' && (
-              <TextInput
-                error={errors.textNetwork?.message}
-                placeholder="Network Name"
-                className="rounded-none rounded-b-md"
-                {...register('textNetwork')}
-              />
-            )}
-
-            {/* Show if there is an error from server */}
-            {submitError && (
-              <p className="text-center text-red-500 mt-5">{submitError}</p>
-            )}
-          </>
+        {/* Network */}
+        <Select
+          label="Network"
+          error={errors.selectNetwork?.message}
+          className={selectNetwork === 'other' ? 'rounded-t-md' : 'rounded-md'}
+          options={[
+            { label: 'Choose a network...', value: '' },
+            ...ethereumNodeNetworkOptions,
+            { label: 'Other', value: 'other' },
+          ]}
+          {...register('selectNetwork')}
+        />
+        {selectNetwork === 'other' && (
+          <TextInput
+            error={errors.textNetwork?.message}
+            placeholder="Network Name"
+            className="rounded-none rounded-b-md"
+            {...register('textNetwork')}
+          />
         )}
       </div>
 
       {/* <!-- end: content here --> */}
-      <div className="flex px-4 py-3 bg-gray-50 text-right sm:px-6">
+      <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
         <Button
           className="btn btn-primary"
           disabled={(isSubmitted && !isValid) || isSubmitting}
@@ -132,6 +108,11 @@ const CreateNodeForm: React.FC = () => {
         >
           Create
         </Button>
+
+        {/* Show if there is an error from server */}
+        {submitError && (
+          <p className="text-center text-red-500">{submitError}</p>
+        )}
       </div>
     </form>
   )
