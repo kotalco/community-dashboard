@@ -1,10 +1,13 @@
 import { useEffect, useState } from 'react'
 import { InferGetStaticPropsType } from 'next'
+import { GlobeAltIcon } from '@heroicons/react/solid'
+import { ChipIcon } from '@heroicons/react/outline'
 import useSWR from 'swr'
 
 import Button from '@components/atoms/Button/Button'
 import Layout from '@components/templates/Layout/Layout'
-import NodesList from '@components/organisms/NodesList/NodesList'
+import List from '@components/organisms/List/List'
+import ListItem from '@components/molecules/ListItem/ListItem'
 import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel'
 import { getAllNodes } from '@utils/requests'
 import { EthereumNode } from '@interfaces/Node'
@@ -49,9 +52,20 @@ function EthereumNodes({
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
           <div className="py-4">
             {data && data.length !== 0 ? (
-              <div className="bg-white shadow overflow-hidden sm:rounded-md">
-                <NodesList nodes={data} />
-              </div>
+              <List>
+                {nodes.map(({ name, client, network }) => (
+                  <ListItem
+                    key={name}
+                    link={`/deployments/ethereum/nodes/${name}`}
+                    title={name}
+                  >
+                    <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
+                    <p>{client}</p>
+                    <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
+                    <p>{network}</p>
+                  </ListItem>
+                ))}
+              </List>
             ) : (
               <p>There is no nodes created</p>
             )}
