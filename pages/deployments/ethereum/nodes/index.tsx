@@ -51,7 +51,7 @@ function EthereumNodes({
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
           <div className="py-4">
-            {data && data.length !== 0 ? (
+            {data && data.length > 0 ? (
               <List>
                 {nodes.map(({ name, client, network }) => (
                   <ListItem
