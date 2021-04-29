@@ -10,7 +10,7 @@ import {
   ethereumNodeClientsOptions,
   ethereumNodeNetworkOptions,
 } from '@data/data'
-import { createEthereumNode } from '@utils/requests'
+import { createEthereumNode } from '@utils/requests/ethereumNodeRequests'
 import { schema } from '@schemas/createNode'
 
 export type FormData = {

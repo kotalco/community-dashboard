@@ -35,21 +35,19 @@ export const IPFSPeers: React.FC<Props> = ({ peers }) => {
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
           <div className="py-4">
-            <List>
-              {data && data.length > 0 ? (
-                <List>
-                  {data.map(({ name }) => (
-                    <ListItem
-                      key={name}
-                      link={`/deployments/ipfs/peers/${name}`}
-                      title={name}
-                    />
-                  ))}
-                </List>
-              ) : (
-                <p>There is no peers created</p>
-              )}
-            </List>
+            {data && data.length > 0 ? (
+              <List>
+                {data.map(({ name }) => (
+                  <ListItem
+                    key={name}
+                    link={`/deployments/ipfs/peers/${name}`}
+                    title={name}
+                  />
+                ))}
+              </List>
+            ) : (
+              <p>There is no peers created</p>
+            )}
           </div>
         </div>
       </div>
@@ -60,7 +58,7 @@ export const IPFSPeers: React.FC<Props> = ({ peers }) => {
 export const getStaticProps: GetStaticProps = async () => {
   try {
     const peers = await getAllIPFSPeers()
-    return { props: { peers } }
+    return { props: { peers }, revalidate: 10 }
   } catch (e) {
     return { notFound: true }
   }

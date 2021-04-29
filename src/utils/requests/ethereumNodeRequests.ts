@@ -1,4 +1,4 @@
-import axios from './axios'
+import axios from '../axios'
 import {
   EthereumNode,
   AxiosNodesResponse,
@@ -6,8 +6,8 @@ import {
 } from '@interfaces/Node'
 
 // Get all nodes
-export const getAllNodes = async (protocol = ''): Promise<EthereumNode[]> => {
-  const { data } = await axios.get<AxiosNodesResponse>(`/${protocol}/nodes`)
+export const getAllNodes = async (): Promise<EthereumNode[]> => {
+  const { data } = await axios.get<AxiosNodesResponse>(`/ethereum/nodes`)
   return data.nodes
 }
 

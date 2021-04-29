@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form'
 import Button from '@components/atoms/Button/Button'
 import Typography from '@components/atoms/Typgraphy/Typography'
 import Modal from '@components/organisms/Modal/Modal'
-import { deleteNode } from '@utils/requests'
+import { deleteNode } from '@utils/requests/ethereumNodeRequests'
 import TextInput from '@components/molecules/TextInput/TextInput'
 
 interface FormData {

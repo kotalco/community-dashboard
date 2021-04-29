@@ -8,7 +8,7 @@ import Button from '@components/atoms/Button/Button'
 import Select from '@components/molecules/Select/Select'
 import { EthereumNode } from '@interfaces/Node'
 import { ethereumNodeClientsOptions } from '@data/data'
-import { updateNode, getNode } from '@utils/requests'
+import { updateNode, getNode } from '@utils/requests/ethereumNodeRequests'
 import { setNotificationState } from '@store/slices/notificationSlice/notificationSlice'
 
 interface Props {
