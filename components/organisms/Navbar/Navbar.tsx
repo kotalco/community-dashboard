@@ -15,16 +15,16 @@ const Navbar: React.FC<Props> = ({ setIsOpen }) => {
   }
 
   return (
-    <div className="relative z-10 flex-shrink-0 flex h-16 bg-white border-b border-gray-200 md:border-none">
+    <div className="relative z-10 flex-shrink-0 flex h-16 bg-white shadow">
       <IconButton
-        className="px-4 border-r border-gray-200 text-gray-400 md:hidden"
+        className="px-4 border-r border-gray-200 text-gray-500 md:hidden"
         srText="Open sidebar"
         onClick={() => setIsOpen(true)}
       >
         <MenuAlt1Icon className="h-6 w-6" aria-hidden="true" />
       </IconButton>
 
-      <div className="flex-1 px-4 flex justify-between sm:px-6 lg:max-w-6xl lg:mx-auto lg:px-8">
+      <div className="flex-1 px-4 flex justify-between">
         <div className="flex-1 flex">
           <SearchForm />
         </div>
