@@ -26,7 +26,7 @@ export const IPFSPeers: React.FC<Props> = ({ peers }) => {
             IPFS Peers
           </h1>
           <Button
-            href="/deployments/ethereum/nodes/create"
+            href="/deployments/ipfs/peers/create"
             className="btn btn-primary"
           >
             Create New Peer
