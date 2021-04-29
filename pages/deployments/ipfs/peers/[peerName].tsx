@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
@@ -6,6 +7,9 @@ import Layout from '@components/templates/Layout/Layout'
 import PageDetailsHeader from '@components/molecules/PageDetailsHeader/PageDetailsHeader'
 import StatsComponent from '@components/molecules/Stats/Stats'
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator'
+import ProtocolTabContent from '@components/organisms/ProtocolTabContent/ProtocolTabContent'
+import DangerousZoneContent from '@components/organisms/DangerousZoneContent/DangerousZoneContent'
+import Tabs from '@components/organisms/Tabs/Tabs'
 import { getIPFSPeer } from '@utils/requests/ipfsPeersRequests'
 import { IPFSPeer } from '@interfaces/IPFSPeer'
 
@@ -14,6 +18,7 @@ interface Props {
 }
 
 const IPFSPeerDetail: React.FC<Props> = ({ ipfsPeer }) => {
+  const [activeTabIndex, setActiveTabIndex] = useState(0)
   const { isFallback, query } = useRouter()
   const { peerName } = query
 
@@ -43,9 +48,14 @@ const IPFSPeerDetail: React.FC<Props> = ({ ipfsPeer }) => {
             </dl>
           </div>
 
-          {/* <div className="bg-white overflow-hidden shadow rounded-lg divided-y divided-gray-200 mt-4">
-            <Tabs node={node} />
-          </div> */}
+          <div className="bg-white overflow-hidden shadow rounded-lg divided-y divided-gray-200 mt-4">
+            <Tabs
+              activeIndex={activeTabIndex}
+              setActiveIndex={setActiveTabIndex}
+            >
+              {activeTabIndex === 0 && <div>Protocol Tab Content</div>}
+            </Tabs>
+          </div>
         </div>
       </div>
     </Layout>
