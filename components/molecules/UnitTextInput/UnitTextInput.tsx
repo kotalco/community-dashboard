@@ -15,7 +15,7 @@ const UnitTextInput: React.FC<Props> = ({ label, name, id, value, unit }) => {
         <div>
           <InputLabel
             htmlFor={id}
-            className="block text-sm font-medium text-gray-700"
+            labelClassName="block text-sm font-medium text-gray-700"
           >
             {label}
           </InputLabel>

@@ -1,6 +1,6 @@
 import { Transition } from '@headlessui/react'
 
-import MenuOverlay from '@components/atoms/MenuOverlay/MenuOverlay'
+// import MenuOverlay from '@components/atoms/MenuOverlay/MenuOverlay'
 import IconButton from '@components/atoms/IconButton/IconButton'
 import CloseIcon from '@components/Icons/CloseIcon/CloseIcon'
 import OutlineExclamationIcon from '@components/Icons/OutlineExclamationIcon/OutlineExclamationIcon'
@@ -31,7 +31,7 @@ const Modal: React.FC<Props> = ({ close, title, children, show, action }) => {
           className="fixed inset-0"
           aria-hidden={true}
         >
-          <MenuOverlay />
+          {/* <MenuOverlay /> */}
         </Transition.Child>
         <span
           className="hidden sm:inline-block sm:align-middle sm:h-screen"
