@@ -22,3 +22,11 @@ export const createIPFSPeer = async (body: IPFSPeer): Promise<IPFSPeer> => {
 
   return data.peer
 }
+
+export const getIPFSPeer = async (peerName: string): Promise<IPFSPeer> => {
+  const { data } = await axios.get<{ peer: IPFSPeer }>(
+    `/ipfs/peers/${peerName}`
+  )
+
+  return data.peer
+}

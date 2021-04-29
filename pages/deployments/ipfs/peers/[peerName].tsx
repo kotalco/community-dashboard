@@ -1,12 +1,37 @@
+import { GetStaticPaths, GetStaticProps } from 'next'
+import { useRouter } from 'next/router'
+import useSWR from 'swr'
+
 import Layout from '@components/templates/Layout/Layout'
 import PageDetailsHeader from '@components/molecules/PageDetailsHeader/PageDetailsHeader'
 import StatsComponent from '@components/molecules/Stats/Stats'
+import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator'
+import { getIPFSPeer } from '@utils/requests/ipfsPeersRequests'
+import { IPFSPeer } from '@interfaces/IPFSPeer'
 
-const IPFSPeerDetail: React.FC = () => {
+interface Props {
+  ipfsPeer: IPFSPeer
+}
+
+const IPFSPeerDetail: React.FC<Props> = ({ ipfsPeer }) => {
+  const { isFallback, query } = useRouter()
+  const { peerName } = query
+
+  const { data } = useSWR(
+    typeof peerName === 'string' ? peerName : null,
+    getIPFSPeer,
+    {
+      initialData: ipfsPeer,
+      revalidateOnMount: true,
+    }
+  )
+
+  if (!data || isFallback) return <LoadingIndicator />
+
   return (
     <Layout>
       <div className="py-6">
-        <PageDetailsHeader title="Static Title" date="January 11, 2021" />
+        <PageDetailsHeader title={data.name} date="January 11, 2021" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
           {/* Stats */}
@@ -25,6 +50,21 @@ const IPFSPeerDetail: React.FC = () => {
       </div>
     </Layout>
   )
+}
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  const peerName = context.params?.peerName as string
+  try {
+    const ipfsPeer = await getIPFSPeer(peerName)
+
+    return { props: { ipfsPeer } }
+  } catch (e) {
+    return { notFound: true }
+  }
+}
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  return { paths: [], fallback: true }
 }
 
 export default IPFSPeerDetail

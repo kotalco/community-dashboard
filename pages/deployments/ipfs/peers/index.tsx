@@ -13,7 +13,7 @@ interface Props {
 }
 
 export const IPFSPeers: React.FC<Props> = ({ peers }) => {
-  const { data } = useSWR(null, getAllIPFSPeers, {
+  const { data } = useSWR('/ipfs/peers', getAllIPFSPeers, {
     initialData: peers,
     revalidateOnMount: true,
   })
