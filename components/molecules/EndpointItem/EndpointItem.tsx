@@ -1,7 +1,7 @@
 import Link from 'next/link'
+import CubeIcon from '@heroicons/react/outline/CubeIcon'
 
 import Typography from '@components/atoms/Typgraphy/Typography'
-import CubeIcon from '@components/Icons/CubeIcon/CubeIcon'
 
 interface Props {
   name: string

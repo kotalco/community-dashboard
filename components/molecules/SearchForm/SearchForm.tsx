@@ -1,4 +1,4 @@
-import SearchIcon from '@components/Icons/SearchIcon/SearchIcon'
+import SearchIcon from '@heroicons/react/outline/SearchIcon'
 
 const SearchForm: React.FC = () => {
   return (

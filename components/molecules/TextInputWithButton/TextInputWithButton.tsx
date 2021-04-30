@@ -1,4 +1,4 @@
-import CopyIcon from '@components/Icons/CopyIcon/CopyIcon'
+import CopyIcon from '@heroicons/react/outline/ClipboardCopyIcon'
 
 interface Props {
   id: string
