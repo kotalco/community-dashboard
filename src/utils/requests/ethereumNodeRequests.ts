@@ -40,9 +40,9 @@ export const getEthereumNode = async (name: string): Promise<EthereumNode> => {
  * @param name ethereum node name
  * @returns the updated node data after update is done
  */
-export const updateNode = async (
-  body: { client: string },
-  name: string
+export const updateEthereumNode = async (
+  name: string,
+  body: { client: string }
 ): Promise<EthereumNode> => {
   const { data } = await axios.put<{ node: EthereumNode }>(
     `/ethereum/nodes/${name}`,

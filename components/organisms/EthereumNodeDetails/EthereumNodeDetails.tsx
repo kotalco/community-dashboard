@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 import { mutate } from 'swr'
 
@@ -7,7 +6,7 @@ import Button from '@components/atoms/Button/Button'
 import Select from '@components/molecules/Select/Select'
 import { EthereumNode } from '@interfaces/EthereumNode'
 import { ethereumNodeClientsOptions } from '@data/data'
-import { updateNode } from '@utils/requests/ethereumNodeRequests'
+import { updateEthereumNode } from '@utils/requests/ethereumNodeRequests'
 
 interface Props {
   node: EthereumNode
@@ -16,9 +15,6 @@ interface Props {
 const EthereumNodeDetails: React.FC<Props> = ({ node }) => {
   const [submitError, setSubmitError] = useState('')
   const [submitSuccess, setSubmitSuccess] = useState('')
-  const router = useRouter()
-
-  const { nodeName } = router.query
 
   const {
     reset,
@@ -33,15 +29,8 @@ const EthereumNodeDetails: React.FC<Props> = ({ node }) => {
     setSubmitError('')
     setSubmitSuccess('')
     try {
-      mutate(
-        typeof nodeName === 'string' ? nodeName : null,
-        { ...node, client: data.client },
-        false
-      )
-      mutate(
-        typeof nodeName === 'string' ? nodeName : null,
-        updateNode(data, node.name)
-      )
+      mutate(node.name, { ...node, client: data.client }, false)
+      mutate(node.name, updateEthereumNode(node.name, data))
       reset({ client: data.client })
       setSubmitSuccess('Node has been updated')
     } catch (e) {
