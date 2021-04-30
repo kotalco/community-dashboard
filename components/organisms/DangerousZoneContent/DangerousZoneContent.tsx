@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 
 import Button from '@components/atoms/Button/Button'
 import Typography from '@components/atoms/Typgraphy/Typography'
-import Modal from '@components/organisms/Modal/Modal'
+import DeleteModal from '@components/organisms/DeleteModal/DeleteModal'
 import { deleteNode } from '@utils/requests/ethereumNodeRequests'
 import TextInput from '@components/molecules/TextInput/TextInput'
 
@@ -65,13 +65,13 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
         </div>
         {error && <Typography variant="p">{error}</Typography>}
         <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
-          <Button alert onClick={openModal}>
+          <Button className="btn btn-alert" onClick={openModal}>
             Delete Node
           </Button>
         </div>
       </div>
-      <Modal
-        show={showDeleteModal}
+      <DeleteModal
+        open={showDeleteModal}
         close={closeModal}
         title="Delete node"
         action={
@@ -94,7 +94,7 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
           <span className="font-bold">{nodeName}</span>) to confirm
         </Typography>
         <TextInput {...register('name')} />
-      </Modal>
+      </DeleteModal>
     </>
   )
 }
