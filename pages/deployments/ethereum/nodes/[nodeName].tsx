@@ -8,14 +8,15 @@ import PageDetailsHeader from '@components/molecules/PageDetailsHeader/PageDetai
 import StatsComponent from '@components/molecules/Stats/Stats'
 import Tabs from '@components/organisms/Tabs/Tabs'
 import Layout from '@components/templates/Layout/Layout'
-import { EthereumNode } from '@interfaces/EthereumNode'
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator'
+import EthereumNodeDetails from '@components/organisms/EthereumNodeDetails/EthereumNodeDetails'
+import { EthereumNode } from '@interfaces/EthereumNode'
 
 interface Props {
   ethereumNode: EthereumNode
 }
 
-const EthereumNodeDetails: React.FC<Props> = ({ ethereumNode }) => {
+const EthereumNodeDetailsPage: React.FC<Props> = ({ ethereumNode }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0)
   const { isFallback, query } = useRouter()
   const { nodeName } = query
@@ -51,7 +52,7 @@ const EthereumNodeDetails: React.FC<Props> = ({ ethereumNode }) => {
               activeIndex={activeTabIndex}
               setActiveIndex={setActiveTabIndex}
             >
-              {activeTabIndex === 0 && <div>Protocol Tab Content</div>}
+              {activeTabIndex === 0 && <EthereumNodeDetails node={data} />}
             </Tabs>
           </div>
         </div>
@@ -77,4 +78,4 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
 }
 
-export default EthereumNodeDetails
+export default EthereumNodeDetailsPage

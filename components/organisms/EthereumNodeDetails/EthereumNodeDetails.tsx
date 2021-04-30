@@ -1,48 +1,49 @@
 import { useState } from 'react'
 import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
-import useSWR, { mutate } from 'swr'
+import { mutate } from 'swr'
 
-import { useAppDispatch } from '@hooks/hooks'
 import Button from '@components/atoms/Button/Button'
 import Select from '@components/molecules/Select/Select'
 import { EthereumNode } from '@interfaces/EthereumNode'
 import { ethereumNodeClientsOptions } from '@data/data'
-import { updateNode, getNode } from '@utils/requests/ethereumNodeRequests'
-import { setNotificationState } from '@store/slices/notificationSlice/notificationSlice'
+import { updateNode } from '@utils/requests/ethereumNodeRequests'
 
 interface Props {
   node: EthereumNode
 }
 
-const ProtocolTabContent: React.FC<Props> = ({ node }) => {
+const EthereumNodeDetails: React.FC<Props> = ({ node }) => {
   const [submitError, setSubmitError] = useState('')
+  const [submitSuccess, setSubmitSuccess] = useState('')
   const router = useRouter()
-  const dispatch = useAppDispatch()
 
-  const { protocol, nodeName } = router.query
-  const { data } = useSWR([protocol, nodeName], getNode, {
-    initialData: node,
-  })
+  const { nodeName } = router.query
 
   const {
+    reset,
     register,
     handleSubmit,
     formState: { isDirty, isSubmitting },
   } = useForm({
-    defaultValues: { client: data?.client },
+    defaultValues: { client: node.client },
   })
 
   const onSubmit = async (data: { client: string }) => {
     setSubmitError('')
+    setSubmitSuccess('')
     try {
-      mutate([protocol, nodeName], { ...node, client: data.client }, false)
       mutate(
-        [protocol, nodeName],
-        updateNode(data, node.name, protocol as string)
+        typeof nodeName === 'string' ? nodeName : null,
+        { ...node, client: data.client },
+        false
       )
-
-      dispatch(setNotificationState(true))
+      mutate(
+        typeof nodeName === 'string' ? nodeName : null,
+        updateNode(data, node.name)
+      )
+      reset({ client: data.client })
+      setSubmitSuccess('Node has been updated')
     } catch (e) {
       setSubmitError(e.response.data.error)
     }
@@ -54,7 +55,7 @@ const ProtocolTabContent: React.FC<Props> = ({ node }) => {
         <dl>
           <dt className="block text-sm font-medium text-gray-700">Protocol</dt>
           <dd className="mt-1">
-            <span className="text-gray-500 text-sm">{protocol}</span>
+            <span className="text-gray-500 text-sm">Ethereum</span>
           </dd>
         </dl>
         <dl>
@@ -67,16 +68,15 @@ const ProtocolTabContent: React.FC<Props> = ({ node }) => {
         </dl>
         <div className="mt-4">
           <Select
+            className="rounded-md"
             options={ethereumNodeClientsOptions}
             {...register('client')}
             label="Client Software"
           />
         </div>
       </div>
-      {submitError && (
-        <p className="text-center text-red-500 mb-5">{submitError}</p>
-      )}
-      <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
+
+      <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
         <Button
           className="btn btn-primary"
           disabled={!isDirty || isSubmitting}
@@ -85,9 +85,13 @@ const ProtocolTabContent: React.FC<Props> = ({ node }) => {
         >
           Save
         </Button>
+        {submitError && (
+          <p className="text-center text-red-500 mb-5">{submitError}</p>
+        )}
+        {submitSuccess && <p>{submitSuccess}</p>}
       </div>
     </>
   )
 }
 
-export default ProtocolTabContent
+export default EthereumNodeDetails
