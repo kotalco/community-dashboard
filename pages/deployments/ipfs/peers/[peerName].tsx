@@ -7,7 +7,7 @@ import Layout from '@components/templates/Layout/Layout'
 import PageDetailsHeader from '@components/molecules/PageDetailsHeader/PageDetailsHeader'
 import StatsComponent from '@components/molecules/Stats/Stats'
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator'
-// import DangerousZoneContent from '@components/organisms/DangerousZoneContent/DangerousZoneContent'
+import DeleteIPFSPeer from '@components/organisms/DeleteIPFSPeer/DeleteIPFSPeer'
 import Tabs from '@components/organisms/Tabs/Tabs'
 import { getIPFSPeer } from '@utils/requests/ipfsPeersRequests'
 import { IPFSPeer } from '@interfaces/IPFSPeer'
@@ -54,6 +54,7 @@ const IPFSPeerDetailsPage: React.FC<Props> = ({ ipfsPeer }) => {
               setActiveIndex={setActiveTabIndex}
             >
               {activeTabIndex === 0 && <IPFSPeerDetails peer={data} />}
+              {activeTabIndex === 6 && <DeleteIPFSPeer peerName={data.name} />}
             </Tabs>
           </div>
         </div>

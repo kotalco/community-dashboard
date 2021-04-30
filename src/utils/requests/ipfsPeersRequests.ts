@@ -48,3 +48,11 @@ export const updateIPFSPeer = async (
 
   return data.peer
 }
+
+/**
+ * Send a delete request to delete an IPFS Peer
+ * @param name IPFS Peer name
+ */
+export const deleteIPFSPeer = async (name: string): Promise<void> => {
+  await axios.delete(`/ipfs/peers/${name}`)
+}
