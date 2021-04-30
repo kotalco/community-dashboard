@@ -1,4 +1,4 @@
-import SearchIcon from '@heroicons/react/outline/SearchIcon'
+import SearchIcon from '@heroicons/react/solid/SearchIcon'
 
 const SearchForm: React.FC = () => {
   return (
@@ -8,7 +8,7 @@ const SearchForm: React.FC = () => {
       </label>
       <div className="relative w-full text-gray-400 focus-within:text-gray-600">
         <div className="absolute inset-y-0 left-0 flex items-center pointer-events-none">
-          <SearchIcon />
+          <SearchIcon className="h-5 w-5" aria-hidden="true" />
         </div>
         <input
           id="search_field"
