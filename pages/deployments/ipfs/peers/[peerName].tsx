@@ -7,16 +7,17 @@ import Layout from '@components/templates/Layout/Layout'
 import PageDetailsHeader from '@components/molecules/PageDetailsHeader/PageDetailsHeader'
 import StatsComponent from '@components/molecules/Stats/Stats'
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator'
-import DangerousZoneContent from '@components/organisms/DangerousZoneContent/DangerousZoneContent'
+// import DangerousZoneContent from '@components/organisms/DangerousZoneContent/DangerousZoneContent'
 import Tabs from '@components/organisms/Tabs/Tabs'
 import { getIPFSPeer } from '@utils/requests/ipfsPeersRequests'
 import { IPFSPeer } from '@interfaces/IPFSPeer'
+import IPFSPeerDetails from '@components/organisms/IPFSPeerDetails/IPFSPeerDetails'
 
 interface Props {
   ipfsPeer: IPFSPeer
 }
 
-const IPFSPeerDetail: React.FC<Props> = ({ ipfsPeer }) => {
+const IPFSPeerDetailsPage: React.FC<Props> = ({ ipfsPeer }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0)
   const { isFallback, query } = useRouter()
   const { peerName } = query
@@ -52,7 +53,7 @@ const IPFSPeerDetail: React.FC<Props> = ({ ipfsPeer }) => {
               activeIndex={activeTabIndex}
               setActiveIndex={setActiveTabIndex}
             >
-              {/* {activeTabIndex === 0 && <ProtocolTabContent />} */}
+              {activeTabIndex === 0 && <IPFSPeerDetails peer={data} />}
             </Tabs>
           </div>
         </div>
@@ -76,4 +77,4 @@ export const getStaticPaths: GetStaticPaths = async () => {
   return { paths: [], fallback: true }
 }
 
-export default IPFSPeerDetail
+export default IPFSPeerDetailsPage

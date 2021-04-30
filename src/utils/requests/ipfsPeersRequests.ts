@@ -1,6 +1,6 @@
 import axios from '../axios'
 
-import { IPFSPeer } from '@interfaces/IPFSPeer'
+import { IPFSPeer, MutateIPFSPeer } from '@interfaces/IPFSPeer'
 
 /**
  * Send GET request to the server to get all peers
@@ -26,6 +26,24 @@ export const createIPFSPeer = async (body: IPFSPeer): Promise<IPFSPeer> => {
 export const getIPFSPeer = async (peerName: string): Promise<IPFSPeer> => {
   const { data } = await axios.get<{ peer: IPFSPeer }>(
     `/ipfs/peers/${peerName}`
+  )
+
+  return data.peer
+}
+
+/**
+ * Send Put request to update specific IPFS Peer
+ * @param peerName The IPFS Peer that will be updated
+ * @param values The values needed to be updated
+ * @returns an updated peer
+ */
+export const updateIPFSPeer = async (
+  peerName: string,
+  values: MutateIPFSPeer
+): Promise<IPFSPeer> => {
+  const { data } = await axios.put<{ peer: IPFSPeer }>(
+    `ipfs/peers/${peerName}`,
+    values
   )
 
   return data.peer
