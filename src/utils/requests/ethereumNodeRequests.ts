@@ -51,10 +51,10 @@ export const updateEthereumNode = async (
   return data.node
 }
 
-// Delete node by its name
-export const deleteNode = async (
-  protocol: string,
-  name: string
-): Promise<void> => {
-  await axios.delete(`/${protocol}/nodes/${name}`)
+/**
+ * Send a delete request to delete an Ethereum Node
+ * @param name Ethereum node name
+ */
+export const deleteNode = async (name: string): Promise<void> => {
+  await axios.delete(`/ethereum/nodes/${name}`)
 }

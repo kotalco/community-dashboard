@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 
 import Button from '@components/atoms/Button/Button'
-import Typography from '@components/atoms/Typgraphy/Typography'
 import DeleteModal from '@components/organisms/DeleteModal/DeleteModal'
 import { deleteNode } from '@utils/requests/ethereumNodeRequests'
 import TextInput from '@components/molecules/TextInput/TextInput'
@@ -26,14 +25,14 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
     handleSubmit,
     formState: { isSubmitting },
   } = useForm<FormData>()
-  const { protocol } = router.query
+
   const [name] = watch(['name'])
 
   const onSubmit = async () => {
     setError('')
     try {
-      await deleteNode(protocol as string, nodeName)
-      router.push('/')
+      await deleteNode(nodeName)
+      router.push('/deployments/ethereum/nodes')
     } catch (e) {
       setError(e.response.data.message)
     }
@@ -51,19 +50,19 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
     <>
       <div>
         <div className="px-4 py-5 sm:p-6">
-          <Typography variant="p" className="text-gray-700">
+          <p className="text-gray-700">
             By deleting this node, all connected Apps will lose access to the
             Blockchain network.
-          </Typography>
-          <Typography variant="p" className="text-gray-700">
+          </p>
+          <p className="text-gray-700">
             Node attached volume that persists Blockchain data will not be
             removed, you need to delete it yourself.
-          </Typography>
-          <Typography variant="p" className="text-gray-700">
+          </p>
+          <p className="text-gray-700">
             Are you sure you want to delete this node ?
-          </Typography>
+          </p>
         </div>
-        {error && <Typography variant="p">{error}</Typography>}
+        {error && <p>{error}</p>}
         <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
           <Button className="btn btn-alert" onClick={openModal}>
             Delete Node
@@ -73,10 +72,10 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
       <DeleteModal
         open={showDeleteModal}
         close={closeModal}
-        title="Delete node"
+        title="Delete Ethereum Node"
         action={
           <Button
-            alert
+            className="btn btn-alert"
             onClick={handleSubmit(onSubmit)}
             disabled={name !== nodeName || isSubmitting}
             loading={isSubmitting}
@@ -85,15 +84,17 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
           </Button>
         }
       >
-        <Typography variant="p" className="text-sm text-gray-500">
-          This action cannot be undone. This will permnantly delete the node{' '}
-          {nodeName} node.
-        </Typography>
-        <Typography variant="p">
-          Please type the node name (
-          <span className="font-bold">{nodeName}</span>) to confirm
-        </Typography>
-        <TextInput {...register('name')} />
+        <p className="text-sm text-gray-500">
+          This action cannot be undone. This will permnantly delete the node (
+          {nodeName}) node.
+        </p>
+        <div className="mt-4">
+          <p className="mb-2">
+            Please type the node name (
+            <span className="font-bold">{nodeName}</span>) to confirm
+          </p>
+          <TextInput className="rounded-md" {...register('name')} />
+        </div>
       </DeleteModal>
     </>
   )

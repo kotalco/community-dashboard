@@ -10,7 +10,7 @@ import Tabs from '@components/organisms/Tabs/Tabs'
 import Layout from '@components/templates/Layout/Layout'
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator'
 import EthereumNodeDetails from '@components/organisms/EthereumNodeDetails/EthereumNodeDetails'
-import DangerousZoneContent from '@components/organisms/DangerousZoneContent/DangerousZoneContent'
+import DeleteEthereumNode from '@components/organisms/DeleteEthereumNode/DeleteEthereumNode'
 import { EthereumNode } from '@interfaces/EthereumNode'
 
 interface Props {
@@ -55,7 +55,7 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ ethereumNode }) => {
             >
               {activeTabIndex === 0 && <EthereumNodeDetails node={data} />}
               {activeTabIndex === 6 && (
-                <DangerousZoneContent nodeName={data.name} />
+                <DeleteEthereumNode nodeName={data.name} />
               )}
             </Tabs>
           </div>
