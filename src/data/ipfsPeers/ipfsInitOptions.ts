@@ -1,4 +1,4 @@
-import { IPFSConfigurationProfile } from '@enums/ipfsPeers/IPFSConfigurationProfile'
+import { IPFSConfigurationProfile } from '@enums/IPFSPeers/IPFSConfigurationProfile'
 
 type InitProfiles = { label: string; value: IPFSConfigurationProfile }[]
 

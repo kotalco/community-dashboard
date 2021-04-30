@@ -1,4 +1,4 @@
-import { IPFSRouting } from '@enums/ipfsPeers/IPFSRouting'
+import { IPFSRouting } from '@enums/IPFSPeers/IPFSRouting'
 
 type Routing = { label: string; value: IPFSRouting }[]
 

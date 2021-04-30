@@ -7,9 +7,9 @@ import TextInput from '@components/molecules/TextInput/TextInput'
 import Button from '@components/atoms/Button/Button'
 import Checkbox from '@components/molecules/CheckBox/CheckBox'
 import { createIPFSPeer } from '@utils/requests/ipfsPeersRequests'
-import { schema } from '@schemas/createIPFSPeer'
+import { schema } from '@schemas/ipfsPeer/createIPFSPeer'
 import { IPFSPeer } from '@interfaces/IPFSPeer'
-import { IPFSConfigurationProfile } from '@enums/ipfsPeers/IPFSConfigurationProfile'
+import { IPFSConfigurationProfile } from '@enums/IPFSPeers/IPFSConfigurationProfile'
 import { initProfilesOptions } from '@data/ipfsPeers/ipfsInitOptions'
 
 const CreateNodeForm: React.FC = () => {

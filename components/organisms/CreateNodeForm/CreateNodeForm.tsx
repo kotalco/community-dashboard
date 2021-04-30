@@ -6,12 +6,10 @@ import { joiResolver } from '@hookform/resolvers/joi'
 import TextInput from '@components/molecules/TextInput/TextInput'
 import Select from '@components/molecules/Select/Select'
 import Button from '@components/atoms/Button/Button'
-import {
-  ethereumNodeClientsOptions,
-  ethereumNodeNetworkOptions,
-} from '@data/data'
+import { ethereumNodeClientsOptions } from '@data/ethereumNodes/nodeClientsOptions'
+import { ethereumNodeNetworkOptions } from '@data/ethereumNodes/nodeNetworkOptions'
 import { createEthereumNode } from '@utils/requests/ethereumNodeRequests'
-import { schema } from '@schemas/createNode'
+import { schema } from '@schemas/ethereumNode/createNode'
 
 export type FormData = {
   name: string

@@ -9,17 +9,13 @@ test('Render label correctly', () => {
 })
 
 test('Check for class sr-only if available', () => {
-  render(
-    <InputLabel htmlFor="full-name" srOnly>
-      Name:
-    </InputLabel>
-  )
+  render(<InputLabel htmlFor="full-name">Name:</InputLabel>)
   expect(screen.getByText(/name/i)).toHaveClass('sr-only')
 })
 
 test('Check for classes if available', () => {
   render(
-    <InputLabel htmlFor="full-name" className="test-class">
+    <InputLabel htmlFor="full-name" labelClassName="test-class">
       Name:
     </InputLabel>
   )

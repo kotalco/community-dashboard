@@ -8,7 +8,7 @@ import TextInput from '@components/molecules/TextInput/TextInput'
 import { IPFSPeer, MutateIPFSPeer } from '@interfaces/IPFSPeer'
 import Select from '@components/molecules/Select/Select'
 import { ipfsRoutingOptions } from '@data/ipfsPeers/ipfsRoutongOptions'
-import { schema } from '@schemas/updateIPFSPeer'
+import { schema } from '@schemas/ipfsPeer/updateIPFSPeer'
 import { updateIPFSPeer } from '@utils/requests/ipfsPeersRequests'
 
 interface Props {

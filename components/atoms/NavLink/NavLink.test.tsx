@@ -24,6 +24,10 @@ test('Render inactive naviagtion link', () => {
 })
 
 test('Do not render icon if no Icon', () => {
-  render(<NavLink url="/about">About Us</NavLink>)
+  render(
+    <NavLink Icon={KeyIcon} url="/about">
+      About Us
+    </NavLink>
+  )
   expect(screen.queryByTestId('icon')).toBeNull()
 })

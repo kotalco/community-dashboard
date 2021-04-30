@@ -1,5 +1,5 @@
-import { IPFSRouting } from '@enums/ipfsPeers/IPFSRouting'
-import { IPFSConfigurationProfile } from '@enums/ipfsPeers/IPFSConfigurationProfile'
+import { IPFSRouting } from '@enums/IPFSPeers/IPFSRouting'
+import { IPFSConfigurationProfile } from '@enums/IPFSPeers/IPFSConfigurationProfile'
 
 export interface IPFSPeer extends MutateIPFSPeer {
   name: string
