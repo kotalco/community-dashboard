@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction } from 'react'
 
 import TabsMobileView from '@components/molecules/TabsMobileView/TabsMobileView'
 import TabsDesktopView from '@components/molecules/TabsDesktopView/TabsDesktopView'

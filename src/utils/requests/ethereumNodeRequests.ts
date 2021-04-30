@@ -1,32 +1,35 @@
 import axios from '../axios'
-import {
-  EthereumNode,
-  AxiosNodesResponse,
-  AxiosNodeResponse,
-} from '@interfaces/Node'
+import { EthereumNode } from '@interfaces/EthereumNode'
 
-// Get all nodes
 export const getAllNodes = async (): Promise<EthereumNode[]> => {
-  const { data } = await axios.get<AxiosNodesResponse>(`/ethereum/nodes`)
+  const { data } = await axios.get<{ nodes: EthereumNode[] }>(`/ethereum/nodes`)
   return data.nodes
 }
 
-// Create new node
+/**
+ * Create a new node
+ * @param body ethereum node data
+ * @returns the newly created node
+ */
 export const createEthereumNode = async (
   body: EthereumNode
 ): Promise<EthereumNode> => {
-  const { data } = await axios.post<AxiosNodeResponse>(`/ethereum/nodes`, body)
+  const { data } = await axios.post<{ node: EthereumNode }>(
+    `/ethereum/nodes`,
+    body
+  )
 
   return data.node
 }
 
-// Get node by its name
-export const getNode = async (
-  protocol: string,
-  name: string
-): Promise<EthereumNode> => {
-  const { data } = await axios.get<AxiosNodeResponse>(
-    `/${protocol}/nodes/${name}`
+/**
+ * Find ethereum node by its name
+ * @param name ethereum node name
+ * @returns the found node or error 404 in not found
+ */
+export const getEthereumNode = async (name: string): Promise<EthereumNode> => {
+  const { data } = await axios.get<{ node: EthereumNode }>(
+    `/ethereum/nodes/${name}`
   )
   return data.node
 }
@@ -37,7 +40,7 @@ export const updateNode = async (
   name: string,
   protocol: string
 ): Promise<EthereumNode> => {
-  const { data } = await axios.put<AxiosNodeResponse>(
+  const { data } = await axios.put<{ node: EthereumNode }>(
     `/${protocol}/nodes/${name}`,
     body
   )

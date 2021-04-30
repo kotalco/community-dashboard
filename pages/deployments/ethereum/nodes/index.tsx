@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react'
-import { GetStaticProps, InferGetStaticPropsType } from 'next'
+import { GetStaticProps } from 'next'
 import { GlobeAltIcon } from '@heroicons/react/solid'
 import { ChipIcon } from '@heroicons/react/outline'
 import useSWR from 'swr'
@@ -9,7 +8,7 @@ import Layout from '@components/templates/Layout/Layout'
 import List from '@components/organisms/List/List'
 import ListItem from '@components/molecules/ListItem/ListItem'
 import { getAllNodes } from '@utils/requests/ethereumNodeRequests'
-import { EthereumNode } from '@interfaces/Node'
+import { EthereumNode } from '@interfaces/EthereumNode'
 
 interface Props {
   ethereumNodes: EthereumNode[]
