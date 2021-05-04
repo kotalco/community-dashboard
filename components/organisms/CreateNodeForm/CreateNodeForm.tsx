@@ -6,6 +6,7 @@ import { joiResolver } from '@hookform/resolvers/joi'
 import TextInput from '@components/molecules/TextInput/TextInput'
 import Select from '@components/molecules/Select/Select'
 import Button from '@components/atoms/Button/Button'
+import { useNotification } from '@components/contexts/NotificationContext'
 import { ethereumNodeClientsOptions } from '@data/ethereumNodes/nodeClientsOptions'
 import { ethereumNodeNetworkOptions } from '@data/ethereumNodes/nodeNetworkOptions'
 import { createEthereumNode } from '@utils/requests/ethereumNodeRequests'
@@ -21,6 +22,7 @@ export type FormData = {
 const CreateNodeForm: React.FC = () => {
   const [submitError, setSubmitError] = useState('')
   const router = useRouter()
+  const { createNotification } = useNotification()
   const {
     register,
     watch,
@@ -45,7 +47,12 @@ const CreateNodeForm: React.FC = () => {
     try {
       setSubmitError('')
       const node = await createEthereumNode(body)
-      localStorage.setItem('node', JSON.stringify(node))
+      createNotification({
+        title: 'Node has been created',
+        protocol: `Ethereum`,
+        name: node.name,
+      })
+
       router.push('/deployments/ethereum/nodes')
     } catch (e) {
       setSubmitError(e.response.data.error)

@@ -1,15 +1,14 @@
 import { AppProps } from 'next/app'
 import { ReactElement } from 'react'
-import { Provider } from 'react-redux'
+import { NotificationProvider } from '@components/contexts/NotificationContext'
 
-import store from '@store/store'
 import '../styles/globals.css'
 
 function MyApp({ Component, pageProps }: AppProps): ReactElement {
   return (
-    <Provider store={store}>
+    <NotificationProvider>
       <Component {...pageProps} />
-    </Provider>
+    </NotificationProvider>
   )
 }
 

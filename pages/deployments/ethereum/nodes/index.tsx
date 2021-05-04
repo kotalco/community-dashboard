@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { GetStaticProps } from 'next'
 import { GlobeAltIcon } from '@heroicons/react/solid'
 import { ChipIcon } from '@heroicons/react/outline'
@@ -7,18 +8,26 @@ import Button from '@components/atoms/Button/Button'
 import Layout from '@components/templates/Layout/Layout'
 import List from '@components/organisms/List/List'
 import ListItem from '@components/molecules/ListItem/ListItem'
+import { useNotification } from '@components/contexts/NotificationContext'
 import { getAllNodes } from '@utils/requests/ethereumNodeRequests'
 import { EthereumNode } from '@interfaces/EthereumNode'
+import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel'
 
 interface Props {
   ethereumNodes: EthereumNode[]
 }
 
 const EthereumNodes: React.FC<Props> = ({ ethereumNodes }) => {
+  const { notificationData, removeNotification } = useNotification()
+
   const { data, error } = useSWR('/ethereum/nodes', getAllNodes, {
     initialData: ethereumNodes,
     revalidateOnMount: true,
   })
+
+  useEffect(() => {
+    return () => removeNotification()
+  }, [])
 
   if (error) return <p>failed to load nodes</p>
 
@@ -60,6 +69,20 @@ const EthereumNodes: React.FC<Props> = ({ ethereumNodes }) => {
           </div>
         </div>
       </div>
+
+      <NotificationPanel
+        show={!!notificationData}
+        title={notificationData?.title}
+        close={removeNotification}
+      >
+        <p className="mt-1 text-sm text-gray-500">
+          <span className="text-indigo-900 bg-indigo-100 p-1 m-1 ml-0 rounded-md">
+            {notificationData?.name}
+          </span>{' '}
+          {`${notificationData?.protocol} has been created successfully, and will
+          be up and running in few seconds.`}
+        </p>
+      </NotificationPanel>
     </Layout>
   )
 }

@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react'
+import { Fragment } from 'react'
 import { Transition } from '@headlessui/react'
 import { CheckCircleIcon } from '@heroicons/react/outline'
 import { XIcon } from '@heroicons/react/solid'
@@ -6,14 +6,17 @@ import { XIcon } from '@heroicons/react/solid'
 import IconButton from '@components/atoms/IconButton/IconButton'
 
 interface Props {
+  show: boolean
+  close: () => void
   title?: string
-  name: string
-  type: string
 }
 
-const NotificationPanel: React.FC<Props> = ({ title, name, type }) => {
-  const [show, setShow] = useState(true)
-
+const NotificationPanel: React.FC<Props> = ({
+  title,
+  show,
+  close,
+  children,
+}) => {
   return (
     <>
       <div
@@ -41,21 +44,13 @@ const NotificationPanel: React.FC<Props> = ({ title, name, type }) => {
                 </div>
                 <div className="ml-3 w-0 flex-1 pt-0.5">
                   <p className="text-sm font-medium text-gray-900">{title}</p>
-                  <p className="mt-1 text-sm text-gray-500">
-                    <span className="text-indigo-900 bg-indigo-100 p-1 m-1 ml-0 rounded-md">
-                      {name}
-                    </span>{' '}
-                    {type} has been created successfully, and will be up and
-                    running in few seconds.
-                  </p>
+                  {children}
                 </div>
                 <div className="ml-4 flex-shrink-0 flex">
                   <IconButton
                     className="btn-icn"
                     srText="Close"
-                    onClick={() => {
-                      setShow(false)
-                    }}
+                    onClick={close}
                   >
                     <XIcon className="h-5 w-5" aria-hidden="true" />
                   </IconButton>
