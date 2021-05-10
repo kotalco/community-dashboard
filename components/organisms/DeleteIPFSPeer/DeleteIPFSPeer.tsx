@@ -6,6 +6,7 @@ import Button from '@components/atoms/Button/Button'
 import DeleteModal from '@components/organisms/DeleteModal/DeleteModal'
 import { deleteIPFSPeer } from '@utils/requests/ipfsPeersRequests'
 import TextInput from '@components/molecules/TextInput/TextInput'
+import { useNotification } from '@components/contexts/NotificationContext'
 
 interface FormData {
   name: string
@@ -17,6 +18,7 @@ interface Props {
 
 const DangerousZoneContent: React.FC<Props> = ({ peerName }) => {
   const [error, setError] = useState('')
+  const { createNotification } = useNotification()
   const [showDeleteModal, setShowDeleteModal] = useState(false)
   const router = useRouter()
   const {
@@ -33,6 +35,12 @@ const DangerousZoneContent: React.FC<Props> = ({ peerName }) => {
     try {
       await deleteIPFSPeer(peerName)
       router.push('/deployments/ipfs/peers')
+      createNotification({
+        title: 'IPFS peer has been deleted',
+        name: peerName,
+        action: 'deleted successfuly',
+        protocol: 'IPFS',
+      })
     } catch (e) {
       setError(e.response.data.message)
     }
