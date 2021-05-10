@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { GetStaticProps } from 'next'
 import useSWR from 'swr'
 
@@ -5,18 +6,28 @@ import Layout from '@components/templates/Layout/Layout'
 import Button from '@components/atoms/Button/Button'
 import List from '@components/organisms/List/List'
 import ListItem from '@components/molecules/ListItem/ListItem'
+import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel'
 import { getAllIPFSPeers } from '@utils/requests/ipfsPeersRequests'
 import { IPFSPeer } from '@interfaces/IPFSPeer'
+import { useNotification } from '@components/contexts/NotificationContext'
 
 interface Props {
   peers: IPFSPeer[]
 }
 
 export const IPFSPeers: React.FC<Props> = ({ peers }) => {
+  const { notificationData, removeNotification } = useNotification()
+
   const { data } = useSWR('/ipfs/peers', getAllIPFSPeers, {
     initialData: peers,
     revalidateOnMount: true,
   })
+
+  useEffect(() => {
+    return () => {
+      removeNotification
+    }
+  }, [])
 
   return (
     <Layout>
@@ -51,6 +62,19 @@ export const IPFSPeers: React.FC<Props> = ({ peers }) => {
           </div>
         </div>
       </div>
+
+      <NotificationPanel
+        show={!!notificationData}
+        title={notificationData?.title}
+        close={removeNotification}
+      >
+        <p className="mt-1 text-sm text-gray-500">
+          <span className="text-indigo-900 bg-indigo-100 p-1 m-1 ml-0 rounded-md">
+            {notificationData?.name}
+          </span>{' '}
+          {`${notificationData?.protocol} has been ${notificationData?.action}`}
+        </p>
+      </NotificationPanel>
     </Layout>
   )
 }
