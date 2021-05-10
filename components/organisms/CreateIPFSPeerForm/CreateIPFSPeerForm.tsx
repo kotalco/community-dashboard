@@ -11,9 +11,12 @@ import { schema } from '@schemas/ipfsPeer/createIPFSPeer'
 import { IPFSPeer } from '@interfaces/IPFSPeer'
 import { IPFSConfigurationProfile } from '@enums/IPFSPeers/IPFSConfigurationProfile'
 import { initProfilesOptions } from '@data/ipfsPeers/ipfsInitOptions'
+import { useNotification } from '@components/contexts/NotificationContext'
 
 const CreateNodeForm: React.FC = () => {
   const [submitError, setSubmitError] = useState('')
+  const { createNotification } = useNotification()
+
   const router = useRouter()
   const {
     register,
@@ -33,7 +36,14 @@ const CreateNodeForm: React.FC = () => {
   const onSubmit = async (values: IPFSPeer) => {
     try {
       setSubmitError('')
-      await createIPFSPeer(values)
+      const peer = await createIPFSPeer(values)
+      createNotification({
+        title: 'IPFS Peer has been created',
+        protocol: 'IPFS',
+        name: peer.name,
+        action:
+          'created successfully, and will be up and running in few seconds.',
+      })
       router.push('/deployments/ipfs/peers')
     } catch (e) {
       setSubmitError(e.response.data.error)
