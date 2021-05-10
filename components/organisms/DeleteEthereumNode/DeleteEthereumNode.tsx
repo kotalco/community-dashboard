@@ -6,6 +6,7 @@ import Button from '@components/atoms/Button/Button'
 import DeleteModal from '@components/organisms/DeleteModal/DeleteModal'
 import { deleteNode } from '@utils/requests/ethereumNodeRequests'
 import TextInput from '@components/molecules/TextInput/TextInput'
+import { useNotification } from '@components/contexts/NotificationContext'
 
 interface FormData {
   name: string
@@ -18,6 +19,8 @@ interface Props {
 const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
   const [error, setError] = useState('')
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const { createNotification } = useNotification()
+
   const router = useRouter()
   const {
     register,
@@ -32,6 +35,12 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
     setError('')
     try {
       await deleteNode(nodeName)
+      createNotification({
+        title: 'Node has been deleted',
+        protocol: 'Ethereum',
+        name: nodeName,
+        action: 'deleted successfully',
+      })
       router.push('/deployments/ethereum/nodes')
     } catch (e) {
       setError(e.response.data.message)

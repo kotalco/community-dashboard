@@ -4,6 +4,7 @@ type notificationData = {
   title: string
   protocol: string
   name: string
+  action: string
 } | null
 
 type notificationContextType = {

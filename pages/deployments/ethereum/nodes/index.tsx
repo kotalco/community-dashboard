@@ -79,8 +79,7 @@ const EthereumNodes: React.FC<Props> = ({ ethereumNodes }) => {
           <span className="text-indigo-900 bg-indigo-100 p-1 m-1 ml-0 rounded-md">
             {notificationData?.name}
           </span>{' '}
-          {`${notificationData?.protocol} has been created successfully, and will
-          be up and running in few seconds.`}
+          {`${notificationData?.protocol} has been ${notificationData?.action}`}
         </p>
       </NotificationPanel>
     </Layout>
