@@ -12,6 +12,7 @@ import Tabs from '@components/organisms/Tabs/Tabs'
 import { getIPFSPeer } from '@utils/requests/ipfsPeersRequests'
 import { IPFSPeer } from '@interfaces/IPFSPeer'
 import IPFSPeerDetails from '@components/organisms/IPFSPeerDetails/IPFSPeerDetails'
+import { tabsTitles } from '@data/ipfsPeers/tabsTitles'
 
 interface Props {
   ipfsPeer: IPFSPeer
@@ -52,9 +53,10 @@ const IPFSPeerDetailsPage: React.FC<Props> = ({ ipfsPeer }) => {
             <Tabs
               activeIndex={activeTabIndex}
               setActiveIndex={setActiveTabIndex}
+              tabs={tabsTitles}
             >
               {activeTabIndex === 0 && <IPFSPeerDetails peer={data} />}
-              {activeTabIndex === 6 && <DeleteIPFSPeer peerName={data.name} />}
+              {activeTabIndex === 5 && <DeleteIPFSPeer peerName={data.name} />}
             </Tabs>
           </div>
         </div>
