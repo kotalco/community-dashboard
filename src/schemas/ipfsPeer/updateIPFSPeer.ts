@@ -27,3 +27,14 @@ export const schema = Joi.object({
       'any.only': `Please choose a client from the list`,
     }),
 })
+
+export const updateAPIsSchema = Joi.object({
+  apiPort: Joi.number().required().messages({
+    'any.required': 'Please provide an API server port',
+    'number.base': 'API server port should be a valid port number',
+  }),
+  apiHost: Joi.string().required().trim().pattern(ipAddressRegex).messages({
+    'string.empty': 'Please provide an API server host',
+    'string.pattern.base': 'Please provide a valid ip address',
+  }),
+})

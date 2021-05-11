@@ -9,9 +9,10 @@ import StatsComponent from '@components/molecules/Stats/Stats'
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator'
 import DeleteIPFSPeer from '@components/organisms/DeleteIPFSPeer/DeleteIPFSPeer'
 import Tabs from '@components/organisms/Tabs/Tabs'
+import IPFSPeerDetails from '@components/organisms/IPFSPeerDetails/IPFSPeerDetails'
+import IPFSApiDetails from '@components/organisms/IPFSApiDetails/IPFSApiDetails'
 import { getIPFSPeer } from '@utils/requests/ipfsPeersRequests'
 import { IPFSPeer } from '@interfaces/IPFSPeer'
-import IPFSPeerDetails from '@components/organisms/IPFSPeerDetails/IPFSPeerDetails'
 import { tabsTitles } from '@data/ipfsPeers/tabsTitles'
 
 interface Props {
@@ -56,6 +57,7 @@ const IPFSPeerDetailsPage: React.FC<Props> = ({ ipfsPeer }) => {
               tabs={tabsTitles}
             >
               {activeTabIndex === 0 && <IPFSPeerDetails peer={data} />}
+              {activeTabIndex === 2 && <IPFSApiDetails peer={data} />}
               {activeTabIndex === 5 && <DeleteIPFSPeer peerName={data.name} />}
             </Tabs>
           </div>
