@@ -38,3 +38,14 @@ export const updateAPIsSchema = Joi.object({
     'string.pattern.base': 'Please provide a valid ip address',
   }),
 })
+
+export const updateGatewaySchema = Joi.object({
+  gatewayPort: Joi.number().required().messages({
+    'any.required': 'Please provide a local IPFS gateway server port',
+    'number.base': 'API server port should be a valid port number',
+  }),
+  gatewayHost: Joi.string().required().trim().pattern(ipAddressRegex).messages({
+    'string.empty': 'Please provide a gateway server host',
+    'string.pattern.base': 'Please provide a valid ip address',
+  }),
+})
