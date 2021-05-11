@@ -49,3 +49,13 @@ export const updateGatewaySchema = Joi.object({
     'string.pattern.base': 'Please provide a valid ip address',
   }),
 })
+
+export const updateRoutingSchema = Joi.object({
+  routing: Joi.string()
+    .required()
+    .trim()
+    .valid('none', 'dht', 'dhtclient', 'dhtserver')
+    .messages({
+      'any.only': `Please choose a client from the list`,
+    }),
+})
