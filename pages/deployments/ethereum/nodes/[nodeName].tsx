@@ -12,6 +12,7 @@ import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndi
 import EthereumNodeDetails from '@components/organisms/EthereumNodeDetails/EthereumNodeDetails'
 import DeleteEthereumNode from '@components/organisms/DeleteEthereumNode/DeleteEthereumNode'
 import { EthereumNode } from '@interfaces/EthereumNode'
+import { tabTitles } from '@data/ethereumNodes/tabTitles'
 
 interface Props {
   ethereumNode: EthereumNode
@@ -52,6 +53,7 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ ethereumNode }) => {
             <Tabs
               activeIndex={activeTabIndex}
               setActiveIndex={setActiveTabIndex}
+              tabs={tabTitles}
             >
               {activeTabIndex === 0 && <EthereumNodeDetails node={data} />}
               {activeTabIndex === 6 && (

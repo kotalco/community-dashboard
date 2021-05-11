@@ -3,22 +3,18 @@ import { Dispatch, SetStateAction } from 'react'
 import TabsMobileView from '@components/molecules/TabsMobileView/TabsMobileView'
 import TabsDesktopView from '@components/molecules/TabsDesktopView/TabsDesktopView'
 
-const TAB_TITLES = [
-  'Protocol',
-  'Networking',
-  'API',
-  'Whitelisting',
-  'Mining',
-  'Resources',
-  'Dangerous Zone',
-]
-
 interface Props {
   activeIndex: number
   setActiveIndex: Dispatch<SetStateAction<number>>
+  tabs: string[]
 }
 
-const Tabs: React.FC<Props> = ({ activeIndex, setActiveIndex, children }) => {
+const Tabs: React.FC<Props> = ({
+  activeIndex,
+  setActiveIndex,
+  tabs,
+  children,
+}) => {
   return (
     <>
       {/* Tabs Ttitles */}
@@ -26,12 +22,12 @@ const Tabs: React.FC<Props> = ({ activeIndex, setActiveIndex, children }) => {
         <div>
           <TabsMobileView
             setActiveTabIndex={setActiveIndex}
-            tabs={TAB_TITLES}
+            tabs={tabs}
             activeTabIndex={activeIndex}
           />
           <TabsDesktopView
             setActiveTabIndex={setActiveIndex}
-            tabs={TAB_TITLES}
+            tabs={tabs}
             activeTabIndex={activeIndex}
           />
         </div>
