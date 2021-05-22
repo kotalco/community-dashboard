@@ -12,5 +12,5 @@ export interface MutateIPFSPeer {
   gatewayPort: number
   gatewayHost: string
   routing: IPFSRouting
-  profiles: IPFSConfigurationProfile[]
+  profiles: IPFSConfigurationProfile[] | null
 }

@@ -3,13 +3,14 @@ import React from 'react'
 interface Props {
   name: string
   label: string
+  disabled?: boolean
   value?: string
   onBlur: (e: React.FocusEvent<HTMLInputElement>) => void
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 const Checkbox = React.forwardRef<HTMLInputElement, Props>(
-  ({ name, label, onBlur, onChange, value }, ref) => {
+  ({ name, label, onBlur, onChange, value, disabled }, ref) => {
     return (
       <div className="relative flex items-start">
         <div className="flex items-center h-5">
@@ -21,7 +22,8 @@ const Checkbox = React.forwardRef<HTMLInputElement, Props>(
             id={value}
             name={name}
             type="checkbox"
-            className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+            disabled={disabled}
+            className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded disabled:text-gray-300"
           />
         </div>
         <div className="ml-3 text-sm">

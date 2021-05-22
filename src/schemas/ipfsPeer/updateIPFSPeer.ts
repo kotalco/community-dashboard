@@ -28,6 +28,22 @@ export const schema = Joi.object({
     }),
 })
 
+export const updateConfigProfilesSchema = Joi.object({
+  profiles: Joi.array().items(
+    Joi.string().valid(
+      'server',
+      'randomports',
+      'default-datastore',
+      'local-discovery',
+      'test',
+      'default-networking',
+      'flatfs',
+      'badgerds',
+      'lowpower'
+    )
+  ),
+})
+
 export const updateAPIsSchema = Joi.object({
   apiPort: Joi.number().required().messages({
     'any.required': 'Please provide an API server port',
