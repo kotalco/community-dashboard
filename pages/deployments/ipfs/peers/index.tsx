@@ -25,7 +25,7 @@ export const IPFSPeers: React.FC<Props> = ({ peers }) => {
 
   useEffect(() => {
     return () => {
-      removeNotification
+      removeNotification()
     }
   }, [])
 
