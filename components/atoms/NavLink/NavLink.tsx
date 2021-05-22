@@ -52,7 +52,7 @@ const NavLink: React.FC<Props> = ({ children, url, Icon, subLinks }) => {
   }
 
   return (
-    <Disclosure as="div" className="space-y-1">
+    <Disclosure defaultOpen={active} as="div" className="space-y-1">
       {({ open }) => (
         <>
           <Disclosure.Button
@@ -75,7 +75,11 @@ const NavLink: React.FC<Props> = ({ children, url, Icon, subLinks }) => {
           <Disclosure.Panel className="space-y-1">
             {subLinks?.map(({ href, name }) => (
               <Link key={name} href={href}>
-                <a className="group w-full flex items-center pl-11 pr-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50">
+                <a
+                  className={`group w-full flex items-center pl-11 pr-2 py-2 text-sm text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50 ${
+                    href === pathname ? 'font-bold' : 'font-medium'
+                  }`}
+                >
                   {name}
                 </a>
               </Link>
