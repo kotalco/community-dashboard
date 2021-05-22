@@ -9,7 +9,7 @@ import StatsComponent from '@components/molecules/Stats/Stats'
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator'
 import DeleteIPFSPeer from '@components/organisms/DeleteIPFSPeer/DeleteIPFSPeer'
 import Tabs from '@components/organisms/Tabs/Tabs'
-import IPFSPeerDetails from '@components/organisms/IPFSPeerDetails/IPFSPeerDetails'
+import IPFSProtocolDetails from '@components/organisms/IPFSProtocolDetails/IPFSProtocolDetails'
 import IPFSConfigrationProfiles from '@components/organisms/IPFSConfigrationProfiles/IPFSConfigrationProfiles'
 import IPFSApiDetails from '@components/organisms/IPFSApiDetails/IPFSApiDetails'
 import IPFSGatewayDetails from '@components/organisms/IPFSGatewayDetails/IPFSGatewayDetails'
@@ -59,7 +59,7 @@ const IPFSPeerDetailsPage: React.FC<Props> = ({ ipfsPeer }) => {
               setActiveIndex={setActiveTabIndex}
               tabs={tabsTitles}
             >
-              {activeTabIndex === 0 && <IPFSPeerDetails peer={data} />}
+              {activeTabIndex === 0 && <IPFSProtocolDetails />}
               {activeTabIndex === 1 && <IPFSConfigrationProfiles peer={data} />}
               {activeTabIndex === 2 && <IPFSApiDetails peer={data} />}
               {activeTabIndex === 3 && <IPFSGatewayDetails peer={data} />}
