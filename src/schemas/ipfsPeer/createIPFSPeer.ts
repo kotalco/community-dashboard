@@ -10,6 +10,7 @@ export const schema = Joi.object({
   gatewayPort: Joi.number().default(8080),
   gatewayHost: Joi.string().default('0.0.0.0'),
   routing: Joi.string().default('dht'),
+  profiles: Joi.array().default([]),
   initProfiles: Joi.array()
     .min(1)
     .items(
