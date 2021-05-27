@@ -9,21 +9,25 @@ import Layout from '@components/templates/Layout/Layout'
 import List from '@components/organisms/List/List'
 import ListItem from '@components/molecules/ListItem/ListItem'
 import { useNotification } from '@components/contexts/NotificationContext'
-import { getAllNodes } from '@utils/requests/ethereumNodeRequests'
-import { EthereumNode } from '@interfaces/EthereumNode'
+import { getAllEthereum2BeaconNodes } from '@utils/requests/Ethereum2Requests'
+import { Ethereum2BeaconNode } from '@interfaces/Ethereum2BeaconNode'
 import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel'
 
 interface Props {
-  ethereumNodes: EthereumNode[]
+  beaconNodes: Ethereum2BeaconNode[]
 }
 
-const Ethereum2: React.FC<Props> = ({ ethereumNodes }) => {
+const Ethereum2Nodes: React.FC<Props> = ({ beaconNodes }) => {
   const { notificationData, removeNotification } = useNotification()
 
-  const { data, error } = useSWR('/ethereum/nodes', getAllNodes, {
-    initialData: ethereumNodes,
-    revalidateOnMount: true,
-  })
+  const { data, error } = useSWR(
+    '/ethereum2/beaconnodes',
+    getAllEthereum2BeaconNodes,
+    {
+      initialData: beaconNodes,
+      revalidateOnMount: true,
+    }
+  )
 
   useEffect(() => {
     return () => removeNotification()
@@ -36,13 +40,13 @@ const Ethereum2: React.FC<Props> = ({ ethereumNodes }) => {
       <div className="py-6">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 flex">
           <h1 className="text-2xl font-semibold text-gray-900 flex-grow">
-            Nodes
+            Beacon Nodes
           </h1>
           <Button
             href="/deployments/ethereum/nodes/create"
             className="btn btn-primary"
           >
-            Create New Node
+            Create New Beacon Node
           </Button>
         </div>
 
@@ -53,7 +57,7 @@ const Ethereum2: React.FC<Props> = ({ ethereumNodes }) => {
                 {data.map(({ name, client, network }) => (
                   <ListItem
                     key={name}
-                    link={`/deployments/ethereum/nodes/${name}`}
+                    link={`/deployments/ethereum2/beaconnodes/${name}`}
                     title={name}
                   >
                     <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
@@ -88,11 +92,11 @@ const Ethereum2: React.FC<Props> = ({ ethereumNodes }) => {
 
 export const getStaticProps: GetStaticProps = async () => {
   try {
-    const ethereumNodes = await getAllNodes()
-    return { props: { ethereumNodes }, revalidate: 10 }
+    const beaconNodes = await getAllEthereum2BeaconNodes()
+    return { props: { beaconNodes }, revalidate: 10 }
   } catch (e) {
     return { notFound: true }
   }
 }
 
-export default Ethereum2
+export default Ethereum2Nodes

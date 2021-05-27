@@ -10,7 +10,7 @@ export const getAllEthereum2BeaconNodes = async (): Promise<
   Ethereum2BeaconNode[]
 > => {
   const { data } = await axios.get<{ beaconnodes: Ethereum2BeaconNode[] }>(
-    `/ethereum2/beaonnodes`
+    `/ethereum2/beaconnodes`
   )
   return data.beaconnodes
 }
