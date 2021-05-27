@@ -18,6 +18,11 @@ export const navigation = [
         href: '/deployments/ethereum/nodes',
         active: 'ethereum',
       },
+      {
+        name: 'Ethereum 2.0',
+        href: '/deployments/ethereum2/beaconnodes',
+        active: 'ethereum2',
+      },
       { name: 'IPFS', href: '/deployments/ipfs/peers', active: 'ipfs' },
     ],
   },
