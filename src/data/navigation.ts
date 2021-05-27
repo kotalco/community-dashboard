@@ -13,8 +13,12 @@ export const navigation = [
     name: 'Deployments',
     icon: CubeIcon,
     children: [
-      { name: 'Ethereum', href: '/deployments/ethereum/nodes' },
-      { name: 'IPFS', href: '/deployments/ipfs/peers' },
+      {
+        name: 'Ethereum',
+        href: '/deployments/ethereum/nodes',
+        active: 'ethereum',
+      },
+      { name: 'IPFS', href: '/deployments/ipfs/peers', active: 'ipfs' },
     ],
   },
   {
