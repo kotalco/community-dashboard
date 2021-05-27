@@ -10,12 +10,12 @@ interface IconProps {
 interface Props {
   url?: string
   Icon: React.ComponentType<IconProps>
-  subLinks?: { name: string; href: string; active: string }[]
+  subLinks?: { name: string; href: string; protocol: string }[]
 }
 
 const NavLink: React.FC<Props> = ({ children, url, Icon, subLinks }) => {
   const { pathname } = useRouter()
-  const active = subLinks?.some(({ active }) => pathname.includes(active))
+  const active = subLinks?.some(({ protocol }) => pathname.includes(protocol))
   const activeClassNames = {
     link: 'bg-gray-100 text-gray-900',
     icon: 'text-gray-500',
@@ -73,11 +73,13 @@ const NavLink: React.FC<Props> = ({ children, url, Icon, subLinks }) => {
           </Disclosure.Button>
 
           <Disclosure.Panel className="space-y-1">
-            {subLinks?.map(({ href, name, active }) => (
+            {subLinks?.map(({ href, name, protocol }) => (
               <Link key={name} href={href}>
                 <a
                   className={`group w-full flex items-center pl-11 pr-2 py-2 text-sm text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50 ${
-                    pathname.includes(active) ? 'font-bold' : 'font-medium'
+                    pathname.split('/').includes(protocol)
+                      ? 'font-bold'
+                      : 'font-medium'
                   }`}
                 >
                   {name}

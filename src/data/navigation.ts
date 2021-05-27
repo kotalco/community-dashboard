@@ -16,14 +16,14 @@ export const navigation = [
       {
         name: 'Ethereum',
         href: '/deployments/ethereum/nodes',
-        active: 'ethereum',
+        protocol: 'ethereum',
       },
       {
         name: 'Ethereum 2.0',
         href: '/deployments/ethereum2/beaconnodes',
-        active: 'ethereum2',
+        protocol: 'ethereum2',
       },
-      { name: 'IPFS', href: '/deployments/ipfs/peers', active: 'ipfs' },
+      { name: 'IPFS', href: '/deployments/ipfs/peers', protocol: 'ipfs' },
     ],
   },
   {
