@@ -7,6 +7,7 @@ import Select from '@components/molecules/Select/Select'
 import { EthereumNode } from '@interfaces/EthereumNode'
 import { ethereumNodeClientsOptions } from '@data/ethereumNodes/nodeClientsOptions'
 import { updateEthereumNode } from '@utils/requests/ethereumNodeRequests'
+import { NodeClient } from '@enums/Ethereum/NodeClient'
 
 interface Props {
   node: EthereumNode
@@ -25,7 +26,7 @@ const EthereumNodeDetails: React.FC<Props> = ({ node }) => {
     defaultValues: { client: node.client },
   })
 
-  const onSubmit = async (data: { client: string }) => {
+  const onSubmit = async (data: { client: NodeClient }) => {
     setSubmitError('')
     setSubmitSuccess('')
     try {

@@ -11,10 +11,11 @@ import { ethereumNodeClientsOptions } from '@data/ethereumNodes/nodeClientsOptio
 import { ethereumNodeNetworkOptions } from '@data/ethereumNodes/nodeNetworkOptions'
 import { createEthereumNode } from '@utils/requests/ethereumNodeRequests'
 import { schema } from '@schemas/ethereumNode/createNode'
+import { NodeClient } from '@enums/Ethereum/NodeClient'
 
-export type FormData = {
+export interface FormData {
   name: string
-  client: string
+  client: NodeClient
   selectNetwork: string
   textNetwork: string
 }

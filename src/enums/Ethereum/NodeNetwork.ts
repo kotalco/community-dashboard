@@ -1,4 +1,4 @@
-export enum EthereumNetwork {
+export enum NodeNetwork {
   mainnet = 'mainnet',
   rinkeby = 'rinkeby',
   ropsten = 'ropsten',

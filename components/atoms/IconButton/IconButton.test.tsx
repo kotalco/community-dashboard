@@ -1,8 +1,8 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import BellIcon from '@heroicons/react/solid/BellIcon'
 
 import IconButton from './IconButton'
-import BellIcon from '../../Icons/BellIcon/BellIcon'
 
 test('Render sr-only text', () => {
   render(

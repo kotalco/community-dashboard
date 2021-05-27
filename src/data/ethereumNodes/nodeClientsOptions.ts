@@ -1,10 +1,10 @@
-import { EthereumClient } from '@enums/EthereumNodes/EthereumClient'
+import { NodeClient } from '@enums/Ethereum/NodeClient'
 
-type ethereumNodeOption = { label: string; value: EthereumClient }
+type ethereumNodeOption = { label: string; value: NodeClient }
 
 export const ethereumNodeClientsOptions: ethereumNodeOption[] = [
-  { label: 'Go Ethereum', value: EthereumClient.geth },
-  { label: 'Hyperledger Besu', value: EthereumClient.besu },
-  { label: 'Open Ethereum', value: EthereumClient.parity },
-  { label: 'Nethermind', value: EthereumClient.nethermind },
+  { label: 'Go Ethereum', value: NodeClient.geth },
+  { label: 'Hyperledger Besu', value: NodeClient.besu },
+  { label: 'Open Ethereum', value: NodeClient.parity },
+  { label: 'Nethermind', value: NodeClient.nethermind },
 ]

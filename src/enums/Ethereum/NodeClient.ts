@@ -1,4 +1,4 @@
-export enum EthereumClient {
+export enum NodeClient {
   geth = 'geth',
   besu = 'besu',
   parity = 'parity',

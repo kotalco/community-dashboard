@@ -1,7 +1,7 @@
 import { screen, render } from '@testing-library/react'
+import KeyIcon from '@heroicons/react/outline/KeyIcon'
 
 import NavLink from './NavLink'
-import KeyIcon from '../../Icons/KeyIcon/KeyIcon'
 
 test('Render active naviagtion link', () => {
   render(
