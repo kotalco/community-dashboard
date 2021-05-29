@@ -30,3 +30,18 @@ export const createBeaconNode = async (
 
   return data.beaconnode
 }
+
+export const getBeaconNode = async (
+  nodeName: string
+): Promise<Ethereum2BeaconNode> => {
+  // SHOULD BE FIXED LATER
+  const { data } = await axios.get<{ beaconnnode: Ethereum2BeaconNode }>(
+    `/ethereum2/beaconnodes/${nodeName}`
+  )
+
+  return data.beaconnnode
+}
+
+export const deleteBeaconNode = async (nodeName: string): Promise<void> => {
+  await axios.delete(`/ethereum2/beaconnodes/${nodeName}`)
+}

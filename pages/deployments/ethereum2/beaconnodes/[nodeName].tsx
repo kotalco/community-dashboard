@@ -3,31 +3,31 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 
-import { getEthereumNode } from '@utils/requests/ethereumNodeRequests'
+import { getBeaconNode } from '@utils/requests/ethereum2/beaconNodes'
 import PageDetailsHeader from '@components/molecules/PageDetailsHeader/PageDetailsHeader'
 import StatsComponent from '@components/molecules/Stats/Stats'
 import Tabs from '@components/organisms/Tabs/Tabs'
 import Layout from '@components/templates/Layout/Layout'
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator'
-import EthereumNodeDetails from '@components/organisms/EthereumNodeDetails/EthereumNodeDetails'
-import DeleteEthereumNode from '@components/organisms/DeleteEthereumNode/DeleteEthereumNode'
-import { EthereumNode } from '@interfaces/EthereumNode'
+// import EthereumNodeDetails from '@components/organisms/EthereumNodeDetails/EthereumNodeDetails'
+import DeleteBeaconNode from '@components/organisms/Ethereum2/BeaconNode/DeleteBeaconNode/DeleteBeaconNode'
 import { tabTitles } from '@data/ethereum/node/tabTitles'
+import { Ethereum2BeaconNode } from '@interfaces/ethereum2/beaconNode/Ethereum2BeaconNode'
 
 interface Props {
-  ethereumNode: EthereumNode
+  beaconNode: Ethereum2BeaconNode
 }
 
-const Ethereum2NodeDetailsPage: React.FC<Props> = ({ ethereumNode }) => {
+const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconNode }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0)
   const { isFallback, query } = useRouter()
   const { nodeName } = query
 
   const { data } = useSWR(
     typeof nodeName === 'string' ? nodeName : null,
-    getEthereumNode,
+    getBeaconNode,
     {
-      initialData: ethereumNode,
+      initialData: beaconNode,
       revalidateOnMount: true,
     }
   )
@@ -37,7 +37,7 @@ const Ethereum2NodeDetailsPage: React.FC<Props> = ({ ethereumNode }) => {
   return (
     <Layout>
       <div className="py-6">
-        <PageDetailsHeader title={ethereumNode.name} date="January 11, 2021" />
+        <PageDetailsHeader title={beaconNode.name} date="January 11, 2021" />
 
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
           {/* Stats */}
@@ -55,9 +55,9 @@ const Ethereum2NodeDetailsPage: React.FC<Props> = ({ ethereumNode }) => {
               setActiveIndex={setActiveTabIndex}
               tabs={tabTitles}
             >
-              {activeTabIndex === 0 && <EthereumNodeDetails node={data} />}
+              {/* {activeTabIndex === 0 && <EthereumNodeDetails node={data} />} */}
               {activeTabIndex === 6 && (
-                <DeleteEthereumNode nodeName={data.name} />
+                <DeleteBeaconNode nodeName={data.name} />
               )}
             </Tabs>
           </div>
@@ -70,8 +70,8 @@ const Ethereum2NodeDetailsPage: React.FC<Props> = ({ ethereumNode }) => {
 export const getStaticProps: GetStaticProps = async (context) => {
   const nodeName = context.params?.nodeName as string
   try {
-    const ethereumNode = await getEthereumNode(nodeName)
-    return { props: { ethereumNode }, revalidate: 10 }
+    const beaconNode = await getBeaconNode(nodeName)
+    return { props: { beaconNode }, revalidate: 10 }
   } catch (e) {
     return { notFound: true }
   }
