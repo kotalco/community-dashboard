@@ -12,7 +12,7 @@ import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndi
 import EthereumNodeDetails from '@components/organisms/EthereumNodeDetails/EthereumNodeDetails'
 import DeleteEthereumNode from '@components/organisms/DeleteEthereumNode/DeleteEthereumNode'
 import { EthereumNode } from '@interfaces/EthereumNode'
-import { tabTitles } from '@data/ethereumNodes/tabTitles'
+import { tabTitles } from '@data/ethereum/node/tabTitles'
 
 interface Props {
   ethereumNode: EthereumNode

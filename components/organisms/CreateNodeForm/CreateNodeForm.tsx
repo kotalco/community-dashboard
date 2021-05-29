@@ -7,8 +7,8 @@ import TextInput from '@components/molecules/TextInput/TextInput'
 import Select from '@components/molecules/Select/Select'
 import Button from '@components/atoms/Button/Button'
 import { useNotification } from '@components/contexts/NotificationContext'
-import { ethereumNodeClientsOptions } from '@data/ethereumNodes/nodeClientsOptions'
-import { ethereumNodeNetworkOptions } from '@data/ethereumNodes/nodeNetworkOptions'
+import { clientOptions } from '@data/ethereum/node/clientOptions'
+import { networkOptions } from '@data/ethereum/node/networkOptions'
 import { createEthereumNode } from '@utils/requests/ethereumNodeRequests'
 import { schema } from '@schemas/ethereumNode/createNode'
 import { NodeClient } from '@enums/Ethereum/NodeClient'
@@ -80,7 +80,7 @@ const CreateNodeForm: React.FC = () => {
           className="rounded-md"
           options={[
             { label: 'Choose a client...', value: '' },
-            ...ethereumNodeClientsOptions,
+            ...clientOptions,
           ]}
           {...register('client')}
         />
@@ -91,8 +91,7 @@ const CreateNodeForm: React.FC = () => {
           className={selectNetwork === 'other' ? 'rounded-t-md' : 'rounded-md'}
           options={[
             { label: 'Choose a network...', value: '' },
-            ...ethereumNodeNetworkOptions,
-            { label: 'Other', value: 'other' },
+            ...networkOptions,
           ]}
           {...register('selectNetwork')}
         />

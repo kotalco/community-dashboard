@@ -5,7 +5,7 @@ import { mutate } from 'swr'
 import Button from '@components/atoms/Button/Button'
 import Select from '@components/molecules/Select/Select'
 import { EthereumNode } from '@interfaces/EthereumNode'
-import { ethereumNodeClientsOptions } from '@data/ethereumNodes/nodeClientsOptions'
+import { clientOptions } from '@data/ethereum/node/clientOptions'
 import { updateEthereumNode } from '@utils/requests/ethereumNodeRequests'
 import { NodeClient } from '@enums/Ethereum/NodeClient'
 
@@ -59,7 +59,7 @@ const EthereumNodeDetails: React.FC<Props> = ({ node }) => {
         <div className="mt-4">
           <Select
             className="rounded-md"
-            options={ethereumNodeClientsOptions}
+            options={clientOptions}
             {...register('client')}
             label="Client Software"
           />
