@@ -10,7 +10,7 @@ import { createIPFSPeer } from '@utils/requests/ipfsPeersRequests'
 import { schema } from '@schemas/ipfsPeer/createIPFSPeer'
 import { IPFSPeer } from '@interfaces/IPFSPeer'
 import { IPFSConfigurationProfile } from '@enums/IPFSPeers/IPFSConfigurationProfile'
-import { initProfilesOptions } from '@data/ipfsPeers/ipfsInitOptions'
+import { initProfilesOptions } from '@data/ipfs/peers/initProfilesOptions'
 import { useNotification } from '@components/contexts/NotificationContext'
 
 const CreateNodeForm: React.FC = () => {

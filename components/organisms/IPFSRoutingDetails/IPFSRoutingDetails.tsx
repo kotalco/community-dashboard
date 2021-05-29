@@ -6,7 +6,7 @@ import { joiResolver } from '@hookform/resolvers/joi'
 import Button from '@components/atoms/Button/Button'
 import { IPFSPeer } from '@interfaces/IPFSPeer'
 import Select from '@components/molecules/Select/Select'
-import { ipfsRoutingOptions } from '@data/ipfsPeers/ipfsRoutongOptions'
+import { routingOptions } from '@data/ipfs/peers/routingOptions'
 import { updateRoutingSchema } from '@schemas/ipfsPeer/updateIPFSPeer'
 import { updateIPFSPeer } from '@utils/requests/ipfsPeersRequests'
 import { IPFSRouting } from '@enums/IPFSPeers/IPFSRouting'
@@ -56,7 +56,7 @@ const IPFSPeerDetails: React.FC<Props> = ({ peer }) => {
           <Select
             error={errors.routing?.message}
             className="rounded-md"
-            options={ipfsRoutingOptions}
+            options={routingOptions}
             label="Content Routing Mechanism"
             {...register('routing')}
           />

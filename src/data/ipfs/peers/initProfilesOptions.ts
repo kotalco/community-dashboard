@@ -1,8 +1,8 @@
 import { IPFSConfigurationProfile } from '@enums/IPFSPeers/IPFSConfigurationProfile'
 
-type InitProfiles = { label: string; value: IPFSConfigurationProfile }[]
+type Profiles = { label: string; value: IPFSConfigurationProfile }[]
 
-export const initProfilesOptions: InitProfiles = [
+export const initProfilesOptions: Profiles = [
   { label: 'server', value: IPFSConfigurationProfile.server },
   { label: 'randomports', value: IPFSConfigurationProfile.randomports },
   {

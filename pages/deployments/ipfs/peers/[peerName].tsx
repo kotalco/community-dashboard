@@ -16,7 +16,7 @@ import IPFSGatewayDetails from '@components/organisms/IPFSGatewayDetails/IPFSGat
 import IPFSRoutingDetails from '@components/organisms/IPFSRoutingDetails/IPFSRoutingDetails'
 import { getIPFSPeer } from '@utils/requests/ipfsPeersRequests'
 import { IPFSPeer } from '@interfaces/IPFSPeer'
-import { tabsTitles } from '@data/ipfsPeers/tabsTitles'
+import { tabsTitles } from '@data/ipfs/peers/tabsTitles'
 
 interface Props {
   ipfsPeer: IPFSPeer
