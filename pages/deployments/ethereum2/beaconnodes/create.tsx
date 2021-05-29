@@ -1,15 +1,15 @@
 import Layout from '@components/templates/Layout/Layout'
 import FormLayout from '@components/templates/FormLayout/FormLayout'
-import CreateNodeForm from '@components/organisms/CreateNodeForm/CreateNodeForm'
+import CreateBeaconNodeForm from '@components/organisms/Ethereum2/BeaconNode/CreateBeaconNodeForm/CreateBeaconNodeForm'
 
-const CreateNode: React.FC = () => {
+const CreateBeaconNode: React.FC = () => {
   return (
     <Layout>
       <FormLayout title="Create New Beacon Node">
-        <CreateNodeForm />
+        <CreateBeaconNodeForm />
       </FormLayout>
     </Layout>
   )
 }
 
-export default CreateNode
+export default CreateBeaconNode

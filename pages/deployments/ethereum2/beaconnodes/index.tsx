@@ -9,8 +9,8 @@ import Layout from '@components/templates/Layout/Layout'
 import List from '@components/organisms/List/List'
 import ListItem from '@components/molecules/ListItem/ListItem'
 import { useNotification } from '@components/contexts/NotificationContext'
-import { getAllEthereum2BeaconNodes } from '@utils/requests/Ethereum2Requests'
-import { Ethereum2BeaconNode } from '@interfaces/Ethereum2BeaconNode'
+import { getAllBeaconNodes } from '@utils/requests/ethereum2/beaconNodes'
+import { Ethereum2BeaconNode } from '@interfaces/ethereum2/beaconNode/Ethereum2BeaconNode'
 import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel'
 
 interface Props {
@@ -20,14 +20,10 @@ interface Props {
 const Ethereum2Nodes: React.FC<Props> = ({ beaconNodes }) => {
   const { notificationData, removeNotification } = useNotification()
 
-  const { data, error } = useSWR(
-    '/ethereum2/beaconnodes',
-    getAllEthereum2BeaconNodes,
-    {
-      initialData: beaconNodes,
-      revalidateOnMount: true,
-    }
-  )
+  const { data, error } = useSWR('/ethereum2/beaconnodes', getAllBeaconNodes, {
+    initialData: beaconNodes,
+    revalidateOnMount: true,
+  })
 
   useEffect(() => {
     return () => removeNotification()
@@ -92,7 +88,7 @@ const Ethereum2Nodes: React.FC<Props> = ({ beaconNodes }) => {
 
 export const getStaticProps: GetStaticProps = async () => {
   try {
-    const beaconNodes = await getAllEthereum2BeaconNodes()
+    const beaconNodes = await getAllBeaconNodes()
     return { props: { beaconNodes }, revalidate: 10 }
   } catch (e) {
     return { notFound: true }
