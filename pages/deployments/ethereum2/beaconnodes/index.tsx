@@ -43,7 +43,7 @@ const Ethereum2Nodes: React.FC<Props> = ({ beaconNodes }) => {
             Beacon Nodes
           </h1>
           <Button
-            href="/deployments/ethereum/nodes/create"
+            href="/deployments/ethereum2/beaconnodes/create"
             className="btn btn-primary"
           >
             Create New Beacon Node
