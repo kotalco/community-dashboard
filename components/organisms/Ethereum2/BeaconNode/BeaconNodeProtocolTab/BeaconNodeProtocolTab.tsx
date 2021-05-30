@@ -9,15 +9,12 @@ import { clientOptions } from '@data/ethereum2/beaconNode/clientOptions'
 import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes'
 import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodeClient'
 import { updateClientSchema } from '@schemas/ethereum2/beaconNode/updateBeaconNode'
+import { MutableEthereum2BeaconNode } from '@interfaces/ethereum2/beaconNode/Ethereum2BeaconNode'
 
 interface Props {
   client: BeaconNodeClient
   network: string
   nodeName: string
-}
-
-type FormData = {
-  client: BeaconNodeClient
 }
 
 const BeaconNodeProtocolTab: React.FC<Props> = ({
@@ -33,7 +30,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
     register,
     handleSubmit,
     formState: { isDirty, isSubmitting },
-  } = useForm<FormData>({
+  } = useForm<MutableEthereum2BeaconNode>({
     defaultValues: { client },
     resolver: joiResolver(updateClientSchema),
   })
