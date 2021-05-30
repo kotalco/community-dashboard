@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useForm, useWatch } from 'react-hook-form'
+import { useForm, useWatch, Controller } from 'react-hook-form'
 import { joiResolver } from '@hookform/resolvers/joi'
 import { mutate } from 'swr'
 
@@ -10,10 +10,10 @@ import {
   Ethereum2BeaconNode,
   MutableEthereum2BeaconNode,
 } from '@interfaces/ethereum2/beaconNode/Ethereum2BeaconNode'
-import Checkbox from '@components/molecules/CheckBox/CheckBox'
 import TextInput from '@components/molecules/TextInput/TextInput'
 import Separator from '@components/atoms/Separator/Separator'
 import Toggle from '@components/molecules/Toggle/Toggle'
+import Checkbox from '@components/molecules/CheckBox/CheckBox'
 
 interface Props {
   beaconnode: Ethereum2BeaconNode
@@ -51,7 +51,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({ beaconnode }) => {
     register,
     handleSubmit,
     control,
-    formState: { isDirty, isSubmitting },
+    formState: { isDirty, isSubmitting, errors },
   } = useForm<MutableEthereum2BeaconNode>({
     defaultValues,
     resolver: joiResolver(updateAPISchema),
@@ -65,26 +65,42 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({ beaconnode }) => {
   const onSubmit = handleSubmit(async (values) => {
     setSubmitError('')
     setSubmitSuccess('')
-    try {
-      const beaconnode = await updateBeaconNode(name, values)
-      mutate(name, beaconnode)
-      reset({ ...beaconnode })
-      setSubmitSuccess('Beacon node has been updated')
-    } catch (e) {
-      setSubmitError(e.response.data.error)
-    }
+    console.log('SUBMITTED')
+    // try {
+    //   const beaconnode = await updateBeaconNode(name, values)
+    //   mutate(name, beaconnode)
+    //   reset({ ...beaconnode })
+    //   setSubmitSuccess('Beacon node has been updated')
+    // } catch (e) {
+    //   setSubmitError(e.response.data.error)
+    // }
   })
+
+  console.log(errors)
 
   return (
     <>
       <div className="px-4 py-5 sm:p-6">
         {/* REST API */}
-        <Toggle label="Enable REST API Server" {...register('rest')} />
+        <Controller
+          name="rest"
+          control={control}
+          render={({ field }) => (
+            <Toggle
+              label="REST API Server"
+              onChange={(state) => {
+                field.onChange(state)
+              }}
+              checked={!!field.value}
+            />
+          )}
+        />
         <div className="mt-4">
           <TextInput
             disabled={!restState}
             label="REST API Server Port"
             className="rounded-md"
+            error={errors.restPort?.message}
             {...register('restPort')}
           />
         </div>
@@ -93,6 +109,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({ beaconnode }) => {
             disabled={!restState}
             label="REST API Server Host"
             className="rounded-md"
+            error={errors.restHost?.message}
             {...register('restHost')}
           />
         </div>
@@ -100,12 +117,25 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({ beaconnode }) => {
         <Separator />
 
         {/* JSON-RPC Server */}
-        <Toggle label="Enable JSON-RPC Server" {...register('rpc')} />
+        <Controller
+          name="rpc"
+          control={control}
+          render={({ field }) => (
+            <Toggle
+              label="JSON-RPC Server"
+              onChange={(state) => {
+                field.onChange(state)
+              }}
+              checked={!!field.value}
+            />
+          )}
+        />
         <div className="mt-4">
           <TextInput
             disabled={!rpcState}
             label="JSON-RPC Server Port"
             className="rounded-md"
+            error={errors.rpcPort?.message}
             {...register('rpcPort')}
           />
         </div>
@@ -114,6 +144,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({ beaconnode }) => {
             disabled={!rpcState}
             label="JSON-RPC Server Host"
             className="rounded-md"
+            error={errors.rpcHost?.message}
             {...register('rpcHost')}
           />
         </div>
@@ -121,12 +152,25 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({ beaconnode }) => {
         <Separator />
 
         {/* GRPC Gateway Server */}
-        <Toggle label="Enable GRPC Gateway Server" {...register('grpc')} />
+        <Controller
+          name="grpc"
+          control={control}
+          render={({ field }) => (
+            <Toggle
+              label="GRPC Gateway Server"
+              onChange={(state) => {
+                field.onChange(state)
+              }}
+              checked={!!field.value}
+            />
+          )}
+        />
         <div className="mt-4">
           <TextInput
             disabled={!grpcState}
             label="GRPC Gateway Server Port"
             className="rounded-md"
+            error={errors.grpcPort?.message}
             {...register('grpcPort')}
           />
         </div>
@@ -135,6 +179,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({ beaconnode }) => {
             disabled={!grpcState}
             label="GRPC Gateway Server Host"
             className="rounded-md"
+            error={errors.grpcHost?.message}
             {...register('grpcHost')}
           />
         </div>
