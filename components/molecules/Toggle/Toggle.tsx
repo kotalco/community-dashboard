@@ -1,20 +1,20 @@
 interface Props {
-  id: string
+  name: string
   label: string
   checked: boolean
   onClick: () => void
 }
 
-const Toggle: React.FC<Props> = ({ id, label, checked, onClick }) => {
+const Toggle: React.FC<Props> = ({ name, label, checked, onClick }) => {
   return (
     <>
-      <label htmlFor={id} className="block text-sm font-medium text-gray-700">
+      <label htmlFor={name} className="block text-sm font-medium text-gray-700">
         {label}
       </label>
       <div className="mt-1">
         <button
           onClick={onClick}
-          id={id}
+          id={name}
           type="button"
           aria-pressed={checked}
           className={`${

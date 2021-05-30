@@ -10,3 +10,5 @@ export const updateClientSchema = Joi.object({
       'any.only': `Please choose your client`,
     }),
 })
+
+export const updateAPISchema = Joi.object({})

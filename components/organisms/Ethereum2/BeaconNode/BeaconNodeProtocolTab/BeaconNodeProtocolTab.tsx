@@ -7,23 +7,20 @@ import Button from '@components/atoms/Button/Button'
 import Select from '@components/molecules/Select/Select'
 import { clientOptions } from '@data/ethereum2/beaconNode/clientOptions'
 import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes'
-import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodeClient'
 import { updateClientSchema } from '@schemas/ethereum2/beaconNode/updateBeaconNode'
-import { MutableEthereum2BeaconNode } from '@interfaces/ethereum2/beaconNode/Ethereum2BeaconNode'
+import {
+  Ethereum2BeaconNode,
+  MutableEthereum2BeaconNode,
+} from '@interfaces/ethereum2/beaconNode/Ethereum2BeaconNode'
 
 interface Props {
-  client: BeaconNodeClient
-  network: string
-  nodeName: string
+  beaconnode: Ethereum2BeaconNode
 }
 
-const BeaconNodeProtocolTab: React.FC<Props> = ({
-  client,
-  network,
-  nodeName,
-}) => {
+const BeaconNodeProtocolTab: React.FC<Props> = ({ beaconnode }) => {
   const [submitError, setSubmitError] = useState('')
   const [submitSuccess, setSubmitSuccess] = useState('')
+  const { name, client, network } = beaconnode
 
   const {
     reset,
@@ -39,8 +36,8 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
     setSubmitError('')
     setSubmitSuccess('')
     try {
-      const beaconnode = await updateBeaconNode(nodeName, values)
-      mutate(nodeName, beaconnode)
+      const beaconnode = await updateBeaconNode(name, values)
+      mutate(name, beaconnode)
       reset({ client: beaconnode.client })
       setSubmitSuccess('Beacon node has been updated')
     } catch (e) {

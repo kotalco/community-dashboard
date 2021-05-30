@@ -19,7 +19,7 @@ const Checkbox = React.forwardRef<HTMLInputElement, Props>(
             ref={ref}
             onBlur={onBlur}
             onChange={onChange}
-            id={value}
+            id={name}
             name={name}
             type="checkbox"
             disabled={disabled}
@@ -27,7 +27,7 @@ const Checkbox = React.forwardRef<HTMLInputElement, Props>(
           />
         </div>
         <div className="ml-3 text-sm">
-          <label htmlFor={value} className="font-medium text-gray-700">
+          <label htmlFor={name} className="font-medium text-gray-700">
             {label}
           </label>
         </div>
