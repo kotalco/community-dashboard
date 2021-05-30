@@ -9,9 +9,9 @@ import StatsComponent from '@components/molecules/Stats/Stats'
 import Tabs from '@components/organisms/Tabs/Tabs'
 import Layout from '@components/templates/Layout/Layout'
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator'
-// import EthereumNodeDetails from '@components/organisms/EthereumNodeDetails/EthereumNodeDetails'
+import BeaconNodeProtocolTab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeProtocolTab/BeaconNodeProtocolTab'
 import DeleteBeaconNode from '@components/organisms/Ethereum2/BeaconNode/DeleteBeaconNode/DeleteBeaconNode'
-import { tabTitles } from '@data/ethereum/node/tabTitles'
+import { tabTitles } from '@data/ethereum2/beaconNode/tabTitles'
 import { Ethereum2BeaconNode } from '@interfaces/ethereum2/beaconNode/Ethereum2BeaconNode'
 
 interface Props {
@@ -55,8 +55,14 @@ const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconNode }) => {
               setActiveIndex={setActiveTabIndex}
               tabs={tabTitles}
             >
-              {/* {activeTabIndex === 0 && <EthereumNodeDetails node={data} />} */}
-              {activeTabIndex === 6 && (
+              {activeTabIndex === 0 && (
+                <BeaconNodeProtocolTab
+                  client={data.client}
+                  network={data.network}
+                  nodeName={data.name}
+                />
+              )}
+              {activeTabIndex === 4 && (
                 <DeleteBeaconNode nodeName={data.name} />
               )}
             </Tabs>
