@@ -13,7 +13,6 @@ import {
 import TextInput from '@components/molecules/TextInput/TextInput'
 import Separator from '@components/atoms/Separator/Separator'
 import Toggle from '@components/molecules/Toggle/Toggle'
-import Checkbox from '@components/molecules/CheckBox/CheckBox'
 
 interface Props {
   beaconnode: Ethereum2BeaconNode
