@@ -11,6 +11,7 @@ import Layout from '@components/templates/Layout/Layout'
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator'
 import BeaconNodeProtocolTab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeProtocolTab/BeaconNodeProtocolTab'
 import BeaconNodeAPITab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeAPITab/BeaconNodeAPITab'
+import BeaconNodeEthereumTab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeEthereumTab/BeaconNodeEthereumTab'
 import DeleteBeaconNode from '@components/organisms/Ethereum2/BeaconNode/DeleteBeaconNode/DeleteBeaconNode'
 import { tabTitles } from '@data/ethereum2/beaconNode/tabTitles'
 import { Ethereum2BeaconNode } from '@interfaces/ethereum2/beaconNode/Ethereum2BeaconNode'
@@ -58,6 +59,9 @@ const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconNode }) => {
             >
               {activeTabIndex === 0 && (
                 <BeaconNodeProtocolTab beaconnode={data} />
+              )}
+              {activeTabIndex === 1 && (
+                <BeaconNodeEthereumTab beaconnode={data} />
               )}
               {activeTabIndex === 2 && <BeaconNodeAPITab beaconnode={data} />}
               {activeTabIndex === 4 && (
