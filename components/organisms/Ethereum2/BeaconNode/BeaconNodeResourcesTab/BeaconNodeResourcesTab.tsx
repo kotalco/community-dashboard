@@ -1,22 +1,24 @@
 import { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { joiResolver } from '@hookform/resolvers/joi'
 import { mutate } from 'swr'
 
 import Button from '@components/atoms/Button/Button'
-import Select from '@components/molecules/Select/Select'
-import { clientOptions } from '@data/ethereum2/beaconNode/clientOptions'
 import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes'
 import { updateClientSchema } from '@schemas/ethereum2/beaconNode/updateBeaconNode'
-import {
-  Ethereum2BeaconNode,
-  MutableEthereum2BeaconNode,
-} from '@interfaces/ethereum2/beaconNode/Ethereum2BeaconNode'
+import { Ethereum2BeaconNode } from '@interfaces/ethereum2/beaconNode/Ethereum2BeaconNode'
 import UnitTextInput from '@components/molecules/UnitTextInput/UnitTextInput'
-import { SelectOption } from '@interfaces/SelectOption'
 
 interface Props {
   beaconnode: Ethereum2BeaconNode
+}
+
+interface FormData {
+  cpu: string
+  cpuLimit: string
+  memory: string
+  memoryLimit: string
+  storage: string
 }
 
 const unitOptions = [
@@ -28,15 +30,15 @@ const unitOptions = [
 const BeaconNodeResourcesTab: React.FC<Props> = ({ beaconnode }) => {
   const [submitError, setSubmitError] = useState('')
   const [submitSuccess, setSubmitSuccess] = useState('')
-  const { cpu, cpuLimit, memory, memoryLimit, storage } = beaconnode
+  const { cpu, cpuLimit, memory, memoryLimit, storage, name } = beaconnode
   const defaultValues = { cpu, cpuLimit, memory, memoryLimit, storage }
 
   const {
     reset,
-    register,
     handleSubmit,
+    control,
     formState: { isDirty, isSubmitting },
-  } = useForm<MutableEthereum2BeaconNode>({
+  } = useForm<FormData>({
     defaultValues,
     // resolver: joiResolver(updateClientSchema),
   })
@@ -44,55 +46,81 @@ const BeaconNodeResourcesTab: React.FC<Props> = ({ beaconnode }) => {
   const onSubmit = handleSubmit(async (values) => {
     setSubmitError('')
     setSubmitSuccess('')
-    console.log(values)
-    // try {
-    //   const beaconnode = await updateBeaconNode(name, values)
-    //   mutate(name, beaconnode)
-    //   reset({ client: beaconnode.client })
-    //   setSubmitSuccess('Beacon node has been updated')
-    // } catch (e) {
-    //   setSubmitError(e.response.data.error)
-    // }
-  })
 
-  console.log(memory.match(/(\d+|[^\d]+)/g))
-  console.log(memoryLimit.match(/(\d+|[^\d]+)/g))
-  console.log(storage.match(/(\d+|[^\d]+)/g))
+    try {
+      const beaconnode = await updateBeaconNode(name, values)
+      mutate(name, beaconnode)
+      reset({ ...beaconnode })
+      setSubmitSuccess('Beacon node has been updated')
+    } catch (e) {
+      setSubmitError(e.response.data.error)
+    }
+  })
 
   return (
     <>
       <div className="px-4 py-5 sm:p-6">
-        <UnitTextInput
-          label="CPU Cores Required"
-          unit="Core(s)"
-          {...register('cpu')}
+        <Controller
+          name="cpu"
+          control={control}
+          render={({ field }) => (
+            <UnitTextInput
+              label="CPU Cores Required"
+              unit="Core(s)"
+              {...field}
+            />
+          )}
         />
-        <UnitTextInput
-          label="Maximum CPU Cores"
-          unit="Core(s)"
-          {...register('cpuLimit')}
+
+        <Controller
+          name="cpuLimit"
+          control={control}
+          render={({ field }) => (
+            <UnitTextInput
+              label="Maximum CPU Cores"
+              unit="Core(s)"
+              {...field}
+            />
+          )}
         />
-        <UnitTextInput
-          label="Memory Required"
-          unit={unitOptions}
-          {...register('memory')}
+
+        <Controller
+          name="memory"
+          control={control}
+          render={({ field }) => (
+            <UnitTextInput
+              label="Memory Required"
+              unit={unitOptions}
+              {...field}
+            />
+          )}
         />
-        <UnitTextInput
-          label="Max Memory"
-          unit={unitOptions}
-          {...register('memoryLimit')}
+
+        <Controller
+          name="memoryLimit"
+          control={control}
+          render={({ field }) => (
+            <UnitTextInput label="Max Memory" unit={unitOptions} {...field} />
+          )}
         />
-        <UnitTextInput
-          label="Disk Space Required"
-          unit={unitOptions}
-          {...register('storage')}
+
+        <Controller
+          name="storage"
+          control={control}
+          render={({ field }) => (
+            <UnitTextInput
+              label="Disk Space Required"
+              unit={unitOptions}
+              {...field}
+            />
+          )}
         />
       </div>
 
       <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
         <Button
           className="btn btn-primary"
-          // disabled={!isDirty || isSubmitting}
+          disabled={!isDirty || isSubmitting}
           loading={isSubmitting}
           onClick={onSubmit}
         >

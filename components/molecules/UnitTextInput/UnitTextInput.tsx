@@ -1,17 +1,44 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import InputLabel from '@components/atoms/InputLabel/InputLabel'
 import { SelectOption } from '@interfaces/SelectOption'
 
 interface Props {
   label: string
   name: string
+  value: string
   unit: string | SelectOption[]
-  onBlur: (e: React.FocusEvent<HTMLInputElement>) => void
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onChange: (value: string) => void
 }
 
 const UnitTextInput = React.forwardRef<HTMLInputElement, Props>(
-  ({ label, name, unit, onBlur, onChange }, ref) => {
+  ({ value, label, name, unit, onChange }, ref) => {
+    const [amount, setAmount] = useState('')
+    const [selectedUnit, setSelectedUnit] = useState('')
+
+    useEffect(() => {
+      const valueArray = value.match(/(\d+|[^\d]+)/g)
+      if (valueArray && valueArray.length === 2) {
+        setAmount(valueArray[0])
+        setSelectedUnit(valueArray[1])
+      }
+    }, [])
+
+    const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const { value } = e.target
+      setAmount(value)
+      if (value) {
+        onChange(value + selectedUnit)
+      } else {
+        onChange(value)
+      }
+    }
+
+    const handleUnitChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const { value } = e.target
+      setSelectedUnit(value)
+      onChange(amount + value)
+    }
+
     return (
       <div className="w-48 mt-4">
         <div>
@@ -25,9 +52,9 @@ const UnitTextInput = React.forwardRef<HTMLInputElement, Props>(
             <div className="mt-1 relative rounded-md shadow-sm">
               <input
                 className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pr-12 sm:text-sm border-gray-300 rounded-md"
+                value={amount || value}
                 ref={ref}
-                onBlur={onBlur}
-                onChange={onChange}
+                onChange={handleAmountChange}
                 type="text"
                 name={name}
                 id={name}
@@ -40,7 +67,11 @@ const UnitTextInput = React.forwardRef<HTMLInputElement, Props>(
                 </div>
               ) : (
                 <div className="absolute inset-y-0 right-0 flex items-center">
-                  <select className="focus:ring-indigo-500 focus:border-indigo-500 h-full py-0 pl-2 pr-7 border-transparent bg-transparent text-gray-500 sm:text-sm rounded-md">
+                  <select
+                    value={selectedUnit}
+                    onChange={handleUnitChange}
+                    className="focus:ring-indigo-500 focus:border-indigo-500 h-full py-0 pl-2 pr-7 border-transparent bg-transparent text-gray-500 sm:text-sm rounded-md"
+                  >
                     {unit.map(({ label, value }) => (
                       <option value={value} key={value}>
                         {label}
