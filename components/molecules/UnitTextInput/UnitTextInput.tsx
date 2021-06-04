@@ -6,12 +6,13 @@ interface Props {
   label: string
   name: string
   value: string
+  error?: string
   unit: string | SelectOption[]
   onChange: (value: string) => void
 }
 
 const UnitTextInput = React.forwardRef<HTMLInputElement, Props>(
-  ({ value, label, name, unit, onChange }, ref) => {
+  ({ value, label, name, unit, onChange, error }, ref) => {
     const [amount, setAmount] = useState('')
     const [selectedUnit, setSelectedUnit] = useState('')
 
@@ -40,7 +41,7 @@ const UnitTextInput = React.forwardRef<HTMLInputElement, Props>(
     }
 
     return (
-      <div className="w-48 mt-4">
+      <div className="w-80 mt-4">
         <div>
           <div>
             <InputLabel
@@ -83,6 +84,7 @@ const UnitTextInput = React.forwardRef<HTMLInputElement, Props>(
             </div>
           </div>
         </div>
+        {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
       </div>
     )
   }

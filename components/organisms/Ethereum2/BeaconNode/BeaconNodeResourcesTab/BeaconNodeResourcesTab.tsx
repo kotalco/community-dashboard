@@ -5,7 +5,7 @@ import { mutate } from 'swr'
 
 import Button from '@components/atoms/Button/Button'
 import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes'
-import { updateClientSchema } from '@schemas/ethereum2/beaconNode/updateBeaconNode'
+import { updateResourcesSchema } from '@schemas/ethereum2/beaconNode/updateBeaconNode'
 import { Ethereum2BeaconNode } from '@interfaces/ethereum2/beaconNode/Ethereum2BeaconNode'
 import UnitTextInput from '@components/molecules/UnitTextInput/UnitTextInput'
 
@@ -37,10 +37,10 @@ const BeaconNodeResourcesTab: React.FC<Props> = ({ beaconnode }) => {
     reset,
     handleSubmit,
     control,
-    formState: { isDirty, isSubmitting },
+    formState: { isDirty, isSubmitting, errors },
   } = useForm<FormData>({
     defaultValues,
-    // resolver: joiResolver(updateClientSchema),
+    resolver: joiResolver(updateResourcesSchema),
   })
 
   const onSubmit = handleSubmit(async (values) => {
@@ -67,6 +67,7 @@ const BeaconNodeResourcesTab: React.FC<Props> = ({ beaconnode }) => {
             <UnitTextInput
               label="CPU Cores Required"
               unit="Core(s)"
+              error={errors.cpu?.message}
               {...field}
             />
           )}
@@ -79,6 +80,7 @@ const BeaconNodeResourcesTab: React.FC<Props> = ({ beaconnode }) => {
             <UnitTextInput
               label="Maximum CPU Cores"
               unit="Core(s)"
+              error={errors.cpuLimit?.message}
               {...field}
             />
           )}
@@ -91,6 +93,7 @@ const BeaconNodeResourcesTab: React.FC<Props> = ({ beaconnode }) => {
             <UnitTextInput
               label="Memory Required"
               unit={unitOptions}
+              error={errors.memory?.message}
               {...field}
             />
           )}
@@ -100,7 +103,12 @@ const BeaconNodeResourcesTab: React.FC<Props> = ({ beaconnode }) => {
           name="memoryLimit"
           control={control}
           render={({ field }) => (
-            <UnitTextInput label="Max Memory" unit={unitOptions} {...field} />
+            <UnitTextInput
+              label="Max Memory"
+              unit={unitOptions}
+              error={errors.memoryLimit?.message}
+              {...field}
+            />
           )}
         />
 
@@ -111,6 +119,7 @@ const BeaconNodeResourcesTab: React.FC<Props> = ({ beaconnode }) => {
             <UnitTextInput
               label="Disk Space Required"
               unit={unitOptions}
+              error={errors.storage?.message}
               {...field}
             />
           )}
