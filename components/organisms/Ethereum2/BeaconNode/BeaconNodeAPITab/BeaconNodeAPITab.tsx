@@ -6,16 +6,25 @@ import { mutate } from 'swr'
 import Button from '@components/atoms/Button/Button'
 import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes'
 import { updateAPISchema } from '@schemas/ethereum2/beaconNode/updateBeaconNode'
-import {
-  Ethereum2BeaconNode,
-  MutableEthereum2BeaconNode,
-} from '@interfaces/ethereum2/beaconNode/Ethereum2BeaconNode'
+import { Ethereum2BeaconNode } from '@interfaces/ethereum2/beaconNode/Ethereum2BeaconNode'
 import TextInput from '@components/molecules/TextInput/TextInput'
 import Separator from '@components/atoms/Separator/Separator'
 import Toggle from '@components/molecules/Toggle/Toggle'
 
 interface Props {
   beaconnode: Ethereum2BeaconNode
+}
+
+interface FormData {
+  rest: boolean
+  restHost: string
+  restPort: number
+  rpc: boolean
+  rpcHost: string
+  rpcPort: number
+  grpc: boolean
+  grpcHost: string
+  grpcPort: number
 }
 
 const BeaconNodeProtocolTab: React.FC<Props> = ({ beaconnode }) => {
@@ -51,7 +60,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({ beaconnode }) => {
     handleSubmit,
     control,
     formState: { isDirty, isSubmitting, errors },
-  } = useForm<MutableEthereum2BeaconNode>({
+  } = useForm<FormData>({
     defaultValues,
     resolver: joiResolver(updateAPISchema),
   })
@@ -64,15 +73,15 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({ beaconnode }) => {
   const onSubmit = handleSubmit(async (values) => {
     setSubmitError('')
     setSubmitSuccess('')
-    console.log('SUBMITTED')
-    // try {
-    //   const beaconnode = await updateBeaconNode(name, values)
-    //   mutate(name, beaconnode)
-    //   reset({ ...beaconnode })
-    //   setSubmitSuccess('Beacon node has been updated')
-    // } catch (e) {
-    //   setSubmitError(e.response.data.error)
-    // }
+
+    try {
+      const beaconnode = await updateBeaconNode(name, values)
+      mutate(name, beaconnode)
+      reset({ ...beaconnode })
+      setSubmitSuccess('Beacon node has been updated')
+    } catch (e) {
+      setSubmitError(e.response.data.error)
+    }
   })
 
   console.log(errors)
@@ -90,7 +99,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({ beaconnode }) => {
               onChange={(state) => {
                 field.onChange(state)
               }}
-              checked={!!field.value}
+              checked={field.value}
             />
           )}
         />
