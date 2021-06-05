@@ -77,14 +77,33 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({ beaconnode }) => {
     try {
       const beaconnode = await updateBeaconNode(name, values)
       mutate(name, beaconnode)
-      reset({ ...beaconnode })
+      const {
+        rest,
+        restPort,
+        restHost,
+        rpc,
+        rpcPort,
+        rpcHost,
+        grpc,
+        grpcPort,
+        grpcHost,
+      } = beaconnode
+      reset({
+        rest,
+        restPort,
+        restHost,
+        rpc,
+        rpcPort,
+        rpcHost,
+        grpc,
+        grpcPort,
+        grpcHost,
+      })
       setSubmitSuccess('Beacon node has been updated')
     } catch (e) {
       setSubmitError(e.response.data.error)
     }
   })
-
-  console.log(errors)
 
   return (
     <>

@@ -50,7 +50,8 @@ const BeaconNodeResourcesTab: React.FC<Props> = ({ beaconnode }) => {
     try {
       const beaconnode = await updateBeaconNode(name, values)
       mutate(name, beaconnode)
-      reset({ ...beaconnode })
+      const { cpu, cpuLimit, memory, memoryLimit, storage } = beaconnode
+      reset({ cpu, cpuLimit, memory, memoryLimit, storage })
       setSubmitSuccess('Beacon node has been updated')
     } catch (e) {
       setSubmitError(e.response.data.error)
