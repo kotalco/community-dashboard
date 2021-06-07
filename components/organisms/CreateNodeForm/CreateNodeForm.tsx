@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { joiResolver } from '@hookform/resolvers/joi'
 
@@ -11,14 +11,7 @@ import { clientOptions } from '@data/ethereum/node/clientOptions'
 import { networkOptions } from '@data/ethereum/node/networkOptions'
 import { createEthereumNode } from '@utils/requests/ethereumNodeRequests'
 import { schema } from '@schemas/ethereumNode/createNode'
-import { NodeClient } from '@enums/Ethereum/NodeClient'
-
-export interface FormData {
-  name: string
-  client: NodeClient
-  selectNetwork: string
-  textNetwork: string
-}
+import { CreateEthereumNode } from '@interfaces/Ethereum'
 
 const CreateNodeForm: React.FC = () => {
   const [submitError, setSubmitError] = useState('')
@@ -29,19 +22,19 @@ const CreateNodeForm: React.FC = () => {
     watch,
     formState: { errors, isSubmitted, isValid, isSubmitting },
     handleSubmit,
-  } = useForm<FormData>({ resolver: joiResolver(schema) })
-  const [selectNetwork] = watch(['selectNetwork'])
+  } = useForm<CreateEthereumNode>({ resolver: joiResolver(schema) })
+  const selectNetwork = watch('selectNetwork')
 
   /**
    * Submit create ethereum node form
    * @param nodeData the data required to create new node
    */
-  const onSubmit = async ({
+  const onSubmit: SubmitHandler<CreateEthereumNode> = async ({
     name,
     client,
     selectNetwork,
     textNetwork,
-  }: FormData) => {
+  }) => {
     const network = selectNetwork === 'other' ? textNetwork : selectNetwork
     const body = { name, client, network }
 

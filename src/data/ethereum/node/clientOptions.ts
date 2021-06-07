@@ -1,9 +1,9 @@
 import { SelectOption } from '@interfaces/SelectOption'
-import { NodeClient } from '@enums/Ethereum/NodeClient'
+import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient'
 
 export const clientOptions: SelectOption[] = [
-  { label: 'Go Ethereum', value: NodeClient.geth },
-  { label: 'Hyperledger Besu', value: NodeClient.besu },
-  { label: 'Open Ethereum', value: NodeClient.parity },
-  { label: 'Nethermind', value: NodeClient.nethermind },
+  { label: 'Go Ethereum', value: EthereumNodeClient.geth },
+  { label: 'Hyperledger Besu', value: EthereumNodeClient.besu },
+  { label: 'Open Ethereum', value: EthereumNodeClient.parity },
+  { label: 'Nethermind', value: EthereumNodeClient.nethermind },
 ]

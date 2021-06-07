@@ -4,10 +4,9 @@ import { mutate } from 'swr'
 
 import Button from '@components/atoms/Button/Button'
 import Select from '@components/molecules/Select/Select'
-import { EthereumNode } from '@interfaces/EthereumNode'
+import { EthereumNode } from '@interfaces/Ethereum'
 import { clientOptions } from '@data/ethereum/node/clientOptions'
 import { updateEthereumNode } from '@utils/requests/ethereumNodeRequests'
-import { NodeClient } from '@enums/Ethereum/NodeClient'
 
 interface Props {
   node: EthereumNode

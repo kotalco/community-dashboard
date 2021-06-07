@@ -11,7 +11,7 @@ import Layout from '@components/templates/Layout/Layout'
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator'
 import EthereumNodeDetails from '@components/organisms/EthereumNodeDetails/EthereumNodeDetails'
 import DeleteEthereumNode from '@components/organisms/DeleteEthereumNode/DeleteEthereumNode'
-import { EthereumNode } from '@interfaces/EthereumNode'
+import { EthereumNode } from '@interfaces/Ethereum'
 import { tabTitles } from '@data/ethereum/node/tabTitles'
 
 interface Props {
