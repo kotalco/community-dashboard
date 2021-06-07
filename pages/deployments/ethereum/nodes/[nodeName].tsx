@@ -56,7 +56,7 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ ethereumNode }) => {
               tabs={tabTitles}
             >
               {activeTabIndex === 0 && <EthereumNodeDetails node={data} />}
-              {activeTabIndex === 6 && (
+              {activeTabIndex === 1 && (
                 <DeleteEthereumNode nodeName={data.name} />
               )}
             </Tabs>
