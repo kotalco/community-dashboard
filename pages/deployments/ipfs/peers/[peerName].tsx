@@ -60,7 +60,13 @@ const IPFSPeerDetailsPage: React.FC<Props> = ({ ipfsPeer }) => {
               tabs={tabsTitles}
             >
               {activeTabIndex === 0 && <IPFSProtocolDetails />}
-              {activeTabIndex === 1 && <IPFSConfigrationProfiles peer={data} />}
+              {activeTabIndex === 1 && (
+                <IPFSConfigrationProfiles
+                  peerName={data.name}
+                  profiles={data.profiles}
+                  initProfiles={data.initProfiles}
+                />
+              )}
               {activeTabIndex === 2 && <IPFSApiDetails peer={data} />}
               {activeTabIndex === 3 && <IPFSGatewayDetails peer={data} />}
               {activeTabIndex === 4 && <IPFSRoutingDetails peer={data} />}

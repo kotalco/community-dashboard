@@ -5,21 +5,23 @@ import { joiResolver } from '@hookform/resolvers/joi'
 
 import Button from '@components/atoms/Button/Button'
 import Checkbox from '@components/molecules/CheckBox/CheckBox'
-import { IPFSPeer } from '@interfaces/ipfs/IPFSPeer'
 import { initProfilesOptions } from '@data/ipfs/peers/initProfilesOptions'
 import { updateConfigProfilesSchema } from '@schemas/ipfsPeer/updateIPFSPeer'
 import { updateIPFSPeer } from '@utils/requests/ipfsPeersRequests'
 import { UpdateConfigrationProfiles } from '@interfaces/ipfs/IPFSPeer'
+import { IPFSConfigurationProfile } from '@enums/IPFSPeers/IPFSConfigurationProfile'
 
 interface Props {
-  peer: IPFSPeer
+  peerName: string
+  profiles: IPFSConfigurationProfile[]
+  initProfiles: IPFSConfigurationProfile[]
 }
 
-const IPFSPeerDetails: React.FC<Props> = ({ peer }) => {
+const IPFSPeerDetails: React.FC<Props> = (props) => {
   const [submitError, setSubmitError] = useState('')
   const [submitSuccess, setSubmitSuccess] = useState('')
 
-  const { profiles, initProfiles, name } = peer
+  const { peerName, profiles, initProfiles } = props
 
   // SHOULD FIX THIS AFTER UPDATING API TO RETURN PROFILES WITH [] BY DEFAULT
   const allProfiles = profiles
@@ -43,8 +45,8 @@ const IPFSPeerDetails: React.FC<Props> = ({ peer }) => {
     setSubmitSuccess('')
 
     try {
-      const peer = await updateIPFSPeer(name, values)
-      mutate(name, peer)
+      const peer = await updateIPFSPeer(peerName, values)
+      mutate(peerName, peer)
       reset({ profiles: [...peer.profiles, ...peer.initProfiles] })
       setSubmitSuccess('Peer has been updated')
     } catch (e) {
