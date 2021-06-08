@@ -1,47 +1,43 @@
 import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { mutate } from 'swr'
 import { joiResolver } from '@hookform/resolvers/joi'
 
 import Button from '@components/atoms/Button/Button'
 import TextInput from '@components/molecules/TextInput/TextInput'
-import { IPFSPeer } from '@interfaces/ipfs/IPFSPeer'
+import { UpdateAPI } from '@interfaces/ipfs/IPFSPeer'
 import { updateAPIsSchema } from '@schemas/ipfsPeer/updateIPFSPeer'
 import { updateIPFSPeer } from '@utils/requests/ipfsPeersRequests'
 
 interface Props {
-  peer: IPFSPeer
-}
-
-interface FormData {
+  peerName: string
   apiPort: number
   apiHost: string
 }
 
-const IPFSPeerDetails: React.FC<Props> = ({ peer }) => {
+const IPFSPeerDetails: React.FC<Props> = ({ peerName, apiPort, apiHost }) => {
   const [submitError, setSubmitError] = useState('')
   const [submitSuccess, setSubmitSuccess] = useState('')
-
-  const { apiPort, apiHost } = peer
 
   const {
     reset,
     register,
     handleSubmit,
     formState: { isDirty, isSubmitting, errors },
-  } = useForm<FormData>({
+  } = useForm<UpdateAPI>({
     defaultValues: { apiPort, apiHost },
     resolver: joiResolver(updateAPIsSchema),
   })
 
-  const onSubmit = async (values: FormData) => {
+  const onSubmit: SubmitHandler<UpdateAPI> = async (values) => {
     setSubmitError('')
     setSubmitSuccess('')
-    const peerData = { ...peer, ...values }
+
     try {
-      mutate(peer.name, { ...peer, ...values }, false)
-      mutate(peer.name, updateIPFSPeer(peer.name, peerData))
-      reset(values)
+      const peer = await updateIPFSPeer(peerName, values)
+      mutate(peerName, peer)
+      const { apiPort, apiHost } = peer
+      reset({ apiPort, apiHost })
       setSubmitSuccess('Peer has been updated')
     } catch (e) {
       setSubmitError(e.response.data.error)

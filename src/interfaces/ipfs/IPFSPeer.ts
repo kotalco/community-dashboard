@@ -24,3 +24,8 @@ export interface UpdateIPFSPeer {
 export interface UpdateConfigrationProfiles {
   profiles: IPFSConfigurationProfile[]
 }
+
+export interface UpdateAPI {
+  apiPort: number
+  apiHost: string
+}
