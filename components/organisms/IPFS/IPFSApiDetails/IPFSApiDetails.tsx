@@ -4,40 +4,34 @@ import { mutate } from 'swr'
 import { joiResolver } from '@hookform/resolvers/joi'
 
 import Button from '@components/atoms/Button/Button'
-import Checkbox from '@components/molecules/CheckBox/CheckBox'
-import { IPFSPeer } from '@interfaces/IPFSPeer'
-import { initProfilesOptions } from '@data/ipfs/peers/initProfilesOptions'
-import { updateConfigProfilesSchema } from '@schemas/ipfsPeer/updateIPFSPeer'
+import TextInput from '@components/molecules/TextInput/TextInput'
+import { IPFSPeer } from '@interfaces/ipfs/IPFSPeer'
+import { updateAPIsSchema } from '@schemas/ipfsPeer/updateIPFSPeer'
 import { updateIPFSPeer } from '@utils/requests/ipfsPeersRequests'
-import { IPFSConfigurationProfile } from '@enums/IPFSPeers/IPFSConfigurationProfile'
 
 interface Props {
   peer: IPFSPeer
 }
 
 interface FormData {
-  profiles: IPFSConfigurationProfile[]
+  apiPort: number
+  apiHost: string
 }
 
 const IPFSPeerDetails: React.FC<Props> = ({ peer }) => {
   const [submitError, setSubmitError] = useState('')
   const [submitSuccess, setSubmitSuccess] = useState('')
 
-  const { profiles, initProfiles } = peer
-
-  // SHOULD FIX THIS AFTER UPDATING API TO RETURN PROFILES WITH [] BY DEFAULT
-  const allProfiles = profiles
-    ? [...initProfiles, ...profiles]
-    : [...initProfiles]
+  const { apiPort, apiHost } = peer
 
   const {
     reset,
     register,
     handleSubmit,
-    formState: { isDirty, isSubmitting },
+    formState: { isDirty, isSubmitting, errors },
   } = useForm<FormData>({
-    defaultValues: { profiles: allProfiles },
-    resolver: joiResolver(updateConfigProfilesSchema),
+    defaultValues: { apiPort, apiHost },
+    resolver: joiResolver(updateAPIsSchema),
   })
 
   const onSubmit = async (values: FormData) => {
@@ -47,7 +41,7 @@ const IPFSPeerDetails: React.FC<Props> = ({ peer }) => {
     try {
       mutate(peer.name, { ...peer, ...values }, false)
       mutate(peer.name, updateIPFSPeer(peer.name, peerData))
-      reset({ profiles: [...initProfiles, ...values.profiles] })
+      reset(values)
       setSubmitSuccess('Peer has been updated')
     } catch (e) {
       setSubmitError(e.response.data.error)
@@ -57,22 +51,22 @@ const IPFSPeerDetails: React.FC<Props> = ({ peer }) => {
   return (
     <>
       <div className="px-4 py-5 sm:p-6">
-        <dl>
-          <dt className="block text-sm font-medium text-gray-700">
-            Configration Profiles
-          </dt>
-          <dd className="mt-3 ml-5">
-            {initProfilesOptions.map(({ label, value }) => (
-              <Checkbox
-                key={value}
-                label={label}
-                value={value}
-                disabled={initProfiles.includes(value)}
-                {...register('profiles')}
-              />
-            ))}
-          </dd>
-        </dl>
+        <div className="mt-4">
+          <TextInput
+            error={errors.apiPort?.message}
+            className="rounded-md"
+            label="API Server Port"
+            {...register('apiPort')}
+          />
+        </div>
+        <div className="mt-4">
+          <TextInput
+            error={errors.apiHost?.message}
+            className="rounded-md"
+            label="API Server Host"
+            {...register('apiHost')}
+          />
+        </div>
       </div>
 
       <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">

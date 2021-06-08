@@ -8,7 +8,7 @@ import List from '@components/organisms/List/List'
 import ListItem from '@components/molecules/ListItem/ListItem'
 import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel'
 import { getAllIPFSPeers } from '@utils/requests/ipfsPeersRequests'
-import { IPFSPeer } from '@interfaces/IPFSPeer'
+import { IPFSPeer } from '@interfaces/ipfs/IPFSPeer'
 import { useNotification } from '@components/contexts/NotificationContext'
 
 interface Props {

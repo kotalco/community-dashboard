@@ -1,6 +1,6 @@
 import axios from '../axios'
 
-import { IPFSPeer, MutateIPFSPeer } from '@interfaces/IPFSPeer'
+import { IPFSPeer, MutateIPFSPeer } from '@interfaces/ipfs/IPFSPeer'
 
 /**
  * Send GET request to the server to get all peers

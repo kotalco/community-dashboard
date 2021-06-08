@@ -4,26 +4,25 @@ import { mutate } from 'swr'
 import { joiResolver } from '@hookform/resolvers/joi'
 
 import Button from '@components/atoms/Button/Button'
-import { IPFSPeer } from '@interfaces/IPFSPeer'
-import Select from '@components/molecules/Select/Select'
-import { routingOptions } from '@data/ipfs/peers/routingOptions'
-import { updateRoutingSchema } from '@schemas/ipfsPeer/updateIPFSPeer'
+import TextInput from '@components/molecules/TextInput/TextInput'
+import { IPFSPeer } from '@interfaces/ipfs/IPFSPeer'
+import { updateGatewaySchema } from '@schemas/ipfsPeer/updateIPFSPeer'
 import { updateIPFSPeer } from '@utils/requests/ipfsPeersRequests'
-import { IPFSRouting } from '@enums/IPFSPeers/IPFSRouting'
 
 interface Props {
   peer: IPFSPeer
 }
 
 interface FormData {
-  routing: IPFSRouting
+  gatewayPort: number
+  gatewayHost: string
 }
 
 const IPFSPeerDetails: React.FC<Props> = ({ peer }) => {
   const [submitError, setSubmitError] = useState('')
   const [submitSuccess, setSubmitSuccess] = useState('')
 
-  const { routing } = peer
+  const { gatewayPort, gatewayHost } = peer
 
   const {
     reset,
@@ -31,8 +30,8 @@ const IPFSPeerDetails: React.FC<Props> = ({ peer }) => {
     handleSubmit,
     formState: { isDirty, isSubmitting, errors },
   } = useForm<FormData>({
-    defaultValues: { routing },
-    resolver: joiResolver(updateRoutingSchema),
+    defaultValues: { gatewayHost, gatewayPort },
+    resolver: joiResolver(updateGatewaySchema),
   })
 
   const onSubmit = async (values: FormData) => {
@@ -53,12 +52,19 @@ const IPFSPeerDetails: React.FC<Props> = ({ peer }) => {
     <>
       <div className="px-4 py-5 sm:p-6">
         <div className="mt-4">
-          <Select
-            error={errors.routing?.message}
+          <TextInput
+            error={errors.gatewayPort?.message}
             className="rounded-md"
-            options={routingOptions}
-            label="Content Routing Mechanism"
-            {...register('routing')}
+            label="Local Gateway IPFS Server Port"
+            {...register('gatewayPort')}
+          />
+        </div>
+        <div className="mt-4">
+          <TextInput
+            error={errors.gatewayHost?.message}
+            className="rounded-md"
+            label="Local Gateway IPFS Server Host"
+            {...register('gatewayHost')}
           />
         </div>
       </div>
