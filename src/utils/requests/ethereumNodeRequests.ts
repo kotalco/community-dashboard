@@ -1,5 +1,5 @@
 import axios from '../axios'
-import { EthereumNode } from '@interfaces/Ethereum'
+import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode'
 
 export const getAllNodes = async (): Promise<EthereumNode[]> => {
   const { data } = await axios.get<{ nodes: EthereumNode[] }>(`/ethereum/nodes`)

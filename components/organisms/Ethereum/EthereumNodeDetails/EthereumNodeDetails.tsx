@@ -1,4 +1,4 @@
-import { EthereumNode } from '@interfaces/Ethereum'
+import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode'
 
 interface Props {
   node: EthereumNode

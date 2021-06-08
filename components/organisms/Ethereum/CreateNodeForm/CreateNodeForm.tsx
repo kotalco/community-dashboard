@@ -11,7 +11,7 @@ import { clientOptions } from '@data/ethereum/node/clientOptions'
 import { networkOptions } from '@data/ethereum/node/networkOptions'
 import { createEthereumNode } from '@utils/requests/ethereumNodeRequests'
 import { schema } from '@schemas/ethereumNode/createNode'
-import { CreateEthereumNode } from '@interfaces/Ethereum'
+import { CreateEthereumNode } from '@interfaces/Ethereum/ِEthereumNode'
 
 const CreateNodeForm: React.FC = () => {
   const [submitError, setSubmitError] = useState('')

@@ -10,7 +10,7 @@ import List from '@components/organisms/List/List'
 import ListItem from '@components/molecules/ListItem/ListItem'
 import { useNotification } from '@components/contexts/NotificationContext'
 import { getAllNodes } from '@utils/requests/ethereumNodeRequests'
-import { EthereumNode } from '@interfaces/Ethereum'
+import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode'
 import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel'
 
 interface Props {
