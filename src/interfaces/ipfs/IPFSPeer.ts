@@ -34,3 +34,7 @@ export interface UpdateGateway {
   gatewayPort: number
   gatewayHost: string
 }
+
+export interface UpdateRouting {
+  routing: IPFSRouting
+}

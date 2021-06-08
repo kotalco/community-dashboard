@@ -36,8 +36,7 @@ const IPFSPeerDetails: React.FC<Props> = ({ peerName, apiPort, apiHost }) => {
     try {
       const peer = await updateIPFSPeer(peerName, values)
       mutate(peerName, peer)
-      const { apiPort, apiHost } = peer
-      reset({ apiPort, apiHost })
+      reset(values)
       setSubmitSuccess('Peer has been updated')
     } catch (e) {
       setSubmitError(e.response.data.error)

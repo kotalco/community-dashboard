@@ -81,7 +81,12 @@ const IPFSPeerDetailsPage: React.FC<Props> = ({ ipfsPeer }) => {
                   gatewayHost={data.gatewayHost}
                 />
               )}
-              {activeTabIndex === 4 && <IPFSRoutingDetails peer={data} />}
+              {activeTabIndex === 4 && (
+                <IPFSRoutingDetails
+                  peerName={data.name}
+                  routing={data.routing}
+                />
+              )}
               {activeTabIndex === 5 && <DeleteIPFSPeer peerName={data.name} />}
             </Tabs>
           </div>

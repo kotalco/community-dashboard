@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { mutate } from 'swr'
 import { joiResolver } from '@hookform/resolvers/joi'
 
 import Button from '@components/atoms/Button/Button'
-import { IPFSPeer } from '@interfaces/ipfs/IPFSPeer'
+import { UpdateRouting } from '@interfaces/ipfs/IPFSPeer'
 import Select from '@components/molecules/Select/Select'
 import { routingOptions } from '@data/ipfs/peers/routingOptions'
 import { updateRoutingSchema } from '@schemas/ipfsPeer/updateIPFSPeer'
@@ -12,36 +12,31 @@ import { updateIPFSPeer } from '@utils/requests/ipfsPeersRequests'
 import { IPFSRouting } from '@enums/IPFSPeers/IPFSRouting'
 
 interface Props {
-  peer: IPFSPeer
-}
-
-interface FormData {
+  peerName: string
   routing: IPFSRouting
 }
 
-const IPFSPeerDetails: React.FC<Props> = ({ peer }) => {
+const IPFSPeerDetails: React.FC<Props> = ({ routing, peerName }) => {
   const [submitError, setSubmitError] = useState('')
   const [submitSuccess, setSubmitSuccess] = useState('')
-
-  const { routing } = peer
 
   const {
     reset,
     register,
     handleSubmit,
     formState: { isDirty, isSubmitting, errors },
-  } = useForm<FormData>({
+  } = useForm<UpdateRouting>({
     defaultValues: { routing },
     resolver: joiResolver(updateRoutingSchema),
   })
 
-  const onSubmit = async (values: FormData) => {
+  const onSubmit: SubmitHandler<UpdateRouting> = async (values) => {
     setSubmitError('')
     setSubmitSuccess('')
-    const peerData = { ...peer, ...values }
+
     try {
-      mutate(peer.name, { ...peer, ...values }, false)
-      mutate(peer.name, updateIPFSPeer(peer.name, peerData))
+      const peer = await updateIPFSPeer(peerName, values)
+      mutate(peerName, peer)
       reset(values)
       setSubmitSuccess('Peer has been updated')
     } catch (e) {
