@@ -5,12 +5,6 @@ export const schema = Joi.object({
     'string.empty': `Please provide a name for your node`,
     'string.pattern.base': `Node name shouldn't contain whitespaces`,
   }),
-  apiPort: Joi.number().default(5001),
-  apiHost: Joi.string().default('0.0.0.0'),
-  gatewayPort: Joi.number().default(8080),
-  gatewayHost: Joi.string().default('0.0.0.0'),
-  routing: Joi.string().default('dht'),
-  profiles: Joi.array().default([]),
   initProfiles: Joi.array()
     .min(1)
     .items(

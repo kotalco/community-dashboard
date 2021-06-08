@@ -1,6 +1,10 @@
 import axios from '../axios'
 
-import { IPFSPeer, UpdateIPFSPeer } from '@interfaces/ipfs/IPFSPeer'
+import {
+  CreateIPFSPeer,
+  IPFSPeer,
+  UpdateIPFSPeer,
+} from '@interfaces/ipfs/IPFSPeer'
 
 /**
  * Send GET request to the server to get all peers
@@ -17,7 +21,9 @@ export const getAllIPFSPeers = async (): Promise<IPFSPeer[]> => {
  * @param body data required to create new IPFS Peer
  * @returns the IPFS Peer created by the server
  */
-export const createIPFSPeer = async (body: IPFSPeer): Promise<IPFSPeer> => {
+export const createIPFSPeer = async (
+  body: CreateIPFSPeer
+): Promise<IPFSPeer> => {
   const { data } = await axios.post<{ peer: IPFSPeer }>(`/ipfs/peers`, body)
 
   return data.peer

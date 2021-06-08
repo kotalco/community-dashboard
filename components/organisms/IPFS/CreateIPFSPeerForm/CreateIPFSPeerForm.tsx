@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { FieldError, useForm } from 'react-hook-form'
+import { FieldError, SubmitHandler, useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { joiResolver } from '@hookform/resolvers/joi'
 
@@ -8,7 +8,7 @@ import Button from '@components/atoms/Button/Button'
 import Checkbox from '@components/molecules/CheckBox/CheckBox'
 import { createIPFSPeer } from '@utils/requests/ipfsPeersRequests'
 import { schema } from '@schemas/ipfsPeer/createIPFSPeer'
-import { IPFSPeer } from '@interfaces/ipfs/IPFSPeer'
+import { CreateIPFSPeer } from '@interfaces/ipfs/IPFSPeer'
 import { IPFSConfigurationProfile } from '@enums/IPFSPeers/IPFSConfigurationProfile'
 import { initProfilesOptions } from '@data/ipfs/peers/initProfilesOptions'
 import { useNotification } from '@components/contexts/NotificationContext'
@@ -22,7 +22,7 @@ const CreateNodeForm: React.FC = () => {
     register,
     formState: { errors, isSubmitted, isValid, isSubmitting },
     handleSubmit,
-  } = useForm<IPFSPeer>({
+  } = useForm<CreateIPFSPeer>({
     resolver: joiResolver(schema),
     defaultValues: {
       initProfiles: [IPFSConfigurationProfile.defaultDatastore],
@@ -33,7 +33,7 @@ const CreateNodeForm: React.FC = () => {
    * Submit create IPFS Peer from
    * @param values the data required to create new peer
    */
-  const onSubmit = async (values: IPFSPeer) => {
+  const onSubmit: SubmitHandler<CreateIPFSPeer> = async (values) => {
     try {
       setSubmitError('')
       const peer = await createIPFSPeer(values)

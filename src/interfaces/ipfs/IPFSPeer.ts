@@ -12,6 +12,11 @@ export interface IPFSPeer {
   initProfiles: IPFSConfigurationProfile[]
 }
 
+export interface CreateIPFSPeer {
+  name: string
+  initProfiles: IPFSConfigurationProfile[]
+}
+
 export interface UpdateIPFSPeer {
   apiPort?: number
   apiHost?: string
