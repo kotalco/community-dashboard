@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { mutate } from 'swr'
 import { joiResolver } from '@hookform/resolvers/joi'
 
@@ -9,21 +9,17 @@ import { IPFSPeer } from '@interfaces/ipfs/IPFSPeer'
 import { initProfilesOptions } from '@data/ipfs/peers/initProfilesOptions'
 import { updateConfigProfilesSchema } from '@schemas/ipfsPeer/updateIPFSPeer'
 import { updateIPFSPeer } from '@utils/requests/ipfsPeersRequests'
-import { IPFSConfigurationProfile } from '@enums/IPFSPeers/IPFSConfigurationProfile'
+import { UpdateConfigrationProfiles } from '@interfaces/ipfs/IPFSPeer'
 
 interface Props {
   peer: IPFSPeer
-}
-
-interface FormData {
-  profiles: IPFSConfigurationProfile[]
 }
 
 const IPFSPeerDetails: React.FC<Props> = ({ peer }) => {
   const [submitError, setSubmitError] = useState('')
   const [submitSuccess, setSubmitSuccess] = useState('')
 
-  const { profiles, initProfiles } = peer
+  const { profiles, initProfiles, name } = peer
 
   // SHOULD FIX THIS AFTER UPDATING API TO RETURN PROFILES WITH [] BY DEFAULT
   const allProfiles = profiles
@@ -35,19 +31,21 @@ const IPFSPeerDetails: React.FC<Props> = ({ peer }) => {
     register,
     handleSubmit,
     formState: { isDirty, isSubmitting },
-  } = useForm<FormData>({
+  } = useForm<UpdateConfigrationProfiles>({
     defaultValues: { profiles: allProfiles },
     resolver: joiResolver(updateConfigProfilesSchema),
   })
 
-  const onSubmit = async (values: FormData) => {
+  const onSubmit: SubmitHandler<UpdateConfigrationProfiles> = async (
+    values
+  ) => {
     setSubmitError('')
     setSubmitSuccess('')
-    const peerData = { ...peer, ...values }
+
     try {
-      mutate(peer.name, { ...peer, ...values }, false)
-      mutate(peer.name, updateIPFSPeer(peer.name, peerData))
-      reset({ profiles: [...initProfiles, ...values.profiles] })
+      const peer = await updateIPFSPeer(name, values)
+      mutate(name, peer)
+      reset({ profiles: [...peer.profiles, ...peer.initProfiles] })
       setSubmitSuccess('Peer has been updated')
     } catch (e) {
       setSubmitError(e.response.data.error)

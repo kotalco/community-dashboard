@@ -1,16 +1,26 @@
 import { IPFSRouting } from '@enums/IPFSPeers/IPFSRouting'
 import { IPFSConfigurationProfile } from '@enums/IPFSPeers/IPFSConfigurationProfile'
 
-export interface IPFSPeer extends MutateIPFSPeer {
+export interface IPFSPeer {
   name: string
-  initProfiles: IPFSConfigurationProfile[]
-}
-
-export interface MutateIPFSPeer {
   apiPort: number
   apiHost: string
   gatewayPort: number
   gatewayHost: string
   routing: IPFSRouting
-  profiles: IPFSConfigurationProfile[] | null
+  profiles: IPFSConfigurationProfile[]
+  initProfiles: IPFSConfigurationProfile[]
+}
+
+export interface UpdateIPFSPeer {
+  apiPort?: number
+  apiHost?: string
+  gatewayPort?: number
+  gatewayHost?: string
+  routing?: IPFSRouting
+  profiles?: IPFSConfigurationProfile[]
+}
+
+export interface UpdateConfigrationProfiles {
+  profiles: IPFSConfigurationProfile[]
 }
