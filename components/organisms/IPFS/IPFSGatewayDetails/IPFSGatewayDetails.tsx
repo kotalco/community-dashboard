@@ -1,46 +1,43 @@
 import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { mutate } from 'swr'
 import { joiResolver } from '@hookform/resolvers/joi'
 
 import Button from '@components/atoms/Button/Button'
 import TextInput from '@components/molecules/TextInput/TextInput'
-import { IPFSPeer } from '@interfaces/ipfs/IPFSPeer'
+import { UpdateGateway } from '@interfaces/ipfs/IPFSPeer'
 import { updateGatewaySchema } from '@schemas/ipfsPeer/updateIPFSPeer'
 import { updateIPFSPeer } from '@utils/requests/ipfsPeersRequests'
 
 interface Props {
-  peer: IPFSPeer
-}
-
-interface FormData {
+  peerName: string
   gatewayPort: number
   gatewayHost: string
 }
 
-const IPFSPeerDetails: React.FC<Props> = ({ peer }) => {
+const IPFSPeerDetails: React.FC<Props> = (props) => {
   const [submitError, setSubmitError] = useState('')
   const [submitSuccess, setSubmitSuccess] = useState('')
 
-  const { gatewayPort, gatewayHost } = peer
+  const { gatewayPort, gatewayHost, peerName } = props
 
   const {
     reset,
     register,
     handleSubmit,
     formState: { isDirty, isSubmitting, errors },
-  } = useForm<FormData>({
+  } = useForm<UpdateGateway>({
     defaultValues: { gatewayHost, gatewayPort },
     resolver: joiResolver(updateGatewaySchema),
   })
 
-  const onSubmit = async (values: FormData) => {
+  const onSubmit: SubmitHandler<UpdateGateway> = async (values) => {
     setSubmitError('')
     setSubmitSuccess('')
-    const peerData = { ...peer, ...values }
+
     try {
-      mutate(peer.name, { ...peer, ...values }, false)
-      mutate(peer.name, updateIPFSPeer(peer.name, peerData))
+      const peer = await updateIPFSPeer(peerName, values)
+      mutate(peerName, peer)
       reset(values)
       setSubmitSuccess('Peer has been updated')
     } catch (e) {

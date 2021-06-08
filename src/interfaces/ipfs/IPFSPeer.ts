@@ -29,3 +29,8 @@ export interface UpdateAPI {
   apiPort: number
   apiHost: string
 }
+
+export interface UpdateGateway {
+  gatewayPort: number
+  gatewayHost: string
+}
