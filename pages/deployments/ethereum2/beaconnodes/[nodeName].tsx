@@ -15,7 +15,7 @@ import BeaconNodeEthereumTab from '@components/organisms/Ethereum2/BeaconNode/Be
 import BeaconNodeResourcesTab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeResourcesTab/BeaconNodeResourcesTab'
 import DeleteBeaconNode from '@components/organisms/Ethereum2/BeaconNode/DeleteBeaconNode/DeleteBeaconNode'
 import { tabTitles } from '@data/ethereum2/beaconNode/tabTitles'
-import { Ethereum2BeaconNode } from '@interfaces/ethereum2/beaconNode/Ethereum2BeaconNode'
+import { Ethereum2BeaconNode } from '@interfaces/ethereum2/Ethereum2BeaconNode'
 
 interface Props {
   beaconNode: Ethereum2BeaconNode
@@ -59,7 +59,10 @@ const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconNode }) => {
               tabs={tabTitles}
             >
               {activeTabIndex === 0 && (
-                <BeaconNodeProtocolTab beaconnode={data} />
+                <BeaconNodeProtocolTab
+                  client={data.client}
+                  network={data.network}
+                />
               )}
               {activeTabIndex === 1 && (
                 <BeaconNodeEthereumTab beaconnode={data} />

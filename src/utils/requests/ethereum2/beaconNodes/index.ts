@@ -1,10 +1,10 @@
 import axios from '../../../axios'
 
 import {
+  CreateEthereum2BeaconNode,
   Ethereum2BeaconNode,
   MutableEthereum2BeaconNode,
-} from '@interfaces/ethereum2/beaconNode/Ethereum2BeaconNode'
-import { BeaconNodeRequiredData } from '@interfaces/ethereum2/beaconNode/BeaconNodeRequiredData'
+} from '@interfaces/ethereum2/Ethereum2BeaconNode'
 
 /**
  * Send a get request to find all ethereum 2.0 beacon nodes
@@ -24,7 +24,7 @@ export const getAllBeaconNodes = async (): Promise<Ethereum2BeaconNode[]> => {
  * @returns The newly created beacon node
  */
 export const createBeaconNode = async (
-  body: BeaconNodeRequiredData
+  body: CreateEthereum2BeaconNode
 ): Promise<Ethereum2BeaconNode> => {
   const { data } = await axios.post<{ beaconnode: Ethereum2BeaconNode }>(
     '/ethereum2/beaconnodes',

@@ -21,6 +21,12 @@ export interface Ethereum2BeaconNode {
   storage: string
 }
 
+export interface CreateEthereum2BeaconNode {
+  name: string
+  client: BeaconNodeClient
+  network: string
+}
+
 export interface MutableEthereum2BeaconNode {
   client?: BeaconNodeClient
   eth1Endpoints?: string[]

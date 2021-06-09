@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { SubmitHandler, useForm } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { joiResolver } from '@hookform/resolvers/joi'
 
@@ -36,12 +36,12 @@ const CreateBeaconNodeForm: React.FC = () => {
    * Submit create ethereum node form
    * @param BeaconNodeData the data required to create new node
    */
-  const onSubmit = async ({
+  const onSubmit: SubmitHandler<FormData> = async ({
     name,
     client,
     selectNetwork,
     textNetwork,
-  }: FormData) => {
+  }) => {
     const network = selectNetwork === 'other' ? textNetwork : selectNetwork
     const body = { name, client, network }
 

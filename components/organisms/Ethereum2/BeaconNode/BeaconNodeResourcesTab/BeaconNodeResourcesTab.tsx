@@ -6,7 +6,7 @@ import { mutate } from 'swr'
 import Button from '@components/atoms/Button/Button'
 import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes'
 import { updateResourcesSchema } from '@schemas/ethereum2/beaconNode/updateBeaconNode'
-import { Ethereum2BeaconNode } from '@interfaces/ethereum2/beaconNode/Ethereum2BeaconNode'
+import { Ethereum2BeaconNode } from '@interfaces/ethereum2/Ethereum2BeaconNode'
 import UnitTextInput from '@components/molecules/UnitTextInput/UnitTextInput'
 
 interface Props {

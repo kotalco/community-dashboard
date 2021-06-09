@@ -10,7 +10,7 @@ import List from '@components/organisms/List/List'
 import ListItem from '@components/molecules/ListItem/ListItem'
 import { useNotification } from '@components/contexts/NotificationContext'
 import { getAllBeaconNodes } from '@utils/requests/ethereum2/beaconNodes'
-import { Ethereum2BeaconNode } from '@interfaces/ethereum2/beaconNode/Ethereum2BeaconNode'
+import { Ethereum2BeaconNode } from '@interfaces/ethereum2/Ethereum2BeaconNode'
 import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel'
 
 interface Props {
