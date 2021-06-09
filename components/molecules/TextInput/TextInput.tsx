@@ -7,6 +7,7 @@ interface Props {
   name: string
   placeholder?: string
   className?: string
+  fullWidth?: boolean
   label?: string
   error?: string
   disabled?: boolean
@@ -16,13 +17,23 @@ interface Props {
 
 const TextInput = React.forwardRef<HTMLInputElement, Props>(
   (
-    { label, name, className, placeholder, onBlur, onChange, error, disabled },
+    {
+      label,
+      name,
+      className,
+      fullWidth,
+      placeholder,
+      onBlur,
+      onChange,
+      error,
+      disabled,
+    },
     ref
   ) => {
     return (
       <div>
         {label && <InputLabel htmlFor={name}>{label}</InputLabel>}
-        <div className="relative max-w-xs">
+        <div className={`relative ${fullWidth ? 'w-full' : 'max-w-xs'}`}>
           <input
             disabled={disabled}
             onChange={onChange}

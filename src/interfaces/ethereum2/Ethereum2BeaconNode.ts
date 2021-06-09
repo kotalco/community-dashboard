@@ -27,7 +27,7 @@ export interface CreateEthereum2BeaconNode {
   network: string
 }
 
-export interface MutableEthereum2BeaconNode {
+export interface UpdateEthereum2BeaconNode {
   client?: BeaconNodeClient
   eth1Endpoints?: string[]
   rest?: boolean
@@ -44,4 +44,8 @@ export interface MutableEthereum2BeaconNode {
   memory?: string
   memoryLimit?: string
   storage?: string
+}
+
+export interface UpdateEth1Endpoints {
+  eth1Endpoints: string[]
 }

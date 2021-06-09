@@ -65,7 +65,11 @@ const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconNode }) => {
                 />
               )}
               {activeTabIndex === 1 && (
-                <BeaconNodeEthereumTab beaconnode={data} />
+                <BeaconNodeEthereumTab
+                  name={data.name}
+                  client={data.client}
+                  eth1Endpoints={data.eth1Endpoints}
+                />
               )}
 
               {activeTabIndex === 2 && <BeaconNodeAPITab beaconnode={data} />}

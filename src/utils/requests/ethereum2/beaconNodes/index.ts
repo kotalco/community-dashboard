@@ -3,7 +3,7 @@ import axios from '../../../axios'
 import {
   CreateEthereum2BeaconNode,
   Ethereum2BeaconNode,
-  MutableEthereum2BeaconNode,
+  UpdateEthereum2BeaconNode,
 } from '@interfaces/ethereum2/Ethereum2BeaconNode'
 
 /**
@@ -59,7 +59,7 @@ export const deleteBeaconNode = async (nodeName: string): Promise<void> => {
 
 export const updateBeaconNode = async (
   nodeName: string,
-  nodeData: MutableEthereum2BeaconNode
+  nodeData: UpdateEthereum2BeaconNode
 ): Promise<Ethereum2BeaconNode> => {
   const { data } = await axios.put<{ beaconnode: Ethereum2BeaconNode }>(
     `/ethereum2/beaconnodes/${nodeName}`,
