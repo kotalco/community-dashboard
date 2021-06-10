@@ -8,6 +8,7 @@ interface Props {
   placeholder?: string
   className?: string
   fullWidth?: boolean
+  helperText?: string
   label?: string
   error?: string
   disabled?: boolean
@@ -27,6 +28,7 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>(
       onChange,
       error,
       disabled,
+      helperText,
     },
     ref
   ) => {
@@ -55,6 +57,7 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>(
           )}
         </div>
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+        {helperText && <p className="mt-2 text-sm">{helperText}</p>}
       </div>
     )
   }

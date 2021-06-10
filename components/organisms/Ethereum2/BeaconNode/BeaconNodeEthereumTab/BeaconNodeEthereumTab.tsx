@@ -65,7 +65,8 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
           <TextInput
             fullWidth
             className="rounded-md"
-            label="Ethereum Node JSON-RPC Endpoints"
+            label="Ethereum Node JSON-RPC Endpoint"
+            helperText="We supoort only 1 endpoint in case of ConsenSys Teku and Status.im Nimbus clients"
             {...register('eth1Endpoints')}
           />
         ) : (
