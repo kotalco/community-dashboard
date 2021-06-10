@@ -1,21 +1,18 @@
 import { useState } from 'react'
-import { useForm, useWatch, Controller } from 'react-hook-form'
+import { useForm, useWatch, Controller, SubmitHandler } from 'react-hook-form'
 import { joiResolver } from '@hookform/resolvers/joi'
 import { mutate } from 'swr'
 
 import Button from '@components/atoms/Button/Button'
 import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes'
 import { updateAPISchema } from '@schemas/ethereum2/beaconNode/updateBeaconNode'
-import { Ethereum2BeaconNode } from '@interfaces/ethereum2/Ethereum2BeaconNode'
+import { UpdateAPI } from '@interfaces/ethereum2/Ethereum2BeaconNode'
 import TextInput from '@components/molecules/TextInput/TextInput'
 import Separator from '@components/atoms/Separator/Separator'
 import Toggle from '@components/molecules/Toggle/Toggle'
 
 interface Props {
-  beaconnode: Ethereum2BeaconNode
-}
-
-interface FormData {
+  name: string
   rest: boolean
   restHost: string
   restPort: number
@@ -27,21 +24,21 @@ interface FormData {
   grpcPort: number
 }
 
-const BeaconNodeProtocolTab: React.FC<Props> = ({ beaconnode }) => {
+const BeaconNodeProtocolTab: React.FC<Props> = ({
+  name,
+  rest,
+  restHost,
+  restPort,
+  rpc,
+  rpcHost,
+  rpcPort,
+  grpc,
+  grpcHost,
+  grpcPort,
+}) => {
   const [submitError, setSubmitError] = useState('')
   const [submitSuccess, setSubmitSuccess] = useState('')
-  const {
-    name,
-    rest,
-    restHost,
-    restPort,
-    rpc,
-    rpcHost,
-    rpcPort,
-    grpc,
-    grpcHost,
-    grpcPort,
-  } = beaconnode
+
   const defaultValues = {
     rest,
     restHost: restHost || '0.0.0.0',
@@ -60,7 +57,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({ beaconnode }) => {
     handleSubmit,
     control,
     formState: { isDirty, isSubmitting, errors },
-  } = useForm<FormData>({
+  } = useForm<UpdateAPI>({
     defaultValues,
     resolver: joiResolver(updateAPISchema),
   })
@@ -70,40 +67,19 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({ beaconnode }) => {
     name: ['rest', 'rpc', 'grpc'],
   })
 
-  const onSubmit = handleSubmit(async (values) => {
+  const onSubmit: SubmitHandler<UpdateAPI> = async (values) => {
     setSubmitError('')
     setSubmitSuccess('')
 
     try {
       const beaconnode = await updateBeaconNode(name, values)
       mutate(name, beaconnode)
-      const {
-        rest,
-        restPort,
-        restHost,
-        rpc,
-        rpcPort,
-        rpcHost,
-        grpc,
-        grpcPort,
-        grpcHost,
-      } = beaconnode
-      reset({
-        rest,
-        restPort,
-        restHost,
-        rpc,
-        rpcPort,
-        rpcHost,
-        grpc,
-        grpcPort,
-        grpcHost,
-      })
+      reset(values)
       setSubmitSuccess('Beacon node has been updated')
     } catch (e) {
       setSubmitError(e.response.data.error)
     }
-  })
+  }
 
   return (
     <>
@@ -217,7 +193,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({ beaconnode }) => {
           className="btn btn-primary"
           disabled={!isDirty || isSubmitting}
           loading={isSubmitting}
-          onClick={onSubmit}
+          onClick={handleSubmit(onSubmit)}
         >
           Save
         </Button>

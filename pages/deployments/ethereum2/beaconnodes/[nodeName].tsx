@@ -72,7 +72,20 @@ const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconNode }) => {
                 />
               )}
 
-              {activeTabIndex === 2 && <BeaconNodeAPITab beaconnode={data} />}
+              {activeTabIndex === 2 && (
+                <BeaconNodeAPITab
+                  name={data.name}
+                  rest={data.rest}
+                  restHost={data.restHost}
+                  restPort={data.restPort}
+                  rpc={data.rpc}
+                  rpcPort={data.rpcPort}
+                  rpcHost={data.rpcHost}
+                  grpc={data.grpc}
+                  grpcHost={data.grpcHost}
+                  grpcPort={data.grpcPort}
+                />
+              )}
               {activeTabIndex === 3 && (
                 <BeaconNodeResourcesTab beaconnode={data} />
               )}

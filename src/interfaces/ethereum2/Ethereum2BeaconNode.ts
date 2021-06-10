@@ -49,3 +49,15 @@ export interface UpdateEthereum2BeaconNode {
 export interface UpdateEth1Endpoints {
   eth1Endpoints: string[]
 }
+
+export interface UpdateAPI {
+  rest: boolean
+  restHost: string
+  restPort: number
+  rpc: boolean
+  rpcHost: string
+  rpcPort: number
+  grpc: boolean
+  grpcHost: string
+  grpcPort: number
+}
