@@ -10,18 +10,20 @@ import { UpdateAPI } from '@interfaces/ethereum2/Ethereum2BeaconNode'
 import TextInput from '@components/molecules/TextInput/TextInput'
 import Separator from '@components/atoms/Separator/Separator'
 import Toggle from '@components/molecules/Toggle/Toggle'
+import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodeClient'
 
 interface Props {
   name: string
-  rest: boolean
-  restHost: string
-  restPort: number
+  rest?: boolean
+  restHost?: string
+  restPort?: number
   rpc: boolean
   rpcHost: string
   rpcPort: number
   grpc: boolean
   grpcHost: string
   grpcPort: number
+  client: BeaconNodeClient
 }
 
 const BeaconNodeProtocolTab: React.FC<Props> = ({
@@ -35,6 +37,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
   grpc,
   grpcHost,
   grpcPort,
+  client,
 }) => {
   const [submitError, setSubmitError] = useState('')
   const [submitSuccess, setSubmitSuccess] = useState('')
@@ -49,6 +52,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
     grpc,
     grpcHost: grpcHost || '0.0.0.0',
     grpcPort: grpcPort || 3500,
+    client,
   }
 
   const {
@@ -70,7 +74,6 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
   const onSubmit: SubmitHandler<UpdateAPI> = async (values) => {
     setSubmitError('')
     setSubmitSuccess('')
-
     try {
       const beaconnode = await updateBeaconNode(name, values)
       mutate(name, beaconnode)
@@ -85,39 +88,44 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
     <>
       <div className="px-4 py-5 sm:p-6">
         {/* REST API */}
-        <Controller
-          name="rest"
-          control={control}
-          render={({ field }) => (
-            <Toggle
-              label="REST API Server"
-              onChange={(state) => {
-                field.onChange(state)
-              }}
-              checked={field.value}
+        {/* Supported by Teku and Lighthouse only */}
+        {(client === BeaconNodeClient.teku ||
+          client === BeaconNodeClient.lighthouse) && (
+          <>
+            <Controller
+              name="rest"
+              control={control}
+              render={({ field }) => (
+                <Toggle
+                  label="REST API Server"
+                  onChange={(state) => {
+                    field.onChange(state)
+                  }}
+                  checked={!!field.value}
+                />
+              )}
             />
-          )}
-        />
-        <div className="mt-4">
-          <TextInput
-            disabled={!restState}
-            label="REST API Server Port"
-            className="rounded-md"
-            error={errors.restPort?.message}
-            {...register('restPort')}
-          />
-        </div>
-        <div className="mt-4">
-          <TextInput
-            disabled={!restState}
-            label="REST API Server Host"
-            className="rounded-md"
-            error={errors.restHost?.message}
-            {...register('restHost')}
-          />
-        </div>
-
-        <Separator />
+            <div className="mt-4">
+              <TextInput
+                disabled={!restState}
+                label="REST API Server Port"
+                className="rounded-md"
+                error={errors.restPort?.message}
+                {...register('restPort')}
+              />
+            </div>
+            <div className="mt-4">
+              <TextInput
+                disabled={!restState}
+                label="REST API Server Host"
+                className="rounded-md"
+                error={errors.restHost?.message}
+                {...register('restHost')}
+              />
+            </div>
+            <Separator />
+          </>
+        )}
 
         {/* JSON-RPC Server */}
         <Controller

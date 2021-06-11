@@ -5,9 +5,9 @@ export interface Ethereum2BeaconNode {
   network: string
   client: BeaconNodeClient
   eth1Endpoints: string[]
-  rest: boolean
-  restPort: number
-  restHost: string
+  rest?: boolean
+  restPort?: number
+  restHost?: string
   rpc: boolean
   rpcPort: number
   rpcHost: string
@@ -51,9 +51,9 @@ export interface UpdateEth1Endpoints {
 }
 
 export interface UpdateAPI {
-  rest: boolean
-  restHost: string
-  restPort: number
+  rest?: boolean
+  restHost?: string
+  restPort?: number
   rpc: boolean
   rpcHost: string
   rpcPort: number

@@ -35,9 +35,11 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>(
     return (
       <div>
         {label && <InputLabel htmlFor={name}>{label}</InputLabel>}
-        <div className={`relative ${fullWidth ? 'w-full' : 'max-w-xs'}`}>
+        <fieldset
+          disabled={disabled}
+          className={`relative ${fullWidth ? 'w-full' : 'max-w-xs'}`}
+        >
           <input
-            disabled={disabled}
             onChange={onChange}
             onBlur={onBlur}
             placeholder={placeholder}
@@ -55,7 +57,7 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>(
               />
             </div>
           )}
-        </div>
+        </fieldset>
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
         {helperText && <p className="mt-2 text-sm">{helperText}</p>}
       </div>

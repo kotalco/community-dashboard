@@ -84,6 +84,7 @@ const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconNode }) => {
                   grpc={data.grpc}
                   grpcHost={data.grpcHost}
                   grpcPort={data.grpcPort}
+                  client={data.client}
                 />
               )}
               {activeTabIndex === 3 && (

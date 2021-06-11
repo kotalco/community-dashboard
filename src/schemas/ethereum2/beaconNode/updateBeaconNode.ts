@@ -15,24 +15,32 @@ export const updateClientSchema = Joi.object({
 })
 
 export const updateAPISchema = Joi.object({
-  rest: Joi.boolean(),
-  restPort: Joi.number()
-    .port()
-    .when('rest', {
-      is: Joi.valid(true),
-      then: Joi.number().required(),
-      otherwise: Joi.number().optional(),
+  rest: Joi.boolean().when('client', {
+    not: Joi.valid('teku', 'lighthouse'),
+    then: Joi.boolean().strip(),
+  }),
+  restPort: Joi.when('rest', {
+    is: Joi.valid(true),
+    then: Joi.number().port().required(),
+    otherwise: Joi.any().strip(),
+  })
+    .when('client', {
+      not: Joi.valid('teku', 'lighthouse'),
+      then: Joi.any().strip(),
     })
     .messages({
       'any.required': 'Please provide an API server port',
       'number.base': 'API server port should be a valid port number',
       'number.port': 'API server port should be a valid port number',
     }),
-  restHost: Joi.string()
-    .when('rest', {
-      is: true,
-      then: Joi.string().required().trim().pattern(ipAddressRegex),
-      otherwise: Joi.string().allow(''),
+  restHost: Joi.when('rest', {
+    is: true,
+    then: Joi.string().required().trim().pattern(ipAddressRegex),
+    otherwise: Joi.any().strip(),
+  })
+    .when('client', {
+      not: Joi.valid('teku', 'lighthouse'),
+      then: Joi.any().strip(),
     })
     .messages({
       'any.required': 'Please provide an API server host',
@@ -40,53 +48,44 @@ export const updateAPISchema = Joi.object({
       'string.pattern.base': 'Please provide a valid ip address',
     }),
   rpc: Joi.boolean(),
-  rpcPort: Joi.number()
-    .port()
-    .when('rpc', {
-      is: Joi.valid(true),
-      then: Joi.number().required(),
-      otherwise: Joi.number().optional(),
-    })
-    .messages({
-      'any.required': 'Please provide JSON-RPC server port',
-      'number.base': 'JSON-RPC server port should be a valid port number',
-      'number.port': 'JSON-RPC server port should be a valid port number',
-    }),
-  rpcHost: Joi.string()
-    .when('rpc', {
-      is: true,
-      then: Joi.string().required().trim().pattern(ipAddressRegex),
-      otherwise: Joi.string().allow(''),
-    })
-    .messages({
-      'any.required': 'Please provide JSON-RPC server host',
-      'string.empty': 'Please provide JSON-RPC server host',
-      'string.pattern.base': 'Please provide a valid ip address',
-    }),
+  rpcPort: Joi.when('rpc', {
+    is: Joi.valid(true),
+    then: Joi.number().port().required(),
+    otherwise: Joi.any().strip(),
+  }).messages({
+    'any.required': 'Please provide JSON-RPC server port',
+    'number.base': 'JSON-RPC server port should be a valid port number',
+    'number.port': 'JSON-RPC server port should be a valid port number',
+  }),
+  rpcHost: Joi.when('rpc', {
+    is: true,
+    then: Joi.string().required().trim().pattern(ipAddressRegex),
+    otherwise: Joi.string().strip(),
+  }).messages({
+    'any.required': 'Please provide JSON-RPC server host',
+    'string.empty': 'Please provide JSON-RPC server host',
+    'string.pattern.base': 'Please provide a valid ip address',
+  }),
   grpc: Joi.boolean(),
-  grpcPort: Joi.number()
-    .port()
-    .when('grpc', {
-      is: Joi.valid(true),
-      then: Joi.number().required(),
-      otherwise: Joi.number().optional(),
-    })
-    .messages({
-      'any.required': 'Please provide an GRPC gateway server port',
-      'number.base': 'GRPC gateway server port should be a valid port number',
-      'number.port': 'GRPC gateway server port should be a valid port number',
-    }),
-  grpcHost: Joi.string()
-    .when('grpc', {
-      is: true,
-      then: Joi.string().required().trim().pattern(ipAddressRegex),
-      otherwise: Joi.string().allow(''),
-    })
-    .messages({
-      'any.required': 'Please provide GRPC gateway server host',
-      'string.empty': 'Please provide an GRPC gateway server host',
-      'string.pattern.base': 'Please provide a valid ip address',
-    }),
+  grpcPort: Joi.when('grpc', {
+    is: Joi.valid(true),
+    then: Joi.number().port().required(),
+    otherwise: Joi.any().strip(),
+  }).messages({
+    'any.required': 'Please provide an GRPC gateway server port',
+    'number.base': 'GRPC gateway server port should be a valid port number',
+    'number.port': 'GRPC gateway server port should be a valid port number',
+  }),
+  grpcHost: Joi.when('grpc', {
+    is: true,
+    then: Joi.string().required().trim().pattern(ipAddressRegex),
+    otherwise: Joi.any().strip(),
+  }).messages({
+    'any.required': 'Please provide GRPC gateway server host',
+    'string.empty': 'Please provide an GRPC gateway server host',
+    'string.pattern.base': 'Please provide a valid ip address',
+  }),
+  client: Joi.string().strip(),
 })
 
 export const updateResourcesSchema = Joi.object({
