@@ -57,7 +57,7 @@ export interface UpdateAPI {
   rpc?: boolean
   rpcHost?: string
   rpcPort?: number
-  grpc: boolean
-  grpcHost: string
-  grpcPort: number
+  grpc?: boolean
+  grpcHost?: string
+  grpcPort?: number
 }

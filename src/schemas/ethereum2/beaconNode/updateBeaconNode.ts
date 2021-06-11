@@ -79,25 +79,38 @@ export const updateAPISchema = Joi.object({
       'string.empty': 'Please provide JSON-RPC server host',
       'string.pattern.base': 'Please provide a valid ip address',
     }),
-  grpc: Joi.boolean(),
+  grpc: Joi.boolean().when('client', {
+    not: Joi.valid('prysm'),
+    then: Joi.boolean().strip(),
+  }),
   grpcPort: Joi.when('grpc', {
-    is: Joi.valid(true),
+    is: true,
     then: Joi.number().port().required(),
     otherwise: Joi.any().strip(),
-  }).messages({
-    'any.required': 'Please provide an GRPC gateway server port',
-    'number.base': 'GRPC gateway server port should be a valid port number',
-    'number.port': 'GRPC gateway server port should be a valid port number',
-  }),
+  })
+    .when('client', {
+      not: Joi.valid('prysm'),
+      then: Joi.any().strip(),
+    })
+    .messages({
+      'any.required': 'Please provide an GRPC gateway server port',
+      'number.base': 'GRPC gateway server port should be a valid port number',
+      'number.port': 'GRPC gateway server port should be a valid port number',
+    }),
   grpcHost: Joi.when('grpc', {
     is: true,
     then: Joi.string().required().trim().pattern(ipAddressRegex),
     otherwise: Joi.any().strip(),
-  }).messages({
-    'any.required': 'Please provide GRPC gateway server host',
-    'string.empty': 'Please provide an GRPC gateway server host',
-    'string.pattern.base': 'Please provide a valid ip address',
-  }),
+  })
+    .when('client', {
+      not: Joi.valid('prysm'),
+      then: Joi.any().strip(),
+    })
+    .messages({
+      'any.required': 'Please provide GRPC gateway server host',
+      'string.empty': 'Please provide an GRPC gateway server host',
+      'string.pattern.base': 'Please provide a valid ip address',
+    }),
   client: Joi.string().strip(),
 })
 

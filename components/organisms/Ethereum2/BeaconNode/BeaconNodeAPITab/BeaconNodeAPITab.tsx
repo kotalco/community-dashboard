@@ -123,7 +123,6 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
                 {...register('restHost')}
               />
             </div>
-            <Separator />
           </>
         )}
 
@@ -163,43 +162,48 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
                 {...register('rpcHost')}
               />
             </div>
-
-            <Separator />
           </>
         )}
 
         {/* GRPC Gateway Server */}
-        <Controller
-          name="grpc"
-          control={control}
-          render={({ field }) => (
-            <Toggle
-              label="GRPC Gateway Server"
-              onChange={(state) => {
-                field.onChange(state)
-              }}
-              checked={!!field.value}
+        {/* Supported by Prysm only */}
+        {client === BeaconNodeClient.prysm && (
+          <>
+            <Separator />
+
+            <Controller
+              name="grpc"
+              control={control}
+              render={({ field }) => (
+                <Toggle
+                  label="GRPC Gateway Server"
+                  onChange={(state) => {
+                    field.onChange(state)
+                  }}
+                  checked={!!field.value}
+                />
+              )}
             />
-          )}
-        />
-        <div className="mt-4">
-          <TextInput
-            disabled={!grpcState}
-            label="GRPC Gateway Server Port"
-            className="rounded-md"
-            error={errors.grpcPort?.message}
-            {...register('grpcPort')}
-          />
-        </div>
-        <div className="mt-4">
-          <TextInput
-            disabled={!grpcState}
-            label="GRPC Gateway Server Host"
-            className="rounded-md"
-            error={errors.grpcHost?.message}
-            {...register('grpcHost')}
-          />
-        </div>
+            <div className="mt-4">
+              <TextInput
+                disabled={!grpcState}
+                label="GRPC Gateway Server Port"
+                className="rounded-md"
+                error={errors.grpcPort?.message}
+                {...register('grpcPort')}
+              />
+            </div>
+            <div className="mt-4">
+              <TextInput
+                disabled={!grpcState}
+                label="GRPC Gateway Server Host"
+                className="rounded-md"
+                error={errors.grpcHost?.message}
+                {...register('grpcHost')}
+              />
+            </div>
+          </>
+        )}
       </div>
 
       <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
