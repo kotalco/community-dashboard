@@ -20,7 +20,7 @@ export const updateAPISchema = Joi.object({
     then: Joi.boolean().strip(),
   }),
   restPort: Joi.when('rest', {
-    is: Joi.valid(true),
+    is: true,
     then: Joi.number().port().required(),
     otherwise: Joi.any().strip(),
   })
@@ -47,25 +47,38 @@ export const updateAPISchema = Joi.object({
       'string.empty': 'Please provide an API server host',
       'string.pattern.base': 'Please provide a valid ip address',
     }),
-  rpc: Joi.boolean(),
+  rpc: Joi.boolean().when('client', {
+    not: Joi.valid('prysm', 'nimbus'),
+    then: Joi.boolean().strip(),
+  }),
   rpcPort: Joi.when('rpc', {
-    is: Joi.valid(true),
+    is: true,
     then: Joi.number().port().required(),
     otherwise: Joi.any().strip(),
-  }).messages({
-    'any.required': 'Please provide JSON-RPC server port',
-    'number.base': 'JSON-RPC server port should be a valid port number',
-    'number.port': 'JSON-RPC server port should be a valid port number',
-  }),
+  })
+    .when('client', {
+      not: Joi.valid('prysm', 'nimbus'),
+      then: Joi.any().strip(),
+    })
+    .messages({
+      'any.required': 'Please provide JSON-RPC server port',
+      'number.base': 'JSON-RPC server port should be a valid port number',
+      'number.port': 'JSON-RPC server port should be a valid port number',
+    }),
   rpcHost: Joi.when('rpc', {
     is: true,
     then: Joi.string().required().trim().pattern(ipAddressRegex),
     otherwise: Joi.string().strip(),
-  }).messages({
-    'any.required': 'Please provide JSON-RPC server host',
-    'string.empty': 'Please provide JSON-RPC server host',
-    'string.pattern.base': 'Please provide a valid ip address',
-  }),
+  })
+    .when('client', {
+      not: Joi.valid('prysm', 'nimbus'),
+      then: Joi.any().strip(),
+    })
+    .messages({
+      'any.required': 'Please provide JSON-RPC server host',
+      'string.empty': 'Please provide JSON-RPC server host',
+      'string.pattern.base': 'Please provide a valid ip address',
+    }),
   grpc: Joi.boolean(),
   grpcPort: Joi.when('grpc', {
     is: Joi.valid(true),

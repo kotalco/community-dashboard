@@ -128,39 +128,45 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
         )}
 
         {/* JSON-RPC Server */}
-        <Controller
-          name="rpc"
-          control={control}
-          render={({ field }) => (
-            <Toggle
-              label="JSON-RPC Server"
-              onChange={(state) => {
-                field.onChange(state)
-              }}
-              checked={!!field.value}
+        {/* Supoorted only by Prysm and Nimbus */}
+        {(client === BeaconNodeClient.nimbus ||
+          client === BeaconNodeClient.prysm) && (
+          <>
+            <Controller
+              name="rpc"
+              control={control}
+              render={({ field }) => (
+                <Toggle
+                  label="JSON-RPC Server"
+                  onChange={(state) => {
+                    field.onChange(state)
+                  }}
+                  checked={!!field.value}
+                />
+              )}
             />
-          )}
-        />
-        <div className="mt-4">
-          <TextInput
-            disabled={!rpcState}
-            label="JSON-RPC Server Port"
-            className="rounded-md"
-            error={errors.rpcPort?.message}
-            {...register('rpcPort')}
-          />
-        </div>
-        <div className="mt-4">
-          <TextInput
-            disabled={!rpcState}
-            label="JSON-RPC Server Host"
-            className="rounded-md"
-            error={errors.rpcHost?.message}
-            {...register('rpcHost')}
-          />
-        </div>
+            <div className="mt-4">
+              <TextInput
+                disabled={!rpcState}
+                label="JSON-RPC Server Port"
+                className="rounded-md"
+                error={errors.rpcPort?.message}
+                {...register('rpcPort')}
+              />
+            </div>
+            <div className="mt-4">
+              <TextInput
+                disabled={!rpcState}
+                label="JSON-RPC Server Host"
+                className="rounded-md"
+                error={errors.rpcHost?.message}
+                {...register('rpcHost')}
+              />
+            </div>
 
-        <Separator />
+            <Separator />
+          </>
+        )}
 
         {/* GRPC Gateway Server */}
         <Controller
