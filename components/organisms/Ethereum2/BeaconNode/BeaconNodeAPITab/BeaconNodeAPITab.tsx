@@ -138,8 +138,16 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
                 <Toggle
                   label="JSON-RPC Server"
                   onChange={(state) => {
+                    if (client === BeaconNodeClient.prysm) {
+                      return
+                    }
                     field.onChange(state)
                   }}
+                  helperText={
+                    client === BeaconNodeClient.prysm
+                      ? ` (RPC Server couldn't turned of in case of Prysm Client)`
+                      : ''
+                  }
                   checked={!!field.value}
                 />
               )}

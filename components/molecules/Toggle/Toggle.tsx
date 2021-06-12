@@ -3,10 +3,11 @@ import { Switch } from '@headlessui/react'
 interface Props {
   label: string
   checked: boolean
+  helperText?: string
   onChange: (state: boolean) => void
 }
 
-const Toggle: React.FC<Props> = ({ label, checked, onChange }) => {
+const Toggle: React.FC<Props> = ({ label, checked, helperText, onChange }) => {
   return (
     <Switch.Group as="div" className="flex items-center">
       <Switch
@@ -14,7 +15,7 @@ const Toggle: React.FC<Props> = ({ label, checked, onChange }) => {
         onChange={onChange}
         className={`${
           checked ? 'bg-indigo-600' : 'bg-gray-200'
-        }   relative inline-flex flex-shrink-0  h-6 w-11 border-2 border-trasnparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
+        } relative inline-flex flex-shrink-0  h-6 w-11 border-2 border-trasnparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
       >
         <span className="sr-only">Use setting</span>
         <span
@@ -26,6 +27,9 @@ const Toggle: React.FC<Props> = ({ label, checked, onChange }) => {
       </Switch>
       <Switch.Label as="span" className="ml-3">
         <span className="text-sm font-medium text-gray-900">{label}</span>
+        {helperText && (
+          <span className="text-sm text-gray-500">{helperText}</span>
+        )}
       </Switch.Label>
     </Switch.Group>
   )
