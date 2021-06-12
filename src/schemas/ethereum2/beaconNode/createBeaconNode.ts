@@ -31,5 +31,19 @@ export const schema = Joi.object({
       'string.empty': `Please provide a network name`,
       'any.required': `Please provide a network name`,
     }),
+  eth1Endpoints: Joi.array()
+    .when('client', {
+      is: 'prysm',
+      then: Joi.when('selectNetwork', {
+        not: 'mainnet',
+        then: Joi.array().items(Joi.string()).min(1),
+        otherwise: Joi.any().strip(),
+      }),
+      otherwise: Joi.any().strip(),
+    })
+    .messages({
+      'array.min':
+        'You need to enter at least 1 Ethereum endpoint when client is Prysm and network is not Mainnet',
+    }),
 })
 export default schema

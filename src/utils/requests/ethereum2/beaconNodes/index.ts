@@ -24,8 +24,12 @@ export const getAllBeaconNodes = async (): Promise<Ethereum2BeaconNode[]> => {
  * @returns The newly created beacon node
  */
 export const createBeaconNode = async (
-  body: CreateEthereum2BeaconNode
+  values: CreateEthereum2BeaconNode
 ): Promise<Ethereum2BeaconNode> => {
+  const { name, client, selectNetwork, textNetwork, eth1Endpoints } = values
+  const network = selectNetwork === 'other' ? textNetwork : selectNetwork
+  const body = { name, client, network, eth1Endpoints }
+
   const { data } = await axios.post<{ beaconnode: Ethereum2BeaconNode }>(
     '/ethereum2/beaconnodes',
     body

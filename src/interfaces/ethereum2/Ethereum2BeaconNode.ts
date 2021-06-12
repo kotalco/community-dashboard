@@ -24,7 +24,9 @@ export interface Ethereum2BeaconNode {
 export interface CreateEthereum2BeaconNode {
   name: string
   client: BeaconNodeClient
-  network: string
+  selectNetwork: string
+  textNetwork: string
+  eth1Endpoints: string[]
 }
 
 export interface UpdateEthereum2BeaconNode {

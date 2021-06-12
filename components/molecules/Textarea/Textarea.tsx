@@ -5,11 +5,12 @@ interface Props {
   label: string
   value: string[]
   helperText?: string
+  error?: string
   onChange: (value: string[]) => void
 }
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, Props>(
-  ({ value, name, label, helperText, onChange }, _ref) => {
+  ({ value, name, label, error, helperText, onChange }, _ref) => {
     const [text, setText] = useState(value.join('\n'))
 
     const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -40,6 +41,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, Props>(
         {helperText && (
           <p className="mt-2 text-sm text-gray-500">{helperText}</p>
         )}
+        {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
       </div>
     )
   }

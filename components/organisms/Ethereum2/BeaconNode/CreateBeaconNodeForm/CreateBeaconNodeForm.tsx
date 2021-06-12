@@ -1,24 +1,20 @@
 import React, { useState } from 'react'
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { SubmitHandler, useForm, Controller, FieldError } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { joiResolver } from '@hookform/resolvers/joi'
 
 import TextInput from '@components/molecules/TextInput/TextInput'
 import Select from '@components/molecules/Select/Select'
 import Button from '@components/atoms/Button/Button'
+import Textarea from '@components/molecules/Textarea/Textarea'
 import { useNotification } from '@components/contexts/NotificationContext'
 import { clientOptions } from '@data/ethereum2/beaconNode/clientOptions'
 import { networkOptions } from '@data/ethereum2/beaconNode/networkOption'
 import { createBeaconNode } from '@utils/requests/ethereum2/beaconNodes'
 import { schema } from '@schemas/ethereum2/beaconNode/createBeaconNode'
 import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodeClient'
-
-export interface FormData {
-  name: string
-  client: BeaconNodeClient
-  selectNetwork: string
-  textNetwork: string
-}
+import { CreateEthereum2BeaconNode } from '@interfaces/ethereum2/Ethereum2BeaconNode'
+import { BeaconNodeNetwork } from '@enums/Ethereum2/BeaconNodeNetwork'
 
 const CreateBeaconNodeForm: React.FC = () => {
   const [submitError, setSubmitError] = useState('')
@@ -27,27 +23,23 @@ const CreateBeaconNodeForm: React.FC = () => {
   const {
     register,
     watch,
+    control,
     formState: { errors, isSubmitted, isValid, isSubmitting },
     handleSubmit,
-  } = useForm<FormData>({ resolver: joiResolver(schema) })
-  const [selectNetwork] = watch(['selectNetwork'])
-
+  } = useForm<CreateEthereum2BeaconNode>({
+    defaultValues: { eth1Endpoints: [] },
+    resolver: joiResolver(schema),
+  })
+  const [selectNetwork, client] = watch(['selectNetwork', 'client'])
+  const eth1EndpointsError = errors.eth1Endpoints as FieldError | undefined
   /**
    * Submit create ethereum node form
    * @param BeaconNodeData the data required to create new node
    */
-  const onSubmit: SubmitHandler<FormData> = async ({
-    name,
-    client,
-    selectNetwork,
-    textNetwork,
-  }) => {
-    const network = selectNetwork === 'other' ? textNetwork : selectNetwork
-    const body = { name, client, network }
-
+  const onSubmit: SubmitHandler<CreateEthereum2BeaconNode> = async (values) => {
     try {
       setSubmitError('')
-      const beaconNode = await createBeaconNode(body)
+      const beaconNode = await createBeaconNode(values)
 
       createNotification({
         title: 'Beacon node has been created',
@@ -103,6 +95,25 @@ const CreateBeaconNodeForm: React.FC = () => {
             {...register('textNetwork')}
           />
         )}
+
+        {/* Ethereum Endpoint in case of client is Prysm and network is not Mainnet */}
+        {client === BeaconNodeClient.prysm &&
+          selectNetwork !== BeaconNodeNetwork.mainnet && (
+            <div className="mt-5">
+              <Controller
+                name="eth1Endpoints"
+                control={control}
+                render={({ field }) => (
+                  <Textarea
+                    label="Ethereum Node JSON-RPC Endpoints"
+                    helperText="One endpoint per each line"
+                    error={eth1EndpointsError?.message}
+                    {...field}
+                  />
+                )}
+              />
+            </div>
+          )}
       </div>
 
       {/* <!-- end: content here --> */}
