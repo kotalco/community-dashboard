@@ -42,7 +42,7 @@ const CreateNodeForm: React.FC = () => {
         protocol: 'IPFS',
         name: peer.name,
         action:
-          'created successfully, and will be up and running in few seconds.',
+          'peer created successfully, and will be up and running in few seconds.',
       })
       router.push('/deployments/ipfs/peers')
     } catch (e) {

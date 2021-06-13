@@ -39,7 +39,7 @@ const DeleteBeaconNode: React.FC<Props> = ({ nodeName }) => {
         title: 'Beacon node has been deleted',
         protocol: 'Ethereum 2.0',
         name: nodeName,
-        action: 'deleted successfully',
+        action: 'beacon node deleted successfully',
       })
       router.push('/deployments/ethereum2/beaconnodes')
     } catch (e) {

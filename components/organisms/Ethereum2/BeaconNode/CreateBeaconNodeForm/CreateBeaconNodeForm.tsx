@@ -46,7 +46,7 @@ const CreateBeaconNodeForm: React.FC = () => {
         protocol: `Ethereum 2.0`,
         name: beaconNode.name,
         action:
-          'created successfully, and will be up and running in few seconds.',
+          'beacon node created successfully, and will be up and running in few seconds.',
       })
       router.push('/deployments/ethereum2/beaconnodes')
     } catch (e) {

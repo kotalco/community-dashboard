@@ -39,7 +39,7 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
         title: 'Node has been deleted',
         protocol: 'Ethereum',
         name: nodeName,
-        action: 'deleted successfully',
+        action: 'node deleted successfully',
       })
       router.push('/deployments/ethereum/nodes')
     } catch (e) {
