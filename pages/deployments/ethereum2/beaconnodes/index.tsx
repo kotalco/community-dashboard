@@ -47,8 +47,8 @@ const Ethereum2Nodes: React.FC<Props> = ({ beaconNodes }) => {
         </Button>
       </div>
 
-      <LinkedTabs tabs={resourcesTab} />
       <div className="py-4">
+        <LinkedTabs tabs={resourcesTab} />
         {data && data.length > 0 ? (
           <List>
             {data.map(({ name, client, network }) => (
