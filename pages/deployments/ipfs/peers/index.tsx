@@ -31,36 +31,32 @@ export const IPFSPeers: React.FC<Props> = ({ peers }) => {
 
   return (
     <Layout>
-      <div className="py-6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 flex">
-          <h1 className="text-2xl font-semibold text-gray-900 flex-grow">
-            IPFS Peers
-          </h1>
-          <Button
-            href="/deployments/ipfs/peers/create"
-            className="btn btn-primary"
-          >
-            Create New Peer
-          </Button>
-        </div>
+      <div className="flex">
+        <h1 className="text-2xl font-semibold text-gray-900 flex-grow">
+          IPFS Peers
+        </h1>
+        <Button
+          href="/deployments/ipfs/peers/create"
+          className="btn btn-primary"
+        >
+          Create New Peer
+        </Button>
+      </div>
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-          <div className="py-4">
-            {data && data.length > 0 ? (
-              <List>
-                {data.map(({ name }) => (
-                  <ListItem
-                    key={name}
-                    link={`/deployments/ipfs/peers/${name}`}
-                    title={name}
-                  />
-                ))}
-              </List>
-            ) : (
-              <p>There is no peers created</p>
-            )}
-          </div>
-        </div>
+      <div className="py-4">
+        {data && data.length > 0 ? (
+          <List>
+            {data.map(({ name }) => (
+              <ListItem
+                key={name}
+                link={`/deployments/ipfs/peers/${name}`}
+                title={name}
+              />
+            ))}
+          </List>
+        ) : (
+          <p>There is no peers created</p>
+        )}
       </div>
 
       <NotificationPanel

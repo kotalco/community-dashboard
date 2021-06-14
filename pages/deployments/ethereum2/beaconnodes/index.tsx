@@ -35,42 +35,38 @@ const Ethereum2Nodes: React.FC<Props> = ({ beaconNodes }) => {
 
   return (
     <Layout>
-      <div className="sm:px-6 md:px-8 px-4 py-6">
-        <div className="max-w-7xl mx-auto flex">
-          <h1 className="text-2xl font-semibold text-gray-900 flex-grow">
-            Beacon Nodes
-          </h1>
-          <Button
-            href="/deployments/ethereum2/beaconnodes/create"
-            className="btn btn-primary"
-          >
-            Create New Beacon Node
-          </Button>
-        </div>
+      <div className="flex">
+        <h1 className="text-2xl font-semibold text-gray-900 flex-grow">
+          Beacon Nodes
+        </h1>
+        <Button
+          href="/deployments/ethereum2/beaconnodes/create"
+          className="btn btn-primary"
+        >
+          Create New Beacon Node
+        </Button>
+      </div>
 
-        <LinkedTabs tabs={resourcesTab} />
-        <div className="max-w-7xl mx-auto">
-          <div className="py-4">
-            {data && data.length > 0 ? (
-              <List>
-                {data.map(({ name, client, network }) => (
-                  <ListItem
-                    key={name}
-                    link={`/deployments/ethereum2/beaconnodes/${name}`}
-                    title={name}
-                  >
-                    <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                    <p>{client}</p>
-                    <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
-                    <p>{network}</p>
-                  </ListItem>
-                ))}
-              </List>
-            ) : (
-              <p>There is no beacon nodes created</p>
-            )}
-          </div>
-        </div>
+      <LinkedTabs tabs={resourcesTab} />
+      <div className="py-4">
+        {data && data.length > 0 ? (
+          <List>
+            {data.map(({ name, client, network }) => (
+              <ListItem
+                key={name}
+                link={`/deployments/ethereum2/beaconnodes/${name}`}
+                title={name}
+              >
+                <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
+                <p>{client}</p>
+                <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
+                <p>{network}</p>
+              </ListItem>
+            ))}
+          </List>
+        ) : (
+          <p>There is no beacon nodes created</p>
+        )}
       </div>
 
       <NotificationPanel

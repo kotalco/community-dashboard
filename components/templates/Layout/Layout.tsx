@@ -20,7 +20,9 @@ const Layout: React.FC = ({ children }) => {
           className="flex-1 relative overflow-y-auto focus:outline-none"
           tabIndex={0}
         >
-          {children}
+          <div className="max-w-7xl mx-auto sm:px-6 md:px-8 px-4 py-6">
+            {children}
+          </div>
         </main>
       </div>
     </div>

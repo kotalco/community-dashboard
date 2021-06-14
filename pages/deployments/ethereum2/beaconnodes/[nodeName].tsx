@@ -4,8 +4,7 @@ import { useRouter } from 'next/router'
 import useSWR from 'swr'
 
 import { getBeaconNode } from '@utils/requests/ethereum2/beaconNodes'
-import PageDetailsHeader from '@components/molecules/PageDetailsHeader/PageDetailsHeader'
-import StatsComponent from '@components/molecules/Stats/Stats'
+// import StatsComponent from '@components/molecules/Stats/Stats'
 import Tabs from '@components/organisms/Tabs/Tabs'
 import Layout from '@components/templates/Layout/Layout'
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator'
@@ -39,63 +38,55 @@ const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconNode }) => {
 
   return (
     <Layout>
-      <div className="py-6">
-        <PageDetailsHeader title={beaconNode.name} date="January 11, 2021" />
+      <h1 className="text-2xl font-semibold">{beaconNode.name}</h1>
+      {/* <span className="text-xs text-gray-500">Last Updated on {date}</span> */}
+      {/* Stats */}
+      {/* <div>
+          <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
+            <StatsComponent title="Last Block Number" content="11,971,897" />
+            <StatsComponent title="Transactions Today" content="1,024,569" />
+            <StatsComponent title="Connected Peers" content="21" />
+          </dl>
+        </div> */}
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
-          {/* Stats */}
-          <div>
-            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
-              <StatsComponent title="Last Block Number" content="11,971,897" />
-              <StatsComponent title="Transactions Today" content="1,024,569" />
-              <StatsComponent title="Connected Peers" content="21" />
-            </dl>
-          </div>
+      <div className="bg-white overflow-hidden shadow rounded-lg divided-y divided-gray-200 mt-4">
+        <Tabs
+          activeIndex={activeTabIndex}
+          setActiveIndex={setActiveTabIndex}
+          tabs={tabTitles}
+        >
+          {activeTabIndex === 0 && (
+            <BeaconNodeProtocolTab
+              client={data.client}
+              network={data.network}
+            />
+          )}
+          {activeTabIndex === 1 && (
+            <BeaconNodeEthereumTab
+              name={data.name}
+              client={data.client}
+              eth1Endpoints={data.eth1Endpoints}
+            />
+          )}
 
-          <div className="bg-white overflow-hidden shadow rounded-lg divided-y divided-gray-200 mt-4">
-            <Tabs
-              activeIndex={activeTabIndex}
-              setActiveIndex={setActiveTabIndex}
-              tabs={tabTitles}
-            >
-              {activeTabIndex === 0 && (
-                <BeaconNodeProtocolTab
-                  client={data.client}
-                  network={data.network}
-                />
-              )}
-              {activeTabIndex === 1 && (
-                <BeaconNodeEthereumTab
-                  name={data.name}
-                  client={data.client}
-                  eth1Endpoints={data.eth1Endpoints}
-                />
-              )}
-
-              {activeTabIndex === 2 && (
-                <BeaconNodeAPITab
-                  name={data.name}
-                  rest={data.rest}
-                  restHost={data.restHost}
-                  restPort={data.restPort}
-                  rpc={data.rpc}
-                  rpcPort={data.rpcPort}
-                  rpcHost={data.rpcHost}
-                  grpc={data.grpc}
-                  grpcHost={data.grpcHost}
-                  grpcPort={data.grpcPort}
-                  client={data.client}
-                />
-              )}
-              {activeTabIndex === 3 && (
-                <BeaconNodeResourcesTab beaconnode={data} />
-              )}
-              {activeTabIndex === 4 && (
-                <DeleteBeaconNode nodeName={data.name} />
-              )}
-            </Tabs>
-          </div>
-        </div>
+          {activeTabIndex === 2 && (
+            <BeaconNodeAPITab
+              name={data.name}
+              rest={data.rest}
+              restHost={data.restHost}
+              restPort={data.restPort}
+              rpc={data.rpc}
+              rpcPort={data.rpcPort}
+              rpcHost={data.rpcHost}
+              grpc={data.grpc}
+              grpcHost={data.grpcHost}
+              grpcPort={data.grpcPort}
+              client={data.client}
+            />
+          )}
+          {activeTabIndex === 3 && <BeaconNodeResourcesTab beaconnode={data} />}
+          {activeTabIndex === 4 && <DeleteBeaconNode nodeName={data.name} />}
+        </Tabs>
       </div>
     </Layout>
   )
