@@ -1,4 +1,4 @@
-import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodeClient'
+import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient'
 
 interface Props {
   client: BeaconNodeClient

@@ -9,7 +9,6 @@ const Tabs: React.FC<Props> = ({ tabs }) => {
   const { pathname } = useRouter()
 
   return (
-    // <div className="border-b border-gray-200">
     <nav className="flex divide-x-2" aria-label="Tabs">
       {tabs.map(({ name, href }) => (
         <Link key={name} href={href}>
@@ -26,7 +25,6 @@ const Tabs: React.FC<Props> = ({ tabs }) => {
         </Link>
       ))}
     </nav>
-    // </div>
   )
 }
 

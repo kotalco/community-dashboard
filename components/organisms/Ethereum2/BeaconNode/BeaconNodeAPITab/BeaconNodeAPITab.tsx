@@ -10,7 +10,7 @@ import { UpdateAPI } from '@interfaces/ethereum2/Ethereum2BeaconNode'
 import TextInput from '@components/molecules/TextInput/TextInput'
 import Separator from '@components/atoms/Separator/Separator'
 import Toggle from '@components/molecules/Toggle/Toggle'
-import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodeClient'
+import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient'
 
 interface Props {
   name: string

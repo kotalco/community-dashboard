@@ -6,7 +6,7 @@ import Button from '@components/atoms/Button/Button'
 import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes'
 import { UpdateEth1Endpoints } from '@interfaces/ethereum2/Ethereum2BeaconNode'
 import Textarea from '@components/molecules/Textarea/Textarea'
-import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodeClient'
+import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient'
 import TextInput from '@components/molecules/TextInput/TextInput'
 
 interface Props {

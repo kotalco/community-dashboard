@@ -12,9 +12,9 @@ import { clientOptions } from '@data/ethereum2/beaconNode/clientOptions'
 import { networkOptions } from '@data/ethereum2/beaconNode/networkOption'
 import { createBeaconNode } from '@utils/requests/ethereum2/beaconNodes'
 import { schema } from '@schemas/ethereum2/beaconNode/createBeaconNode'
-import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodeClient'
+import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient'
 import { CreateEthereum2BeaconNode } from '@interfaces/ethereum2/Ethereum2BeaconNode'
-import { BeaconNodeNetwork } from '@enums/Ethereum2/BeaconNodeNetwork'
+import { BeaconNodeNetwork } from '@enums/Ethereum2/BeaconNodes/BeaconNodeNetwork'
 
 const CreateBeaconNodeForm: React.FC = () => {
   const [submitError, setSubmitError] = useState('')
