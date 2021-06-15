@@ -53,7 +53,7 @@ const CreateNodeForm: React.FC = () => {
   const initProfilesError = errors.initProfiles as FieldError | undefined
 
   return (
-    <form>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
         {/* Peer Name */}
         <TextInput

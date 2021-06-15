@@ -55,7 +55,7 @@ const CreateBeaconNodeForm: React.FC = () => {
   }
 
   return (
-    <form>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
         {/* Beacon Node Name */}
         <TextInput
