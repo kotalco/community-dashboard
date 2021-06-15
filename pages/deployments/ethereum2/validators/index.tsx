@@ -11,19 +11,19 @@ import ListItem from '@components/molecules/ListItem/ListItem'
 import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel'
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs'
 import { useNotification } from '@components/contexts/NotificationContext'
-import { getAllBeaconNodes } from '@utils/requests/ethereum2/beaconNodes'
-import { Ethereum2BeaconNode } from '@interfaces/ethereum2/Ethereum2BeaconNode'
+import { getAllValidators } from '@utils/requests/ethereum2/validators'
+import { Ethereum2Validator } from '@interfaces/ethereum2/Ethereum2Validator'
 import { resourcesTab } from '@data/ethereum2/resourcesTab'
 
 interface Props {
-  beaconNodes: Ethereum2BeaconNode[]
+  validators: Ethereum2Validator[]
 }
 
-const Ethereum2Nodes: React.FC<Props> = ({ beaconNodes }) => {
+const Ethereum2Validators: React.FC<Props> = ({ validators }) => {
   const { notificationData, removeNotification } = useNotification()
 
-  const { data, error } = useSWR('/ethereum2/beaconnodes', getAllBeaconNodes, {
-    initialData: beaconNodes,
+  const { data, error } = useSWR('/ethereum2/validators', getAllValidators, {
+    initialData: validators,
     revalidateOnMount: true,
   })
 
@@ -31,7 +31,7 @@ const Ethereum2Nodes: React.FC<Props> = ({ beaconNodes }) => {
     return () => removeNotification()
   }, [])
 
-  if (error) return <p>failed to load nodes</p>
+  if (error) return <p>failed to load validators</p>
 
   return (
     <Layout>
@@ -54,7 +54,7 @@ const Ethereum2Nodes: React.FC<Props> = ({ beaconNodes }) => {
             {data.map(({ name, client, network }) => (
               <ListItem
                 key={name}
-                link={`/deployments/ethereum2/beaconnodes/${name}`}
+                link={`/deployments/ethereum2/validators/${name}`}
                 title={name}
               >
                 <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
@@ -65,7 +65,9 @@ const Ethereum2Nodes: React.FC<Props> = ({ beaconNodes }) => {
             ))}
           </List>
         ) : (
-          <p>There is no beacon nodes created</p>
+          <div className="bg-white shadow p-4 text-center">
+            <p>There is no validators created</p>
+          </div>
         )}
       </div>
 
@@ -87,11 +89,11 @@ const Ethereum2Nodes: React.FC<Props> = ({ beaconNodes }) => {
 
 export const getStaticProps: GetStaticProps = async () => {
   try {
-    const beaconNodes = await getAllBeaconNodes()
-    return { props: { beaconNodes }, revalidate: 10 }
+    const validators = await getAllValidators()
+    return { props: { validators }, revalidate: 10 }
   } catch (e) {
     return { notFound: true }
   }
 }
 
-export default Ethereum2Nodes
+export default Ethereum2Validators
