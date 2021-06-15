@@ -4,12 +4,12 @@ import { GlobeAltIcon } from '@heroicons/react/solid'
 import { ChipIcon } from '@heroicons/react/outline'
 import useSWR from 'swr'
 
-import Button from '@components/atoms/Button/Button'
 import Layout from '@components/templates/Layout/Layout'
 import List from '@components/organisms/List/List'
 import ListItem from '@components/molecules/ListItem/ListItem'
 import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel'
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs'
+import Ethereum2PageHeading from '@components/organisms/Ethereum2/Ethereum2PageHeading/Ethereum2PageHeading'
 import { useNotification } from '@components/contexts/NotificationContext'
 import { getAllValidators } from '@utils/requests/ethereum2/validators'
 import { Ethereum2Validator } from '@interfaces/ethereum2/Ethereum2Validator'
@@ -35,17 +35,7 @@ const Ethereum2Validators: React.FC<Props> = ({ validators }) => {
 
   return (
     <Layout>
-      <div className="flex">
-        <h1 className="text-2xl font-semibold text-gray-900 flex-grow">
-          Ethereum 2.0
-        </h1>
-        <Button
-          href="/deployments/ethereum2/beaconnodes/create"
-          className="btn btn-primary"
-        >
-          Create New Beacon Node
-        </Button>
-      </div>
+      <Ethereum2PageHeading />
 
       <div className="py-4">
         <LinkedTabs tabs={resourcesTab} />
