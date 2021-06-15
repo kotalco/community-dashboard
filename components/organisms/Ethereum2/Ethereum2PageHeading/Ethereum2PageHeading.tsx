@@ -1,4 +1,9 @@
-import Button from '@components/atoms/Button/Button'
+import ButtonGroup from '@components/molecules/ButtonGroup/ButtonGroup'
+
+const links = [
+  { name: 'Beacon Node', href: '/deployments/ethereum2/beaconnodes/create' },
+  { name: 'Validator', href: '/deployments/ethereum2/validators/create' },
+]
 
 const Ethereum2PageHeading: React.FC = () => {
   return (
@@ -6,12 +11,8 @@ const Ethereum2PageHeading: React.FC = () => {
       <h1 className="text-2xl font-semibold text-gray-900 flex-grow">
         Ethereum 2.0
       </h1>
-      <Button
-        href="/deployments/ethereum2/beaconnodes/create"
-        className="btn btn-primary"
-      >
-        Create New Beacon Node
-      </Button>
+
+      <ButtonGroup label="Create New" buttons={links} />
     </div>
   )
 }
