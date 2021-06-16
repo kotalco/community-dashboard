@@ -21,7 +21,7 @@ export interface CreateEthereum2Validator {
   selectNetwork: ValidatorsNetworks
   textNetwork: string
   client: ValidatorsClients
-  keystores: { secretName: string }[]
+  keystores: string[]
   walletPasswordSecretName: string
   beaconEndpoints: string[]
 }

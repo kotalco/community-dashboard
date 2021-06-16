@@ -1,6 +1,9 @@
 import axios from '../../../axios'
 
-import { Ethereum2Validator } from '@interfaces/ethereum2/Ethereum2Validator'
+import {
+  CreateEthereum2Validator,
+  Ethereum2Validator,
+} from '@interfaces/ethereum2/Ethereum2Validator'
 
 /**
  * Send a get request to find all ethereum 2.0 validators
@@ -15,24 +18,41 @@ export const getAllValidators = async (): Promise<Ethereum2Validator[]> => {
 }
 
 /**
- * Send a post request to create a new beacon node using ethereum 2.0 protocol
- * @param body The required data to create a new beacon node
- * @returns The newly created beacon node
+ * Send a post request to create a new validator using ethereum 2.0 protocol
+ * @param body The required data to create a new validator
+ * @returns The newly created validator
  */
-// export const createBeaconNode = async (
-//   values: CreateEthereum2BeaconNode
-// ): Promise<Ethereum2BeaconNode> => {
-//   const { name, client, selectNetwork, textNetwork, eth1Endpoints } = values
-//   const network = selectNetwork === 'other' ? textNetwork : selectNetwork
-//   const body = { name, client, network, eth1Endpoints }
+export const createValidator = async (
+  values: CreateEthereum2Validator
+): Promise<Ethereum2Validator> => {
+  const {
+    name,
+    client,
+    selectNetwork,
+    textNetwork,
+    beaconEndpoints,
+    keystores,
+    walletPasswordSecretName,
+  } = values
+  const network = selectNetwork === 'other' ? textNetwork : selectNetwork
+  const keystoresObject = keystores.map((key) => ({ secretName: key }))
 
-//   const { data } = await axios.post<{ beaconnode: Ethereum2BeaconNode }>(
-//     '/ethereum2/beaconnodes',
-//     body
-//   )
+  const body = {
+    name,
+    client,
+    network,
+    beaconEndpoints,
+    keystores: keystoresObject,
+    walletPasswordSecretName,
+  }
 
-//   return data.beaconnode
-// }
+  const { data } = await axios.post<{ validator: Ethereum2Validator }>(
+    '/ethereum2/validators',
+    body
+  )
+
+  return data.validator
+}
 
 /**
  * Send a get request to find a beacon node by its name

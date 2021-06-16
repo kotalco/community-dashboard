@@ -1,11 +1,5 @@
 import React, { useState } from 'react'
-import {
-  SubmitHandler,
-  useForm,
-  Controller,
-  FieldError,
-  useFieldArray,
-} from 'react-hook-form'
+import { SubmitHandler, useForm, Controller, FieldError } from 'react-hook-form'
 import { useRouter } from 'next/router'
 import { joiResolver } from '@hookform/resolvers/joi'
 
@@ -17,12 +11,11 @@ import Checkbox from '@components/molecules/CheckBox/CheckBox'
 import { useNotification } from '@components/contexts/NotificationContext'
 import { clientOptions } from '@data/ethereum2/validator/clientOptions'
 import { networkOptions } from '@data/ethereum2/validator/networkOption'
-import { createBeaconNode } from '@utils/requests/ethereum2/beaconNodes'
 import { schema } from '@schemas/ethereum2/validator/createValidatorSchema'
 import { CreateEthereum2Validator } from '@interfaces/ethereum2/Ethereum2Validator'
 
 import { walletPasswordSecretName, keystores } from '@data/data'
-import InputLabel from '@components/atoms/InputLabel/InputLabel'
+import { createValidator } from '@utils/requests/ethereum2/validators'
 
 const CreateBeaconNodeForm: React.FC = () => {
   const [submitError, setSubmitError] = useState('')
@@ -47,22 +40,21 @@ const CreateBeaconNodeForm: React.FC = () => {
    * @param ValidatorData the data required to create new node
    */
   const onSubmit: SubmitHandler<CreateEthereum2Validator> = async (values) => {
-    console.log(values)
-    // try {
-    //   setSubmitError('')
-    //   const beaconNode = await createBeaconNode(values)
+    try {
+      setSubmitError('')
+      const validator = await createValidator(values)
 
-    //   createNotification({
-    //     title: 'Beacon node has been created',
-    //     protocol: `Ethereum 2.0`,
-    //     name: beaconNode.name,
-    //     action:
-    //       'beacon node created successfully, and will be up and running in few seconds.',
-    //   })
-    //   router.push('/deployments/ethereum2/beaconnodes')
-    // } catch (e) {
-    //   setSubmitError(e.response.data.error)
-    // }
+      createNotification({
+        title: 'Validator has been created',
+        protocol: `validator`,
+        name: validator.name,
+        action:
+          'created successfully, and will be up and running in few seconds.',
+      })
+      router.push('/deployments/ethereum2/validators')
+    } catch (e) {
+      setSubmitError(e.response.data.error)
+    }
   }
 
   return (
