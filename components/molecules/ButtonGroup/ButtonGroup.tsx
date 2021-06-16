@@ -45,7 +45,7 @@ const ButtonGroup: React.FC<Props> = ({ buttons, label }) => {
                           } block px-4 py-2 text-sm`}
                         >
                           <Link href={href}>
-                            <a>{name}</a>
+                            <a className="block w-full">{name}</a>
                           </Link>
                         </div>
                       )}
