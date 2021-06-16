@@ -38,8 +38,8 @@ const DangerousZoneContent: React.FC<Props> = ({ peerName }) => {
       createNotification({
         title: 'IPFS peer has been deleted',
         name: peerName,
-        action: 'peer deleted successfuly',
-        protocol: 'IPFS',
+        action: 'deleted successfuly',
+        protocol: 'peer',
       })
     } catch (e) {
       setError(e.response.data.message)

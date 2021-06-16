@@ -37,9 +37,9 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
       await deleteNode(nodeName)
       createNotification({
         title: 'Node has been deleted',
-        protocol: 'Ethereum',
+        protocol: 'node',
         name: nodeName,
-        action: 'node deleted successfully',
+        action: 'deleted successfully',
       })
       router.push('/deployments/ethereum/nodes')
     } catch (e) {

@@ -37,9 +37,9 @@ const DeleteBeaconNode: React.FC<Props> = ({ nodeName }) => {
       await deleteBeaconNode(nodeName)
       createNotification({
         title: 'Beacon node has been deleted',
-        protocol: 'Ethereum 2.0',
+        protocol: 'Beacon node',
         name: nodeName,
-        action: 'beacon node deleted successfully',
+        action: 'deleted successfully',
       })
       router.push('/deployments/ethereum2/beaconnodes')
     } catch (e) {

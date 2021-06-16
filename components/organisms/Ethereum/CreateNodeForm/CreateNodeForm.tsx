@@ -43,10 +43,10 @@ const CreateNodeForm: React.FC = () => {
       const node = await createEthereumNode(body)
       createNotification({
         title: 'Node has been created',
-        protocol: `Ethereum`,
+        protocol: `node`,
         name: node.name,
         action:
-          'node created successfully, and will be up and running in few seconds.',
+          'created successfully, and will be up and running in few seconds.',
       })
 
       router.push('/deployments/ethereum/nodes')
