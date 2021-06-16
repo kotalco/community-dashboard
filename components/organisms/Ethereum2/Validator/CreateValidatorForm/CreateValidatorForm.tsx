@@ -18,10 +18,8 @@ import { useNotification } from '@components/contexts/NotificationContext'
 import { clientOptions } from '@data/ethereum2/validator/clientOptions'
 import { networkOptions } from '@data/ethereum2/validator/networkOption'
 import { createBeaconNode } from '@utils/requests/ethereum2/beaconNodes'
-import { schema } from '@schemas/ethereum2/beaconNode/createBeaconNode'
-import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient'
+import { schema } from '@schemas/ethereum2/validator/createValidatorSchema'
 import { CreateEthereum2Validator } from '@interfaces/ethereum2/Ethereum2Validator'
-import { BeaconNodeNetwork } from '@enums/Ethereum2/BeaconNodes/BeaconNodeNetwork'
 
 import { walletPasswordSecretName, keystores } from '@data/data'
 import InputLabel from '@components/atoms/InputLabel/InputLabel'
@@ -38,10 +36,11 @@ const CreateBeaconNodeForm: React.FC = () => {
     handleSubmit,
   } = useForm<CreateEthereum2Validator>({
     defaultValues: { beaconEndpoints: [] },
-    // resolver: joiResolver(schema),
+    resolver: joiResolver(schema),
   })
   const [selectNetwork] = watch(['selectNetwork'])
-  const eth1EndpointsError = errors.beaconEndpoints as FieldError | undefined
+  const beaconEndpointsError = errors.beaconEndpoints as FieldError | undefined
+  const keystoresError = errors.keystores as FieldError | undefined
 
   /**
    * Submit create validator form
@@ -118,6 +117,7 @@ const CreateBeaconNodeForm: React.FC = () => {
             {...register(`keystores`)}
           />
         ))}
+        <p className="text-red-500 text-sm mt-2">{keystoresError?.message}</p>
 
         {/* Prysm Client Wallet Password */}
         <Select
@@ -137,7 +137,7 @@ const CreateBeaconNodeForm: React.FC = () => {
               <Textarea
                 label="Ethereum Node JSON-RPC Endpoints"
                 helperText="One endpoint per each line"
-                error={eth1EndpointsError?.message}
+                error={beaconEndpointsError?.message}
                 {...field}
               />
             )}
@@ -149,7 +149,7 @@ const CreateBeaconNodeForm: React.FC = () => {
       <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
         <Button
           className="btn btn-primary"
-          // disabled={(isSubmitted && !isValid) || isSubmitting}
+          disabled={(isSubmitted && !isValid) || isSubmitting}
           onClick={handleSubmit(onSubmit)}
           loading={isSubmitting}
         >
