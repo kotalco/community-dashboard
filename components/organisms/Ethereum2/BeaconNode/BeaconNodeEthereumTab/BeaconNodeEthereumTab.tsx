@@ -63,10 +63,8 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
         client === BeaconNodeClient.teku ? (
           // Render Text input in case to Teku or Nimbus clients
           <TextInput
-            fullWidth
             className="rounded-md"
             label="Ethereum Node JSON-RPC Endpoint"
-            helperText="We supoort only 1 endpoint in case of ConsenSys Teku and Status.im Nimbus clients"
             {...register('eth1Endpoints')}
           />
         ) : (

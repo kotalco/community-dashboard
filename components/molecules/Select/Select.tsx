@@ -5,7 +5,7 @@ import InputLabel from '@components/atoms/InputLabel/InputLabel'
 import { SelectOption } from '@interfaces/SelectOption'
 
 interface Props {
-  options: SelectOption[]
+  options: SelectOption[] | string[]
   name: string
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
   onBlur: (e: React.FocusEvent<HTMLSelectElement>) => void
@@ -29,11 +29,22 @@ const Select = React.forwardRef<HTMLSelectElement, Props>(
               ref={ref}
               className={`mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${className}`}
             >
-              {options.map(({ value, label }, i) => (
-                <option key={i} value={value}>
+              {options.map((option: SelectOption | string) =>
+                typeof option === 'string' ? (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ) : (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
+                  </option>
+                )
+              )}
+              {/* {options.map(({ value, label }) => (
+                <option key={value} value={value}>
                   {label}
                 </option>
-              ))}
+              ))} */}
             </select>
             {error && (
               <div className="absolute inset-y-0 right-6 pr-3 flex items-center pointer-events-none">

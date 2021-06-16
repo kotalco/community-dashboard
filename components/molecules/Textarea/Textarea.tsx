@@ -28,7 +28,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, Props>(
         >
           {label}
         </label>
-        <div className="mt-1">
+        <div className="mt-1 max-w-xs">
           <textarea
             onChange={handleChange}
             id={name}

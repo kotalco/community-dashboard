@@ -1,4 +1,5 @@
 import { ValidatorsClients } from '@enums/Ethereum2/Validators/ValidatorsClients'
+import { ValidatorsNetworks } from '@enums/Ethereum2/Validators/ValidatorsNetworks'
 
 export interface Ethereum2Validator {
   name: string
@@ -13,4 +14,14 @@ export interface Ethereum2Validator {
   memory: string
   memoryLimit: string
   storage: string
+}
+
+export interface CreateEthereum2Validator {
+  name: string
+  selectNetwork: ValidatorsNetworks
+  textNetwork: string
+  client: ValidatorsClients
+  keystores: { secretName: string }[]
+  walletPasswordSecretName: string
+  beaconEndpoints: string[]
 }
