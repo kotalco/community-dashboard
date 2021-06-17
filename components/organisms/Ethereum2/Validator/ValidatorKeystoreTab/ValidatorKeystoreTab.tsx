@@ -51,6 +51,17 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
   return (
     <>
       <div className="px-4 py-5 sm:p-6">
+        {/* Key Stores */}
+        {/* <p className="mt-4 mb-1 text-sm">Ethereum 2.0 Keystores</p>
+        {keystores.map(({ secretName }) => (
+          <Checkbox
+            key={secretName}
+            label={secretName}
+            value={secretName}
+            {...register(`keystores`)}
+          />
+        ))} */}
+
         <Select
           className="rounded-md"
           label="Prysm Client Wallet Password"
