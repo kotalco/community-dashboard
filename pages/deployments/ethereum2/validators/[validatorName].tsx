@@ -11,6 +11,7 @@ import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndi
 import ValidatorProtocolTab from '@components/organisms/Ethereum2/Validator/ValidatorProtocolTab/ValidatorProtocolTab'
 import ValidatorGraffitiTab from '@components/organisms/Ethereum2/Validator/ValidatorGarfittiTab/ValidatorGarfittiTab'
 import ValidatorKeystoreTab from '@components/organisms/Ethereum2/Validator/ValidatorKeystoreTab/ValidatorKeystoreTab'
+import ValidatorBeaconNodeTab from '@components/organisms/Ethereum2/Validator/ValidatorBeaconNodeTab/ValidatorBeaconNodeTab'
 import BeaconNodeAPITab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeAPITab/BeaconNodeAPITab'
 import BeaconNodeEthereumTab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeEthereumTab/BeaconNodeEthereumTab'
 import BeaconNodeResourcesTab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeResourcesTab/BeaconNodeResourcesTab'
@@ -71,8 +72,13 @@ const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
               walletPasswordSecretName={data.walletPasswordSecretName}
             />
           )}
-          {/* {activeTabIndex === 3 && <BeaconNodeResourcesTab beaconnode={data} />}
-          {activeTabIndex === 4 && <DeleteBeaconNode nodeName={data.name} />} */}
+          {activeTabIndex === 3 && (
+            <ValidatorBeaconNodeTab
+              name={data.name}
+              beaconEndpoints={data.beaconEndpoints}
+            />
+          )}
+          {/* {activeTabIndex === 4 && <DeleteBeaconNode nodeName={data.name} />} */}
         </Tabs>
       </div>
     </Layout>

@@ -46,3 +46,7 @@ export interface UpdateKeystores {
   keystores: { secretName: string }[]
   walletPasswordSecretName: string
 }
+
+export interface UpdateBeaconEndpoints {
+  beaconEndpoints: string[]
+}

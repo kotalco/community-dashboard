@@ -50,7 +50,7 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
 
   return (
     <>
-      <div className="px-4 sm:p-6">
+      <div className="px-4 py-5 sm:p-6">
         <Select
           className="rounded-md"
           label="Prysm Client Wallet Password"
