@@ -8,12 +8,12 @@ import { getValidator } from '@utils/requests/ethereum2/validators'
 import Tabs from '@components/organisms/Tabs/Tabs'
 import Layout from '@components/templates/Layout/Layout'
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator'
-import BeaconNodeProtocolTab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeProtocolTab/BeaconNodeProtocolTab'
+import ValidatorProtocolTab from '@components/organisms/Ethereum2/Validator/ValidatorProtocolTab/ValidatorProtocolTab'
 import BeaconNodeAPITab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeAPITab/BeaconNodeAPITab'
 import BeaconNodeEthereumTab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeEthereumTab/BeaconNodeEthereumTab'
 import BeaconNodeResourcesTab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeResourcesTab/BeaconNodeResourcesTab'
 import DeleteBeaconNode from '@components/organisms/Ethereum2/BeaconNode/DeleteBeaconNode/DeleteBeaconNode'
-import { tabTitles } from '@data/ethereum2/beaconNode/tabTitles'
+import { tabTitles } from '@data/ethereum2/validator/tabTitles'
 import { Ethereum2Validator } from '@interfaces/ethereum2/Ethereum2Validator'
 
 interface Props {
@@ -49,19 +49,16 @@ const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
           </dl>
         </div> */}
 
-      {/* <div className="bg-white overflow-hidden shadow rounded-lg divided-y divided-gray-200 mt-4">
+      <div className="bg-white overflow-hidden shadow rounded-lg divided-y divided-gray-200 mt-4">
         <Tabs
           activeIndex={activeTabIndex}
           setActiveIndex={setActiveTabIndex}
           tabs={tabTitles}
         >
           {activeTabIndex === 0 && (
-            <BeaconNodeProtocolTab
-              client={data.client}
-              network={data.network}
-            />
+            <ValidatorProtocolTab client={data.client} network={data.network} />
           )}
-          {activeTabIndex === 1 && (
+          {/* {activeTabIndex === 1 && (
             <BeaconNodeEthereumTab
               name={data.name}
               client={data.client}
@@ -85,9 +82,9 @@ const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
             />
           )}
           {activeTabIndex === 3 && <BeaconNodeResourcesTab beaconnode={data} />}
-          {activeTabIndex === 4 && <DeleteBeaconNode nodeName={data.name} />}
+          {activeTabIndex === 4 && <DeleteBeaconNode nodeName={data.name} />} */}
         </Tabs>
-      </div> */}
+      </div>
     </Layout>
   )
 }
