@@ -3,7 +3,7 @@ import { GetStaticPaths, GetStaticProps } from 'next'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 
-import { getBeaconNode } from '@utils/requests/ethereum2/beaconNodes'
+import { getValidator } from '@utils/requests/ethereum2/validators'
 // import StatsComponent from '@components/molecules/Stats/Stats'
 import Tabs from '@components/organisms/Tabs/Tabs'
 import Layout from '@components/templates/Layout/Layout'
@@ -23,10 +23,10 @@ interface Props {
 const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
   const [activeTabIndex, setActiveTabIndex] = useState(0)
   const { isFallback, query } = useRouter()
-  const { nodeName } = query
+  const { validatorName } = query
 
   const { data } = useSWR(
-    typeof nodeName === 'string' ? nodeName : null,
+    typeof validatorName === 'string' ? validatorName : null,
     getValidator,
     {
       initialData: validator,

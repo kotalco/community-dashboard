@@ -59,7 +59,7 @@ export const createValidator = async (
  * @param validatorName Name of the validator we are looking for
  * @returns All validator data if found or 404 if not
  */
-export const getBeaconNode = async (
+export const getValidator = async (
   validatorName: string
 ): Promise<Ethereum2Validator> => {
   const { data } = await axios.get<{ validator: Ethereum2Validator }>(
