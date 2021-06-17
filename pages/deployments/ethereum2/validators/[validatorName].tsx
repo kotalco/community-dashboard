@@ -9,6 +9,7 @@ import Tabs from '@components/organisms/Tabs/Tabs'
 import Layout from '@components/templates/Layout/Layout'
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator'
 import ValidatorProtocolTab from '@components/organisms/Ethereum2/Validator/ValidatorProtocolTab/ValidatorProtocolTab'
+import ValidatorGraffitiTab from '@components/organisms/Ethereum2/Validator/ValidatorGarfittiTab/ValidatorGarfittiTab'
 import BeaconNodeAPITab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeAPITab/BeaconNodeAPITab'
 import BeaconNodeEthereumTab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeEthereumTab/BeaconNodeEthereumTab'
 import BeaconNodeResourcesTab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeResourcesTab/BeaconNodeResourcesTab'
@@ -58,15 +59,11 @@ const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
           {activeTabIndex === 0 && (
             <ValidatorProtocolTab client={data.client} network={data.network} />
           )}
-          {/* {activeTabIndex === 1 && (
-            <BeaconNodeEthereumTab
-              name={data.name}
-              client={data.client}
-              eth1Endpoints={data.eth1Endpoints}
-            />
+          {activeTabIndex === 1 && (
+            <ValidatorGraffitiTab name={data.name} graffiti={data.graffiti} />
           )}
 
-          {activeTabIndex === 2 && (
+          {/* {activeTabIndex === 2 && (
             <BeaconNodeAPITab
               name={data.name}
               rest={data.rest}

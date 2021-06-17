@@ -3,6 +3,7 @@ import axios from '../../../axios'
 import {
   CreateEthereum2Validator,
   Ethereum2Validator,
+  UpdateEthereum2Validator,
 } from '@interfaces/ethereum2/Ethereum2Validator'
 
 /**
@@ -77,14 +78,20 @@ export const getValidator = async (
 //   await axios.delete(`/ethereum2/beaconnodes/${nodeName}`)
 // }
 
-// export const updateBeaconNode = async (
-//   nodeName: string,
-//   nodeData: UpdateEthereum2BeaconNode
-// ): Promise<Ethereum2BeaconNode> => {
-//   const { data } = await axios.put<{ beaconnode: Ethereum2BeaconNode }>(
-//     `/ethereum2/beaconnodes/${nodeName}`,
-//     nodeData
-//   )
+/**
+ * Send a put request to update some data of the validator
+ * @param validatorName the name of the validator needs to be updated
+ * @param validatorData the updated data
+ * @returns the validator after updating
+ */
+export const updateValidator = async (
+  validatorName: string,
+  validatorData: UpdateEthereum2Validator
+): Promise<Ethereum2Validator> => {
+  const { data } = await axios.put<{ validator: Ethereum2Validator }>(
+    `/ethereum2/validators/${validatorName}`,
+    validatorData
+  )
 
-//   return data.beaconnode
-// }
+  return data.validator
+}

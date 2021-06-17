@@ -25,3 +25,19 @@ export interface CreateEthereum2Validator {
   walletPasswordSecretName: string
   beaconEndpoints: string[]
 }
+
+export interface UpdateEthereum2Validator {
+  graffiti?: string
+  keystores?: { secretName: string }[]
+  walletPasswordSecretName?: string
+  beaconEndpoints?: string[]
+  cpu?: string
+  cpuLimit?: string
+  memory?: string
+  memoryLimit?: string
+  storage?: string
+}
+
+export interface UpdateGrafitti {
+  graffiti: string
+}

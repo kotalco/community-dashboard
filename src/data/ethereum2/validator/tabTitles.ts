@@ -1,6 +1,6 @@
 export const tabTitles = [
   'Protocol',
-  'Grafitti',
+  'Graffiti',
   'Keystore',
   'Beacon Node',
   'Resources',
