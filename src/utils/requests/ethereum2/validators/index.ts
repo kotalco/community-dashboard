@@ -71,12 +71,12 @@ export const getValidator = async (
 }
 
 /**
- * Send a delete request to delete the beacon node
- * @param nodeName Node name to be deleted
+ * Send a delete request to delete the validator
+ * @param validatorName Vaidator name to be deleted
  */
-// export const deleteBeaconNode = async (nodeName: string): Promise<void> => {
-//   await axios.delete(`/ethereum2/beaconnodes/${nodeName}`)
-// }
+export const deleteValidator = async (validatorName: string): Promise<void> => {
+  await axios.delete(`/ethereum2/validators/${validatorName}`)
+}
 
 /**
  * Send a put request to update some data of the validator

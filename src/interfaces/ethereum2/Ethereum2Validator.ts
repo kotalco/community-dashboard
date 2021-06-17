@@ -50,3 +50,11 @@ export interface UpdateKeystores {
 export interface UpdateBeaconEndpoints {
   beaconEndpoints: string[]
 }
+
+export interface UpdateResources {
+  cpu: string
+  cpuLimit: string
+  memory: string
+  memoryLimit: string
+  storage: string
+}

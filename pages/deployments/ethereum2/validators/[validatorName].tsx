@@ -12,10 +12,8 @@ import ValidatorProtocolTab from '@components/organisms/Ethereum2/Validator/Vali
 import ValidatorGraffitiTab from '@components/organisms/Ethereum2/Validator/ValidatorGarfittiTab/ValidatorGarfittiTab'
 import ValidatorKeystoreTab from '@components/organisms/Ethereum2/Validator/ValidatorKeystoreTab/ValidatorKeystoreTab'
 import ValidatorBeaconNodeTab from '@components/organisms/Ethereum2/Validator/ValidatorBeaconNodeTab/ValidatorBeaconNodeTab'
-import BeaconNodeAPITab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeAPITab/BeaconNodeAPITab'
-import BeaconNodeEthereumTab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeEthereumTab/BeaconNodeEthereumTab'
-import BeaconNodeResourcesTab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeResourcesTab/BeaconNodeResourcesTab'
-import DeleteBeaconNode from '@components/organisms/Ethereum2/BeaconNode/DeleteBeaconNode/DeleteBeaconNode'
+import ValidatorResourcesTab from '@components/organisms/Ethereum2/Validator/ValidatorResourcesTab/ValidatorResourcesTab'
+import DeleteValidator from '@components/organisms/Ethereum2/Validator/DeleteValidator/DeleteValidator'
 import { tabTitles } from '@data/ethereum2/validator/tabTitles'
 import { Ethereum2Validator } from '@interfaces/ethereum2/Ethereum2Validator'
 
@@ -78,7 +76,19 @@ const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
               beaconEndpoints={data.beaconEndpoints}
             />
           )}
-          {/* {activeTabIndex === 4 && <DeleteBeaconNode nodeName={data.name} />} */}
+          {activeTabIndex === 4 && (
+            <ValidatorResourcesTab
+              name={data.name}
+              cpu={data.cpu}
+              cpuLimit={data.cpuLimit}
+              memory={data.memory}
+              memoryLimit={data.memoryLimit}
+              storage={data.storage}
+            />
+          )}
+          {activeTabIndex === 5 && (
+            <DeleteValidator validatorName={data.name} />
+          )}
         </Tabs>
       </div>
     </Layout>
