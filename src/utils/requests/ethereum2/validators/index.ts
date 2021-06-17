@@ -55,19 +55,19 @@ export const createValidator = async (
 }
 
 /**
- * Send a get request to find a beacon node by its name
- * @param nodeName Name of the node we are looking for
- * @returns All node data if found
+ * Send a get request to find a validator by its name
+ * @param validatorName Name of the validator we are looking for
+ * @returns All validator data if found or 404 if not
  */
-// export const getBeaconNode = async (
-//   nodeName: string
-// ): Promise<Ethereum2BeaconNode> => {
-//   const { data } = await axios.get<{ beaconnode: Ethereum2BeaconNode }>(
-//     `/ethereum2/beaconnodes/${nodeName}`
-//   )
+export const getBeaconNode = async (
+  validatorName: string
+): Promise<Ethereum2Validator> => {
+  const { data } = await axios.get<{ validator: Ethereum2Validator }>(
+    `/ethereum2/validators/${validatorName}`
+  )
 
-//   return data.beaconnode
-// }
+  return data.validator
+}
 
 /**
  * Send a delete request to delete the beacon node
