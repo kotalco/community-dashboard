@@ -41,3 +41,8 @@ export interface UpdateEthereum2Validator {
 export interface UpdateGrafitti {
   graffiti: string
 }
+
+export interface UpdateKeystores {
+  keystores: { secretName: string }[]
+  walletPasswordSecretName: string
+}

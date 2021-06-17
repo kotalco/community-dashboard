@@ -10,6 +10,7 @@ import Layout from '@components/templates/Layout/Layout'
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator'
 import ValidatorProtocolTab from '@components/organisms/Ethereum2/Validator/ValidatorProtocolTab/ValidatorProtocolTab'
 import ValidatorGraffitiTab from '@components/organisms/Ethereum2/Validator/ValidatorGarfittiTab/ValidatorGarfittiTab'
+import ValidatorKeystoreTab from '@components/organisms/Ethereum2/Validator/ValidatorKeystoreTab/ValidatorKeystoreTab'
 import BeaconNodeAPITab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeAPITab/BeaconNodeAPITab'
 import BeaconNodeEthereumTab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeEthereumTab/BeaconNodeEthereumTab'
 import BeaconNodeResourcesTab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeResourcesTab/BeaconNodeResourcesTab'
@@ -63,22 +64,14 @@ const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
             <ValidatorGraffitiTab name={data.name} graffiti={data.graffiti} />
           )}
 
-          {/* {activeTabIndex === 2 && (
-            <BeaconNodeAPITab
+          {activeTabIndex === 2 && (
+            <ValidatorKeystoreTab
               name={data.name}
-              rest={data.rest}
-              restHost={data.restHost}
-              restPort={data.restPort}
-              rpc={data.rpc}
-              rpcPort={data.rpcPort}
-              rpcHost={data.rpcHost}
-              grpc={data.grpc}
-              grpcHost={data.grpcHost}
-              grpcPort={data.grpcPort}
-              client={data.client}
+              keystores={data.keystores}
+              walletPasswordSecretName={data.walletPasswordSecretName}
             />
           )}
-          {activeTabIndex === 3 && <BeaconNodeResourcesTab beaconnode={data} />}
+          {/* {activeTabIndex === 3 && <BeaconNodeResourcesTab beaconnode={data} />}
           {activeTabIndex === 4 && <DeleteBeaconNode nodeName={data.name} />} */}
         </Tabs>
       </div>
