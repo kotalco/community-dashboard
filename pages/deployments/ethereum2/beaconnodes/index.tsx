@@ -55,7 +55,7 @@ const Ethereum2Nodes: React.FC<Props> = ({ beaconNodes }) => {
             ))}
           </List>
         ) : (
-          <div className="p-4 text-center">
+          <div className="bg-white p-4 text-center">
             <p>There is no beacon nodes created</p>
           </div>
         )}
