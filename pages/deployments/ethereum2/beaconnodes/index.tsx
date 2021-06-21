@@ -9,11 +9,11 @@ import List from '@components/organisms/List/List'
 import ListItem from '@components/molecules/ListItem/ListItem'
 import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel'
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs'
-import Ethereum2PageHeading from '@components/organisms/Ethereum2/Ethereum2PageHeading/Ethereum2PageHeading'
+import ButtonGroup from '@components/molecules/ButtonGroup/ButtonGroup'
 import { useNotification } from '@components/contexts/NotificationContext'
 import { getAllBeaconNodes } from '@utils/requests/ethereum2/beaconNodes'
 import { Ethereum2BeaconNode } from '@interfaces/ethereum2/Ethereum2BeaconNode'
-import { resourcesTab } from '@data/ethereum2/resourcesTab'
+import { resourcesTab, createButtons } from '@data/ethereum2/links'
 
 interface Props {
   beaconNodes: Ethereum2BeaconNode[]
@@ -35,7 +35,13 @@ const Ethereum2Nodes: React.FC<Props> = ({ beaconNodes }) => {
 
   return (
     <Layout>
-      <Ethereum2PageHeading />
+      <div className="flex">
+        <h1 className="text-2xl font-semibold text-gray-900 flex-grow">
+          Ethereum 2.0
+        </h1>
+
+        <ButtonGroup label="Create New" buttons={createButtons} />
+      </div>
 
       <div className="py-4">
         <LinkedTabs tabs={resourcesTab} />
