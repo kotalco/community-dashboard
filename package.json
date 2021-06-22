@@ -10,18 +10,18 @@
     "format": "prettier --write .",
     "lint": "eslint . --ext ts --ext tsx --ext js",
     "test": "jest --watch --coverage",
-    "test-all": "npm run lint && npm run type-check && npm test"
+    "test-all": "yarn lint && yarn type-check && yarn test"
   },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged",
-      "pre-push": "yarn run type-check"
+      "pre-push": "yarn type-check"
     }
   },
   "lint-staged": {
     "*.@(ts|tsx)": [
-      "npm run lint",
-      "npm run format"
+      "yarn lint",
+      "yarn format"
     ]
   },
   "dependencies": {
@@ -61,6 +61,8 @@
     "jest": "^27.0.4",
     "jest-watch-typeahead": "^0.6.1",
     "lint-staged": "^10.0.10",
+    "msw": "^0.29.0",
+    "next-page-tester": "^0.26.1",
     "prettier": "^2.0.2",
     "typescript": "^4.1.3"
   }
