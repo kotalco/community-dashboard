@@ -26,25 +26,14 @@ export const getAllValidators = async (): Promise<Ethereum2Validator[]> => {
 export const createValidator = async (
   values: CreateEthereum2Validator
 ): Promise<Ethereum2Validator> => {
-  const {
-    name,
-    client,
-    selectNetwork,
-    textNetwork,
-    beaconEndpoints,
-    keystores,
-    walletPasswordSecretName,
-  } = values
+  const { selectNetwork, textNetwork, keystores, ...rest } = values
   const network = selectNetwork === 'other' ? textNetwork : selectNetwork
   const keystoresObject = keystores.map((key) => ({ secretName: key }))
 
   const body = {
-    name,
-    client,
     network,
-    beaconEndpoints,
     keystores: keystoresObject,
-    walletPasswordSecretName,
+    ...rest,
   }
 
   const { data } = await axios.post<{ validator: Ethereum2Validator }>(

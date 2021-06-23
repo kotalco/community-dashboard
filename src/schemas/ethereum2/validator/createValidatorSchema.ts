@@ -37,10 +37,12 @@ export const schema = Joi.object({
   keystores: Joi.array().items(Joi.string()).min(1).messages({
     'array.min': 'You need to choose at least 1 keystore',
   }),
-  walletPasswordSecretName: Joi.string().required().messages({
-    'string.empty': `Please choose your client`,
-    'any.required': `Please choose your client`,
-    'any.only': `Please choose your client`,
+  walletPasswordSecretName: Joi.when('client', {
+    is: 'prysm',
+    then: Joi.required().invalid('Choose a wallet password...'),
+    otherwise: Joi.string().strip(),
+  }).messages({
+    'any.invalid': 'Please choose a wallet password secret name',
   }),
 })
 export default schema

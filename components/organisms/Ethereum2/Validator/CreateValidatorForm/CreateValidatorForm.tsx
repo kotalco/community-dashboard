@@ -16,6 +16,7 @@ import { CreateEthereum2Validator } from '@interfaces/ethereum2/Ethereum2Validat
 
 import { walletPasswordSecretName, keystores } from '@data/data'
 import { createValidator } from '@utils/requests/ethereum2/validators'
+import { ValidatorsClients } from '@enums/Ethereum2/Validators/ValidatorsClients'
 
 const CreateBeaconNodeForm: React.FC = () => {
   const [submitError, setSubmitError] = useState('')
@@ -31,7 +32,7 @@ const CreateBeaconNodeForm: React.FC = () => {
     defaultValues: { beaconEndpoints: [] },
     resolver: joiResolver(schema),
   })
-  const [selectNetwork] = watch(['selectNetwork'])
+  const [selectNetwork, client] = watch(['selectNetwork', 'client'])
   const beaconEndpointsError = errors.beaconEndpoints as FieldError | undefined
   const keystoresError = errors.keystores as FieldError | undefined
 
@@ -112,13 +113,18 @@ const CreateBeaconNodeForm: React.FC = () => {
         <p className="text-red-500 text-sm mt-2">{keystoresError?.message}</p>
 
         {/* Prysm Client Wallet Password */}
-        <Select
-          label="Prysm Client Wallet Password"
-          error={errors.walletPasswordSecretName?.message}
-          className="rounded-md"
-          options={walletPasswordSecretName}
-          {...register('walletPasswordSecretName')}
-        />
+        {client === ValidatorsClients.prysm && (
+          <Select
+            label="Prysm Client Wallet Password"
+            error={errors.walletPasswordSecretName?.message}
+            className="rounded-md"
+            options={[
+              'Choose a wallet password...',
+              ...walletPasswordSecretName,
+            ]}
+            {...register('walletPasswordSecretName')}
+          />
+        )}
 
         {/* Beacon Node Endpoints */}
         <div className="mt-5">
