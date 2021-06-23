@@ -1,18 +1,26 @@
 import { useState } from 'react'
-import { useForm, Controller, SubmitHandler } from 'react-hook-form'
+import { useForm, Controller, SubmitHandler, FieldError } from 'react-hook-form'
+import { joiResolver } from '@hookform/resolvers/joi'
 import { mutate } from 'swr'
 
 import Button from '@components/atoms/Button/Button'
 import { UpdateBeaconEndpoints } from '@interfaces/ethereum2/Ethereum2Validator'
 import Textarea from '@components/molecules/Textarea/Textarea'
 import { updateValidator } from '@utils/requests/ethereum2/validators'
+import { ValidatorsClients } from '@enums/Ethereum2/Validators/ValidatorsClients'
+import { updateBeaconEndpointsSchema } from '@schemas/ethereum2/validator/updateValidatorSchema'
 
 interface Props {
   name: string
   beaconEndpoints: string[]
+  client: ValidatorsClients
 }
 
-const ValidatorBeaconNodeTab: React.FC<Props> = ({ name, beaconEndpoints }) => {
+const ValidatorBeaconNodeTab: React.FC<Props> = ({
+  name,
+  beaconEndpoints,
+  client,
+}) => {
   const [submitError, setSubmitError] = useState('')
   const [submitSuccess, setSubmitSuccess] = useState('')
 
@@ -20,10 +28,13 @@ const ValidatorBeaconNodeTab: React.FC<Props> = ({ name, beaconEndpoints }) => {
     reset,
     handleSubmit,
     control,
-    formState: { isDirty, isSubmitting },
+    formState: { isDirty, isSubmitting, errors },
   } = useForm<UpdateBeaconEndpoints>({
     defaultValues: { beaconEndpoints },
+    resolver: joiResolver(updateBeaconEndpointsSchema),
   })
+
+  const beaconEndpointsError = errors.beaconEndpoints as FieldError | undefined
 
   const onSubmit: SubmitHandler<UpdateBeaconEndpoints> = async (values) => {
     setSubmitError('')
@@ -47,6 +58,8 @@ const ValidatorBeaconNodeTab: React.FC<Props> = ({ name, beaconEndpoints }) => {
           control={control}
           render={({ field }) => (
             <Textarea
+              multiple={client === ValidatorsClients.lighthouse}
+              error={beaconEndpointsError?.message}
               label="Ethereum 2.0 Beacon Node Endpoints"
               helperText="One endpoint per each line"
               {...field}

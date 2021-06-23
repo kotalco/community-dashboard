@@ -74,6 +74,7 @@ const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
             <ValidatorBeaconNodeTab
               name={data.name}
               beaconEndpoints={data.beaconEndpoints}
+              client={data.client}
             />
           )}
           {activeTabIndex === 4 && (
