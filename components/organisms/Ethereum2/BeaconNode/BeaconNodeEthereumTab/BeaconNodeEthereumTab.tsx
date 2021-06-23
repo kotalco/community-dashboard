@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { useForm, Controller, SubmitHandler } from 'react-hook-form'
+import { useForm, Controller, SubmitHandler, FieldError } from 'react-hook-form'
+import { joiResolver } from '@hookform/resolvers/joi'
 import { mutate } from 'swr'
 
 import Button from '@components/atoms/Button/Button'
@@ -7,17 +8,20 @@ import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes'
 import { UpdateEth1Endpoints } from '@interfaces/ethereum2/Ethereum2BeaconNode'
 import Textarea from '@components/molecules/Textarea/Textarea'
 import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient'
+import { updateEth1EndpointsSchema } from '@schemas/ethereum2/beaconNode/updateBeaconNode'
 
 interface Props {
   name: string
   client: BeaconNodeClient
   eth1Endpoints: string[]
+  network: string
 }
 
 const BeaconNodeEthereumTab: React.FC<Props> = ({
   name,
   client,
   eth1Endpoints,
+  network,
 }) => {
   const [submitError, setSubmitError] = useState('')
   const [submitSuccess, setSubmitSuccess] = useState('')
@@ -26,15 +30,16 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
     reset,
     handleSubmit,
     control,
-    formState: { isDirty, isSubmitting },
+    formState: { isDirty, isSubmitting, errors },
   } = useForm<UpdateEth1Endpoints>({
-    defaultValues: { eth1Endpoints },
+    defaultValues: { eth1Endpoints, client, network },
+    resolver: joiResolver(updateEth1EndpointsSchema),
   })
+  const eth1EndpointsError = errors.eth1Endpoints as FieldError | undefined
 
   const onSubmit: SubmitHandler<UpdateEth1Endpoints> = async (values) => {
     setSubmitError('')
     setSubmitSuccess('')
-
     try {
       const beaconnode = await updateBeaconNode(name, values)
       mutate(name, beaconnode)
@@ -57,6 +62,7 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
                 client !== BeaconNodeClient.nimbus &&
                 client !== BeaconNodeClient.teku
               }
+              error={eth1EndpointsError?.message}
               label="Ethereum Node JSON-RPC Endpoints"
               helperText="One endpoint per each line"
               {...field}

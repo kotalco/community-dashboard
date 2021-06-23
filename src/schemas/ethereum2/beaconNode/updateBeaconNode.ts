@@ -14,6 +14,23 @@ export const updateClientSchema = Joi.object({
     }),
 })
 
+export const updateEth1EndpointsSchema = Joi.object({
+  client: Joi.string().strip(),
+  network: Joi.string().strip(),
+  eth1Endpoints: Joi.array()
+    .when('client', {
+      is: 'prysm',
+      then: Joi.when('network', {
+        not: 'mainnet',
+        otherwise: Joi.array().items(Joi.string()).min(1),
+      }),
+    })
+    .messages({
+      'array.min':
+        'You need to enter at least 1 Ethereum endpoint when client is Prysm and network is not Mainnet',
+    }),
+})
+
 export const updateAPISchema = Joi.object({
   rest: Joi.boolean().when('client', {
     not: Joi.valid('teku', 'lighthouse'),

@@ -66,6 +66,7 @@ const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconNode }) => {
               name={data.name}
               client={data.client}
               eth1Endpoints={data.eth1Endpoints}
+              network={data.network}
             />
           )}
 

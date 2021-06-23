@@ -51,6 +51,8 @@ export interface UpdateEthereum2BeaconNode {
 
 export interface UpdateEth1Endpoints {
   eth1Endpoints: string[]
+  client: BeaconNodeClient
+  network: string
 }
 
 export interface UpdateAPI {
