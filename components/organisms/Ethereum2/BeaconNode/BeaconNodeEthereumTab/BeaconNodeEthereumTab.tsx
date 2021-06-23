@@ -7,7 +7,6 @@ import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes'
 import { UpdateEth1Endpoints } from '@interfaces/ethereum2/Ethereum2BeaconNode'
 import Textarea from '@components/molecules/Textarea/Textarea'
 import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient'
-import TextInput from '@components/molecules/TextInput/TextInput'
 
 interface Props {
   name: string
@@ -25,7 +24,6 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
 
   const {
     reset,
-    register,
     handleSubmit,
     control,
     formState: { isDirty, isSubmitting },
@@ -34,15 +32,6 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
   })
 
   const onSubmit: SubmitHandler<UpdateEth1Endpoints> = async (values) => {
-    // Convert values to empty array if empty string
-    if (!values.eth1Endpoints) {
-      values.eth1Endpoints = []
-    }
-    // Convert values to array
-    if (typeof values.eth1Endpoints === 'string') {
-      values.eth1Endpoints = [values.eth1Endpoints]
-    }
-
     setSubmitError('')
     setSubmitSuccess('')
 
@@ -59,28 +48,21 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
   return (
     <>
       <div className="px-4 py-5 sm:p-6">
-        {client === BeaconNodeClient.nimbus ||
-        client === BeaconNodeClient.teku ? (
-          // Render Text input in case to Teku or Nimbus clients
-          <TextInput
-            className="rounded-md"
-            label="Ethereum Node JSON-RPC Endpoint"
-            {...register('eth1Endpoints')}
-          />
-        ) : (
-          // Render Textarea in case of any other client
-          <Controller
-            name="eth1Endpoints"
-            control={control}
-            render={({ field }) => (
-              <Textarea
-                label="Ethereum Node JSON-RPC Endpoints"
-                helperText="One endpoint per each line"
-                {...field}
-              />
-            )}
-          />
-        )}
+        <Controller
+          name="eth1Endpoints"
+          control={control}
+          render={({ field }) => (
+            <Textarea
+              multiple={
+                client !== BeaconNodeClient.nimbus &&
+                client !== BeaconNodeClient.teku
+              }
+              label="Ethereum Node JSON-RPC Endpoints"
+              helperText="One endpoint per each line"
+              {...field}
+            />
+          )}
+        />
       </div>
 
       <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">

@@ -133,6 +133,7 @@ const CreateBeaconNodeForm: React.FC = () => {
             control={control}
             render={({ field }) => (
               <Textarea
+                multiple={client === ValidatorsClients.lighthouse}
                 label="Ethereum Node JSON-RPC Endpoints"
                 helperText="One endpoint per each line"
                 error={beaconEndpointsError?.message}

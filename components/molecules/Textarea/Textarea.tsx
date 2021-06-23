@@ -4,20 +4,33 @@ interface Props {
   name: string
   label: string
   value: string[]
+  multiple?: boolean
   helperText?: string
   error?: string
   onChange: (value: string[]) => void
 }
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, Props>(
-  ({ value, name, label, error, helperText, onChange }, _ref) => {
+  ({ value, name, label, error, helperText, onChange, multiple }, _ref) => {
     const [text, setText] = useState(value.join('\n'))
 
-    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      const value = e.target.value
-
+    const handleChange = (
+      e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+    ) => {
+      const { value } = e.target
       setText(value)
-      onChange(value.split('\n'))
+
+      // Convert value to empty array if empty string and return
+      if (!value) {
+        onChange([])
+        return
+      }
+
+      if (multiple) {
+        onChange(value.split('\n'))
+      } else {
+        onChange([value])
+      }
     }
 
     return (
@@ -29,14 +42,25 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, Props>(
           {label}
         </label>
         <div className="mt-1 max-w-xs">
-          <textarea
-            onChange={handleChange}
-            id={name}
-            name={name}
-            value={text}
-            rows={5}
-            className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-          ></textarea>
+          {multiple ? (
+            <textarea
+              onChange={handleChange}
+              id={name}
+              name={name}
+              value={text}
+              rows={5}
+              className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+            ></textarea>
+          ) : (
+            <input
+              onChange={handleChange}
+              id={name}
+              name={name}
+              value={text}
+              type="text"
+              className="shadow-sm rounded-md focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 disabled:bg-gray-100 disabled:text-gray-500"
+            />
+          )}
         </div>
         {helperText && (
           <p className="mt-2 text-sm text-gray-500">{helperText}</p>

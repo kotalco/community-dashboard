@@ -31,8 +31,13 @@ export const schema = Joi.object({
       'string.empty': `Please provide a network name`,
       'any.required': `Please provide a network name`,
     }),
-  beaconEndpoints: Joi.array().items(Joi.string()).min(1).messages({
+  beaconEndpoints: Joi.when('client', {
+    not: 'lighthouse',
+    otherwise: Joi.array().items(Joi.string()).min(1),
+    then: Joi.array().items(Joi.string()).length(1),
+  }).messages({
     'array.min': 'You need to enter at least 1 beacon endpoint',
+    'array.length': 'Please enter only 1 endpoint in case of lighthouse client',
   }),
   keystores: Joi.array().items(Joi.string()).min(1).messages({
     'array.min': 'You need to choose at least 1 keystore',
