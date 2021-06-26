@@ -7,7 +7,7 @@ import TextInput from '@components/molecules/TextInput/TextInput'
 import Select from '@components/molecules/Select/Select'
 import Button from '@components/atoms/Button/Button'
 import Textarea from '@components/molecules/Textarea/Textarea'
-import Checkbox from '@components/molecules/CheckBox/CheckBox'
+import Multiselect from '@components/molecules/Multiselect/Multiselect'
 import { useNotification } from '@components/contexts/NotificationContext'
 import { clientOptions } from '@data/ethereum2/validator/clientOptions'
 import { networkOptions } from '@data/ethereum2/validator/networkOption'
@@ -29,12 +29,13 @@ const CreateBeaconNodeForm: React.FC = () => {
     formState: { errors, isSubmitted, isValid, isSubmitting },
     handleSubmit,
   } = useForm<CreateEthereum2Validator>({
-    defaultValues: { beaconEndpoints: [] },
+    defaultValues: { beaconEndpoints: [], keystores: [] },
     resolver: joiResolver(schema),
   })
   const [selectNetwork, client] = watch(['selectNetwork', 'client'])
   const beaconEndpointsError = errors.beaconEndpoints as FieldError | undefined
   const keystoresError = errors.keystores as FieldError | undefined
+  const keystoresOptions = keystores.map(({ secretName }) => secretName)
 
   /**
    * Submit create validator form
@@ -101,16 +102,19 @@ const CreateBeaconNodeForm: React.FC = () => {
         )}
 
         {/* Key Stores */}
-        <p className="mt-4 mb-1 text-sm">Ethereum 2.0 Keystores</p>
-        {keystores.map(({ secretName }) => (
-          <Checkbox
-            key={secretName}
-            label={secretName}
-            value={secretName}
-            {...register(`keystores`)}
-          />
-        ))}
-        <p className="text-red-500 text-sm mt-2">{keystoresError?.message}</p>
+        <Controller
+          name="keystores"
+          control={control}
+          render={({ field }) => (
+            <Multiselect
+              label="Ethereum 2.0 Keystores"
+              placeholder="Choose your keystores..."
+              options={keystoresOptions}
+              error={keystoresError?.message}
+              {...field}
+            />
+          )}
+        />
 
         {/* Prysm Client Wallet Password */}
         {client === ValidatorsClients.prysm && (
