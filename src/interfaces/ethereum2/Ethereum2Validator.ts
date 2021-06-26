@@ -21,7 +21,7 @@ export interface CreateEthereum2Validator {
   selectNetwork: ValidatorsNetworks
   textNetwork: string
   client: ValidatorsClients
-  keystores: { secretName: string }[]
+  keystores: string[]
   walletPasswordSecretName?: string
   beaconEndpoints: string[]
 }
@@ -43,8 +43,9 @@ export interface UpdateGrafitti {
 }
 
 export interface UpdateKeystores {
-  keystores: { secretName: string }[]
+  keystores: string[]
   walletPasswordSecretName: string
+  client: ValidatorsClients
 }
 
 export interface UpdateBeaconEndpoints {

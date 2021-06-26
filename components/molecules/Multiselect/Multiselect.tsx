@@ -1,4 +1,4 @@
-import { useState, forwardRef } from 'react'
+import { useState, forwardRef, Fragment } from 'react'
 import { Listbox, Transition } from '@headlessui/react'
 import { ChevronDownIcon, CheckIcon } from '@heroicons/react/solid'
 
@@ -63,14 +63,14 @@ const Multiselect = forwardRef<HTMLDivElement, Props>(
 
                 <Transition
                   show={open}
+                  as={Fragment}
                   leave="transition ease-in duration-100"
                   leaveFrom="opacity-100"
                   leaveTo="opacity-0"
-                  className="absolute z-10 w-full rounded-b-md bg-white shadow-lg"
                 >
                   <Listbox.Options
                     static
-                    className="max-h-60 rounded-b-md py-1 text-base leading-6 shadow-sm overflow-auto focus:outline-none focus:ring-indigo-500 sm:text-small sm:leading-5"
+                    className="absolute z-10 w-full bg-white shadow-sm max-h-60 rounded-b-md py-1 text-base ring-1 ring-black ring-opacity-5 overflow-auto focus:outline-none sm:text-small"
                   >
                     {options.map((option, i) => {
                       const selected = isSelected(option)

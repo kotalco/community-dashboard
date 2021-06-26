@@ -36,7 +36,6 @@ const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
   )
 
   if (!data || isFallback) return <LoadingIndicator />
-
   return (
     <Layout>
       <h1 className="text-2xl font-semibold">{validator.name}</h1>
@@ -68,6 +67,7 @@ const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
               name={data.name}
               keystores={data.keystores}
               walletPasswordSecretName={data.walletPasswordSecretName}
+              client={data.client}
             />
           )}
           {activeTabIndex === 3 && (
