@@ -21,18 +21,16 @@ const defaultValues: notificationContextType = {
   createNotification: () => {},
 }
 
-const NotificationContext = createContext<notificationContextType>(
-  defaultValues
-)
+const NotificationContext =
+  createContext<notificationContextType>(defaultValues)
 
 export function useNotification(): notificationContextType {
   return useContext(NotificationContext)
 }
 
 export const NotificationProvider: React.FC = ({ children }) => {
-  const [notificationData, setNotificationData] = useState<notificationData>(
-    null
-  )
+  const [notificationData, setNotificationData] =
+    useState<notificationData>(null)
 
   const removeNotification = () => {
     setNotificationData(null)

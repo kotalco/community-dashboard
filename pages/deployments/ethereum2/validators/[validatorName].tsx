@@ -49,7 +49,7 @@ const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
           </dl>
         </div> */}
 
-      <div className="bg-white overflow-hidden shadow rounded-lg divided-y divided-gray-200 mt-4">
+      <div className="bg-white shadow rounded-lg divided-y divided-gray-200 mt-4">
         <Tabs
           activeIndex={activeTabIndex}
           setActiveIndex={setActiveTabIndex}
