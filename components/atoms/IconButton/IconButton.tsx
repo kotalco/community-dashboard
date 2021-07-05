@@ -1,9 +1,9 @@
-import { ReactElement } from 'react'
+import { MouseEvent, ReactElement } from 'react'
 
 interface Props {
   srText: string
   className?: string
-  onClick: () => void
+  onClick: (e: MouseEvent<HTMLButtonElement>) => void
   children: ReactElement
 }
 
@@ -12,6 +12,7 @@ const IconButton: React.FC<Props> = (props) => {
 
   return (
     <button
+      type="button"
       className={`${className} focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white`}
       onClick={onClick}
     >

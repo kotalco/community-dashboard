@@ -1,0 +1,6 @@
+import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes'
+import { SelectOption } from '@interfaces/SelectOption'
+
+export const secretTypesOptions: SelectOption[] = [
+  { label: 'Password', value: KubernetesSecretTypes.password },
+]

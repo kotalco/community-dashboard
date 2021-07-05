@@ -4,3 +4,9 @@ export interface KubernetesSecret {
   name: string
   type: KubernetesSecretTypes
 }
+
+export interface CreateKubernetesSecret {
+  name: string
+  type: KubernetesSecretTypes
+  data: { password: string }
+}
