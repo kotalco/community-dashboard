@@ -1,11 +1,4 @@
-import {
-  HomeIcon,
-  CubeIcon,
-  CursorClickIcon,
-  KeyIcon,
-  DocumentTextIcon,
-  BookOpenIcon,
-} from '@heroicons/react/outline'
+import { HomeIcon, CubeIcon, KeyIcon } from '@heroicons/react/outline'
 
 export const navigation = [
   { name: 'Dashboard', icon: HomeIcon, href: '/' },
@@ -26,20 +19,5 @@ export const navigation = [
       { name: 'IPFS', href: '/deployments/ipfs/peers', protocol: 'ipfs' },
     ],
   },
-  {
-    name: 'Endpoints',
-    icon: CursorClickIcon,
-    href: '/endpoints',
-  },
-  { name: 'Keys', icon: KeyIcon, href: '/keys' },
-  {
-    name: 'Contracts',
-    icon: DocumentTextIcon,
-    href: '/contracts',
-  },
-  {
-    name: 'Address Book',
-    icon: BookOpenIcon,
-    href: '/address-book',
-  },
+  { name: 'Secrets', icon: KeyIcon, href: '/core/secrets' },
 ]
