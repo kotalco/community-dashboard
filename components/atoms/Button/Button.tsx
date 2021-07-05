@@ -8,6 +8,7 @@ interface Props {
   loading?: boolean
   className?: string
   href?: string
+  type?: 'button' | 'submit' | 'reset'
 }
 
 const Button: React.FC<Props> = ({
@@ -17,6 +18,7 @@ const Button: React.FC<Props> = ({
   loading,
   className,
   href,
+  type = 'button',
 }) => {
   if (href) {
     return (
@@ -30,7 +32,7 @@ const Button: React.FC<Props> = ({
     <button
       onClick={onClick}
       disabled={disabled}
-      type="button"
+      type={type}
       className={className}
     >
       {loading && <SpinnerIcon className="-ml-1 mr-3 h-5 w-5 text-white" />}
