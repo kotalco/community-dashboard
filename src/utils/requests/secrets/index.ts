@@ -1,19 +1,25 @@
-import axios from '../../axios'
+import axios, { fetcher } from '../../axios'
+import useSWR from 'swr'
 import {
   CreateKubernetesSecret,
   KubernetesSecret,
 } from '@interfaces/KubernetesSecret/KubernetesSecret'
 
 /**
- * get all the kubernetes secrets or filter according to type if type parameter sent
- * @param type the type of secret (optional)
- * @returns All the secrets of that type if introduced or all secrets if no parameter
+ * hook to send a request to get all secrets
+ * @param initialData the secrets already exist
+ * @returns object with the requested secrets or error if exist
  */
-export const getAllSecrets = async (type = ''): Promise<KubernetesSecret[]> => {
-  const { data } = await axios.get<{ secrets: KubernetesSecret[] }>(
-    `/core/secrets${type ? `?type=${type}` : ''}`
+export const useSecrets = (initialData: {
+  secrets: KubernetesSecret[]
+}): { data?: KubernetesSecret[]; isError: boolean } => {
+  const { data, error } = useSWR<{ secrets: KubernetesSecret[] }>(
+    '/core/secrets',
+    fetcher,
+    { initialData }
   )
-  return data.secrets
+
+  return { data: data?.secrets, isError: !!error }
 }
 
 /**
