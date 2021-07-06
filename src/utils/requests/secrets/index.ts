@@ -1,5 +1,8 @@
 import axios from '../../axios'
-import { KubernetesSecret } from '@interfaces/KubernetesSecret/KubernetesSecret'
+import {
+  CreateKubernetesSecret,
+  KubernetesSecret,
+} from '@interfaces/KubernetesSecret/KubernetesSecret'
 
 /**
  * get all the kubernetes secrets or filter according to type if type parameter sent
@@ -11,4 +14,20 @@ export const getAllSecrets = async (type = ''): Promise<KubernetesSecret[]> => {
     `/core/secrets${type ? `?type=${type}` : ''}`
   )
   return data.secrets
+}
+
+/**
+ * Create new secret type
+ * @param secret Secret data
+ * @returns the name and type of the created secret
+ */
+export const createSecret = async (
+  secret: CreateKubernetesSecret
+): Promise<KubernetesSecret> => {
+  const { data } = await axios.post<{ secret: CreateKubernetesSecret }>(
+    '/core/secrets',
+    secret
+  )
+
+  return data.secret
 }

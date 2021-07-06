@@ -1,20 +1,23 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { joiResolver } from '@hookform/resolvers/joi'
+import { useRouter } from 'next/router'
 
 import Layout from '@components/templates/Layout/Layout'
-import FormLayout from '@components/templates/FormLayout/FormLayout'
 import TextInput from '@components/molecules/TextInput/TextInput'
 import Select from '@components/molecules/Select/Select'
 import Button from '@components/atoms/Button/Button'
 import { CreateKubernetesSecret } from '@interfaces/KubernetesSecret/KubernetesSecret'
 import { secretTypesOptions } from '@data/kubernetesSecrets/secretTypesOptions'
 import { schema } from '@schemas/kubernetesSecrets/createKubernetesSecret'
+import { createSecret } from '@utils/requests/secrets'
 
-const CreateBeaconNode: React.FC = () => {
+const CreateSecret: React.FC = () => {
+  const router = useRouter()
   const {
     register,
     handleSubmit,
     watch,
+    setError,
     formState: { errors, isSubmitted, isValid, isSubmitting },
   } = useForm<CreateKubernetesSecret>({
     resolver: joiResolver(schema),
@@ -22,14 +25,19 @@ const CreateBeaconNode: React.FC = () => {
   const type = watch('type')
 
   const onSubmit: SubmitHandler<CreateKubernetesSecret> = async (values) => {
-    console.log(values)
+    try {
+      await createSecret(values)
+      router.push('/core/secrets')
+    } catch (e) {
+      setError('name', { type: 'server', message: e.response.data.error })
+    }
   }
 
   return (
     <Layout>
       <h1 className="text-2xl font-semibold">Create New Secret</h1>
-      <div className="bg-white shadow rounded-lg mt-4 overflow-hidden divide-y-2 divide-gray-200">
-        <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="bg-white shadow rounded-lg mt-4 overflow-hidden">
           <div className="px-4 py-5 sm:p-6">
             <TextInput
               label="Secret Name"
@@ -72,10 +80,10 @@ const CreateBeaconNode: React.FC = () => {
               Create
             </Button>
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
     </Layout>
   )
 }
 
-export default CreateBeaconNode
+export default CreateSecret
