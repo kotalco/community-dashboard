@@ -1,18 +1,16 @@
-import { useEffect } from 'react'
+import { useRef, Fragment, useState } from 'react'
 import { GetStaticProps } from 'next'
-import { GlobeAltIcon } from '@heroicons/react/solid'
-import { ChipIcon } from '@heroicons/react/outline'
-import useSWR from 'swr'
+import { TrashIcon } from '@heroicons/react/outline'
 
+import IconButton from '@components/atoms/IconButton/IconButton'
 import Button from '@components/atoms/Button/Button'
 import Layout from '@components/templates/Layout/Layout'
 import List from '@components/organisms/List/List'
-import ListItem from '@components/molecules/ListItem/ListItem'
-import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel'
-import { useNotification } from '@components/contexts/NotificationContext'
+import DeleteModal from '@components/organisms/DeleteModal/DeleteModal'
 import { useSecrets } from '@utils/requests/secrets'
 import { KubernetesSecret } from '@interfaces/KubernetesSecret/KubernetesSecret'
 import { fetcher } from '@utils/axios'
+import { Transition, Dialog } from '@headlessui/react'
 
 interface Props {
   secrets: { secrets: KubernetesSecret[] }
@@ -20,6 +18,17 @@ interface Props {
 
 const KubernetesSecrets: React.FC<Props> = ({ secrets }) => {
   const { data, isError } = useSecrets(secrets)
+  const [openDelete, setOpenDelete] = useState(false)
+  const [selectedSecret, setSelectedSecret] = useState('')
+
+  const confirmDelete = (secretName: string) => {
+    setOpenDelete(true)
+    setSelectedSecret(secretName)
+  }
+
+  const deleteSecret = () => {
+    console.log('Delete')
+  }
 
   if (isError) return <p>failed to load secrets</p>
 
@@ -27,53 +36,67 @@ const KubernetesSecrets: React.FC<Props> = ({ secrets }) => {
     <Layout>
       <div className="flex">
         <h1 className="text-2xl font-semibold text-gray-900 flex-grow">
-          Secret Keys
+          Secrets
         </h1>
         <Button href="/core/secrets/create" className="btn btn-primary">
           Create New Secret
         </Button>
       </div>
 
-      {/* <div className="py-4">
-        {data && data.length > 0 ? (
+      <div className="py-4">
+        {data && !!data.length ? (
           <List>
-            {data.map(({ name, client, network }) => (
-              <ListItem
-                key={name}
-                link={`/deployments/ethereum/nodes/${name}`}
-                title={name}
-              >
-                <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                <p>{client}</p>
-                <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
-                <p>{network}</p>
-              </ListItem>
+            {data.map(({ name, type }) => (
+              <li key={name}>
+                <div className="group p-4 flex items-center sm:px-6">
+                  <div className="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
+                    <div>
+                      <div className="flex text-sm font-medium text-indigo-600 truncate">
+                        <p>{name}</p>
+                      </div>
+                      <div className="mt-2 flex">
+                        <div className="flex items-center text-sm text-gray-500">
+                          {type}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="ml-5 flex-shrink-0 opacity-0 transition-opacity group-hover:opacity-100">
+                    <IconButton
+                      srText="delete"
+                      onClick={() => confirmDelete(name)}
+                    >
+                      <TrashIcon className="h-5 w-5 text-red-600" />
+                    </IconButton>
+                  </div>
+                </div>
+              </li>
             ))}
           </List>
         ) : (
-          <p>There is no nodes created</p>
+          <p>You don&apos;t have any secrets yet</p>
         )}
       </div>
-
-      <NotificationPanel
-        show={!!notificationData}
-        title={notificationData?.title}
-        close={removeNotification}
+      <DeleteModal
+        open={openDelete}
+        close={() => setOpenDelete(false)}
+        action={
+          <Button className="btn btn-alert" onClick={deleteSecret}>
+            Confirm
+          </Button>
+        }
       >
-        <p className="mt-1 text-sm text-gray-500">
-          <span className="text-indigo-900 bg-indigo-100 p-1 m-1 ml-0 rounded-md">
-            {notificationData?.name}
-          </span>{' '}
-          {`${notificationData?.protocol} has been ${notificationData?.action}`}
+        <p className="text-sm text-gray-500">
+          Are you sure you want to delete secret:{' '}
+          <span className="font-semibold">{selectedSecret}</span>?
         </p>
-      </NotificationPanel> */}
+      </DeleteModal>
     </Layout>
   )
 }
 
 export const getStaticProps: GetStaticProps = async () => {
   try {
-    // const secrets = await getAllSecrets()
     const secrets = await fetcher<{ secrets: KubernetesSecret[] }>(
       '/core/secrets'
     )

@@ -1,4 +1,4 @@
-import { MouseEvent, ReactElement } from 'react'
+import { MouseEvent, ReactElement, forwardRef } from 'react'
 
 interface Props {
   srText: string
@@ -7,11 +7,12 @@ interface Props {
   children: ReactElement
 }
 
-const IconButton: React.FC<Props> = (props) => {
+const IconButton = forwardRef<HTMLButtonElement, Props>((props, ref) => {
   const { srText, className, onClick, children } = props
 
   return (
     <button
+      ref={ref}
       type="button"
       className={`${className} focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white`}
       onClick={onClick}
@@ -20,6 +21,6 @@ const IconButton: React.FC<Props> = (props) => {
       {children}
     </button>
   )
-}
+})
 
 export default IconButton

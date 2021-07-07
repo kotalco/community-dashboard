@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { Fragment, useRef } from 'react'
 import { Transition, Dialog } from '@headlessui/react'
 import { XIcon, ExclamationIcon } from '@heroicons/react/outline'
 
@@ -12,9 +12,12 @@ interface Props {
 }
 
 const Modal: React.FC<Props> = ({ close, title, children, open, action }) => {
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog
+        initialFocus={closeButtonRef}
         as="div"
         static
         className="fixed z-10 inset-0 overflow-y-auto"
@@ -53,6 +56,7 @@ const Modal: React.FC<Props> = ({ close, title, children, open, action }) => {
             <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full sm:p-6">
               <div className="hidden sm:block absolute top-0 right-0 pt-4 pr-4">
                 <IconButton
+                  ref={closeButtonRef}
                   srText="Close"
                   className="bg-white rounded-md text-gray-400 hover:text-gray-500"
                   onClick={close}
