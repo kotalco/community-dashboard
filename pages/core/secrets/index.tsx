@@ -1,6 +1,7 @@
-import { useRef, Fragment, useState } from 'react'
+import { useState } from 'react'
 import { GetStaticProps } from 'next'
 import { TrashIcon } from '@heroicons/react/outline'
+import { mutate } from 'swr'
 
 import IconButton from '@components/atoms/IconButton/IconButton'
 import Button from '@components/atoms/Button/Button'
@@ -9,8 +10,8 @@ import List from '@components/organisms/List/List'
 import DeleteModal from '@components/organisms/DeleteModal/DeleteModal'
 import { useSecrets } from '@utils/requests/secrets'
 import { KubernetesSecret } from '@interfaces/KubernetesSecret/KubernetesSecret'
+import { deleteSecret as sendDeleteRequest } from '@utils/requests/secrets'
 import { fetcher } from '@utils/axios'
-import { Transition, Dialog } from '@headlessui/react'
 
 interface Props {
   secrets: { secrets: KubernetesSecret[] }
@@ -20,14 +21,24 @@ const KubernetesSecrets: React.FC<Props> = ({ secrets }) => {
   const { data, isError } = useSecrets(secrets)
   const [openDelete, setOpenDelete] = useState(false)
   const [selectedSecret, setSelectedSecret] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState('')
 
   const confirmDelete = (secretName: string) => {
     setOpenDelete(true)
     setSelectedSecret(secretName)
   }
 
-  const deleteSecret = () => {
-    console.log('Delete')
+  const deleteSecret = async (secretName: string) => {
+    try {
+      setIsSubmitting(true)
+      await sendDeleteRequest(secretName)
+      mutate('/core/secrets')
+      setOpenDelete(false)
+    } catch (e) {
+      setError(e.response.data.error)
+    }
+    setIsSubmitting(false)
   }
 
   if (isError) return <p>failed to load secrets</p>
@@ -77,11 +88,18 @@ const KubernetesSecrets: React.FC<Props> = ({ secrets }) => {
           <p>You don&apos;t have any secrets yet</p>
         )}
       </div>
+      {/* This Dialog appears when user clicks on delete button */}
       <DeleteModal
         open={openDelete}
         close={() => setOpenDelete(false)}
+        error={error}
         action={
-          <Button className="btn btn-alert" onClick={deleteSecret}>
+          <Button
+            className="btn btn-alert"
+            onClick={() => deleteSecret(selectedSecret)}
+            loading={isSubmitting}
+            disabled={isSubmitting}
+          >
             Confirm
           </Button>
         }

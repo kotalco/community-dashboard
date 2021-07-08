@@ -6,12 +6,20 @@ import IconButton from '@components/atoms/IconButton/IconButton'
 
 interface Props {
   close: () => void
+  error?: string
   title?: string
   open: boolean
   action?: React.ReactElement
 }
 
-const Modal: React.FC<Props> = ({ close, title, children, open, action }) => {
+const Modal: React.FC<Props> = ({
+  close,
+  title,
+  children,
+  open,
+  action,
+  error,
+}) => {
   const closeButtonRef = useRef<HTMLButtonElement>(null)
 
   return (
@@ -81,8 +89,11 @@ const Modal: React.FC<Props> = ({ close, title, children, open, action }) => {
                   <div className="mt-2">{children}</div>
                 </div>
               </div>
-              <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+              <div className="mt-5 sm:mt-4 flex sm:flex-row-reverse justify-between items-center flex-col">
                 {action}
+                {error && (
+                  <p className="text-sm text-red-500 mt-2 sm:mt-0">{error}</p>
+                )}
               </div>
             </div>
           </Transition.Child>

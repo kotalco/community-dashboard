@@ -37,3 +37,11 @@ export const createSecret = async (
 
   return data.secret
 }
+
+/**
+ * Deletes kubernetes secret
+ * @param name Name of the secret
+ */
+export const deleteSecret = async (name: string): Promise<void> => {
+  await axios.delete(`/core/secrets/${name}`)
+}
