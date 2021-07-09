@@ -5,7 +5,7 @@ import { mutate } from 'swr'
 
 import Button from '@components/atoms/Button/Button'
 import { UpdateBeaconEndpoints } from '@interfaces/ethereum2/Ethereum2Validator'
-import Textarea from '@components/molecules/Textarea/Textarea'
+import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput'
 import { updateValidator } from '@utils/requests/ethereum2/validators'
 import { ValidatorsClients } from '@enums/Ethereum2/Validators/ValidatorsClients'
 import { updateBeaconEndpointsSchema } from '@schemas/ethereum2/validator/updateValidatorSchema'
@@ -57,7 +57,7 @@ const ValidatorBeaconNodeTab: React.FC<Props> = ({
           name="beaconEndpoints"
           control={control}
           render={({ field }) => (
-            <Textarea
+            <TextareaWithInput
               multiple={client === ValidatorsClients.lighthouse}
               error={beaconEndpointsError?.message}
               label="Ethereum 2.0 Beacon Node Endpoints"

@@ -1,18 +1,27 @@
-import Joi from 'joi'
+import { noSpacePattern } from '@schemas/helpers'
+import { RegisterOptions } from 'react-hook-form'
 
-export const schema = Joi.object({
-  name: Joi.string().trim().pattern(/^\S*$/).required().messages({
-    'string.empty': 'Please provide a secret name',
-    'string.pattern.base': 'Secret name should not containe spaces',
-  }),
-  type: Joi.string().required().valid('password').messages({
-    'string.empty': 'Please choose your secret type',
-    'any.only': 'Please choose your secret name',
-  }),
-  data: Joi.object({
-    password: Joi.string().trim().required().min(8).messages({
-      'string.empty': 'Please enter your password value',
-      'string.min': 'Your password value must not be less than 8 characters',
-    }),
-  }),
-})
+export const nameValidations: RegisterOptions = {
+  required: 'Please provide a secret name',
+  setValueAs: (value: string) => value.trim(),
+  pattern: {
+    value: noSpacePattern,
+    message: 'A secret name should not containe spaces',
+  },
+}
+
+export const typeValidations: RegisterOptions = {
+  required: 'Please choose your secret type',
+}
+
+export const passwordValidations: RegisterOptions = {
+  required: 'Please provide a password',
+  setValueAs: (value: string) => value.trim(),
+  shouldUnregister: true,
+}
+
+export const keyValidations: RegisterOptions = {
+  required: 'Please provide a private key',
+  setValueAs: (value: string) => value.trim(),
+  shouldUnregister: true,
+}

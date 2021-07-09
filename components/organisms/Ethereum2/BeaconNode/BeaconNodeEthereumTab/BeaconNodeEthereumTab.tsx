@@ -6,7 +6,7 @@ import { mutate } from 'swr'
 import Button from '@components/atoms/Button/Button'
 import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes'
 import { UpdateEth1Endpoints } from '@interfaces/ethereum2/Ethereum2BeaconNode'
-import Textarea from '@components/molecules/Textarea/Textarea'
+import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput'
 import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient'
 import { updateEth1EndpointsSchema } from '@schemas/ethereum2/beaconNode/updateBeaconNode'
 
@@ -57,7 +57,7 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
           name="eth1Endpoints"
           control={control}
           render={({ field }) => (
-            <Textarea
+            <TextareaWithInput
               multiple={
                 client !== BeaconNodeClient.nimbus &&
                 client !== BeaconNodeClient.teku

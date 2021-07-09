@@ -6,7 +6,7 @@ import { joiResolver } from '@hookform/resolvers/joi'
 import TextInput from '@components/molecules/TextInput/TextInput'
 import Select from '@components/molecules/Select/Select'
 import Button from '@components/atoms/Button/Button'
-import Textarea from '@components/molecules/Textarea/Textarea'
+import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput'
 import { useNotification } from '@components/contexts/NotificationContext'
 import { clientOptions } from '@data/ethereum2/beaconNode/clientOptions'
 import { networkOptions } from '@data/ethereum2/beaconNode/networkOption'
@@ -104,7 +104,7 @@ const CreateBeaconNodeForm: React.FC = () => {
                 name="eth1Endpoints"
                 control={control}
                 render={({ field }) => (
-                  <Textarea
+                  <TextareaWithInput
                     multiple
                     label="Ethereum Node JSON-RPC Endpoints"
                     helperText="One endpoint per each line"

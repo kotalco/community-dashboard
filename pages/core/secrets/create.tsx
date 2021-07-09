@@ -1,15 +1,21 @@
 import { SubmitHandler, useForm } from 'react-hook-form'
-import { joiResolver } from '@hookform/resolvers/joi'
 import { useRouter } from 'next/router'
 
 import Layout from '@components/templates/Layout/Layout'
 import TextInput from '@components/molecules/TextInput/TextInput'
 import Select from '@components/molecules/Select/Select'
 import FormLayout from '@components/templates/FormLayout/FormLayout'
+import Textarea from '@components/molecules/Textarea/Textarea'
 import { CreateKubernetesSecret } from '@interfaces/KubernetesSecret/KubernetesSecret'
 import { secretTypesOptions } from '@data/kubernetesSecrets/secretTypesOptions'
-import { schema } from '@schemas/kubernetesSecrets/createKubernetesSecret'
+import {
+  nameValidations,
+  typeValidations,
+  passwordValidations,
+  keyValidations,
+} from '@schemas/kubernetesSecrets/createKubernetesSecret'
 import { createSecret } from '@utils/requests/secrets'
+import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes'
 
 const CreateSecret: React.FC = () => {
   const router = useRouter()
@@ -19,9 +25,7 @@ const CreateSecret: React.FC = () => {
     watch,
     setError,
     formState: { errors, isSubmitted, isValid, isSubmitting },
-  } = useForm<CreateKubernetesSecret>({
-    resolver: joiResolver(schema),
-  })
+  } = useForm<CreateKubernetesSecret>()
   const type = watch('type')
 
   const onSubmit: SubmitHandler<CreateKubernetesSecret> = async (values) => {
@@ -46,29 +50,39 @@ const CreateSecret: React.FC = () => {
             label="Secret Name"
             className="rounded-md"
             error={errors.name?.message}
-            {...register('name')}
+            {...register('name', nameValidations)}
           />
 
           <Select
             label="Secret Type"
             error={errors.type?.message}
             className="rounded-md"
-            {...register('type')}
+            {...register('type', typeValidations)}
             options={[
               { label: 'Choose a type...', value: '' },
               ...secretTypesOptions,
             ]}
           />
 
-          {type === 'password' && (
+          {type === KubernetesSecretTypes.password && (
             <div className="mt-4">
               <TextInput
                 label="Password"
                 className="rounded-md"
                 type="password"
                 error={errors.data?.password?.message}
-                {...register('data.password')}
+                {...register('data.password', passwordValidations)}
               />
+            </div>
+          )}
+
+          {type === KubernetesSecretTypes.privatekey && (
+            <div className="mt-4">
+              <Textarea
+                label="Key"
+                {...register('data.key', keyValidations)}
+                error={errors.data?.key?.message}
+              ></Textarea>
             </div>
           )}
         </FormLayout>
