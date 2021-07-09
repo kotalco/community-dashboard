@@ -1,16 +1,14 @@
 import { useState } from 'react'
 import { GetStaticProps } from 'next'
 import { TrashIcon } from '@heroicons/react/outline'
-import { mutate } from 'swr'
 
 import IconButton from '@components/atoms/IconButton/IconButton'
 import Button from '@components/atoms/Button/Button'
 import Layout from '@components/templates/Layout/Layout'
 import List from '@components/organisms/List/List'
-import Dialog from '@components/molecules/Dialog/Dialog'
+import DeleteSecretDialog from '@components/organisms/KubernetesSecrets/DeleteSecretDialog/DeleteSecretDialoge'
 import { useSecrets } from '@utils/requests/secrets'
 import { KubernetesSecret } from '@interfaces/KubernetesSecret/KubernetesSecret'
-import { deleteSecret as sendDeleteRequest } from '@utils/requests/secrets'
 import { fetcher } from '@utils/axios'
 
 interface Props {
@@ -21,25 +19,10 @@ const KubernetesSecrets: React.FC<Props> = ({ secrets }) => {
   const { data, isError } = useSecrets(secrets)
   const [openDelete, setOpenDelete] = useState(false)
   const [selectedSecret, setSelectedSecret] = useState('')
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [error, setError] = useState('')
 
   const confirmDelete = (secretName: string) => {
     setOpenDelete(true)
     setSelectedSecret(secretName)
-  }
-
-  const deleteSecret = async (secretName: string) => {
-    try {
-      setError('')
-      setIsSubmitting(true)
-      await sendDeleteRequest(secretName)
-      mutate('/core/secrets')
-      setOpenDelete(false)
-    } catch (e) {
-      setError(e.response.data.error)
-    }
-    setIsSubmitting(false)
   }
 
   if (isError) return <p>failed to load secrets</p>
@@ -82,6 +65,12 @@ const KubernetesSecrets: React.FC<Props> = ({ secrets }) => {
                     </IconButton>
                   </div>
                 </div>
+                {/* This Dialog appears when user clicks on delete button */}
+                <DeleteSecretDialog
+                  setOpen={setOpenDelete}
+                  open={openDelete}
+                  secretName={selectedSecret}
+                />
               </li>
             ))}
           </List>
@@ -89,27 +78,6 @@ const KubernetesSecrets: React.FC<Props> = ({ secrets }) => {
           <p>You don&apos;t have any secrets yet</p>
         )}
       </div>
-      {/* This Dialog appears when user clicks on delete button */}
-      <Dialog
-        open={openDelete}
-        close={() => setOpenDelete(false)}
-        error={error}
-        action={
-          <Button
-            className="btn btn-alert"
-            onClick={() => deleteSecret(selectedSecret)}
-            loading={isSubmitting}
-            disabled={isSubmitting}
-          >
-            Confirm
-          </Button>
-        }
-      >
-        <p className="text-sm text-gray-500">
-          Are you sure you want to delete secret:{' '}
-          <span className="font-semibold">{selectedSecret}</span>?
-        </p>
-      </Dialog>
     </Layout>
   )
 }
