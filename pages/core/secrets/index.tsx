@@ -7,7 +7,7 @@ import IconButton from '@components/atoms/IconButton/IconButton'
 import Button from '@components/atoms/Button/Button'
 import Layout from '@components/templates/Layout/Layout'
 import List from '@components/organisms/List/List'
-import DeleteModal from '@components/organisms/DeleteModal/DeleteModal'
+import Dialog from '@components/molecules/Dialog/Dialog'
 import { useSecrets } from '@utils/requests/secrets'
 import { KubernetesSecret } from '@interfaces/KubernetesSecret/KubernetesSecret'
 import { deleteSecret as sendDeleteRequest } from '@utils/requests/secrets'
@@ -31,6 +31,7 @@ const KubernetesSecrets: React.FC<Props> = ({ secrets }) => {
 
   const deleteSecret = async (secretName: string) => {
     try {
+      setError('')
       setIsSubmitting(true)
       await sendDeleteRequest(secretName)
       mutate('/core/secrets')
@@ -89,7 +90,7 @@ const KubernetesSecrets: React.FC<Props> = ({ secrets }) => {
         )}
       </div>
       {/* This Dialog appears when user clicks on delete button */}
-      <DeleteModal
+      <Dialog
         open={openDelete}
         close={() => setOpenDelete(false)}
         error={error}
@@ -108,7 +109,7 @@ const KubernetesSecrets: React.FC<Props> = ({ secrets }) => {
           Are you sure you want to delete secret:{' '}
           <span className="font-semibold">{selectedSecret}</span>?
         </p>
-      </DeleteModal>
+      </Dialog>
     </Layout>
   )
 }

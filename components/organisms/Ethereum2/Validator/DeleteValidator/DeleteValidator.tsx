@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
 
 import Button from '@components/atoms/Button/Button'
-import DeleteModal from '@components/organisms/DeleteModal/DeleteModal'
+import DeleteModal from '@components/molecules/Dialog/Dialog'
 import { deleteValidator } from '@utils/requests/ethereum2/validators'
 import TextInput from '@components/molecules/TextInput/TextInput'
 import { useNotification } from '@components/contexts/NotificationContext'
