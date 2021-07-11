@@ -1,4 +1,4 @@
-import { SubmitHandler, useForm } from 'react-hook-form'
+import { SubmitHandler, useForm, Controller } from 'react-hook-form'
 import { useRouter } from 'next/router'
 
 import Layout from '@components/templates/Layout/Layout'
@@ -6,6 +6,7 @@ import TextInput from '@components/molecules/TextInput/TextInput'
 import Select from '@components/molecules/Select/Select'
 import FormLayout from '@components/templates/FormLayout/FormLayout'
 import Textarea from '@components/molecules/Textarea/Textarea'
+import FileInput from '@components/molecules/FileInput/FileInput'
 import { CreateKubernetesSecret } from '@interfaces/KubernetesSecret/KubernetesSecret'
 import { secretTypesOptions } from '@data/kubernetesSecrets/secretTypesOptions'
 import {
@@ -13,6 +14,7 @@ import {
   typeValidations,
   passwordValidations,
   keyValidations,
+  keystoreValidations,
 } from '@schemas/kubernetesSecrets/createKubernetesSecret'
 import { createSecret } from '@utils/requests/secrets'
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes'
@@ -24,6 +26,7 @@ const CreateSecret: React.FC = () => {
     handleSubmit,
     watch,
     setError,
+    control,
     formState: { errors, isSubmitted, isValid, isSubmitting },
   } = useForm<CreateKubernetesSecret>()
   const type = watch('type')
@@ -64,7 +67,8 @@ const CreateSecret: React.FC = () => {
             ]}
           />
 
-          {type === KubernetesSecretTypes.password && (
+          {(type === KubernetesSecretTypes.password ||
+            type === KubernetesSecretTypes.keystore) && (
             <div className="mt-4">
               <TextInput
                 label="Password"
@@ -83,6 +87,24 @@ const CreateSecret: React.FC = () => {
                 {...register('data.key', keyValidations)}
                 error={errors.data?.key?.message}
               ></Textarea>
+            </div>
+          )}
+
+          {type === KubernetesSecretTypes.keystore && (
+            <div className="mt-4">
+              <Controller
+                name="data.keystore"
+                control={control}
+                shouldUnregister={true}
+                rules={keystoreValidations}
+                render={({ field }) => (
+                  <FileInput
+                    label="Keystore"
+                    error={errors.data?.keystore?.message}
+                    {...field}
+                  />
+                )}
+              />
             </div>
           )}
         </FormLayout>

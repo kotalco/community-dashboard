@@ -65,12 +65,6 @@ const KubernetesSecrets: React.FC<Props> = ({ secrets }) => {
                     </IconButton>
                   </div>
                 </div>
-                {/* This Dialog appears when user clicks on delete button */}
-                <DeleteSecretDialog
-                  setOpen={setOpenDelete}
-                  open={openDelete}
-                  secretName={selectedSecret}
-                />
               </li>
             ))}
           </List>
@@ -78,6 +72,12 @@ const KubernetesSecrets: React.FC<Props> = ({ secrets }) => {
           <p>You don&apos;t have any secrets yet</p>
         )}
       </div>
+      {/* This Dialog appears when user clicks on delete button */}
+      <DeleteSecretDialog
+        setOpen={setOpenDelete}
+        open={openDelete}
+        secretName={selectedSecret}
+      />
     </Layout>
   )
 }

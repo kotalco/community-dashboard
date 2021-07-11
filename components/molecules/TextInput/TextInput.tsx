@@ -59,7 +59,7 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>(
             name={name}
             type={inputType}
             id={name}
-            className={`shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 disabled:bg-gray-100 disabled:text-gray-500 ${className}`}
+            className={`shadow-sm focus:ring-indigo-500 block w-full sm:text-sm border-gray-300 disabled:bg-gray-100 disabled:text-gray-500 ${className}`}
           />
           {error && type !== 'password' && (
             <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">

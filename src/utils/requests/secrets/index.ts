@@ -1,5 +1,6 @@
-import axios, { fetcher } from '../../axios'
 import useSWR from 'swr'
+
+import axios, { fetcher } from '../../axios'
 import {
   CreateKubernetesSecret,
   KubernetesSecret,
@@ -16,7 +17,7 @@ export const useSecrets = (initialData: {
   const { data, error } = useSWR<{ secrets: KubernetesSecret[] }>(
     '/core/secrets',
     fetcher,
-    { initialData }
+    { initialData, revalidateOnMount: true }
   )
 
   return { data: data?.secrets, isError: !!error }
@@ -30,9 +31,16 @@ export const useSecrets = (initialData: {
 export const createSecret = async (
   secret: CreateKubernetesSecret
 ): Promise<KubernetesSecret> => {
+  const formData = new FormData()
+  formData.append('name', secret.name)
+  formData.append('type', secret.type)
+  formData.append('data[password]', secret.data.password)
+  formData.append('data[keystore]', secret.data.keystore)
+
   const { data } = await axios.post<{ secret: CreateKubernetesSecret }>(
     '/core/secrets',
-    secret
+    formData,
+    { headers: { 'Content-Type': 'multipart/form-data' } }
   )
 
   return data.secret
