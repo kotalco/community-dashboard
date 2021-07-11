@@ -31,16 +31,9 @@ export const useSecrets = (initialData: {
 export const createSecret = async (
   secret: CreateKubernetesSecret
 ): Promise<KubernetesSecret> => {
-  const formData = new FormData()
-  formData.append('name', secret.name)
-  formData.append('type', secret.type)
-  formData.append('data[password]', secret.data.password)
-  formData.append('data[keystore]', secret.data.keystore)
-
   const { data } = await axios.post<{ secret: CreateKubernetesSecret }>(
     '/core/secrets',
-    formData,
-    { headers: { 'Content-Type': 'multipart/form-data' } }
+    secret
   )
 
   return data.secret

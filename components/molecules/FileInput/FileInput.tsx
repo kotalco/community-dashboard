@@ -18,7 +18,12 @@ const FileInput = React.forwardRef<HTMLInputElement, Props>(
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const files = e.target.files
       if (files?.length) {
-        onChange(files[0])
+        const reader = new FileReader()
+        reader.readAsDataURL(files[0])
+        reader.onload = (e) => {
+          if (typeof e.target?.result === 'string')
+            onChange(e.target.result.split(',')[1])
+        }
         setFileName(files[0].name)
       }
     }

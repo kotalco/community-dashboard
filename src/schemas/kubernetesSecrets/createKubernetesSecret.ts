@@ -29,10 +29,18 @@ export const keyValidations: RegisterOptions = {
 export const keystoreValidations: RegisterOptions = {
   required: 'Please upload your keystore',
   validate: {
-    json: (value: File) =>
-      value.type === 'application/json' ||
-      'Your keystore should be in JSON format',
-    size: (value: File) =>
-      value.size < 1 * 1024 * 1024 || 'Your keystore should be less than 1 MB',
+    // The file must be in JSON format
+    json: (value: string) => {
+      try {
+        JSON.parse(atob(value))
+        return true
+      } catch (e) {
+        return 'Your keystore should be in JSON format'
+      }
+    },
+    // File size should be less than 50KB
+    size: (value: string) =>
+      value.length * (3 / 4) < 50 * 1024 ||
+      'Your keystore should be less than 1 MB',
   },
 }
