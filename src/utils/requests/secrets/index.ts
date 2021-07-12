@@ -8,14 +8,18 @@ import {
 
 /**
  * hook to send a request to get all secrets
+ * @param type secret types [password, keystore, privatekey, generic]
  * @param initialData the secrets already exist
  * @returns object with the requested secrets or error if exist
  */
-export const useSecrets = (initialData: {
-  secrets: KubernetesSecret[]
-}): { data?: KubernetesSecret[]; isError: boolean } => {
+export const useSecrets = (
+  type: string,
+  initialData?: {
+    secrets: KubernetesSecret[]
+  }
+): { data?: KubernetesSecret[]; isError: boolean } => {
   const { data, error } = useSWR<{ secrets: KubernetesSecret[] }>(
-    '/core/secrets',
+    `/core/secrets?type=${type}`,
     fetcher,
     { initialData, revalidateOnMount: true }
   )

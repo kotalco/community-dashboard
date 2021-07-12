@@ -17,7 +17,6 @@ interface Props {
   error?: string
   disabled?: boolean
   type?: string
-  onBlur: (e: React.FocusEvent<HTMLInputElement>) => void
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
@@ -28,7 +27,6 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>(
       name,
       className,
       placeholder,
-      onBlur,
       onChange,
       error,
       disabled,
@@ -53,7 +51,6 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>(
         <fieldset disabled={disabled} className="relative max-w-xs">
           <input
             onChange={onChange}
-            onBlur={onBlur}
             placeholder={placeholder}
             ref={ref}
             name={name}

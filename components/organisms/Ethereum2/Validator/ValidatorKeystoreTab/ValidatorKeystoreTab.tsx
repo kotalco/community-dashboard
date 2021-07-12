@@ -8,13 +8,9 @@ import { updateValidator } from '@utils/requests/ethereum2/validators'
 import { UpdateKeystores } from '@interfaces/ethereum2/Ethereum2Validator'
 import Multiselect from '@components/molecules/Multiselect/Multiselect'
 import Select from '@components/molecules/Select/Select'
-
-import {
-  walletPasswordSecretName as walletValues,
-  keystores as allKeystores,
-} from '@data/data'
 import { ValidatorsClients } from '@enums/Ethereum2/Validators/ValidatorsClients'
 import { updateKeystoresSchema } from '@schemas/ethereum2/validator/updateValidatorSchema'
+import { useSecrets } from '@utils/requests/secrets'
 
 interface Props {
   name: string
@@ -31,7 +27,10 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
 }) => {
   const [submitError, setSubmitError] = useState('')
   const [submitSuccess, setSubmitSuccess] = useState('')
-  const keystoresOptions = allKeystores.map(({ secretName }) => secretName)
+  const { data: allKeystores } = useSecrets('keystore')
+  const { data: allWalletValues } = useSecrets('password')
+  const keystoresOptions = allKeystores?.map(({ name }) => name) || []
+  const walletValues = allWalletValues?.map(({ name }) => name) || []
   const selectedKeystores = keystores.map(({ secretName }) => secretName)
 
   const {

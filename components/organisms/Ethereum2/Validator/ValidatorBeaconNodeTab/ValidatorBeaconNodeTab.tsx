@@ -61,7 +61,11 @@ const ValidatorBeaconNodeTab: React.FC<Props> = ({
               multiple={client === ValidatorsClients.lighthouse}
               error={beaconEndpointsError?.message}
               label="Ethereum 2.0 Beacon Node Endpoints"
-              helperText="One endpoint per each line"
+              helperText={
+                client === ValidatorsClients.lighthouse
+                  ? 'One endpoint per each line'
+                  : ''
+              }
               {...field}
             />
           )}

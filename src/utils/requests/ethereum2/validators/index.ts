@@ -26,12 +26,10 @@ export const getAllValidators = async (): Promise<Ethereum2Validator[]> => {
 export const createValidator = async (
   values: CreateEthereum2Validator
 ): Promise<Ethereum2Validator> => {
-  const { selectNetwork, textNetwork, keystores, ...rest } = values
-  const network = selectNetwork === 'other' ? textNetwork : selectNetwork
+  const { keystores, ...rest } = values
   const keystoresObject = keystores.map((key) => ({ secretName: key }))
 
   const body = {
-    network,
     keystores: keystoresObject,
     ...rest,
   }

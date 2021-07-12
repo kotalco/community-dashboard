@@ -1,5 +1,5 @@
 import { ValidatorsClients } from '@enums/Ethereum2/Validators/ValidatorsClients'
-import { ValidatorsNetworks } from '@enums/Ethereum2/Validators/ValidatorsNetworks'
+import { NestedValue } from 'react-hook-form'
 
 export interface Ethereum2Validator {
   name: string
@@ -18,12 +18,11 @@ export interface Ethereum2Validator {
 
 export interface CreateEthereum2Validator {
   name: string
-  selectNetwork: ValidatorsNetworks
-  textNetwork: string
+  network: string
   client: ValidatorsClients
-  keystores: string[]
+  keystores: NestedValue<{ secretName: string }[]>
   walletPasswordSecretName?: string
-  beaconEndpoints: string[]
+  beaconEndpoints: NestedValue<string[]>
 }
 
 export interface UpdateEthereum2Validator {

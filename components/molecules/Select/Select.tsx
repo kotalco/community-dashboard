@@ -8,14 +8,13 @@ interface Props {
   options: SelectOption[] | string[]
   name: string
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
-  onBlur: (e: React.FocusEvent<HTMLSelectElement>) => void
   label: string
   className?: string
   error?: string
 }
 
 const Select = React.forwardRef<HTMLSelectElement, Props>(
-  ({ options, name, label, className, error, onChange, onBlur }, ref) => {
+  ({ options, name, label, className, error, onChange }, ref) => {
     return (
       <>
         <div className="mt-4 max-w-xs">
@@ -25,7 +24,6 @@ const Select = React.forwardRef<HTMLSelectElement, Props>(
               id={name}
               name={name}
               onChange={onChange}
-              onBlur={onBlur}
               ref={ref}
               className={`mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${className}`}
             >

@@ -16,7 +16,7 @@ interface Props {
 }
 
 const KubernetesSecrets: React.FC<Props> = ({ secrets }) => {
-  const { data, isError } = useSecrets(secrets)
+  const { data, isError } = useSecrets('', secrets)
   const [openDelete, setOpenDelete] = useState(false)
   const [selectedSecret, setSelectedSecret] = useState('')
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 interface Props {
   name: string
@@ -13,6 +13,11 @@ interface Props {
 const Textarea = React.forwardRef<HTMLTextAreaElement, Props>(
   ({ value, name, label, error, helperText, onChange, multiple }, _ref) => {
     const [text, setText] = useState(value.join('\n'))
+
+    useEffect(() => {
+      onChange([])
+      setText('')
+    }, [multiple])
 
     const handleChange = (
       e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
