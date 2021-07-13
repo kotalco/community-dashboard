@@ -44,7 +44,7 @@ const CreateValidator: React.FC = () => {
 
   useEffect(() => {
     register('network', networkValidations)
-  }, [])
+  }, [register])
 
   const client = watch('client')
   const keystoresOptions = keystoreSecrets?.map(({ name }) => name) || []
