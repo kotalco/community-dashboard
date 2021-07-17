@@ -9,7 +9,7 @@ import Checkbox from '@components/molecules/CheckBox/CheckBox'
 import { createIPFSPeer } from '@utils/requests/ipfs/peers'
 import { schema } from '@schemas/ipfsPeer/createIPFSPeer'
 import { CreateIPFSPeer } from '@interfaces/ipfs/IPFSPeer'
-import { IPFSConfigurationProfile } from '@enums/IPFSPeers/IPFSConfigurationProfile'
+import { IPFSConfigurationProfile } from '@enums/IPFS/Peers/IPFSConfigurationProfile'
 import { initProfilesOptions } from '@data/ipfs/peers/initProfilesOptions'
 import { useNotification } from '@components/contexts/NotificationContext'
 

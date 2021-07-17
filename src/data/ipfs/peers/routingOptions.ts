@@ -1,5 +1,5 @@
 import { SelectOption } from '@interfaces/SelectOption'
-import { IPFSRouting } from '@enums/IPFSPeers/IPFSRouting'
+import { IPFSRouting } from '@enums/IPFS/Peers/IPFSRouting'
 
 export const routingOptions: SelectOption[] = [
   { label: 'None', value: IPFSRouting.none },

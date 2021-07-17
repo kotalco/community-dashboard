@@ -9,7 +9,7 @@ import { initProfilesOptions } from '@data/ipfs/peers/initProfilesOptions'
 import { updateConfigProfilesSchema } from '@schemas/ipfsPeer/updateIPFSPeer'
 import { updateIPFSPeer } from '@utils/requests/ipfs/peers'
 import { UpdateConfigrationProfiles } from '@interfaces/ipfs/IPFSPeer'
-import { IPFSConfigurationProfile } from '@enums/IPFSPeers/IPFSConfigurationProfile'
+import { IPFSConfigurationProfile } from '@enums/IPFS/Peers/IPFSConfigurationProfile'
 
 interface Props {
   peerName: string

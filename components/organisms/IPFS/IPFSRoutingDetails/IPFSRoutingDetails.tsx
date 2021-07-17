@@ -9,7 +9,7 @@ import Select from '@components/molecules/Select/Select'
 import { routingOptions } from '@data/ipfs/peers/routingOptions'
 import { updateRoutingSchema } from '@schemas/ipfsPeer/updateIPFSPeer'
 import { updateIPFSPeer } from '@utils/requests/ipfs/peers'
-import { IPFSRouting } from '@enums/IPFSPeers/IPFSRouting'
+import { IPFSRouting } from '@enums/IPFS/Peers/IPFSRouting'
 
 interface Props {
   peerName: string

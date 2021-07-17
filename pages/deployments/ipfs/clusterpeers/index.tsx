@@ -11,18 +11,19 @@ import Heading from '@components/templates/Heading/Heading'
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs'
 import ButtonGroup from '@components/molecules/ButtonGroup/ButtonGroup'
 import { createButtons, resourcesTab } from '@data/ipfs/links'
-import { usePeers } from '@utils/requests/ipfs/peers'
+import { useClusterPeers } from '@utils/requests/ipfs/clusterPeers'
 import { IPFSPeer } from '@interfaces/ipfs/IPFSPeer'
 import { useNotification } from '@components/contexts/NotificationContext'
 import { fetcher } from '@utils/axios'
+import { IPFSClusterPeer } from '@interfaces/ipfs/IPFSClusterPeer'
 
 interface Props {
-  initialPeers: { peers: IPFSPeer[] }
+  initialClusterPeers: { clusterpeers: IPFSClusterPeer[] }
 }
 
-export const IPFSPeers: React.FC<Props> = ({ initialPeers }) => {
+export const IPFSPeers: React.FC<Props> = ({ initialClusterPeers }) => {
   const { notificationData, removeNotification } = useNotification()
-  const { peers } = usePeers(initialPeers)
+  const { clusterpeers } = useClusterPeers(initialClusterPeers)
 
   useEffect(() => {
     return () => {
@@ -32,15 +33,15 @@ export const IPFSPeers: React.FC<Props> = ({ initialPeers }) => {
 
   return (
     <Layout>
-      <Heading title="IPFS Peers">
+      <Heading title="IPFS Cluster Peers">
         <ButtonGroup label="Create New" buttons={createButtons} />
       </Heading>
 
       <div className="py-4">
         <LinkedTabs tabs={resourcesTab} />
-        {peers && peers.length ? (
+        {clusterpeers && clusterpeers.length ? (
           <List>
-            {peers.map(({ name }) => (
+            {clusterpeers.map(({ name }) => (
               <ListItem
                 key={name}
                 link={`/deployments/ipfs/peers/${name}`}
@@ -55,7 +56,7 @@ export const IPFSPeers: React.FC<Props> = ({ initialPeers }) => {
           </List>
         ) : (
           <div className="bg-white p-4 text-center">
-            <p>There is no peers created</p>
+            <p>There is no cluster peers created</p>
           </div>
         )}
       </div>
@@ -78,8 +79,11 @@ export const IPFSPeers: React.FC<Props> = ({ initialPeers }) => {
 
 export const getStaticProps: GetStaticProps = async () => {
   try {
-    const peers = await fetcher<{ peers: IPFSPeer[] }>('/ipfs/peers')
-    return { props: { initialPeers: peers }, revalidate: 10 }
+    const clusterpeers = await fetcher<{ clusterpeers: IPFSPeer[] }>(
+      '/ipfs/clusterpeers'
+    )
+
+    return { props: { initialClusterPeers: clusterpeers }, revalidate: 10 }
   } catch (e) {
     return { notFound: true }
   }
