@@ -13,7 +13,7 @@ import IPFSConfigrationProfiles from '@components/organisms/IPFS/IPFSConfigratio
 import IPFSApiDetails from '@components/organisms/IPFS/IPFSApiDetails/IPFSApiDetails'
 import IPFSGatewayDetails from '@components/organisms/IPFS/IPFSGatewayDetails/IPFSGatewayDetails'
 import IPFSRoutingDetails from '@components/organisms/IPFS/IPFSRoutingDetails/IPFSRoutingDetails'
-import { getIPFSPeer } from '@utils/requests/ipfsPeersRequests'
+import { getIPFSPeer } from '@utils/requests/ipfs/peers'
 import { IPFSPeer } from '@interfaces/ipfs/IPFSPeer'
 import { tabsTitles } from '@data/ipfs/peers/tabsTitles'
 

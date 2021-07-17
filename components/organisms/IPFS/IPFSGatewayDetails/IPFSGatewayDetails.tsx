@@ -7,7 +7,7 @@ import Button from '@components/atoms/Button/Button'
 import TextInput from '@components/molecules/TextInput/TextInput'
 import { UpdateGateway } from '@interfaces/ipfs/IPFSPeer'
 import { updateGatewaySchema } from '@schemas/ipfsPeer/updateIPFSPeer'
-import { updateIPFSPeer } from '@utils/requests/ipfsPeersRequests'
+import { updateIPFSPeer } from '@utils/requests/ipfs/peers'
 
 interface Props {
   peerName: string

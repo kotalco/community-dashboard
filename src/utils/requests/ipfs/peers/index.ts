@@ -1,4 +1,5 @@
-import axios from '../axios'
+import useSWR from 'swr'
+import axios, { fetcher } from '../../../axios'
 
 import {
   CreateIPFSPeer,
@@ -7,13 +8,20 @@ import {
 } from '@interfaces/ipfs/IPFSPeer'
 
 /**
- * Send GET request to the server to get all peers
- * @returns all ipfs peers
+ * Hook that get all peers from the server
+ * @param initialPeers if present
+ * @returns object with all peers or undefined if error then isError is true
  */
-export const getAllIPFSPeers = async (): Promise<IPFSPeer[]> => {
-  const { data } = await axios.get<{ peers: IPFSPeer[] }>('/ipfs/peers')
+export const usePeers = (initialPeers?: {
+  peers: IPFSPeer[]
+}): { peers?: IPFSPeer[]; isError: boolean } => {
+  const { data, error } = useSWR<{ peers: IPFSPeer[] }>(
+    '/ipfs/peers',
+    fetcher,
+    { initialData: initialPeers, revalidateOnMount: true }
+  )
 
-  return data.peers
+  return { peers: data?.peers, isError: !!error }
 }
 
 /**

@@ -1,27 +1,28 @@
 import { useEffect } from 'react'
 import { GetStaticProps } from 'next'
-import useSWR from 'swr'
+import { GlobeAltIcon } from '@heroicons/react/solid'
+import { ChipIcon } from '@heroicons/react/outline'
 
 import Layout from '@components/templates/Layout/Layout'
-import Button from '@components/atoms/Button/Button'
 import List from '@components/organisms/List/List'
 import ListItem from '@components/molecules/ListItem/ListItem'
 import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel'
-import { getAllIPFSPeers } from '@utils/requests/ipfsPeersRequests'
+import Heading from '@components/templates/Heading/Heading'
+import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs'
+import ButtonGroup from '@components/molecules/ButtonGroup/ButtonGroup'
+import { createButtons, resourcesTab } from '@data/ipfs/links'
+import { usePeers } from '@utils/requests/ipfs/peers'
 import { IPFSPeer } from '@interfaces/ipfs/IPFSPeer'
 import { useNotification } from '@components/contexts/NotificationContext'
+import { fetcher } from '@utils/axios'
 
 interface Props {
-  peers: IPFSPeer[]
+  initialPeers: { peers: IPFSPeer[] }
 }
 
-export const IPFSPeers: React.FC<Props> = ({ peers }) => {
+export const IPFSPeers: React.FC<Props> = ({ initialPeers }) => {
   const { notificationData, removeNotification } = useNotification()
-
-  const { data } = useSWR('/ipfs/peers', getAllIPFSPeers, {
-    initialData: peers,
-    revalidateOnMount: true,
-  })
+  const { peers } = usePeers(initialPeers)
 
   useEffect(() => {
     return () => {
@@ -31,27 +32,25 @@ export const IPFSPeers: React.FC<Props> = ({ peers }) => {
 
   return (
     <Layout>
-      <div className="flex">
-        <h1 className="text-2xl font-semibold text-gray-900 flex-grow">
-          IPFS Peers
-        </h1>
-        <Button
-          href="/deployments/ipfs/peers/create"
-          className="btn btn-primary"
-        >
-          Create New Peer
-        </Button>
-      </div>
+      <Heading title="IPFS Peers">
+        <ButtonGroup label="Create New" buttons={createButtons} />
+      </Heading>
 
       <div className="py-4">
-        {data && data.length > 0 ? (
+        <LinkedTabs tabs={resourcesTab} />
+        {peers && peers.length ? (
           <List>
-            {data.map(({ name }) => (
+            {peers.map(({ name }) => (
               <ListItem
                 key={name}
                 link={`/deployments/ipfs/peers/${name}`}
                 title={name}
-              />
+              >
+                <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
+                <p>public-swarm</p>
+                <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
+                <p>go-ipfs</p>
+              </ListItem>
             ))}
           </List>
         ) : (
@@ -77,8 +76,8 @@ export const IPFSPeers: React.FC<Props> = ({ peers }) => {
 
 export const getStaticProps: GetStaticProps = async () => {
   try {
-    const peers = await getAllIPFSPeers()
-    return { props: { peers }, revalidate: 10 }
+    const peers = await fetcher<{ peers: IPFSPeer[] }>('/ipfs/peers')
+    return { props: { initialPeers: peers }, revalidate: 10 }
   } catch (e) {
     return { notFound: true }
   }

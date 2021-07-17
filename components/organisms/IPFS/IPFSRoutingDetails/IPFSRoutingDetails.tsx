@@ -8,7 +8,7 @@ import { UpdateRouting } from '@interfaces/ipfs/IPFSPeer'
 import Select from '@components/molecules/Select/Select'
 import { routingOptions } from '@data/ipfs/peers/routingOptions'
 import { updateRoutingSchema } from '@schemas/ipfsPeer/updateIPFSPeer'
-import { updateIPFSPeer } from '@utils/requests/ipfsPeersRequests'
+import { updateIPFSPeer } from '@utils/requests/ipfs/peers'
 import { IPFSRouting } from '@enums/IPFSPeers/IPFSRouting'
 
 interface Props {

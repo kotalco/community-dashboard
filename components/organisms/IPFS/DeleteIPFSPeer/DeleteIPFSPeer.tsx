@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form'
 
 import Button from '@components/atoms/Button/Button'
 import DeleteModal from '@components/molecules/Dialog/Dialog'
-import { deleteIPFSPeer } from '@utils/requests/ipfsPeersRequests'
+import { deleteIPFSPeer } from '@utils/requests/ipfs/peers'
 import TextInput from '@components/molecules/TextInput/TextInput'
 import { useNotification } from '@components/contexts/NotificationContext'
 
