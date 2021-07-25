@@ -1,7 +1,10 @@
 import useSWR from 'swr'
 
-import { fetcher } from '@utils/axios'
-import { IPFSClusterPeer } from '@interfaces/ipfs/IPFSClusterPeer'
+import axios, { fetcher } from '@utils/axios'
+import {
+  CreateIPFSClusterPeer,
+  IPFSClusterPeer,
+} from '@interfaces/ipfs/IPFSClusterPeer'
 
 /**
  * Hook that get all cluster peers from the server
@@ -18,4 +21,19 @@ export const useClusterPeers = (initialClusterPeers?: {
   )
 
   return { clusterpeers: data?.clusterpeers, isError: !!error }
+}
+
+/**
+ * Send POST request to the server to create new IPFS Cluster Peer
+ * @param body data required to create new IPFS Cluster Peer
+ * @returns the IPFS Cluster Peer created by the server
+ */
+export const createIPFSClusterPeer = async (
+  body: CreateIPFSClusterPeer
+): Promise<IPFSClusterPeer> => {
+  const { data } = await axios.post<{ clusterpeer: IPFSClusterPeer }>(
+    `/ipfs/clusterpeers`,
+    body
+  )
+  return data.clusterpeer
 }

@@ -6,7 +6,7 @@ import { joiResolver } from '@hookform/resolvers/joi'
 import Button from '@components/atoms/Button/Button'
 import TextInput from '@components/molecules/TextInput/TextInput'
 import { UpdateGateway } from '@interfaces/ipfs/IPFSPeer'
-import { updateGatewaySchema } from '@schemas/ipfsPeer/updateIPFSPeer'
+import { updateGatewaySchema } from '@schemas/ipfs/peers/updateIPFSPeer'
 import { updateIPFSPeer } from '@utils/requests/ipfs/peers'
 
 interface Props {

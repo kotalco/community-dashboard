@@ -7,7 +7,7 @@ import Button from '@components/atoms/Button/Button'
 import { UpdateRouting } from '@interfaces/ipfs/IPFSPeer'
 import Select from '@components/molecules/Select/Select'
 import { routingOptions } from '@data/ipfs/peers/routingOptions'
-import { updateRoutingSchema } from '@schemas/ipfsPeer/updateIPFSPeer'
+import { updateRoutingSchema } from '@schemas/ipfs/peers/updateIPFSPeer'
 import { updateIPFSPeer } from '@utils/requests/ipfs/peers'
 import { IPFSRouting } from '@enums/IPFS/Peers/IPFSRouting'
 
