@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import Joi from 'joi';
 
 export const schema = Joi.object({
   name: Joi.string().trim().required().pattern(/^\S*$/).messages({
@@ -45,5 +45,5 @@ export const schema = Joi.object({
       'array.min':
         'You need to enter at least 1 Ethereum endpoint when client is Prysm and network is not Mainnet',
     }),
-})
-export default schema
+});
+export default schema;

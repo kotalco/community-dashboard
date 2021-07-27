@@ -1,10 +1,12 @@
-import axios from '../axios'
-import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode'
+import axios from '../axios';
+import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 
 export const getAllNodes = async (): Promise<EthereumNode[]> => {
-  const { data } = await axios.get<{ nodes: EthereumNode[] }>(`/ethereum/nodes`)
-  return data.nodes
-}
+  const { data } = await axios.get<{ nodes: EthereumNode[] }>(
+    `/ethereum/nodes`
+  );
+  return data.nodes;
+};
 
 /**
  * Create a new node
@@ -17,10 +19,10 @@ export const createEthereumNode = async (
   const { data } = await axios.post<{ node: EthereumNode }>(
     `/ethereum/nodes`,
     body
-  )
+  );
 
-  return data.node
-}
+  return data.node;
+};
 
 /**
  * Find ethereum node by its name
@@ -30,9 +32,9 @@ export const createEthereumNode = async (
 export const getEthereumNode = async (name: string): Promise<EthereumNode> => {
   const { data } = await axios.get<{ node: EthereumNode }>(
     `/ethereum/nodes/${name}`
-  )
-  return data.node
-}
+  );
+  return data.node;
+};
 
 /**
  * Find ethereum node by its name and updates its data
@@ -47,14 +49,14 @@ export const updateEthereumNode = async (
   const { data } = await axios.put<{ node: EthereumNode }>(
     `/ethereum/nodes/${name}`,
     body
-  )
-  return data.node
-}
+  );
+  return data.node;
+};
 
 /**
  * Send a delete request to delete an Ethereum Node
  * @param name Ethereum node name
  */
 export const deleteNode = async (name: string): Promise<void> => {
-  await axios.delete(`/ethereum/nodes/${name}`)
-}
+  await axios.delete(`/ethereum/nodes/${name}`);
+};

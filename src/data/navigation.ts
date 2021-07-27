@@ -1,4 +1,4 @@
-import { HomeIcon, CubeIcon, KeyIcon } from '@heroicons/react/outline'
+import { HomeIcon, CubeIcon, KeyIcon } from '@heroicons/react/outline';
 
 export const navigation = [
   { name: 'Dashboard', icon: HomeIcon, href: '/' },
@@ -20,4 +20,4 @@ export const navigation = [
     ],
   },
   { name: 'Secrets', icon: KeyIcon, href: '/core/secrets' },
-]
+];

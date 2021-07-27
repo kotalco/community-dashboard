@@ -1,7 +1,7 @@
-import Joi from 'joi'
+import Joi from 'joi';
 
 const ipAddressRegex =
-  /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
+  /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
 
 export const updateClientSchema = Joi.object({
   client: Joi.string()
@@ -12,7 +12,7 @@ export const updateClientSchema = Joi.object({
       'any.required': `Please choose your client`,
       'any.only': `Please choose your client`,
     }),
-})
+});
 
 export const updateEth1EndpointsSchema = Joi.object({
   client: Joi.string().strip(),
@@ -29,7 +29,7 @@ export const updateEth1EndpointsSchema = Joi.object({
       'array.min':
         'You need to enter at least 1 Ethereum endpoint when client is Prysm and network is not Mainnet',
     }),
-})
+});
 
 export const updateAPISchema = Joi.object({
   rest: Joi.boolean().when('client', {
@@ -129,7 +129,7 @@ export const updateAPISchema = Joi.object({
       'string.pattern.base': 'Please provide a valid ip address',
     }),
   client: Joi.string().strip(),
-})
+});
 
 export const updateResourcesSchema = Joi.object({
   cpu: Joi.string()
@@ -166,4 +166,4 @@ export const updateResourcesSchema = Joi.object({
       'string.empty': 'Please enter number of disk space required',
       'string.pattern.base': 'Disk space required should be a number',
     }),
-})
+});

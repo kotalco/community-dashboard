@@ -1,1 +1,1 @@
-export const tabTitles = ['Protocol', 'Dangerous Zone']
+export const tabTitles = ['Protocol', 'Dangerous Zone'];

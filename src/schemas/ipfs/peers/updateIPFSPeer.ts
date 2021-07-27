@@ -1,7 +1,7 @@
-import Joi from 'joi'
+import Joi from 'joi';
 
 const ipAddressRegex =
-  /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/
+  /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
 
 export const updateConfigProfilesSchema = Joi.object({
   profiles: Joi.array().items(
@@ -17,7 +17,7 @@ export const updateConfigProfilesSchema = Joi.object({
       'lowpower'
     )
   ),
-})
+});
 
 export const updateAPIsSchema = Joi.object({
   apiPort: Joi.number().required().messages({
@@ -28,7 +28,7 @@ export const updateAPIsSchema = Joi.object({
     'string.empty': 'Please provide an API server host',
     'string.pattern.base': 'Please provide a valid ip address',
   }),
-})
+});
 
 export const updateGatewaySchema = Joi.object({
   gatewayPort: Joi.number().required().messages({
@@ -39,7 +39,7 @@ export const updateGatewaySchema = Joi.object({
     'string.empty': 'Please provide a gateway server host',
     'string.pattern.base': 'Please provide a valid ip address',
   }),
-})
+});
 
 export const updateRoutingSchema = Joi.object({
   routing: Joi.string()
@@ -49,4 +49,4 @@ export const updateRoutingSchema = Joi.object({
     .messages({
       'any.only': `Please choose a client from the list`,
     }),
-})
+});

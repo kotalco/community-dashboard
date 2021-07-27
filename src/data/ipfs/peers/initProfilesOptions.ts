@@ -1,6 +1,6 @@
-import { IPFSConfigurationProfile } from '@enums/IPFS/Peers/IPFSConfigurationProfile'
+import { IPFSConfigurationProfile } from '@enums/IPFS/Peers/IPFSConfigurationProfile';
 
-type Profiles = { label: string; value: IPFSConfigurationProfile }[]
+type Profiles = { label: string; value: IPFSConfigurationProfile }[];
 
 export const initProfilesOptions: Profiles = [
   { label: 'server', value: IPFSConfigurationProfile.server },
@@ -18,4 +18,4 @@ export const initProfilesOptions: Profiles = [
   { label: 'flatfs', value: IPFSConfigurationProfile.flatfs },
   { label: 'badgerds', value: IPFSConfigurationProfile.badgerds },
   { label: 'lowpower', value: IPFSConfigurationProfile.lowpower },
-]
+];

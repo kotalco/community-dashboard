@@ -1,10 +1,10 @@
-import axios from '../../../axios'
+import axios from '../../../axios';
 
 import {
   CreateEthereum2Validator,
   Ethereum2Validator,
   UpdateEthereum2Validator,
-} from '@interfaces/ethereum2/Ethereum2Validator'
+} from '@interfaces/ethereum2/Ethereum2Validator';
 
 /**
  * Send a get request to find all ethereum 2.0 validators
@@ -13,10 +13,10 @@ import {
 export const getAllValidators = async (): Promise<Ethereum2Validator[]> => {
   const { data } = await axios.get<{ validators: Ethereum2Validator[] }>(
     `/ethereum2/validators`
-  )
+  );
 
-  return data.validators
-}
+  return data.validators;
+};
 
 /**
  * Send a post request to create a new validator using ethereum 2.0 protocol
@@ -26,21 +26,21 @@ export const getAllValidators = async (): Promise<Ethereum2Validator[]> => {
 export const createValidator = async (
   values: CreateEthereum2Validator
 ): Promise<Ethereum2Validator> => {
-  const { keystores, ...rest } = values
-  const keystoresObject = keystores.map((key) => ({ secretName: key }))
+  const { keystores, ...rest } = values;
+  const keystoresObject = keystores.map((key) => ({ secretName: key }));
 
   const body = {
     keystores: keystoresObject,
     ...rest,
-  }
+  };
 
   const { data } = await axios.post<{ validator: Ethereum2Validator }>(
     '/ethereum2/validators',
     body
-  )
+  );
 
-  return data.validator
-}
+  return data.validator;
+};
 
 /**
  * Send a get request to find a validator by its name
@@ -52,18 +52,18 @@ export const getValidator = async (
 ): Promise<Ethereum2Validator> => {
   const { data } = await axios.get<{ validator: Ethereum2Validator }>(
     `/ethereum2/validators/${validatorName}`
-  )
+  );
 
-  return data.validator
-}
+  return data.validator;
+};
 
 /**
  * Send a delete request to delete the validator
  * @param validatorName Vaidator name to be deleted
  */
 export const deleteValidator = async (validatorName: string): Promise<void> => {
-  await axios.delete(`/ethereum2/validators/${validatorName}`)
-}
+  await axios.delete(`/ethereum2/validators/${validatorName}`);
+};
 
 /**
  * Send a put request to update some data of the validator
@@ -78,7 +78,7 @@ export const updateValidator = async (
   const { data } = await axios.put<{ validator: Ethereum2Validator }>(
     `/ethereum2/validators/${validatorName}`,
     validatorData
-  )
+  );
 
-  return data.validator
-}
+  return data.validator;
+};

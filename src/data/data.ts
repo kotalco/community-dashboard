@@ -14,4 +14,4 @@ export const ENDPOINTS = [
     name: 'rinkeby-endpoint',
     nodeName: 'my-ethereum-node',
   },
-]
+];

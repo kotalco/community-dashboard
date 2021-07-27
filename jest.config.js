@@ -1,22 +1,18 @@
 module.exports = {
-  roots: ['<rootDir>'],
+  preset: 'ts-jest',
   testEnvironment: 'jsdom',
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'json', 'jsx'],
-  testPathIgnorePatterns: ['<rootDir>[/\\\\](node_modules|.next)[/\\\\]'],
-  transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(ts|tsx)$'],
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.ts'],
-  transform: {
-    '^.+\\.(ts|tsx)$': 'babel-jest',
+  globals: {
+    'ts-jest': {
+      tsconfig: './tsconfig.jest.json',
+    },
   },
-  watchPlugins: [
-    'jest-watch-typeahead/filename',
-    'jest-watch-typeahead/testname',
-  ],
-  moduleNameMapper: {
-    '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
-    '@enums/(.*)': '<rootDir>/src/enums/$1',
-    '@components/(.*)': '<rootDir>/components/$1',
-    '@data/(.*)': '<rootDir>/src/data/$1',
-    '@utils/(.*)': '<rootDir>/src/utils/$1',
+  setupFilesAfterEnv: ['./src/utils/jest.setup.ts'],
+  coverageThreshold: {
+    global: {
+      branches: 100,
+      functions: 100,
+      lines: 100,
+      statements: 100,
+    },
   },
-}
+};

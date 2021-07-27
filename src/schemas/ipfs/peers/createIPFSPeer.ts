@@ -1,4 +1,4 @@
-import Joi from 'joi'
+import Joi from 'joi';
 
 export const schema = Joi.object({
   name: Joi.string().trim().required().pattern(/^\S*$/).messages({
@@ -29,4 +29,4 @@ export const schema = Joi.object({
           'You have to choose 1 configration profile from the allowed list',
       },
     }),
-})
+});

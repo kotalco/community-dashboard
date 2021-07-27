@@ -5,4 +5,4 @@ export const tabsTitles = [
   'Gateway',
   'Routing',
   'Dangerous Zone',
-]
+];

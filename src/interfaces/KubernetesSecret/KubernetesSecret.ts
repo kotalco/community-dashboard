@@ -1,12 +1,12 @@
-import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes'
+import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 
 export interface KubernetesSecret {
-  name: string
-  type: KubernetesSecretTypes
+  name: string;
+  type: KubernetesSecretTypes;
 }
 
 export interface CreateKubernetesSecret {
-  name: string
-  type: KubernetesSecretTypes
-  data: { password: string; key: string; keystore: string }
+  name: string;
+  type: KubernetesSecretTypes;
+  data: { password: string; key: string; keystore: string };
 }

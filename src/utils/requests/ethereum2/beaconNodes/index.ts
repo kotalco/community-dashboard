@@ -1,10 +1,10 @@
-import axios from '../../../axios'
+import axios from '../../../axios';
 
 import {
   CreateEthereum2BeaconNode,
   Ethereum2BeaconNode,
   UpdateEthereum2BeaconNode,
-} from '@interfaces/ethereum2/Ethereum2BeaconNode'
+} from '@interfaces/ethereum2/Ethereum2BeaconNode';
 
 /**
  * Send a get request to find all ethereum 2.0 beacon nodes
@@ -13,10 +13,10 @@ import {
 export const getAllBeaconNodes = async (): Promise<Ethereum2BeaconNode[]> => {
   const { data } = await axios.get<{ beaconnodes: Ethereum2BeaconNode[] }>(
     `/ethereum2/beaconnodes`
-  )
+  );
 
-  return data.beaconnodes
-}
+  return data.beaconnodes;
+};
 
 /**
  * Send a post request to create a new beacon node using ethereum 2.0 protocol
@@ -26,17 +26,17 @@ export const getAllBeaconNodes = async (): Promise<Ethereum2BeaconNode[]> => {
 export const createBeaconNode = async (
   values: CreateEthereum2BeaconNode
 ): Promise<Ethereum2BeaconNode> => {
-  const { name, client, selectNetwork, textNetwork, eth1Endpoints } = values
-  const network = selectNetwork === 'other' ? textNetwork : selectNetwork
-  const body = { name, client, network, eth1Endpoints }
+  const { name, client, selectNetwork, textNetwork, eth1Endpoints } = values;
+  const network = selectNetwork === 'other' ? textNetwork : selectNetwork;
+  const body = { name, client, network, eth1Endpoints };
 
   const { data } = await axios.post<{ beaconnode: Ethereum2BeaconNode }>(
     '/ethereum2/beaconnodes',
     body
-  )
+  );
 
-  return data.beaconnode
-}
+  return data.beaconnode;
+};
 
 /**
  * Send a get request to find a beacon node by its name
@@ -48,18 +48,18 @@ export const getBeaconNode = async (
 ): Promise<Ethereum2BeaconNode> => {
   const { data } = await axios.get<{ beaconnode: Ethereum2BeaconNode }>(
     `/ethereum2/beaconnodes/${nodeName}`
-  )
+  );
 
-  return data.beaconnode
-}
+  return data.beaconnode;
+};
 
 /**
  * Send a delete request to delete the beacon node
  * @param nodeName Node name to be deleted
  */
 export const deleteBeaconNode = async (nodeName: string): Promise<void> => {
-  await axios.delete(`/ethereum2/beaconnodes/${nodeName}`)
-}
+  await axios.delete(`/ethereum2/beaconnodes/${nodeName}`);
+};
 
 export const updateBeaconNode = async (
   nodeName: string,
@@ -68,7 +68,7 @@ export const updateBeaconNode = async (
   const { data } = await axios.put<{ beaconnode: Ethereum2BeaconNode }>(
     `/ethereum2/beaconnodes/${nodeName}`,
     nodeData
-  )
+  );
 
-  return data.beaconnode
-}
+  return data.beaconnode;
+};

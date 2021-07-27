@@ -1,10 +1,11 @@
-import useSWR from 'swr'
+import useSWR from 'swr';
 
-import axios, { fetcher } from '../../axios'
+import axios, { fetcher } from '../../axios';
 import {
   CreateKubernetesSecret,
   KubernetesSecret,
-} from '@interfaces/KubernetesSecret/KubernetesSecret'
+} from '@interfaces/KubernetesSecret/KubernetesSecret';
+import { AxiosError } from 'axios';
 
 /**
  * hook to send a request to get all secrets
@@ -15,17 +16,17 @@ import {
 export const useSecrets = (
   type: string,
   initialData?: {
-    secrets: KubernetesSecret[]
+    secrets: KubernetesSecret[];
   }
 ): { data?: KubernetesSecret[]; isError: boolean } => {
-  const { data, error } = useSWR<{ secrets: KubernetesSecret[] }>(
+  const { data, error } = useSWR<{ secrets: KubernetesSecret[] }, AxiosError>(
     `/core/secrets?type=${type}`,
     fetcher,
     { initialData, revalidateOnMount: true }
-  )
+  );
 
-  return { data: data?.secrets, isError: !!error }
-}
+  return { data: data?.secrets, isError: !!error };
+};
 
 /**
  * Create new secret type
@@ -38,15 +39,15 @@ export const createSecret = async (
   const { data } = await axios.post<{ secret: CreateKubernetesSecret }>(
     '/core/secrets',
     secret
-  )
+  );
 
-  return data.secret
-}
+  return data.secret;
+};
 
 /**
  * Deletes kubernetes secret
  * @param name Name of the secret
  */
 export const deleteSecret = async (name: string): Promise<void> => {
-  await axios.delete(`/core/secrets/${name}`)
-}
+  await axios.delete(`/core/secrets/${name}`);
+};

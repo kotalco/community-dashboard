@@ -1,1 +1,1 @@
-export const noSpacePattern = /^\S*$/
+export const noSpacePattern = /^\S*$/;
