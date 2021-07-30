@@ -1,10 +1,8 @@
 import { useEffect } from 'react';
-import Error from 'next/error';
-import { GetStaticProps, InferGetStaticPropsType } from 'next';
+import { InferGetStaticPropsType } from 'next';
 import { GlobeAltIcon } from '@heroicons/react/solid';
 import { ChipIcon } from '@heroicons/react/outline';
 import { PlusIcon } from '@heroicons/react/solid';
-import useSWR from 'swr';
 
 import Layout from '@components/templates/Layout/Layout';
 import List from '@components/organisms/List/List';
