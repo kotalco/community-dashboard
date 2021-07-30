@@ -1,4 +1,6 @@
-import axios from '../../../axios';
+import axios, { fetcher } from '../../../axios';
+import { AxiosError } from 'axios';
+import useSWR, { SWRConfiguration } from 'swr';
 
 import {
   CreateEthereum2BeaconNode,
@@ -10,12 +12,15 @@ import {
  * Send a get request to find all ethereum 2.0 beacon nodes
  * @returns All Ethereum 2.0 beacon nodes
  */
-export const getAllBeaconNodes = async (): Promise<Ethereum2BeaconNode[]> => {
-  const { data } = await axios.get<{ beaconnodes: Ethereum2BeaconNode[] }>(
-    `/ethereum2/beaconnodes`
+export const useBeaconnodes = (config?: SWRConfiguration) => {
+  const swr = useSWR<{ beaconnodes: Ethereum2BeaconNode[] }, AxiosError>(
+    '/ethereum2/beaconnodes',
+    fetcher,
+    config
   );
+  const data = swr.data?.beaconnodes;
 
-  return data.beaconnodes;
+  return { ...swr, data };
 };
 
 /**

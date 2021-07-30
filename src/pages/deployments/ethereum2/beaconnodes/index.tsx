@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { GetStaticProps } from 'next';
+import Error from 'next/error';
+import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import { GlobeAltIcon } from '@heroicons/react/solid';
 import { ChipIcon } from '@heroicons/react/outline';
 import { PlusIcon } from '@heroicons/react/solid';
@@ -14,33 +15,23 @@ import ButtonGroup from '@components/molecules/ButtonGroup/ButtonGroup';
 import Heading from '@components/templates/Heading/Heading';
 import EThereumIcon from '@components/Icons/EthereumIcon/EthereumIcon';
 import { useNotification } from '@components/contexts/NotificationContext';
-import { getAllBeaconNodes } from '@utils/requests/ethereum2/beaconNodes';
+import { useBeaconnodes } from '@utils/requests/ethereum2/beaconNodes';
 import { Ethereum2BeaconNode } from '@interfaces/ethereum2/Ethereum2BeaconNode';
 import { resourcesTab, createButtons } from '@data/ethereum2/links';
-import { AxiosError } from 'axios';
 import Button from '@components/atoms/Button/Button';
+import { fetcher } from '@utils/axios';
 
-interface Props {
-  beaconNodes: Ethereum2BeaconNode[];
-}
-
-const Ethereum2Nodes: React.FC<Props> = ({ beaconNodes }) => {
+function BeaconnodesPage({
+  beaconnodes,
+}: InferGetStaticPropsType<typeof getStaticProps>) {
   const { notificationData, removeNotification } = useNotification();
-
-  const { data, error } = useSWR<Ethereum2BeaconNode[], AxiosError>(
-    '/ethereum2/beaconnodes',
-    getAllBeaconNodes,
-    {
-      initialData: beaconNodes,
-      revalidateOnMount: true,
-    }
-  );
+  const { data } = useBeaconnodes({
+    initialData: { beaconnodes },
+  });
 
   useEffect(() => {
     return () => removeNotification();
   }, [removeNotification]);
-
-  if (error) return <p>failed to load nodes</p>;
 
   return (
     <Layout>
@@ -50,9 +41,9 @@ const Ethereum2Nodes: React.FC<Props> = ({ beaconNodes }) => {
 
       <div className="py-4">
         <LinkedTabs tabs={resourcesTab} />
-        {data && data.length > 0 ? (
+        {data?.length ? (
           <List>
-            {data.map(({ name, client, network }) => (
+            {beaconnodes.map(({ name, client, network }) => (
               <ListItem
                 key={name}
                 link={`/deployments/ethereum2/beaconnodes/${name}`}
@@ -102,15 +93,13 @@ const Ethereum2Nodes: React.FC<Props> = ({ beaconNodes }) => {
       </NotificationPanel>
     </Layout>
   );
+}
+
+export const getStaticProps = async () => {
+  const { beaconnodes } = await fetcher<{ beaconnodes: Ethereum2BeaconNode[] }>(
+    '/ethereum2/beaconnodes'
+  );
+  return { props: { beaconnodes }, revalidate: 10 };
 };
 
-export const getStaticProps: GetStaticProps = async () => {
-  try {
-    const beaconNodes = await getAllBeaconNodes();
-    return { props: { beaconNodes }, revalidate: 10 };
-  } catch (e) {
-    return { notFound: true };
-  }
-};
-
-export default Ethereum2Nodes;
+export default BeaconnodesPage;
