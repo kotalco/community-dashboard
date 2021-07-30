@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { GetStaticProps } from 'next';
 import { GlobeAltIcon } from '@heroicons/react/solid';
 import { ChipIcon } from '@heroicons/react/outline';
+import { PlusIcon } from '@heroicons/react/solid';
 import useSWR from 'swr';
 
 import Layout from '@components/templates/Layout/Layout';
@@ -11,11 +12,13 @@ import NotificationPanel from '@components/organisms/NotificationPanel/Notificat
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import ButtonGroup from '@components/molecules/ButtonGroup/ButtonGroup';
 import Heading from '@components/templates/Heading/Heading';
+import EThereumIcon from '@components/Icons/EthereumIcon/EthereumIcon';
 import { useNotification } from '@components/contexts/NotificationContext';
 import { getAllBeaconNodes } from '@utils/requests/ethereum2/beaconNodes';
 import { Ethereum2BeaconNode } from '@interfaces/ethereum2/Ethereum2BeaconNode';
 import { resourcesTab, createButtons } from '@data/ethereum2/links';
 import { AxiosError } from 'axios';
+import Button from '@components/atoms/Button/Button';
 
 interface Props {
   beaconNodes: Ethereum2BeaconNode[];
@@ -41,7 +44,7 @@ const Ethereum2Nodes: React.FC<Props> = ({ beaconNodes }) => {
 
   return (
     <Layout>
-      <Heading title="Etherium 2.0">
+      <Heading title="Ethereum 2.0">
         <ButtonGroup label="Create New" buttons={createButtons} />
       </Heading>
 
@@ -63,8 +66,23 @@ const Ethereum2Nodes: React.FC<Props> = ({ beaconNodes }) => {
             ))}
           </List>
         ) : (
-          <div className="bg-white p-4 text-center">
-            <p>There is no beacon nodes created</p>
+          <div className="text-center bg-white py-6 rounded-tr-md rounded-b-md">
+            <EThereumIcon className="mx-auto w-12 h-12 text-gray-400" />
+            <h3 className="mt-2 text-sm font-medium text-gray-900">
+              No Beacon Nodes
+            </h3>
+            <p className="mt-1 text-sm text-gray-500">
+              Get started by creating a new beacon node.
+            </p>
+            <div className="mt-6">
+              <Button
+                href="/deployments/ethereum2/beaconnodes/create"
+                className="btn btn-primary"
+              >
+                <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                New Beacon Node
+              </Button>
+            </div>
           </div>
         )}
       </div>
