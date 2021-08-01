@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 
 interface Props {
   name: string;
@@ -19,35 +19,24 @@ const TextareaWithInput: React.FC<Props> = ({
   onChange,
   multiple,
 }) => {
-  const [text, setText] = useState(value?.join('\n') || []);
-  const isMounted = useRef(false);
+  const [text, setText] = useState(value?.join('\n') || '');
+  // const isMounted = useRef(false);
 
-  useEffect(() => {
-    if (isMounted.current) {
-      onChange([]);
-      setText('');
-    } else {
-      isMounted.current = true;
-    }
-  }, [multiple]);
+  // useEffect(() => {
+  //   if (isMounted.current) {
+  //     onChange([]);
+  //     setText('');
+  //   } else {
+  //     isMounted.current = true;
+  //   }
+  // }, [multiple]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
   ) => {
     const { value } = e.target;
     setText(value);
-
-    // Convert value to empty array if empty string and return
-    if (!value) {
-      onChange([]);
-      return;
-    }
-
-    if (multiple) {
-      onChange(value.split('\n'));
-    } else {
-      onChange([value]);
-    }
+    onChange(value.split('\n'));
   };
 
   return (
@@ -77,7 +66,7 @@ const TextareaWithInput: React.FC<Props> = ({
         )}
       </div>
       {helperText && <p className="mt-2 text-sm text-gray-500">{helperText}</p>}
-      {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+      {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
     </div>
   );
 };

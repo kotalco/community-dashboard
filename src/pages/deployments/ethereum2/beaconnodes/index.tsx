@@ -48,9 +48,9 @@ function BeaconnodesPage({
                 title={name}
               >
                 <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                <p>{client}</p>
-                <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
                 <p>{network}</p>
+                <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
+                <p>{client}</p>
               </ListItem>
             ))}
           </List>

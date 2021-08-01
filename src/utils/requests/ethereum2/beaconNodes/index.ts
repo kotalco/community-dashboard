@@ -31,13 +31,9 @@ export const useBeaconnodes = (config?: SWRConfiguration) => {
 export const createBeaconNode = async (
   values: CreateEthereum2BeaconNode
 ): Promise<Ethereum2BeaconNode> => {
-  const { name, client, selectNetwork, textNetwork, eth1Endpoints } = values;
-  const network = selectNetwork === 'other' ? textNetwork : selectNetwork;
-  const body = { name, client, network, eth1Endpoints };
-
   const { data } = await axios.post<{ beaconnode: Ethereum2BeaconNode }>(
     '/ethereum2/beaconnodes',
-    body
+    values
   );
 
   return data.beaconnode;

@@ -1,11 +1,5 @@
-import {
-  SubmitHandler,
-  useForm,
-  Controller,
-  FieldError,
-} from 'react-hook-form';
+import { SubmitHandler, useForm, Controller } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import { joiResolver } from '@hookform/resolvers/joi';
 import axios from 'axios';
 
 import Layout from '@components/templates/Layout/Layout';
@@ -13,11 +7,13 @@ import FormLayout from '@components/templates/FormLayout/FormLayout';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Select from '@components/molecules/Select/Select';
 import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
+import Heading from '@components/templates/Heading/Heading';
+import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 import { useNotification } from '@components/contexts/NotificationContext';
 import { clientOptions } from '@data/ethereum2/beaconNode/clientOptions';
 import { networkOptions } from '@data/ethereum2/beaconNode/networkOption';
 import { createBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
-import { schema } from '@schemas/ethereum2/beaconNode/createBeaconNode';
+import schema from '@schemas/ethereum2/beaconNode/createBeaconNode';
 import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
 import { CreateEthereum2BeaconNode } from '@interfaces/ethereum2/Ethereum2BeaconNode';
 import { BeaconNodeNetwork } from '@enums/Ethereum2/BeaconNodes/BeaconNodeNetwork';
@@ -34,12 +30,8 @@ const CreateBeaconNode: React.FC = () => {
     handleSubmit,
     setError,
     formState: { errors, isSubmitted, isValid, isSubmitting },
-  } = useForm<CreateEthereum2BeaconNode>({
-    defaultValues: { eth1Endpoints: [] },
-    resolver: joiResolver(schema),
-  });
-  const [selectNetwork, client] = watch(['selectNetwork', 'client']);
-  const eth1EndpointsError = errors.eth1Endpoints as FieldError | undefined;
+  } = useForm<CreateEthereum2BeaconNode>();
+  const [network, client] = watch(['network', 'client']);
   /**
    * Submit create ethereum node form
    * @param BeaconNodeData the data required to create new node
@@ -69,77 +61,81 @@ const CreateBeaconNode: React.FC = () => {
 
   return (
     <Layout>
-      <h1 className="text-2xl font-semibold">Create New Beacon Node</h1>
+      <Heading title="Create New Beacon Node" />
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormLayout
           isSubmitted={isSubmitted}
           isSubmitting={isSubmitting}
           isValid={isValid}
         >
-          <div className="px-4 py-5 sm:p-6">
-            {/* Beacon Node Name */}
-            <TextInput
-              {...register('name')}
-              label="Node Name"
-              className="rounded-md"
-              error={errors.name?.message}
-            />
+          {/* Beacon Node Name */}
+          <TextInput
+            {...register('name', schema.name)}
+            label="Node Name"
+            error={errors.name?.message}
+          />
 
-            {/* Client */}
-            <Select
-              label="Client"
-              error={errors.client?.message}
-              className="rounded-md"
-              options={[
-                { label: 'Choose a client...', value: '' },
-                ...clientOptions,
-              ]}
-              {...register('client')}
-            />
-            {/* Network */}
-            <Select
-              label="Network"
-              error={errors.selectNetwork?.message}
-              className={
-                selectNetwork === 'other' ? 'rounded-t-md' : 'rounded-md'
-              }
-              options={[
-                { label: 'Choose a network...', value: '' },
-                ...networkOptions,
-              ]}
-              {...register('selectNetwork')}
-            />
-            {selectNetwork === 'other' && (
-              <TextInput
-                error={errors.textNetwork?.message}
-                placeholder="Network Name"
-                className="rounded-none rounded-b-md"
-                {...register('textNetwork')}
-              />
-            )}
-
-            {/* Ethereum Endpoint in case of client is Prysm and network is not Mainnet */}
-            {client === BeaconNodeClient.prysm &&
-              selectNetwork !== BeaconNodeNetwork.mainnet && (
-                <div className="mt-5">
-                  <Controller
-                    name="eth1Endpoints"
-                    control={control}
-                    render={({ field }) => (
-                      <TextareaWithInput
-                        multiple
-                        label="Ethereum Node JSON-RPC Endpoints"
-                        helperText="One endpoint per each line"
-                        error={eth1EndpointsError?.message}
-                        value={field.value}
-                        name={field.name}
-                        onChange={field.onChange}
-                      />
-                    )}
-                  />
-                </div>
+          {/* Client */}
+          <div className="pt-4 max-w-xs">
+            <Controller
+              name="client"
+              control={control}
+              rules={schema.client}
+              render={({ field }) => (
+                <Select
+                  placeholder="Choose a client..."
+                  label="Client"
+                  error={errors.client?.message}
+                  options={clientOptions}
+                  onChange={field.onChange}
+                />
               )}
+            />
           </div>
+
+          {/* Network */}
+          <div className="pt-4 max-w-xs">
+            <Controller
+              name="network"
+              control={control}
+              rules={schema.network}
+              render={({ field }) => (
+                <SelectWithInput
+                  placeholder="Choose a network..."
+                  label="Network"
+                  error={errors.network?.message}
+                  options={networkOptions}
+                  value={field.value}
+                  name={field.name}
+                  onChange={field.onChange}
+                />
+              )}
+            />
+          </div>
+
+          {/* Ethereum Endpoint in case of client is Prysm and network is not Mainnet */}
+          {client === BeaconNodeClient.prysm &&
+            network !== BeaconNodeNetwork.mainnet && (
+              <div className="mt-5">
+                <Controller
+                  name="eth1Endpoints"
+                  control={control}
+                  shouldUnregister
+                  rules={schema.eth1Endpoints}
+                  render={({ field }) => (
+                    <TextareaWithInput
+                      multiple
+                      label="Ethereum Node JSON-RPC Endpoints"
+                      helperText="One endpoint per each line"
+                      error={errors.eth1Endpoints?.message}
+                      value={field.value}
+                      name={field.name}
+                      onChange={field.onChange}
+                    />
+                  )}
+                />
+              </div>
+            )}
         </FormLayout>
       </form>
     </Layout>

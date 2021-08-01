@@ -1,4 +1,5 @@
 import React, { MouseEvent, useState } from 'react';
+import { ChangeHandler } from 'react-hook-form';
 import {
   ExclamationCircleIcon,
   EyeIcon,
@@ -11,21 +12,19 @@ import IconButton from '@components/atoms/IconButton/IconButton';
 interface Props {
   name: string;
   placeholder?: string;
-  className?: string;
   helperText?: string;
   label?: string;
   error?: string;
   disabled?: boolean;
   type?: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: ChangeHandler;
 }
 
 const TextInput = React.forwardRef<HTMLInputElement, Props>(function TextInput(
   {
     label,
     name,
-    className,
-    placeholder,
+    placeholder = '',
     onChange,
     error,
     disabled,
@@ -55,8 +54,8 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>(function TextInput(
           name={name}
           type={inputType}
           id={name}
-          className={`shadow-sm focus:ring-indigo-500 block w-full sm:text-sm border-gray-300 disabled:bg-gray-100 disabled:text-gray-500 ${
-            className ? className : ''
+          className={`shadow-sm focus:ring-indigo-500 block w-full sm:text-sm disabled:bg-gray-100 disabled:text-gray-500 rounded-md ${
+            error ? 'border-red-300' : 'border-gray-300'
           }`}
         />
         {error && type !== 'password' && (
@@ -79,15 +78,14 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>(function TextInput(
           </div>
         )}
       </fieldset>
-      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+      {error && (
+        <p role="alert" className="mt-2 text-sm text-red-600">
+          {error}
+        </p>
+      )}
       {helperText && <p className="mt-2 text-sm">{helperText}</p>}
     </div>
   );
 });
-
-TextInput.defaultProps = {
-  className: '',
-  placeholder: '',
-};
 
 export default TextInput;
