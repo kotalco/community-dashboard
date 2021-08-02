@@ -48,6 +48,7 @@ const DeleteSecretDialoge: React.FC<Props> = ({
       open={open}
       close={closeDialog}
       error={error}
+      cancel
       action={
         <Button
           className="btn btn-alert"

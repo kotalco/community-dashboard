@@ -43,7 +43,7 @@ const KubernetesSecrets = ({
                 <div className="group p-4 flex items-center sm:px-6">
                   <div className="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
                     <div>
-                      <div className="flex text-sm font-medium text-indigo-600 truncate">
+                      <div className="flex text-sm font-medium text-gray-900 truncate">
                         <p>{name}</p>
                       </div>
                       <div className="mt-2 flex">

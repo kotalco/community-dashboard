@@ -3,12 +3,14 @@ import { Transition, Dialog } from '@headlessui/react';
 import { XIcon, ExclamationIcon } from '@heroicons/react/outline';
 
 import IconButton from '@components/atoms/IconButton/IconButton';
+import Button from '@components/atoms/Button/Button';
 
 interface Props {
   close: () => void;
   error?: string;
   title?: string;
   open: boolean;
+  cancel?: boolean;
   action?: React.ReactElement;
 }
 
@@ -19,6 +21,7 @@ const Modal: React.FC<Props> = ({
   open,
   action,
   error,
+  cancel,
 }) => {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -90,7 +93,17 @@ const Modal: React.FC<Props> = ({
                 </div>
               </div>
               <div className="mt-5 sm:mt-4 flex sm:flex-row-reverse justify-between items-center flex-col">
-                {action}
+                <div>
+                  {cancel && (
+                    <Button
+                      onClick={close}
+                      className="mr-3 mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+                    >
+                      Cancel
+                    </Button>
+                  )}
+                  {action}
+                </div>
                 {error && (
                   <p className="text-sm text-red-500 mt-2 sm:mt-0">{error}</p>
                 )}
