@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import axios from 'axios';
 
 import Layout from '@components/templates/Layout/Layout';
+import Heading from '@components/templates/Heading/Heading';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Select from '@components/molecules/Select/Select';
 import FormLayout from '@components/templates/FormLayout/FormLayout';
@@ -51,7 +52,7 @@ const CreateSecret: React.FC = () => {
 
   return (
     <Layout>
-      <h1 className="text-2xl font-semibold">Create New Secret</h1>
+      <Heading title="Create New Secret" />
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormLayout
           isSubmitted={isSubmitted}
@@ -64,23 +65,25 @@ const CreateSecret: React.FC = () => {
             {...register('name', nameValidations)}
           />
 
-          <Controller
-            name="type"
-            rules={typeValidations}
-            control={control}
-            render={({ field }) => (
-              <Select
-                placeholder="Choose a type..."
-                label="Secret Type"
-                error={errors.type?.message}
-                options={secretTypesOptions}
-                onChange={field.onChange}
-              />
-            )}
-          />
+          <div className="mt-4 max-w-xs">
+            <Controller
+              name="type"
+              rules={typeValidations}
+              control={control}
+              render={({ field }) => (
+                <Select
+                  placeholder="Choose a type..."
+                  label="Secret Type"
+                  error={errors.type?.message}
+                  options={secretTypesOptions}
+                  onChange={field.onChange}
+                />
+              )}
+            />
+          </div>
 
           {(type === KubernetesSecretTypes.password ||
-            type === KubernetesSecretTypes.keystore) && (
+            type === KubernetesSecretTypes.ethereum2Keystore) && (
             <div className="mt-4">
               <TextInput
                 label="Password"
@@ -91,7 +94,9 @@ const CreateSecret: React.FC = () => {
             </div>
           )}
 
-          {type === KubernetesSecretTypes.privatekey && (
+          {(type === KubernetesSecretTypes.ethereumPrivatekey ||
+            type === KubernetesSecretTypes.ipfsClusterPeerPrivatekey ||
+            type === KubernetesSecretTypes.ipfsSwarmKey) && (
             <div className="mt-4">
               <Textarea
                 label="Key"
@@ -101,7 +106,7 @@ const CreateSecret: React.FC = () => {
             </div>
           )}
 
-          {type === KubernetesSecretTypes.keystore && (
+          {type === KubernetesSecretTypes.ethereum2Keystore && (
             <div className="mt-4">
               <Controller
                 name="data.keystore"
