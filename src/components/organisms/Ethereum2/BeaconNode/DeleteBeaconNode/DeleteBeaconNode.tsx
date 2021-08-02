@@ -77,7 +77,6 @@ const DeleteBeaconNode: React.FC<Props> = ({ nodeName }) => {
             Are you sure you want to delete this node ?
           </p>
         </div>
-        {error && <p>{error}</p>}
         <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
           <Button className="btn btn-alert" onClick={openModal}>
             Delete Beacon Node
@@ -108,8 +107,9 @@ const DeleteBeaconNode: React.FC<Props> = ({ nodeName }) => {
             Please type the node name (
             <span className="font-bold">{nodeName}</span>) to confirm
           </p>
-          <TextInput className="rounded-md" {...register('name')} />
+          <TextInput {...register('name')} />
         </div>
+        {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
       </DeleteModal>
     </>
   );
