@@ -41,7 +41,7 @@ const UnitTextInput = React.forwardRef<HTMLInputElement, Props>(
     };
 
     return (
-      <div className="w-80 mt-4">
+      <div className="max-w-xs mt-4">
         <div>
           <div>
             <InputLabel

@@ -1,11 +1,13 @@
 import { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { mutate } from 'swr';
 import axios from 'axios';
 
 import Button from '@components/atoms/Button/Button';
-import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
+import {
+  updateBeaconNode,
+  useBeaconnode,
+} from '@utils/requests/ethereum2/beaconNodes';
 import { updateResourcesSchema } from '@schemas/ethereum2/beaconNode/updateBeaconNode';
 import { Ethereum2BeaconNode } from '@interfaces/ethereum2/Ethereum2BeaconNode';
 import UnitTextInput from '@components/molecules/UnitTextInput/UnitTextInput';
@@ -31,6 +33,7 @@ const unitOptions = [
 ];
 
 const BeaconNodeResourcesTab: React.FC<Props> = ({ beaconnode }) => {
+  const { mutate } = useBeaconnode(beaconnode.name);
   const [submitError, setSubmitError] = useState<string | undefined>('');
   const [submitSuccess, setSubmitSuccess] = useState('');
   const { cpu, cpuLimit, memory, memoryLimit, storage, name } = beaconnode;
@@ -46,13 +49,13 @@ const BeaconNodeResourcesTab: React.FC<Props> = ({ beaconnode }) => {
     resolver: joiResolver(updateResourcesSchema),
   });
 
-  const onSubmit = handleSubmit(async (values) => {
+  const onSubmit: SubmitHandler<FormData> = async (values) => {
     setSubmitError('');
     setSubmitSuccess('');
 
     try {
       const beaconnode = await updateBeaconNode(name, values);
-      void mutate(name, beaconnode);
+      void mutate({ beaconnode });
       const { cpu, cpuLimit, memory, memoryLimit, storage } = beaconnode;
       reset({ cpu, cpuLimit, memory, memoryLimit, storage });
       setSubmitSuccess('Beacon node has been updated');
@@ -62,10 +65,10 @@ const BeaconNodeResourcesTab: React.FC<Props> = ({ beaconnode }) => {
         setSubmitError(error.response?.data.error);
       }
     }
-  });
+  };
 
   return (
-    <>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
         <Controller
           name="cpu"
@@ -135,10 +138,10 @@ const BeaconNodeResourcesTab: React.FC<Props> = ({ beaconnode }) => {
 
       <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
         <Button
+          type="submit"
           className="btn btn-primary"
           disabled={!isDirty || isSubmitting}
           loading={isSubmitting}
-          onClick={onSubmit}
         >
           Save
         </Button>
@@ -147,7 +150,7 @@ const BeaconNodeResourcesTab: React.FC<Props> = ({ beaconnode }) => {
         )}
         {submitSuccess && <p>{submitSuccess}</p>}
       </div>
-    </>
+    </form>
   );
 };
 
