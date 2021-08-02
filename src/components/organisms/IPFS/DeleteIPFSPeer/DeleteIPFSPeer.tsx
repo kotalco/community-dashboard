@@ -106,7 +106,7 @@ const DangerousZoneContent: React.FC<Props> = ({ peerName }) => {
             Please type the peer name (
             <span className="font-bold">{peerName}</span>) to confirm
           </p>
-          <TextInput className="rounded-md" {...register('name')} />
+          <TextInput {...register('name')} />
         </div>
         {error && (
           <p className="text-sm text-red-600 font-medium mt-2">{error}</p>

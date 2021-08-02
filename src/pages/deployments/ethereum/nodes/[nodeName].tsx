@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
@@ -17,7 +16,6 @@ interface Props {
 }
 
 const EthereumNodeDetailsPage: React.FC<Props> = ({ ethereumNode }) => {
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
   const { isFallback, query } = useRouter();
   const { nodeName } = query;
 
@@ -37,13 +35,9 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ ethereumNode }) => {
       <h1 className="text-2xl font-semibold">{ethereumNode.name}</h1>
 
       <div className="bg-white overflow-hidden shadow rounded-lg divided-y divided-gray-200 mt-4">
-        <Tabs
-          activeIndex={activeTabIndex}
-          setActiveIndex={setActiveTabIndex}
-          tabs={tabTitles}
-        >
-          {activeTabIndex === 0 && <EthereumNodeDetails node={data} />}
-          {activeTabIndex === 1 && <DeleteEthereumNode nodeName={data.name} />}
+        <Tabs tabs={tabTitles}>
+          <EthereumNodeDetails node={data} />
+          <DeleteEthereumNode nodeName={data.name} />
         </Tabs>
       </div>
     </Layout>

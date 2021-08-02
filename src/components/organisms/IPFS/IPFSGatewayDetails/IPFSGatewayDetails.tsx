@@ -57,7 +57,6 @@ const IPFSPeerDetails: React.FC<Props> = (props) => {
         <div className="mt-4">
           <TextInput
             error={errors.gatewayPort?.message}
-            className="rounded-md"
             label="Local Gateway IPFS Server Port"
             {...register('gatewayPort')}
           />
@@ -65,7 +64,6 @@ const IPFSPeerDetails: React.FC<Props> = (props) => {
         <div className="mt-4">
           <TextInput
             error={errors.gatewayHost?.message}
-            className="rounded-md"
             label="Local Gateway IPFS Server Host"
             {...register('gatewayHost')}
           />

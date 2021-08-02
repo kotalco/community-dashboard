@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { mutate } from 'swr';
 import { joiResolver } from '@hookform/resolvers/joi';
 import axios from 'axios';
@@ -25,8 +25,8 @@ const IPFSPeerDetails: React.FC<Props> = ({ routing, peerName }) => {
 
   const {
     reset,
-    register,
     handleSubmit,
+    control,
     formState: { isDirty, isSubmitting, errors },
   } = useForm<UpdateRouting>({
     defaultValues: { routing },
@@ -54,12 +54,18 @@ const IPFSPeerDetails: React.FC<Props> = ({ routing, peerName }) => {
     <>
       <div className="px-4 py-5 sm:p-6">
         <div className="mt-4">
-          <Select
-            error={errors.routing?.message}
-            className="rounded-md"
-            options={routingOptions}
-            label="Content Routing Mechanism"
-            {...register('routing')}
+          <Controller
+            name="routing"
+            control={control}
+            render={({ field }) => (
+              <Select
+                placeholder="Choose routing option..."
+                error={errors.routing?.message}
+                options={routingOptions}
+                label="Content Routing Mechanism"
+                onChange={field.onChange}
+              />
+            )}
           />
         </div>
       </div>

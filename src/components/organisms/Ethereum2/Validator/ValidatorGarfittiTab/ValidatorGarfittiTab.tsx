@@ -48,11 +48,7 @@ const ValidatorGarfittiTab: React.FC<Props> = ({ name, graffiti }) => {
   return (
     <>
       <div className="px-4 py-5 sm:p-6">
-        <TextInput
-          className="rounded-md"
-          label="Graffiti"
-          {...register('graffiti')}
-        />
+        <TextInput label="Graffiti" {...register('graffiti')} />
       </div>
 
       <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">

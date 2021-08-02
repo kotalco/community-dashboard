@@ -55,7 +55,6 @@ const IPFSPeerDetails: React.FC<Props> = ({ peerName, apiPort, apiHost }) => {
         <div className="mt-4">
           <TextInput
             error={errors.apiPort?.message}
-            className="rounded-md"
             label="API Server Port"
             {...register('apiPort')}
           />
@@ -63,7 +62,6 @@ const IPFSPeerDetails: React.FC<Props> = ({ peerName, apiPort, apiHost }) => {
         <div className="mt-4">
           <TextInput
             error={errors.apiHost?.message}
-            className="rounded-md"
             label="API Server Host"
             {...register('apiHost')}
           />

@@ -1,5 +1,4 @@
 import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
-import { EthereumNodeNetwork } from '@enums/Ethereum/EthereumNodeNetwork';
 
 export interface EthereumNode {
   name: string;
@@ -10,6 +9,5 @@ export interface EthereumNode {
 export interface CreateEthereumNode {
   name: string;
   client: EthereumNodeClient;
-  selectNetwork: EthereumNodeNetwork;
-  textNetwork: string;
+  network: string;
 }

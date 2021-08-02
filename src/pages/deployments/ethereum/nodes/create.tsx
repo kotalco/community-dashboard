@@ -1,6 +1,6 @@
 import Layout from '@components/templates/Layout/Layout';
 import FormLayout from '@components/templates/FormLayout/FormLayout';
-import { SubmitHandler, useForm } from 'react-hook-form';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { joiResolver } from '@hookform/resolvers/joi';
 
@@ -15,34 +15,26 @@ import { CreateEthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import axios from 'axios';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
+import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 
 const CreateNode: React.FC = () => {
   const router = useRouter();
   const { createNotification } = useNotification();
   const {
     register,
-    watch,
     handleSubmit,
     setError,
+    control,
     formState: { errors, isSubmitted, isValid, isSubmitting },
   } = useForm<CreateEthereumNode>({ resolver: joiResolver(schema) });
-  const selectNetwork = watch('selectNetwork');
 
   /**
    * Submit create ethereum node form
    * @param nodeData the data required to create new node
    */
-  const onSubmit: SubmitHandler<CreateEthereumNode> = async ({
-    name,
-    client,
-    selectNetwork,
-    textNetwork,
-  }) => {
-    const network = selectNetwork === 'other' ? textNetwork : selectNetwork;
-    const body = { name, client, network };
-
+  const onSubmit: SubmitHandler<CreateEthereumNode> = async (values) => {
     try {
-      const node = await createEthereumNode(body);
+      const node = await createEthereumNode(values);
       createNotification({
         title: 'Node has been created',
         protocol: `node`,
@@ -77,42 +69,40 @@ const CreateNode: React.FC = () => {
             <TextInput
               {...register('name')}
               label="Node Name"
-              className="rounded-md"
               error={errors.name?.message}
             />
 
             {/* Client */}
-            <Select
-              label="Client"
-              error={errors.client?.message}
-              className="rounded-md"
-              options={[
-                { label: 'Choose a client...', value: '' },
-                ...clientOptions,
-              ]}
-              {...register('client')}
+            <Controller
+              name="client"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  placeholder="Choose a client..."
+                  label="Client"
+                  error={errors.client?.message}
+                  options={clientOptions}
+                  onChange={field.onChange}
+                />
+              )}
             />
+
             {/* Network */}
-            <Select
-              label="Network"
-              error={errors.selectNetwork?.message}
-              className={
-                selectNetwork === 'other' ? 'rounded-t-md' : 'rounded-md'
-              }
-              options={[
-                { label: 'Choose a network...', value: '' },
-                ...networkOptions,
-              ]}
-              {...register('selectNetwork')}
+            <Controller
+              name="network"
+              control={control}
+              render={({ field }) => (
+                <SelectWithInput
+                  placeholder="Choose a network..."
+                  label="Network"
+                  error={errors.network?.message}
+                  options={networkOptions}
+                  name={field.name}
+                  onChange={field.onChange}
+                  value={field.value}
+                />
+              )}
             />
-            {selectNetwork === 'other' && (
-              <TextInput
-                error={errors.textNetwork?.message}
-                placeholder="Network Name"
-                className="rounded-none rounded-b-md"
-                {...register('textNetwork')}
-              />
-            )}
           </div>
         </FormLayout>
       </form>

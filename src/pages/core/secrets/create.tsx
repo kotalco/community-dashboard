@@ -60,20 +60,23 @@ const CreateSecret: React.FC = () => {
         >
           <TextInput
             label="Secret Name"
-            className="rounded-md"
             error={errors.name?.message}
             {...register('name', nameValidations)}
           />
 
-          <Select
-            label="Secret Type"
-            error={errors.type?.message}
-            className="rounded-md"
-            {...register('type', typeValidations)}
-            options={[
-              { label: 'Choose a type...', value: '' },
-              ...secretTypesOptions,
-            ]}
+          <Controller
+            name="type"
+            rules={typeValidations}
+            control={control}
+            render={({ field }) => (
+              <Select
+                placeholder="Choose a type..."
+                label="Secret Type"
+                error={errors.type?.message}
+                options={secretTypesOptions}
+                onChange={field.onChange}
+              />
+            )}
           />
 
           {(type === KubernetesSecretTypes.password ||
@@ -81,7 +84,6 @@ const CreateSecret: React.FC = () => {
             <div className="mt-4">
               <TextInput
                 label="Password"
-                className="rounded-md"
                 type="password"
                 error={errors.data?.password?.message}
                 {...register('data.password', passwordValidations)}

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
@@ -21,7 +20,6 @@ interface Props {
 }
 
 const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
   const { isFallback, query } = useRouter();
   const { validatorName } = query;
 
@@ -40,46 +38,33 @@ const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
       <h1 className="text-2xl font-semibold">{validator.name}</h1>
 
       <div className="bg-white shadow rounded-lg divided-y divided-gray-200 mt-4">
-        <Tabs
-          activeIndex={activeTabIndex}
-          setActiveIndex={setActiveTabIndex}
-          tabs={tabTitles}
-        >
-          {activeTabIndex === 0 && (
-            <ValidatorProtocolTab client={data.client} network={data.network} />
-          )}
-          {activeTabIndex === 1 && (
-            <ValidatorGraffitiTab name={data.name} graffiti={data.graffiti} />
-          )}
+        <Tabs tabs={tabTitles}>
+          <ValidatorProtocolTab client={data.client} network={data.network} />
+          <ValidatorGraffitiTab name={data.name} graffiti={data.graffiti} />
 
-          {activeTabIndex === 2 && (
-            <ValidatorKeystoreTab
-              name={data.name}
-              keystores={data.keystores}
-              walletPasswordSecretName={data.walletPasswordSecretName}
-              client={data.client}
-            />
-          )}
-          {activeTabIndex === 3 && (
-            <ValidatorBeaconNodeTab
-              name={data.name}
-              beaconEndpoints={data.beaconEndpoints}
-              client={data.client}
-            />
-          )}
-          {activeTabIndex === 4 && (
-            <ValidatorResourcesTab
-              name={data.name}
-              cpu={data.cpu}
-              cpuLimit={data.cpuLimit}
-              memory={data.memory}
-              memoryLimit={data.memoryLimit}
-              storage={data.storage}
-            />
-          )}
-          {activeTabIndex === 5 && (
-            <DeleteValidator validatorName={data.name} />
-          )}
+          <ValidatorKeystoreTab
+            name={data.name}
+            keystores={data.keystores}
+            walletPasswordSecretName={data.walletPasswordSecretName}
+            client={data.client}
+          />
+
+          <ValidatorBeaconNodeTab
+            name={data.name}
+            beaconEndpoints={data.beaconEndpoints}
+            client={data.client}
+          />
+
+          <ValidatorResourcesTab
+            name={data.name}
+            cpu={data.cpu}
+            cpuLimit={data.cpuLimit}
+            memory={data.memory}
+            memoryLimit={data.memoryLimit}
+            storage={data.storage}
+          />
+
+          <DeleteValidator validatorName={data.name} />
         </Tabs>
       </div>
     </Layout>

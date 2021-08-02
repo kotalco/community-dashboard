@@ -108,7 +108,7 @@ const DeleteValidator: React.FC<Props> = ({ validatorName }) => {
             Please type the validator name (
             <span className="font-bold">{validatorName}</span>) to confirm
           </p>
-          <TextInput className="rounded-md" {...register('name')} />
+          <TextInput {...register('name')} />
         </div>
       </DeleteModal>
     </>
