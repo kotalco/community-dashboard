@@ -49,9 +49,7 @@ export interface UpdateEthereum2BeaconNode {
 }
 
 export interface UpdateEth1Endpoints {
-  eth1Endpoints: string[];
-  client: BeaconNodeClient;
-  network: string;
+  eth1Endpoints: NestedValue<string[]>;
 }
 
 export interface UpdateAPI {

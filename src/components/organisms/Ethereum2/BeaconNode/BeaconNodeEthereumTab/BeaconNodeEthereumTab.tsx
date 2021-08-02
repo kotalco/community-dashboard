@@ -1,20 +1,16 @@
 import { useState } from 'react';
-import {
-  useForm,
-  Controller,
-  SubmitHandler,
-  FieldError,
-} from 'react-hook-form';
-import { joiResolver } from '@hookform/resolvers/joi';
-import { mutate } from 'swr';
+import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import axios from 'axios';
 
 import Button from '@components/atoms/Button/Button';
-import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
+import {
+  updateBeaconNode,
+  useBeaconnode,
+} from '@utils/requests/ethereum2/beaconNodes';
 import { UpdateEth1Endpoints } from '@interfaces/ethereum2/Ethereum2BeaconNode';
 import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
 import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
-import { updateEth1EndpointsSchema } from '@schemas/ethereum2/beaconNode/updateBeaconNode';
+import schema from '@schemas/ethereum2/beaconNode/createBeaconNode';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
 
@@ -31,49 +27,54 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
   eth1Endpoints,
   network,
 }) => {
-  const [submitError, setSubmitError] = useState<string | undefined>('');
+  const { mutate } = useBeaconnode(name);
   const [submitSuccess, setSubmitSuccess] = useState('');
-
   const {
     reset,
     handleSubmit,
     control,
+    setError,
     formState: { isDirty, isSubmitting, errors },
   } = useForm<UpdateEth1Endpoints>({
-    defaultValues: { eth1Endpoints, client, network },
-    resolver: joiResolver(updateEth1EndpointsSchema),
+    defaultValues: { eth1Endpoints },
   });
-  const eth1EndpointsError = errors.eth1Endpoints as FieldError | undefined;
 
   const onSubmit: SubmitHandler<UpdateEth1Endpoints> = async (values) => {
-    setSubmitError('');
     setSubmitSuccess('');
     try {
       const beaconnode = await updateBeaconNode(name, values);
-      void mutate(name, beaconnode);
+      void mutate({ beaconnode });
       reset(values);
       setSubmitSuccess('Beacon node has been updated');
     } catch (e) {
       if (axios.isAxiosError(e)) {
         const error = handleAxiosError<ServerError>(e);
-        setSubmitError(error.response?.data.error);
+        setError('eth1Endpoints', {
+          type: 'server',
+          message: error.response?.data.error,
+        });
       }
     }
   };
 
   return (
-    <>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
         <Controller
           name="eth1Endpoints"
           control={control}
+          rules={
+            client === BeaconNodeClient.prysm && network !== 'mainnet'
+              ? schema.eth1Endpoints
+              : undefined
+          }
           render={({ field }) => (
             <TextareaWithInput
               multiple={
                 client !== BeaconNodeClient.nimbus &&
                 client !== BeaconNodeClient.teku
               }
-              error={eth1EndpointsError?.message}
+              error={errors.eth1Endpoints?.message}
               label="Ethereum Node JSON-RPC Endpoints"
               helperText="One endpoint per each line"
               value={field.value}
@@ -86,19 +87,16 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
 
       <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
         <Button
+          type="submit"
           className="btn btn-primary"
           disabled={!isDirty || isSubmitting}
           loading={isSubmitting}
-          onClick={handleSubmit(onSubmit)}
         >
           Save
         </Button>
-        {submitError && (
-          <p className="text-center text-red-500 mb-5">{submitError}</p>
-        )}
         {submitSuccess && <p>{submitSuccess}</p>}
       </div>
-    </>
+    </form>
   );
 };
 

@@ -1,41 +1,45 @@
-import { Dispatch, SetStateAction } from 'react';
-
-import TabsMobileView from '@components/molecules/TabsMobileView/TabsMobileView';
-import TabsDesktopView from '@components/molecules/TabsDesktopView/TabsDesktopView';
+import { Tab } from '@headlessui/react';
 
 interface Props {
-  activeIndex: number;
-  setActiveIndex: Dispatch<SetStateAction<number>>;
   tabs: string[];
 }
 
-const Tabs: React.FC<Props> = ({
-  activeIndex,
-  setActiveIndex,
-  tabs,
-  children,
-}) => {
+const Tabs: React.FC<Props> = ({ tabs, children }) => {
   return (
-    <>
-      {/* Tabs Ttitles */}
-      <div className="px-4 py-5 border-b border-gray-200 sm:px-6">
-        <div>
-          <TabsMobileView
-            setActiveTabIndex={setActiveIndex}
-            tabs={tabs}
-            activeTabIndex={activeIndex}
-          />
-          <TabsDesktopView
-            setActiveTabIndex={setActiveIndex}
-            tabs={tabs}
-            activeTabIndex={activeIndex}
-          />
-        </div>
-      </div>
-
-      {/* Tabs Content */}
-      {children}
-    </>
+    <Tab.Group>
+      <Tab.List className="flex p-2 sm:px-4 sm:py-5 border-b border-gray-200 overflow-x-auto">
+        {tabs.map((title) =>
+          title.includes('Danger') ? (
+            <Tab
+              key={title}
+              className={({ selected }) =>
+                `${
+                  selected
+                    ? 'bg-red-100 text-red-700'
+                    : 'text-red-500 hover:text-red-700'
+                } p-1 sm:px-3 sm:py-2 font-medium text-sm rounded-md cursor-pointer whitespace-nowrap`
+              }
+            >
+              {title}
+            </Tab>
+          ) : (
+            <Tab
+              key={title}
+              className={({ selected }) =>
+                `${
+                  selected
+                    ? 'bg-indigo-100 text-indigo-700'
+                    : 'text-gray-500 hover:text-gray-700'
+                } px-3 py-2 font-medium text-sm rounded-md cursor-pointer`
+              }
+            >
+              {title}
+            </Tab>
+          )
+        )}
+      </Tab.List>
+      <Tab.Panels>{children}</Tab.Panels>
+    </Tab.Group>
   );
 };
 

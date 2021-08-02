@@ -3,5 +3,5 @@ export const tabTitles = [
   'Ethereum',
   'API',
   'Resources',
-  'Dangerous Zone',
+  'Danger Zone',
 ];

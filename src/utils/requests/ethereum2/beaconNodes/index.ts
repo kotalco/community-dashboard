@@ -10,6 +10,7 @@ import {
 
 /**
  * Send a get request to find all ethereum 2.0 beacon nodes
+ * @param config Any SWR Configration Value
  * @returns All Ethereum 2.0 beacon nodes
  */
 export const useBeaconnodes = (config?: SWRConfiguration) => {
@@ -42,16 +43,18 @@ export const createBeaconNode = async (
 /**
  * Send a get request to find a beacon node by its name
  * @param nodeName Name of the node we are looking for
+ * @param config Any SWR Configration Value
  * @returns All node data if found
  */
-export const getBeaconNode = async (
-  nodeName: string
-): Promise<Ethereum2BeaconNode> => {
-  const { data } = await axios.get<{ beaconnode: Ethereum2BeaconNode }>(
-    `/ethereum2/beaconnodes/${nodeName}`
+export const useBeaconnode = (nodeName: string, config?: SWRConfiguration) => {
+  const swr = useSWR<{ beaconnode: Ethereum2BeaconNode }>(
+    !nodeName ? null : `/ethereum2/beaconnodes/${nodeName}`,
+    fetcher,
+    config
   );
+  const data = swr.data?.beaconnode;
 
-  return data.beaconnode;
+  return { ...swr, data };
 };
 
 /**
