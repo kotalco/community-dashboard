@@ -1,8 +1,10 @@
 import { useState } from 'react';
-import { GetStaticProps } from 'next';
-import { TrashIcon } from '@heroicons/react/outline';
+import { InferGetStaticPropsType } from 'next';
+import { TrashIcon, KeyIcon } from '@heroicons/react/outline';
+import { PlusIcon } from '@heroicons/react/solid';
 
 import IconButton from '@components/atoms/IconButton/IconButton';
+import Heading from '@components/templates/Heading/Heading';
 import Button from '@components/atoms/Button/Button';
 import Layout from '@components/templates/Layout/Layout';
 import List from '@components/organisms/List/List';
@@ -11,12 +13,10 @@ import { useSecrets } from '@utils/requests/secrets';
 import { KubernetesSecret } from '@interfaces/KubernetesSecret/KubernetesSecret';
 import { fetcher } from '@utils/axios';
 
-interface Props {
-  secrets: { secrets: KubernetesSecret[] };
-}
-
-const KubernetesSecrets: React.FC<Props> = ({ secrets }) => {
-  const { data, isError } = useSecrets('', secrets);
+const KubernetesSecrets = ({
+  secrets,
+}: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const { data } = useSecrets({ initialData: { secrets } });
   const [openDelete, setOpenDelete] = useState(false);
   const [selectedSecret, setSelectedSecret] = useState('');
 
@@ -25,21 +25,18 @@ const KubernetesSecrets: React.FC<Props> = ({ secrets }) => {
     setSelectedSecret(secretName);
   };
 
-  if (isError) return <p>failed to load secrets</p>;
-
   return (
     <Layout>
-      <div className="flex">
-        <h1 className="text-2xl font-semibold text-gray-900 flex-grow">
-          Secrets
-        </h1>
-        <Button href="/core/secrets/create" className="btn btn-primary">
-          Create New Secret
-        </Button>
-      </div>
+      <Heading title="Secrets">
+        {!!data?.length && (
+          <Button href="/core/secrets/create" className="btn btn-primary">
+            Create New Secret
+          </Button>
+        )}
+      </Heading>
 
       <div className="py-4">
-        {data && !!data.length ? (
+        {data?.length ? (
           <List>
             {data.map(({ name, type }) => (
               <li key={name}>
@@ -69,7 +66,21 @@ const KubernetesSecrets: React.FC<Props> = ({ secrets }) => {
             ))}
           </List>
         ) : (
-          <p>You don&apos;t have any secrets yet</p>
+          <div className="text-center bg-white py-6 rounded-tr-md rounded-b-md">
+            <KeyIcon className="mx-auto w-12 h-12 text-gray-400" />
+            <h3 className="mt-2 text-sm font-medium text-gray-900">
+              No Secrets
+            </h3>
+            <p className="mt-1 text-sm text-gray-500">
+              Get started by creating a new secret.
+            </p>
+            <div className="mt-6">
+              <Button href="/core/secrets/create" className="btn btn-primary">
+                <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                Create New Secret
+              </Button>
+            </div>
+          </div>
         )}
       </div>
       {/* This Dialog appears when user clicks on delete button */}
@@ -82,15 +93,11 @@ const KubernetesSecrets: React.FC<Props> = ({ secrets }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
-  try {
-    const secrets = await fetcher<{ secrets: KubernetesSecret[] }>(
-      '/core/secrets'
-    );
-    return { props: { secrets }, revalidate: 10 };
-  } catch (e) {
-    return { notFound: true };
-  }
+export const getStaticProps = async () => {
+  const { secrets } = await fetcher<{ secrets: KubernetesSecret[] }>(
+    '/core/secrets'
+  );
+  return { props: { secrets }, revalidate: 10 };
 };
 
 export default KubernetesSecrets;

@@ -1,4 +1,4 @@
-import useSWR from 'swr';
+import useSWR, { SWRConfiguration } from 'swr';
 
 import axios, { fetcher } from '../../axios';
 import {
@@ -13,19 +13,15 @@ import { AxiosError } from 'axios';
  * @param initialData the secrets already exist
  * @returns object with the requested secrets or error if exist
  */
-export const useSecrets = (
-  type: string,
-  initialData?: {
-    secrets: KubernetesSecret[];
-  }
-): { data?: KubernetesSecret[]; isError: boolean } => {
-  const { data, error } = useSWR<{ secrets: KubernetesSecret[] }, AxiosError>(
-    `/core/secrets?type=${type}`,
+export const useSecrets = (config?: SWRConfiguration) => {
+  const swr = useSWR<{ secrets: KubernetesSecret[] }, AxiosError>(
+    '/core/secrets',
     fetcher,
-    { initialData, revalidateOnMount: true }
+    config
   );
+  const data = swr.data?.secrets;
 
-  return { data: data?.secrets, isError: !!error };
+  return { ...swr, data };
 };
 
 /**
