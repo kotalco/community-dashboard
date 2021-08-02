@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useForm, useWatch, Controller, SubmitHandler } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
-import { mutate } from 'swr';
 import axios from 'axios';
 
 import Button from '@components/atoms/Button/Button';
-import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
+import {
+  updateBeaconNode,
+  useBeaconnode,
+} from '@utils/requests/ethereum2/beaconNodes';
 import { updateAPISchema } from '@schemas/ethereum2/beaconNode/updateBeaconNode';
 import { UpdateAPI } from '@interfaces/ethereum2/Ethereum2BeaconNode';
 import TextInput from '@components/molecules/TextInput/TextInput';
@@ -42,6 +44,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
   grpcPort,
   client,
 }) => {
+  const { mutate } = useBeaconnode(name);
   const [submitError, setSubmitError] = useState<string | undefined>('');
   const [submitSuccess, setSubmitSuccess] = useState('');
 
@@ -79,7 +82,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
     setSubmitSuccess('');
     try {
       const beaconnode = await updateBeaconNode(name, values);
-      void mutate(name, beaconnode);
+      void mutate({ beaconnode });
       reset(values);
       setSubmitSuccess('Beacon node has been updated');
     } catch (e) {
@@ -91,7 +94,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
   };
 
   return (
-    <>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
         {/* REST API */}
         {/* Supported by Teku and Lighthouse only */}
@@ -115,7 +118,6 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
               <TextInput
                 disabled={!restState}
                 label="REST API Server Port"
-                className="rounded-md"
                 error={errors.restPort?.message}
                 {...register('restPort')}
               />
@@ -124,7 +126,6 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
               <TextInput
                 disabled={!restState}
                 label="REST API Server Host"
-                className="rounded-md"
                 error={errors.restHost?.message}
                 {...register('restHost')}
               />
@@ -162,7 +163,6 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
               <TextInput
                 disabled={!rpcState}
                 label="JSON-RPC Server Port"
-                className="rounded-md"
                 error={errors.rpcPort?.message}
                 {...register('rpcPort')}
               />
@@ -171,7 +171,6 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
               <TextInput
                 disabled={!rpcState}
                 label="JSON-RPC Server Host"
-                className="rounded-md"
                 error={errors.rpcHost?.message}
                 {...register('rpcHost')}
               />
@@ -202,7 +201,6 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
               <TextInput
                 disabled={!grpcState}
                 label="GRPC Gateway Server Port"
-                className="rounded-md"
                 error={errors.grpcPort?.message}
                 {...register('grpcPort')}
               />
@@ -211,7 +209,6 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
               <TextInput
                 disabled={!grpcState}
                 label="GRPC Gateway Server Host"
-                className="rounded-md"
                 error={errors.grpcHost?.message}
                 {...register('grpcHost')}
               />
@@ -222,10 +219,10 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
 
       <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
         <Button
+          type="submit"
           className="btn btn-primary"
           disabled={!isDirty || isSubmitting}
           loading={isSubmitting}
-          onClick={handleSubmit(onSubmit)}
         >
           Save
         </Button>
@@ -234,7 +231,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
         )}
         {submitSuccess && <p>{submitSuccess}</p>}
       </div>
-    </>
+    </form>
   );
 };
 
