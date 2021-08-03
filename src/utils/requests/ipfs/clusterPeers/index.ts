@@ -1,4 +1,4 @@
-import useSWR from 'swr';
+import useSWR, { SWRConfiguration } from 'swr';
 import { AxiosError } from 'axios';
 
 import axios, { fetcher } from '@utils/axios';
@@ -12,18 +12,15 @@ import {
  * @param initialClusterPeers if present
  * @returns object with all cluster peers or undefined if error then isError is true
  */
-export const useClusterPeers = (initialClusterPeers?: {
-  clusterpeers: IPFSClusterPeer[];
-}): { clusterpeers?: IPFSClusterPeer[]; isError: boolean } => {
-  const { data, error } = useSWR<
-    { clusterpeers: IPFSClusterPeer[] },
-    AxiosError
-  >('/ipfs/clusterpeers', fetcher, {
-    initialData: initialClusterPeers,
-    revalidateOnMount: true,
-  });
+export const useClusterPeers = (config?: SWRConfiguration) => {
+  const swr = useSWR<{ clusterpeers: IPFSClusterPeer[] }, AxiosError>(
+    '/ipfs/clusterpeers',
+    fetcher,
+    config
+  );
+  const data = swr.data?.clusterpeers;
 
-  return { clusterpeers: data?.clusterpeers, isError: !!error };
+  return { ...swr, data };
 };
 
 /**
