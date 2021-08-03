@@ -106,6 +106,16 @@ const CreateSecret: React.FC = () => {
             </div>
           )}
 
+          {type === KubernetesSecretTypes.ipfsClusterSecret && (
+            <div className="mt-4">
+              <Textarea
+                label="Key"
+                {...register('data.secret', keyValidations)}
+                error={errors.data?.key?.message}
+              ></Textarea>
+            </div>
+          )}
+
           {type === KubernetesSecretTypes.ethereum2Keystore && (
             <div className="mt-4">
               <Controller

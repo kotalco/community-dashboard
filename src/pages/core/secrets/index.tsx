@@ -16,7 +16,10 @@ import { fetcher } from '@utils/axios';
 const KubernetesSecrets = ({
   secrets,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const { data } = useSecrets({ initialData: { secrets } });
+  const { data } = useSecrets({
+    initialData: { secrets },
+    revalidateOnMount: true,
+  });
   const [openDelete, setOpenDelete] = useState(false);
   const [selectedSecret, setSelectedSecret] = useState('');
 
@@ -44,7 +47,7 @@ const KubernetesSecrets = ({
                   <div className="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
                     <div>
                       <div className="flex text-sm font-medium text-gray-900 truncate">
-                        <p>{name}</p>
+                        {name}
                       </div>
                       <div className="mt-2 flex">
                         <div className="flex items-center text-sm text-gray-500">
