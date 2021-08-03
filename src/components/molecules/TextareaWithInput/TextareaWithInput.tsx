@@ -36,7 +36,7 @@ const TextareaWithInput: React.FC<Props> = ({
   ) => {
     const { value } = e.target;
     setText(value);
-    onChange(value.split('\n'));
+    onChange(value ? value.split('\n') : []);
   };
 
   return (

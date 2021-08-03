@@ -9,29 +9,28 @@ import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaW
 import RadioGroup from '@components/molecules/RadioGroup/RadioGroup';
 import Toggle from '@components/molecules/Toggle/Toggle';
 import Select from '@components/molecules/Select/Select';
+import Heading from '@components/templates/Heading/Heading';
 import { createIPFSClusterPeer } from '@utils/requests/ipfs/clusterPeers';
-import {
-  nameValidations,
-  consensusValidations,
-  clusterSecretNameValidations,
-  idValidation,
-  privatekeySecretNameValidations,
-  trustedPeersValidation,
-} from '@schemas/ipfs/clusterPeers';
+import schema from '@schemas/ipfs/clusterPeers';
 import { CreateIPFSClusterPeer } from '@interfaces/ipfs/IPFSClusterPeer';
 import { useNotification } from '@components/contexts/NotificationContext';
 import { consensusOptions } from '@data/ipfs/clusterPeers/consensusOptions';
-import { useSecrets } from '@utils/requests/secrets';
+import { useSecretsByType } from '@utils/requests/secrets';
 import { ClusterConsensusAlgorithm } from '@enums/IPFS/ClusterPeers/ClusterConsensusAlgorithm';
 import axios from 'axios';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
+import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 
 const CreateClusterPeerPage: React.FC = () => {
   const { createNotification } = useNotification();
   const [isPredefined, setIsPredefined] = useState(false);
-  const { data } = useSecrets('privatekey');
-  const privateKeyNames = data?.map(({ name }) => name) || [];
+  const { data: privateKeyNames } = useSecretsByType(
+    KubernetesSecretTypes.ipfsClusterPeerPrivatekey
+  );
+  const { data: clusterSecretNames } = useSecretsByType(
+    KubernetesSecretTypes.ipfsClusterSecret
+  );
 
   const togglePredefined = () => {
     setIsPredefined(!isPredefined);
@@ -45,19 +44,10 @@ const CreateClusterPeerPage: React.FC = () => {
     control,
     watch,
     formState: { errors, isSubmitted, isValid, isSubmitting },
-  } = useForm<CreateIPFSClusterPeer>({
-    defaultValues: {
-      trustedPeers: [],
-      bootstrapPeers: [],
-    },
-  });
+  } = useForm<CreateIPFSClusterPeer>();
 
   const consensusValue = watch('consensus');
 
-  /**
-   * Submit create IPFS Cluster Peer form
-   * @param values the data required to create new peer
-   */
   const onSubmit: SubmitHandler<CreateIPFSClusterPeer> = async (values) => {
     try {
       const peer = await createIPFSClusterPeer(values);
@@ -82,7 +72,7 @@ const CreateClusterPeerPage: React.FC = () => {
 
   return (
     <Layout>
-      <h1 className="text-2xl font-semibold">Create New Cluster Peer</h1>
+      <Heading title="Create New Cluster Peer" />
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormLayout
           isSubmitted={isSubmitted}
@@ -92,16 +82,15 @@ const CreateClusterPeerPage: React.FC = () => {
           {/* Cluster Peer Name */}
           <TextInput
             label="Name"
-            className="rounded-md"
             error={errors.name?.message}
-            {...register('name', nameValidations)}
+            {...register('name', schema.name)}
           />
 
           {/* Consensus */}
           <Controller
             name="consensus"
             control={control}
-            rules={consensusValidations}
+            rules={schema.consensus}
             render={({ field }) => (
               <RadioGroup
                 options={consensusOptions}
@@ -113,12 +102,22 @@ const CreateClusterPeerPage: React.FC = () => {
           />
 
           {/* Cluster Secret */}
-          <div className="mt-4">
-            <TextInput
-              label="Cluster Secret Name"
-              className="rounded-md"
-              error={errors.clusterSecretName?.message}
-              {...register('clusterSecretName', clusterSecretNameValidations)}
+          <div className="mt-4 max-w-xs">
+            <Controller
+              name="clusterSecretName"
+              control={control}
+              rules={schema.clusterSecretName}
+              render={({ field }) => (
+                <Select
+                  label="Cluster Secret Name"
+                  placeholder="Choose a secret..."
+                  error={errors.clusterSecretName?.message}
+                  href="/core/secrets/create"
+                  hrefTitle="Create new secret..."
+                  options={clusterSecretNames}
+                  onChange={field.onChange}
+                />
+              )}
             />
           </div>
 
@@ -134,25 +133,28 @@ const CreateClusterPeerPage: React.FC = () => {
                 {/* Cluster Peer ID */}
                 <div className="mt-4">
                   <TextInput
-                    className="rounded-md"
                     label="ID"
                     error={errors.id?.message}
-                    {...register('id', idValidation)}
+                    {...register('id', schema.id)}
                   />
                 </div>
                 {/* Cluster Peer Private Key */}
-                <div className="mt-4">
-                  <Select
-                    label="Private Key"
-                    options={[
-                      'Choose a private key name...',
-                      ...privateKeyNames,
-                    ]}
-                    className="rounded-md"
-                    error={errors.privatekeySecretName?.message}
-                    {...register(
-                      'privatekeySecretName',
-                      privatekeySecretNameValidations
+                <div className="mt-4 max-w-xs">
+                  <Controller
+                    name="privatekeySecretName"
+                    control={control}
+                    rules={schema.privatekeySecretName}
+                    shouldUnregister
+                    render={({ field }) => (
+                      <Select
+                        label="Private Key"
+                        options={privateKeyNames}
+                        error={errors.privatekeySecretName?.message}
+                        placeholder="Choose a private key..."
+                        href="/core/secrets/create"
+                        hrefTitle="Create new private key..."
+                        onChange={field.onChange}
+                      />
                     )}
                   />
                 </div>
@@ -167,7 +169,7 @@ const CreateClusterPeerPage: React.FC = () => {
                 shouldUnregister={true}
                 name="trustedPeers"
                 control={control}
-                rules={trustedPeersValidation}
+                rules={schema.trustedPeers}
                 render={({ field }) => (
                   <TextareaWithInput
                     multiple

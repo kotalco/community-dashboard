@@ -6,6 +6,8 @@ import {
   KubernetesSecret,
 } from '@interfaces/KubernetesSecret/KubernetesSecret';
 import { AxiosError } from 'axios';
+import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
+import { arrangeSecrets } from '@utils/helpers/secrets';
 
 /**
  * hook to send a request to get all secrets
@@ -20,6 +22,21 @@ export const useSecrets = (config?: SWRConfiguration) => {
     config
   );
   const data = swr.data?.secrets;
+
+  return { ...swr, data };
+};
+
+export const useSecretsByType = (
+  type: KubernetesSecretTypes,
+  config?: SWRConfiguration
+) => {
+  const swr = useSWR<{ secrets: KubernetesSecret[] }, AxiosError>(
+    `/core/secrets?type=${type}`,
+    fetcher,
+    config
+  );
+  const secrets = swr.data?.secrets;
+  const data = arrangeSecrets(secrets || []);
 
   return { ...swr, data };
 };

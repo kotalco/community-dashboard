@@ -1,4 +1,5 @@
 import { Fragment, useState } from 'react';
+import Link from 'next/link';
 import { Listbox, Transition } from '@headlessui/react';
 import {
   ExclamationCircleIcon,
@@ -14,6 +15,8 @@ interface Props {
   onChange: (value: string) => void;
   label: string;
   error?: string;
+  href?: string;
+  hrefTitle?: string;
 }
 
 const Select: React.FC<Props> = ({
@@ -22,6 +25,8 @@ const Select: React.FC<Props> = ({
   label,
   options,
   placeholder,
+  href,
+  hrefTitle,
 }) => {
   const allOptions = [{ label: placeholder, value: '' }, ...options];
   const [selected, setSelected] = useState<SelectOption>(allOptions[0]);
@@ -112,6 +117,13 @@ const Select: React.FC<Props> = ({
                     )}
                   </Listbox.Option>
                 ))}
+                {href && hrefTitle && (
+                  <Link href={href}>
+                    <a className="pl-3 text-sm text-indigo-600 hover:underline">
+                      {hrefTitle}
+                    </a>
+                  </Link>
+                )}
               </Listbox.Options>
             </Transition>
           </div>
