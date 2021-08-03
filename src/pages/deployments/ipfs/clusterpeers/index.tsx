@@ -43,7 +43,7 @@ export const IPFSPeers = ({
             {data.map(({ name }) => (
               <ListItem
                 key={name}
-                link={`/deployments/ipfs/peers/${name}`}
+                link={`/deployments/ipfs/clusterpeers/${name}`}
                 title={name}
               >
                 <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
