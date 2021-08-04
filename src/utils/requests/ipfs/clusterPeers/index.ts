@@ -5,11 +5,12 @@ import axios, { fetcher } from '@utils/axios';
 import {
   CreateIPFSClusterPeer,
   IPFSClusterPeer,
+  UpdateIPFSClusterPeer,
 } from '@interfaces/ipfs/IPFSClusterPeer';
 
 /**
  * Hook that get all cluster peers from the server
- * @param initialClusterPeers if present
+ * @param config swr configration if present
  * @returns object with all cluster peers or undefined if error then isError is true
  */
 export const useClusterPeers = (config?: SWRConfiguration) => {
@@ -20,6 +21,22 @@ export const useClusterPeers = (config?: SWRConfiguration) => {
   );
   const data = swr.data?.clusterpeers;
 
+  return { ...swr, data };
+};
+
+/**
+ * Hook that get the cluster peer details using its name
+ * @param name Peername
+ * @param config swr configration if present
+ * @returns Object with cluster peer details and swr return
+ */
+export const useClusterPeer = (name?: string, config?: SWRConfiguration) => {
+  const swr = useSWR<{ clusterpeer: IPFSClusterPeer }, AxiosError>(
+    !name ? null : `/ipfs/clusterpeers/${name}`,
+    fetcher,
+    config
+  );
+  const data = swr.data?.clusterpeer;
   return { ...swr, data };
 };
 
@@ -35,5 +52,17 @@ export const createIPFSClusterPeer = async (
     `/ipfs/clusterpeers`,
     body
   );
+  return data.clusterpeer;
+};
+
+export const updateClusterPeer = async (
+  name: string,
+  body: UpdateIPFSClusterPeer
+): Promise<IPFSClusterPeer> => {
+  const { data } = await axios.put<{ clusterpeer: IPFSClusterPeer }>(
+    `/ipfs/clusterpeers/${name}`,
+    body
+  );
+
   return data.clusterpeer;
 };

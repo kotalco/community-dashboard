@@ -18,7 +18,7 @@ import React from 'react';
 import Heading from '@components/templates/Heading/Heading';
 
 interface Props {
-  beaconnode: Ethereum2BeaconNode;
+  beaconnode?: Ethereum2BeaconNode;
 }
 
 const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconnode }) => {

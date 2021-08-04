@@ -9,8 +9,8 @@ export interface IPFSClusterPeer {
   peerEndpoint: string;
   id: string;
   privatekeySecretName: string;
-  trustedPeers: string[];
-  bootstrapPeers: string[];
+  trustedPeers: string[] | null;
+  bootstrapPeers: string[] | null;
   cpu: string;
   cpuLimit: string;
   memory: string;
@@ -28,3 +28,20 @@ export interface CreateIPFSClusterPeer {
   trustedPeers: NestedValue<string[]>;
   bootstrapPeers: NestedValue<string[]>;
 }
+
+export interface UpdatePeers {
+  peerEndpoint: string;
+  bootstrapPeers: NestedValue<string[]>;
+}
+
+export interface UpdateResources {
+  cpu: string;
+  cpuLimit: string;
+  memory: string;
+  memoryLimit: string;
+  storage: string;
+}
+
+export interface UpdateIPFSClusterPeer
+  extends Partial<UpdatePeers>,
+    Partial<UpdateResources> {}

@@ -46,7 +46,7 @@ export const createBeaconNode = async (
  * @param config Any SWR Configration Value
  * @returns All node data if found
  */
-export const useBeaconnode = (nodeName: string, config?: SWRConfiguration) => {
+export const useBeaconnode = (nodeName?: string, config?: SWRConfiguration) => {
   const swr = useSWR<{ beaconnode: Ethereum2BeaconNode }>(
     !nodeName ? null : `/ethereum2/beaconnodes/${nodeName}`,
     fetcher,
