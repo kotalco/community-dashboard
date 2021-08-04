@@ -12,8 +12,8 @@ import Heading from '@components/templates/Heading/Heading';
 import Tabs from '@components/organisms/Tabs/Tabs';
 import Protocol from '@components/organisms/IPFS/ClusterPeer/Protocol/Protocol';
 import Security from '@components/organisms/IPFS/ClusterPeer/Security/Security';
-import Resources from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeResourcesTab/BeaconNodeResourcesTab';
 import Peers from '@components/organisms/IPFS/ClusterPeer/Peers/Peers';
+import Resources from '@components/organisms/Resources/Resources';
 
 interface Props {
   initialClusterpeer?: IPFSClusterPeer;
@@ -51,7 +51,16 @@ const ClusterPeerDetailsPage: React.FC<Props> = ({ initialClusterpeer }) => {
           <Tab.Panel>
             <Security clusterSecretName={clusterpeer.clusterSecretName} />
           </Tab.Panel>
-          <Tab.Panel>{/* <Resources /> */}</Tab.Panel>
+          <Tab.Panel>
+            <Resources
+              cpu={clusterpeer.cpu}
+              cpuLimit={clusterpeer.cpuLimit}
+              memory={clusterpeer.memory}
+              memoryLimit={clusterpeer.memoryLimit}
+              storage={clusterpeer.storage}
+              name={clusterpeer.name}
+            />
+          </Tab.Panel>
           <Tab.Panel></Tab.Panel>
         </Tabs>
       </div>
