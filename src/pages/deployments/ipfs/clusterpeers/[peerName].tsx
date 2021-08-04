@@ -14,6 +14,7 @@ import Protocol from '@components/organisms/IPFS/ClusterPeer/Protocol/Protocol';
 import Security from '@components/organisms/IPFS/ClusterPeer/Security/Security';
 import Peers from '@components/organisms/IPFS/ClusterPeer/Peers/Peers';
 import Resources from '@components/organisms/Resources/Resources';
+import DeleteDeployment from '@components/organisms/DeleteDeployment/DeleteDeployment';
 
 interface Props {
   initialClusterpeer?: IPFSClusterPeer;
@@ -61,7 +62,9 @@ const ClusterPeerDetailsPage: React.FC<Props> = ({ initialClusterpeer }) => {
               name={clusterpeer.name}
             />
           </Tab.Panel>
-          <Tab.Panel></Tab.Panel>
+          <Tab.Panel>
+            <DeleteDeployment name={clusterpeer.name} />
+          </Tab.Panel>
         </Tabs>
       </div>
     </Layout>

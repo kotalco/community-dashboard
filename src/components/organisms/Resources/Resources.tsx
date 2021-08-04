@@ -74,70 +74,76 @@ const ResourcesTab: React.FC<Props> = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
-        <Controller
-          name="cpu"
-          control={control}
-          render={({ field }) => (
-            <UnitTextInput
-              label="CPU Cores Required"
-              unit="Core(s)"
-              error={errors.cpu?.message}
-              {...field}
-            />
-          )}
-        />
-
-        <Controller
-          name="cpuLimit"
-          control={control}
-          render={({ field }) => (
-            <UnitTextInput
-              label="Maximum CPU Cores"
-              unit="Core(s)"
-              error={errors.cpuLimit?.message}
-              {...field}
-            />
-          )}
-        />
-
-        <Controller
-          name="memory"
-          control={control}
-          render={({ field }) => (
-            <UnitTextInput
-              label="Memory Required"
-              unit={unitOptions}
-              error={errors.memory?.message}
-              {...field}
-            />
-          )}
-        />
-
-        <Controller
-          name="memoryLimit"
-          control={control}
-          render={({ field }) => (
-            <UnitTextInput
-              label="Max Memory"
-              unit={unitOptions}
-              error={errors.memoryLimit?.message}
-              {...field}
-            />
-          )}
-        />
-
-        <Controller
-          name="storage"
-          control={control}
-          render={({ field }) => (
-            <UnitTextInput
-              label="Disk Space Required"
-              unit={unitOptions}
-              error={errors.storage?.message}
-              {...field}
-            />
-          )}
-        />
+        <div className="max-w-xs">
+          <Controller
+            name="cpu"
+            control={control}
+            render={({ field }) => (
+              <UnitTextInput
+                label="CPU Cores Required"
+                unit="Core(s)"
+                error={errors.cpu?.message}
+                {...field}
+              />
+            )}
+          />
+        </div>
+        <div className="max-w-xs mt-4">
+          <Controller
+            name="cpuLimit"
+            control={control}
+            render={({ field }) => (
+              <UnitTextInput
+                label="Maximum CPU Cores"
+                unit="Core(s)"
+                error={errors.cpuLimit?.message}
+                {...field}
+              />
+            )}
+          />
+        </div>
+        <div className="max-w-xs mt-4">
+          <Controller
+            name="memory"
+            control={control}
+            render={({ field }) => (
+              <UnitTextInput
+                label="Memory Required"
+                unit={unitOptions}
+                error={errors.memory?.message}
+                {...field}
+              />
+            )}
+          />
+        </div>
+        <div className="max-w-xs mt-4">
+          <Controller
+            name="memoryLimit"
+            control={control}
+            render={({ field }) => (
+              <UnitTextInput
+                label="Max Memory"
+                unit={unitOptions}
+                error={errors.memoryLimit?.message}
+                {...field}
+              />
+            )}
+          />
+        </div>
+        <div className="max-w-xs mt-4">
+          <Controller
+            name="storage"
+            control={control}
+            render={({ field }) => (
+              <UnitTextInput
+                label="Disk Space Required"
+                unit={unitOptions}
+                error={errors.storage?.message}
+                {...field}
+              />
+            )}
+          />
+        </div>
       </div>
 
       <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">

@@ -66,3 +66,11 @@ export const updateClusterPeer = async (
 
   return data.clusterpeer;
 };
+
+/**
+ * Send a delete request to delete an IPFS Cluster Peer
+ * @param name IPFS Cluster Peer name
+ */
+export const deleteClusterPeer = async (name: string): Promise<void> => {
+  await axios.delete(`/ipfs/clusterpeers/${name}`);
+};
