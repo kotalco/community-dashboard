@@ -1,9 +1,11 @@
 import { useEffect } from 'react';
 import { GetStaticProps } from 'next';
-import { GlobeAltIcon } from '@heroicons/react/solid';
+import { GlobeAltIcon, PlusIcon } from '@heroicons/react/solid';
 import { ChipIcon } from '@heroicons/react/outline';
 import useSWR from 'swr';
 
+import EthereumIcon from '@components/Icons/EthereumIcon/EthereumIcon';
+import Button from '@components/atoms/Button/Button';
 import Layout from '@components/templates/Layout/Layout';
 import List from '@components/organisms/List/List';
 import ListItem from '@components/molecules/ListItem/ListItem';
@@ -66,8 +68,23 @@ const Ethereum2Validators: React.FC<Props> = ({ validators }) => {
             ))}
           </List>
         ) : (
-          <div className="bg-white shadow p-4 text-center">
-            <p>There is no validators created</p>
+          <div className="text-center bg-white py-6 rounded-tr-md rounded-b-md">
+            <EthereumIcon className="mx-auto w-12 h-12 text-gray-400" />
+            <h3 className="mt-2 text-sm font-medium text-gray-900">
+              No Validators
+            </h3>
+            <p className="mt-1 text-sm text-gray-500">
+              Get started by creating a new validator.
+            </p>
+            <div className="mt-6">
+              <Button
+                href="/deployments/ethereum2/validators/create"
+                className="btn btn-primary"
+              >
+                <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                New Validator
+              </Button>
+            </div>
           </div>
         )}
       </div>
