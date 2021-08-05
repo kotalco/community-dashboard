@@ -52,22 +52,21 @@ const IPFSPeerDetails: React.FC<Props> = ({ routing, peerName }) => {
 
   return (
     <>
-      <div className="px-4 py-5 sm:p-6">
-        <div className="mt-4">
-          <Controller
-            name="routing"
-            control={control}
-            render={({ field }) => (
-              <Select
-                placeholder="Choose routing option..."
-                error={errors.routing?.message}
-                options={routingOptions}
-                label="Content Routing Mechanism"
-                onChange={field.onChange}
-              />
-            )}
-          />
-        </div>
+      <div className="px-4 py-5 max-w-xs sm:p-6">
+        <Controller
+          name="routing"
+          control={control}
+          render={({ field }) => (
+            <Select
+              placeholder="Choose routing option..."
+              error={errors.routing?.message}
+              options={routingOptions}
+              label="Content Routing Mechanism"
+              onChange={field.onChange}
+              value={field.value}
+            />
+          )}
+        />
       </div>
 
       <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">

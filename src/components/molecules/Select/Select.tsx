@@ -17,6 +17,7 @@ interface Props {
   error?: string;
   href?: string;
   hrefTitle?: string;
+  value?: string;
 }
 
 const Select: React.FC<Props> = ({
@@ -27,9 +28,12 @@ const Select: React.FC<Props> = ({
   placeholder,
   href,
   hrefTitle,
+  value,
 }) => {
   const allOptions = [{ label: placeholder, value: '' }, ...options];
-  const [selected, setSelected] = useState<SelectOption>(allOptions[0]);
+  const defaultValue =
+    allOptions.find((option) => option.value === value) || allOptions[0];
+  const [selected, setSelected] = useState<SelectOption>(defaultValue);
 
   const handleChange = (option: SelectOption) => {
     setSelected(option);

@@ -1,10 +1,8 @@
-import { useState } from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
 
 import Layout from '@components/templates/Layout/Layout';
-// import StatsComponent from '@components/molecules/Stats/Stats'
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import DeleteIPFSPeer from '@components/organisms/IPFS/DeleteIPFSPeer/DeleteIPFSPeer';
 import Tabs from '@components/organisms/Tabs/Tabs';
@@ -16,13 +14,14 @@ import IPFSRoutingDetails from '@components/organisms/IPFS/IPFSRoutingDetails/IP
 import { getIPFSPeer } from '@utils/requests/ipfs/peers';
 import { IPFSPeer } from '@interfaces/ipfs/IPFSPeer';
 import { tabsTitles } from '@data/ipfs/peers/tabsTitles';
+import Heading from '@components/templates/Heading/Heading';
+import { Tab } from '@headlessui/react';
 
 interface Props {
   ipfsPeer: IPFSPeer;
 }
 
 const IPFSPeerDetailsPage: React.FC<Props> = ({ ipfsPeer }) => {
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
   const { isFallback, query } = useRouter();
   const { peerName } = query;
 
@@ -39,49 +38,42 @@ const IPFSPeerDetailsPage: React.FC<Props> = ({ ipfsPeer }) => {
 
   return (
     <Layout>
-      <h1 className="text-2xl font-semibold">{data.name}</h1>
-      {/* <span className="text-xs text-gray-500">Last Updated on {date}</span> */}
-      {/* Stats */}
-      {/* <div>
-            <dl className="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
-              <StatsComponent title="Last Block Number" content="11,971,897" />
-              <StatsComponent title="Transactions Today" content="1,024,569" />
-              <StatsComponent title="Connected Peers" content="21" />
-            </dl>
-          </div> */}
+      <Heading title={data.name} />
 
-      <div className="bg-white overflow-hidden shadow rounded-lg divided-y divided-gray-200 mt-4">
-        <Tabs
-          activeIndex={activeTabIndex}
-          setActiveIndex={setActiveTabIndex}
-          tabs={tabsTitles}
-        >
-          {activeTabIndex === 0 && <IPFSProtocolDetails />}
-          {activeTabIndex === 1 && (
+      <div className="bg-white shadow rounded-lg divided-y divided-gray-200 mt-4">
+        <Tabs tabs={tabsTitles}>
+          <Tab.Panel>
+            <IPFSProtocolDetails />
+          </Tab.Panel>
+          <Tab.Panel>
             <IPFSConfigrationProfiles
               peerName={data.name}
               profiles={data.profiles}
               initProfiles={data.initProfiles}
             />
-          )}
-          {activeTabIndex === 2 && (
+          </Tab.Panel>
+          <Tab.Panel>
             <IPFSApiDetails
               peerName={data.name}
               apiPort={data.apiPort}
               apiHost={data.apiHost}
             />
-          )}
-          {activeTabIndex === 3 && (
+          </Tab.Panel>
+
+          <Tab.Panel>
             <IPFSGatewayDetails
               peerName={data.name}
               gatewayPort={data.gatewayPort}
               gatewayHost={data.gatewayHost}
             />
-          )}
-          {activeTabIndex === 4 && (
+          </Tab.Panel>
+
+          <Tab.Panel>
             <IPFSRoutingDetails peerName={data.name} routing={data.routing} />
-          )}
-          {activeTabIndex === 5 && <DeleteIPFSPeer peerName={data.name} />}
+          </Tab.Panel>
+          <Tab.Panel>
+            <DeleteIPFSPeer peerName={data.name} />
+          </Tab.Panel>
         </Tabs>
       </div>
     </Layout>
