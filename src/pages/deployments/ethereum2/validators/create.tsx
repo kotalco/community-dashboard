@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { SubmitHandler, useForm, Controller } from 'react-hook-form';
 
@@ -11,27 +10,25 @@ import Multiselect from '@components/molecules/Multiselect/Multiselect';
 import { useNotification } from '@components/contexts/NotificationContext';
 import { clientOptions } from '@data/ethereum2/clientOptions';
 import { networkOptions } from '@data/ethereum2/networkOptions';
-import {
-  clientValidations,
-  nameValidations,
-  networkValidations,
-  keystoreValidations,
-  walletPasswordValidations,
-  beaconEndpointsValidations,
-} from '@schemas/ethereum2/validator/createValidatorSchema';
+import { schema } from '@schemas/ethereum2/validator/createValidatorSchema';
 import { CreateEthereum2Validator } from '@interfaces/ethereum2/Ethereum2Validator';
 import { createValidator } from '@utils/requests/ethereum2/validators';
 import { ValidatorsClients } from '@enums/Ethereum2/Validators/ValidatorsClients';
-import { useSecrets } from '@utils/requests/secrets';
+import { useSecretsByType } from '@utils/requests/secrets';
 import axios from 'axios';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
+import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
+import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 
 const CreateValidator: React.FC = () => {
-  const [showTextNetwork, setShowTextNetwork] = useState(false);
   const router = useRouter();
-  const { data: keystoreSecrets } = useSecrets('keystore');
-  const { data: walletPasswordSecrets } = useSecrets('password');
+  const { data: keystoreOptions } = useSecretsByType(
+    KubernetesSecretTypes.ethereum2Keystore
+  );
+  const { data: walletPasswordOptions } = useSecretsByType(
+    KubernetesSecretTypes.password
+  );
   const { createNotification } = useNotification();
   const {
     register,
@@ -39,36 +36,10 @@ const CreateValidator: React.FC = () => {
     control,
     handleSubmit,
     setError,
-    setValue,
     formState: { errors, isSubmitted, isValid, isSubmitting },
-  } = useForm<CreateEthereum2Validator>({
-    defaultValues: { beaconEndpoints: [], keystores: [] },
-  });
-
-  useEffect(() => {
-    register('network', networkValidations);
-  }, [register]);
+  } = useForm<CreateEthereum2Validator>();
 
   const client = watch('client');
-  const keystoresOptions = keystoreSecrets?.map(({ name }) => name) || [];
-  const walletPasswordOptions =
-    walletPasswordSecrets?.map(({ name }) => name) || [];
-  const handleNetworkChange = (
-    e: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>
-  ) => {
-    const { value } = e.target;
-    if (
-      value === 'mainnet' ||
-      value === 'pyrmont' ||
-      value === 'prater' ||
-      value === 'choose'
-    ) {
-      setShowTextNetwork(false);
-    } else {
-      setShowTextNetwork(true);
-    }
-    setValue('network', value, { shouldValidate: true });
-  };
 
   /**
    * Submit create validator form
@@ -106,105 +77,111 @@ const CreateValidator: React.FC = () => {
           isSubmitting={isSubmitting}
           isValid={isValid}
         >
-          <div className="px-4 py-5 sm:p-6">
-            {/* Beacon Node Name */}
-            <TextInput
-              {...register('name', nameValidations)}
-              label="Validator Name"
-              className="rounded-md"
-              error={errors.name?.message}
-            />
+          {/* Beacon Node Name */}
+          <TextInput
+            {...register('name', schema.name)}
+            label="Validator Name"
+            error={errors.name?.message}
+          />
 
-            {/* Client */}
-            <Select
-              label="Client"
-              error={errors.client?.message}
-              className="rounded-md"
-              options={[
-                { label: 'Choose a client...', value: '' },
-                ...clientOptions,
-              ]}
-              {...register('client', clientValidations)}
-            />
-            {/* Network */}
-            <Select
-              label="Network"
-              error={!showTextNetwork ? errors.network?.message : ''}
-              className={showTextNetwork ? 'rounded-t-md' : 'rounded-md'}
-              options={[
-                { label: 'Choose a network...', value: 'choose' },
-                ...networkOptions,
-              ]}
-              onChange={handleNetworkChange}
-              name="selectNetwork"
-            />
-            {showTextNetwork && (
-              <TextInput
-                error={errors.network?.message}
-                placeholder="Network Name"
-                className="rounded-none rounded-b-md"
-                onChange={handleNetworkChange}
-                name="textNetwork"
-              />
-            )}
-
-            {/* Key Stores */}
+          {/* Client */}
+          <div className="mt-4 max-w-xs">
             <Controller
-              name="keystores"
+              name="client"
+              rules={schema.client}
               control={control}
-              rules={keystoreValidations}
               render={({ field }) => (
-                <Multiselect
-                  label="Ethereum 2.0 Keystores"
-                  placeholder="Choose your keystores..."
-                  options={keystoresOptions}
-                  error={errors.keystores?.message}
-                  value={field.value}
+                <Select
+                  label="Client"
+                  error={errors.client?.message}
+                  options={clientOptions}
+                  placeholder="Choose a client..."
                   onChange={field.onChange}
                 />
               )}
             />
+          </div>
 
-            {/* Prysm Client Wallet Password */}
-            {client === ValidatorsClients.prysm && (
-              <Select
-                label="Prysm Client Wallet Password"
-                error={errors.walletPasswordSecretName?.message}
-                className="rounded-md"
-                options={[
-                  'Choose a wallet password...',
-                  ...walletPasswordOptions,
-                ]}
-                {...register(
-                  'walletPasswordSecretName',
-                  walletPasswordValidations
-                )}
+          {/* Network */}
+          <div className="mt-4 max-w-xs">
+            <Controller
+              name="network"
+              control={control}
+              rules={schema.network}
+              render={({ field }) => (
+                <SelectWithInput
+                  options={networkOptions}
+                  placeholder="Choose a network..."
+                  label="Network"
+                  name={field.name}
+                  value={field.value}
+                  onChange={field.onChange}
+                  error={errors.network?.message}
+                />
+              )}
+            />
+          </div>
+
+          {/* Key Stores */}
+          <Controller
+            name="keystores"
+            control={control}
+            rules={schema.keystore}
+            render={({ field }) => (
+              <Multiselect
+                label="Ethereum 2.0 Keystores"
+                placeholder="Choose your keystores..."
+                options={keystoreOptions}
+                error={errors.keystores?.message}
+                onChange={field.onChange}
+                value={field.value}
               />
             )}
+          />
 
-            {/* Beacon Node Endpoints */}
-            <div className="mt-5">
+          {/* Prysm Client Wallet Password */}
+          {client === ValidatorsClients.prysm && (
+            <div className="mt-4 max-w-xs">
               <Controller
-                name="beaconEndpoints"
+                name="walletPasswordSecretName"
                 control={control}
-                rules={beaconEndpointsValidations}
+                shouldUnregister={true}
+                rules={schema.walletPassword}
                 render={({ field }) => (
-                  <TextareaWithInput
-                    multiple={client === ValidatorsClients.lighthouse}
-                    label="Ethereum Node JSON-RPC Endpoints"
-                    helperText={
-                      client === ValidatorsClients.lighthouse
-                        ? 'One endpoint per each line'
-                        : ''
-                    }
-                    error={errors.beaconEndpoints?.message}
-                    value={field.value}
-                    name={field.name}
+                  <Select
+                    placeholder="Choose your wallet password..."
+                    label="Prysm Client Wallet Password"
+                    error={errors.walletPasswordSecretName?.message}
+                    options={walletPasswordOptions}
                     onChange={field.onChange}
                   />
                 )}
               />
             </div>
+          )}
+
+          {/* Beacon Node Endpoints */}
+          <div className="mt-5">
+            <Controller
+              name="beaconEndpoints"
+              control={control}
+              rules={schema.beaconEndpoints}
+              render={({ field }) => (
+                <TextareaWithInput
+                  multiple={client === ValidatorsClients.lighthouse}
+                  label="Ethereum Node JSON-RPC Endpoints"
+                  helperText={
+                    client === ValidatorsClients.lighthouse
+                      ? 'One endpoint per each line'
+                      : ''
+                  }
+                  error={errors.beaconEndpoints?.message}
+                  value={field.value}
+                  name={field.name}
+                  onChange={field.onChange}
+                />
+              )}
+            />
           </div>
         </FormLayout>
       </form>

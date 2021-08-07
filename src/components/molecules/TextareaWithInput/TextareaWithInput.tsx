@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 interface Props {
   name: string;
@@ -20,16 +20,17 @@ const TextareaWithInput: React.FC<Props> = ({
   multiple,
 }) => {
   const [text, setText] = useState(value?.join('\n') || '');
-  // const isMounted = useRef(false);
+  const isMounted = useRef(false);
 
-  // useEffect(() => {
-  //   if (isMounted.current) {
-  //     onChange([]);
-  //     setText('');
-  //   } else {
-  //     isMounted.current = true;
-  //   }
-  // }, [multiple]);
+  useEffect(() => {
+    if (isMounted.current) {
+      onChange([]);
+      setText('');
+    } else {
+      isMounted.current = true;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [multiple]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
