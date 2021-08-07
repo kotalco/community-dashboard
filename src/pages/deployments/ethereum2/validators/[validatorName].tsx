@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
@@ -23,7 +22,6 @@ interface Props {
 }
 
 const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
-  const [activeTabIndex, setActiveTabIndex] = useState(0);
   const { isFallback, query } = useRouter();
   const { validatorName } = query;
 

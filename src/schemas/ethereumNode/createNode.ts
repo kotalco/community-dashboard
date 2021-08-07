@@ -13,23 +13,10 @@ export const schema = Joi.object({
       'any.required': `Please choose your client`,
       'any.only': `Please choose your client`,
     }),
-  selectNetwork: Joi.string()
-    .required()
-    .valid('mainnet', 'rinkeby', 'ropsten', 'goerli', 'other')
-    .messages({
-      'string.empty': `Please choose your network`,
-      'any.required': `Please choose your network`,
-      'any.only': `Please choose your network`,
-    }),
-  textNetwork: Joi.string()
-    .when('selectNetwork', {
-      is: Joi.valid('other'),
-      then: Joi.string().required(),
-      otherwise: Joi.string().allow(''),
-    })
-    .messages({
-      'string.empty': `Please provide a network name`,
-      'any.required': `Please provide a network name`,
-    }),
+  network: Joi.string().required().messages({
+    'string.empty': `Please choose your network`,
+    'any.required': `Please choose your network`,
+    'any.only': `Please choose your network`,
+  }),
 });
 export default schema;

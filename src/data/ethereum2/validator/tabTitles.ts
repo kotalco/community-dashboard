@@ -4,5 +4,5 @@ export const tabTitles = [
   'Keystore',
   'Beacon Node',
   'Resources',
-  'Dangerous Zone',
+  'Danger Zone',
 ];

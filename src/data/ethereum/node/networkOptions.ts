@@ -6,5 +6,4 @@ export const networkOptions: SelectOption[] = [
   { label: 'Rinkeby', value: EthereumNodeNetwork.rinkeby },
   { label: 'Ropsten', value: EthereumNodeNetwork.ropsten },
   { label: 'Goerli', value: EthereumNodeNetwork.goerli },
-  { label: 'Other', value: 'other' },
 ];

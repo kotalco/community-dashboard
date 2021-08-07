@@ -73,36 +73,40 @@ const CreateNode: React.FC = () => {
             />
 
             {/* Client */}
-            <Controller
-              name="client"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  placeholder="Choose a client..."
-                  label="Client"
-                  error={errors.client?.message}
-                  options={clientOptions}
-                  onChange={field.onChange}
-                />
-              )}
-            />
+            <div className="mt-4 max-w-xs">
+              <Controller
+                name="client"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    placeholder="Choose a client..."
+                    label="Client"
+                    error={errors.client?.message}
+                    options={clientOptions}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            </div>
 
             {/* Network */}
-            <Controller
-              name="network"
-              control={control}
-              render={({ field }) => (
-                <SelectWithInput
-                  placeholder="Choose a network..."
-                  label="Network"
-                  error={errors.network?.message}
-                  options={networkOptions}
-                  name={field.name}
-                  onChange={field.onChange}
-                  value={field.value}
-                />
-              )}
-            />
+            <div className="mt-4 max-w-xs">
+              <Controller
+                name="network"
+                control={control}
+                render={({ field }) => (
+                  <SelectWithInput
+                    placeholder="Choose a network..."
+                    label="Network"
+                    error={errors.network?.message}
+                    options={networkOptions}
+                    name={field.name}
+                    onChange={field.onChange}
+                    value={field.value}
+                  />
+                )}
+              />
+            </div>
           </div>
         </FormLayout>
       </form>

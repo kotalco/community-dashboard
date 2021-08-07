@@ -10,6 +10,7 @@ import EthereumNodeDetails from '@components/organisms/Ethereum/EthereumNodeDeta
 import DeleteEthereumNode from '@components/organisms/Ethereum/DeleteEthereumNode/DeleteEthereumNode';
 import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { tabTitles } from '@data/ethereum/node/tabTitles';
+import { Tab } from '@headlessui/react';
 
 interface Props {
   ethereumNode: EthereumNode;
@@ -36,8 +37,12 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ ethereumNode }) => {
 
       <div className="bg-white overflow-hidden shadow rounded-lg divided-y divided-gray-200 mt-4">
         <Tabs tabs={tabTitles}>
-          <EthereumNodeDetails node={data} />
-          <DeleteEthereumNode nodeName={data.name} />
+          <Tab.Panel>
+            <EthereumNodeDetails node={data} />
+          </Tab.Panel>
+          <Tab.Panel>
+            <DeleteEthereumNode nodeName={data.name} />
+          </Tab.Panel>
         </Tabs>
       </div>
     </Layout>
