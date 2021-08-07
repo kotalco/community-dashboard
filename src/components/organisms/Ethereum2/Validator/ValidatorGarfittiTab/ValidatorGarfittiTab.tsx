@@ -46,17 +46,17 @@ const ValidatorGarfittiTab: React.FC<Props> = ({ name, graffiti }) => {
   };
 
   return (
-    <>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
         <TextInput label="Graffiti" {...register('graffiti')} />
       </div>
 
       <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
         <Button
+          type="submit"
           className="btn btn-primary"
           disabled={!isDirty || isSubmitting}
           loading={isSubmitting}
-          onClick={handleSubmit(onSubmit)}
         >
           Save
         </Button>
@@ -65,7 +65,7 @@ const ValidatorGarfittiTab: React.FC<Props> = ({ name, graffiti }) => {
         )}
         {submitSuccess && <p>{submitSuccess}</p>}
       </div>
-    </>
+    </form>
   );
 };
 

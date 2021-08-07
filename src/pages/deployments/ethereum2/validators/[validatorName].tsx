@@ -1,11 +1,14 @@
+import { useState } from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
+import { Tab } from '@headlessui/react';
 
 import { getValidator } from '@utils/requests/ethereum2/validators';
 import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
+import Heading from '@components/templates/Heading/Heading';
 import ValidatorProtocolTab from '@components/organisms/Ethereum2/Validator/ValidatorProtocolTab/ValidatorProtocolTab';
 import ValidatorGraffitiTab from '@components/organisms/Ethereum2/Validator/ValidatorGarfittiTab/ValidatorGarfittiTab';
 import ValidatorKeystoreTab from '@components/organisms/Ethereum2/Validator/ValidatorKeystoreTab/ValidatorKeystoreTab';
@@ -20,6 +23,7 @@ interface Props {
 }
 
 const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
+  const [activeTabIndex, setActiveTabIndex] = useState(0);
   const { isFallback, query } = useRouter();
   const { validatorName } = query;
 
@@ -35,36 +39,44 @@ const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
   if (!data || isFallback) return <LoadingIndicator />;
   return (
     <Layout>
-      <h1 className="text-2xl font-semibold">{validator.name}</h1>
+      <Heading title={validator.name} />
 
       <div className="bg-white shadow rounded-lg divided-y divided-gray-200 mt-4">
         <Tabs tabs={tabTitles}>
-          <ValidatorProtocolTab client={data.client} network={data.network} />
-          <ValidatorGraffitiTab name={data.name} graffiti={data.graffiti} />
-
-          <ValidatorKeystoreTab
-            name={data.name}
-            keystores={data.keystores}
-            walletPasswordSecretName={data.walletPasswordSecretName}
-            client={data.client}
-          />
-
-          <ValidatorBeaconNodeTab
-            name={data.name}
-            beaconEndpoints={data.beaconEndpoints}
-            client={data.client}
-          />
-
-          <ValidatorResourcesTab
-            name={data.name}
-            cpu={data.cpu}
-            cpuLimit={data.cpuLimit}
-            memory={data.memory}
-            memoryLimit={data.memoryLimit}
-            storage={data.storage}
-          />
-
-          <DeleteValidator validatorName={data.name} />
+          <Tab.Panel>
+            <ValidatorProtocolTab client={data.client} network={data.network} />
+          </Tab.Panel>
+          <Tab.Panel>
+            <ValidatorGraffitiTab name={data.name} graffiti={data.graffiti} />
+          </Tab.Panel>
+          <Tab.Panel>
+            <ValidatorKeystoreTab
+              name={data.name}
+              keystores={data.keystores}
+              walletPasswordSecretName={data.walletPasswordSecretName}
+              client={data.client}
+            />
+          </Tab.Panel>
+          <Tab.Panel>
+            <ValidatorBeaconNodeTab
+              name={data.name}
+              beaconEndpoints={data.beaconEndpoints}
+              client={data.client}
+            />
+          </Tab.Panel>
+          <Tab.Panel>
+            <ValidatorResourcesTab
+              name={data.name}
+              cpu={data.cpu}
+              cpuLimit={data.cpuLimit}
+              memory={data.memory}
+              memoryLimit={data.memoryLimit}
+              storage={data.storage}
+            />
+          </Tab.Panel>
+          <Tab.Panel>
+            <DeleteValidator validatorName={data.name} />
+          </Tab.Panel>
         </Tabs>
       </div>
     </Layout>

@@ -1,10 +1,5 @@
 import { useState } from 'react';
-import {
-  useForm,
-  SubmitHandler,
-  Controller,
-  FieldError,
-} from 'react-hook-form';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { mutate } from 'swr';
 import axios from 'axios';
@@ -16,9 +11,10 @@ import Multiselect from '@components/molecules/Multiselect/Multiselect';
 import Select from '@components/molecules/Select/Select';
 import { ValidatorsClients } from '@enums/Ethereum2/Validators/ValidatorsClients';
 import { updateKeystoresSchema } from '@schemas/ethereum2/validator/updateValidatorSchema';
-import { useSecrets } from '@utils/requests/secrets';
+import { useSecretsByType } from '@utils/requests/secrets';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
+import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 
 interface Props {
   name: string;
@@ -33,17 +29,19 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
   walletPasswordSecretName,
   client,
 }) => {
-  const [submitError, setSubmitError] = useState<string | undefined>('');
+  const [submitError, setSubmitError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
-  const { data: allKeystores } = useSecrets('keystore');
-  const { data: allWalletValues } = useSecrets('password');
-  const keystoresOptions = allKeystores?.map(({ name }) => name) || [];
-  const walletValues = allWalletValues?.map(({ name }) => name) || [];
+  const { data: allKeystores } = useSecretsByType(
+    KubernetesSecretTypes.ethereum2Keystore
+  );
+  const { data: allWalletValues } = useSecretsByType(
+    KubernetesSecretTypes.password
+  );
+
   const selectedKeystores = keystores.map(({ secretName }) => secretName);
 
   const {
     reset,
-    register,
     handleSubmit,
     control,
     formState: { isDirty, isSubmitting, errors },
@@ -55,7 +53,6 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
       client,
     },
   });
-  const keystoresError = errors.keystores as FieldError | undefined;
 
   const onSubmit: SubmitHandler<UpdateKeystores> = async (values) => {
     const { keystores, ...rest } = values;
@@ -72,45 +69,59 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
     } catch (e) {
       if (axios.isAxiosError(e)) {
         const error = handleAxiosError<ServerError>(e);
-        setSubmitError(error.response?.data.error);
+        setSubmitError(
+          error.response?.data.error || 'Something wrong happened'
+        );
       }
     }
   };
 
   return (
-    <>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
         {/* Key Stores */}
-        <Controller
-          name="keystores"
-          control={control}
-          render={({ field }) => (
-            <Multiselect
-              label="Ethereum 2.0 Keystores"
-              placeholder="Choose your keystores..."
-              options={keystoresOptions}
-              error={keystoresError?.message}
-              {...field}
-            />
-          )}
-        />
+        <div className="max-w-xs">
+          <Controller
+            name="keystores"
+            control={control}
+            render={({ field }) => (
+              <Multiselect
+                label="Ethereum 2.0 Keystores"
+                placeholder="Choose your keystores..."
+                options={allKeystores}
+                error={errors.keystores?.message}
+                onChange={field.onChange}
+                value={field.value}
+              />
+            )}
+          />
+        </div>
 
         {walletPasswordSecretName && (
-          <Select
-            className="rounded-md"
-            label="Prysm Client Wallet Password"
-            options={walletValues}
-            {...register('walletPasswordSecretName')}
-          />
+          <div className="mt-4 max-w-xs">
+            <Controller
+              name="walletPasswordSecretName"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  placeholder="Choose a wallet password"
+                  label="Prysm Client Wallet Password"
+                  options={allWalletValues}
+                  onChange={field.onChange}
+                  value={field.value}
+                />
+              )}
+            />
+          </div>
         )}
       </div>
 
       <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
         <Button
+          type="submit"
           className="btn btn-primary"
           disabled={!isDirty || isSubmitting}
           loading={isSubmitting}
-          onClick={handleSubmit(onSubmit)}
         >
           Save
         </Button>
@@ -119,7 +130,7 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
         )}
         {submitSuccess && <p>{submitSuccess}</p>}
       </div>
-    </>
+    </form>
   );
 };
 

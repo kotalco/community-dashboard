@@ -43,12 +43,7 @@ const Multiselect: React.FC<Props> = ({
   };
 
   return (
-    <Listbox
-      as="div"
-      className="space-y-1 max-w-xs mt-4"
-      value={text}
-      onChange={handleChange}
-    >
+    <Listbox as="div" value={text} onChange={handleChange}>
       {({ open }) => (
         <>
           <Listbox.Label className="block text-sm font-medium text-gray-700">

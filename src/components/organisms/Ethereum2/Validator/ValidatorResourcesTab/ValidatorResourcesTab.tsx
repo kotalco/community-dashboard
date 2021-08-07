@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { mutate } from 'swr';
 import axios from 'axios';
@@ -35,7 +35,7 @@ const ValidatorResourcesTab: React.FC<Props> = ({
   memoryLimit,
   storage,
 }) => {
-  const [submitError, setSubmitError] = useState<string | undefined>('');
+  const [submitError, setSubmitError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
   const defaultValues = { cpu, cpuLimit, memory, memoryLimit, storage };
 
@@ -49,7 +49,7 @@ const ValidatorResourcesTab: React.FC<Props> = ({
     resolver: joiResolver(updateResourcesSchema),
   });
 
-  const onSubmit = handleSubmit(async (values) => {
+  const onSubmit: SubmitHandler<UpdateResources> = async (values) => {
     setSubmitError('');
     setSubmitSuccess('');
 
@@ -61,86 +61,92 @@ const ValidatorResourcesTab: React.FC<Props> = ({
     } catch (e) {
       if (axios.isAxiosError(e)) {
         const error = handleAxiosError<ServerError>(e);
-        setSubmitError(error.response?.data.error);
+        setSubmitError(error.response?.data.error || 'Somthing wrong happened');
       }
     }
-  });
+  };
 
   return (
-    <>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
-        <Controller
-          name="cpu"
-          control={control}
-          render={({ field }) => (
-            <UnitTextInput
-              label="CPU Cores Required"
-              unit="Core(s)"
-              error={errors.cpu?.message}
-              {...field}
-            />
-          )}
-        />
-
-        <Controller
-          name="cpuLimit"
-          control={control}
-          render={({ field }) => (
-            <UnitTextInput
-              label="Maximum CPU Cores"
-              unit="Core(s)"
-              error={errors.cpuLimit?.message}
-              {...field}
-            />
-          )}
-        />
-
-        <Controller
-          name="memory"
-          control={control}
-          render={({ field }) => (
-            <UnitTextInput
-              label="Memory Required"
-              unit={unitOptions}
-              error={errors.memory?.message}
-              {...field}
-            />
-          )}
-        />
-
-        <Controller
-          name="memoryLimit"
-          control={control}
-          render={({ field }) => (
-            <UnitTextInput
-              label="Max Memory"
-              unit={unitOptions}
-              error={errors.memoryLimit?.message}
-              {...field}
-            />
-          )}
-        />
-
-        <Controller
-          name="storage"
-          control={control}
-          render={({ field }) => (
-            <UnitTextInput
-              label="Disk Space Required"
-              unit={unitOptions}
-              error={errors.storage?.message}
-              {...field}
-            />
-          )}
-        />
+        <div className="max-w-xs">
+          <Controller
+            name="cpu"
+            control={control}
+            render={({ field }) => (
+              <UnitTextInput
+                label="CPU Cores Required"
+                unit="Core(s)"
+                error={errors.cpu?.message}
+                {...field}
+              />
+            )}
+          />
+        </div>
+        <div className="max-w-xs mt-4">
+          <Controller
+            name="cpuLimit"
+            control={control}
+            render={({ field }) => (
+              <UnitTextInput
+                label="Maximum CPU Cores"
+                unit="Core(s)"
+                error={errors.cpuLimit?.message}
+                {...field}
+              />
+            )}
+          />
+        </div>
+        <div className="max-w-xs mt-4">
+          <Controller
+            name="memory"
+            control={control}
+            render={({ field }) => (
+              <UnitTextInput
+                label="Memory Required"
+                unit={unitOptions}
+                error={errors.memory?.message}
+                {...field}
+              />
+            )}
+          />
+        </div>
+        <div className="max-w-xs mt-4">
+          <Controller
+            name="memoryLimit"
+            control={control}
+            render={({ field }) => (
+              <UnitTextInput
+                label="Max Memory"
+                unit={unitOptions}
+                error={errors.memoryLimit?.message}
+                {...field}
+              />
+            )}
+          />
+        </div>
+        <div className="max-w-xs mt-4">
+          <Controller
+            name="storage"
+            control={control}
+            render={({ field }) => (
+              <UnitTextInput
+                label="Disk Space Required"
+                unit={unitOptions}
+                error={errors.storage?.message}
+                {...field}
+              />
+            )}
+          />
+        </div>
       </div>
 
       <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
         <Button
+          type="submit"
           className="btn btn-primary"
           disabled={!isDirty || isSubmitting}
           loading={isSubmitting}
-          onClick={onSubmit}
         >
           Save
         </Button>
@@ -149,7 +155,7 @@ const ValidatorResourcesTab: React.FC<Props> = ({
         )}
         {submitSuccess && <p>{submitSuccess}</p>}
       </div>
-    </>
+    </form>
   );
 };
 

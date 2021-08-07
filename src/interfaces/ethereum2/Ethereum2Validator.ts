@@ -42,7 +42,7 @@ export interface UpdateGrafitti {
 }
 
 export interface UpdateKeystores {
-  keystores: string[];
+  keystores: NestedValue<string[]>;
   walletPasswordSecretName: string;
   client: ValidatorsClients;
 }
