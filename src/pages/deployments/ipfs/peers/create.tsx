@@ -74,7 +74,6 @@ const CreateIPFSPeerPage: React.FC = () => {
             <TextInput
               {...register('name')}
               label="Peer Name"
-              className="rounded-md"
               error={errors.name?.message}
             />
 
