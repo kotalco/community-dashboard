@@ -9,7 +9,7 @@
     "lint": "next lint --dir src",
     "type-check": "tsc --pretty --noEmit",
     "test": "jest",
-    "test:ci": "jest --coverage --silent",
+    "test:ci": "jest --coverage --silent --ci",
     "prepare": "husky install",
     "prettier": "prettier {*,src/*,src/**/*} --write --ignore-unknown",
     "lint-staged": "lint-staged"
