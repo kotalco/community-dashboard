@@ -5,7 +5,7 @@ const IPFSPeerDetails: React.FC = () => {
         <dl>
           <dt className="block text-sm font-medium text-gray-700">Protocol</dt>
           <dd className="mt-1">
-            <span className="text-gray-500 text-sm">IPFS Peer</span>
+            <span className="text-gray-500 text-sm">IPFS</span>
           </dd>
         </dl>
       </div>
