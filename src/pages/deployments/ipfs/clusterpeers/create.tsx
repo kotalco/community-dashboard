@@ -86,6 +86,15 @@ const CreateClusterPeerPage: React.FC = () => {
             {...register('name', schema.name)}
           />
 
+          {/* Peer Endpoint */}
+          <div className="mt-4">
+            <TextInput
+              label="IPFS Peer"
+              error={errors.peerEndpoint?.message}
+              {...register('peerEndpoint', schema.peerEndpoint)}
+            />
+          </div>
+
           {/* Consensus */}
           <Controller
             name="consensus"

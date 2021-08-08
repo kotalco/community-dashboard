@@ -21,9 +21,9 @@ export interface IPFSClusterPeer {
 
 export interface CreateIPFSClusterPeer {
   name: string;
+  peerEndpoint: string;
   consensus: ClusterConsensusAlgorithm;
   clusterSecretName: string;
-  peerEndpoint: string;
   id: string;
   privatekeySecretName: string;
   trustedPeers: NestedValue<string[]>;

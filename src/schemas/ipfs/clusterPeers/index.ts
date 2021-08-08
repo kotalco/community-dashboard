@@ -4,6 +4,7 @@ import { noSpacePattern } from '@schemas/helpers';
 
 type Schema = {
   name: RegisterOptions;
+  peerEndpoint: RegisterOptions;
   consensus: RegisterOptions;
   clusterSecretName: RegisterOptions;
   id: RegisterOptions;
@@ -19,6 +20,9 @@ const schema: Schema = {
       message: 'Cluster peer name should have no spaces',
     },
     setValueAs: (value: string) => value.trim(),
+  },
+  peerEndpoint: {
+    required: 'Please provide your peer endpoint',
   },
   consensus: {
     required: 'Please choose your consensus algorithm',
