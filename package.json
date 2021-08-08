@@ -55,6 +55,6 @@
   },
   "lint-staged": {
     "*.(tsx|ts)": "eslint --cache --fix",
-    "*": "prettier --write --write --ignore-unknown"
+    "*": "prettier --write --ignore-unknown"
   }
 }
