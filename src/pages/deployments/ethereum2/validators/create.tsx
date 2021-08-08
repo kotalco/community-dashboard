@@ -123,21 +123,23 @@ const CreateValidator: React.FC = () => {
           </div>
 
           {/* Key Stores */}
-          <Controller
-            name="keystores"
-            control={control}
-            rules={schema.keystore}
-            render={({ field }) => (
-              <Multiselect
-                label="Ethereum 2.0 Keystores"
-                placeholder="Choose your keystores..."
-                options={keystoreOptions}
-                error={errors.keystores?.message}
-                onChange={field.onChange}
-                value={field.value}
-              />
-            )}
-          />
+          <div className="mt-4 max-w-xs">
+            <Controller
+              name="keystores"
+              control={control}
+              rules={schema.keystore}
+              render={({ field }) => (
+                <Multiselect
+                  label="Ethereum 2.0 Keystores"
+                  placeholder="Choose your keystores..."
+                  options={keystoreOptions}
+                  error={errors.keystores?.message}
+                  onChange={field.onChange}
+                  value={field.value}
+                />
+              )}
+            />
+          </div>
 
           {/* Prysm Client Wallet Password */}
           {client === ValidatorsClients.prysm && (
