@@ -47,11 +47,7 @@ const NotificationPanel: React.FC<Props> = ({
                   {children}
                 </div>
                 <div className="ml-4 flex-shrink-0 flex">
-                  <IconButton
-                    className="btn-icn"
-                    srText="Close"
-                    onClick={close}
-                  >
+                  <IconButton className="btn-icn" onClick={close}>
                     <XIcon className="h-5 w-5" aria-hidden="true" />
                   </IconButton>
                 </div>

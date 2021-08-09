@@ -55,7 +55,6 @@ const SidebarMobile: React.FC<Props> = ({ isOpen, setIsOpen }) => {
                 <div className="absolute top-0 right-0 -mr-12 pt-2">
                   <IconButton
                     className="ml-1 flex items-center justify-center h-10 w-10 rounded-full"
-                    srText="Close sidebar"
                     onClick={() => setIsOpen(false)}
                   >
                     <XIcon className="h-6 w-6 text-white" aria-hidden="true" />

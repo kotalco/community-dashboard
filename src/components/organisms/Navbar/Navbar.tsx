@@ -18,7 +18,6 @@ const Navbar: React.FC<Props> = ({ setIsOpen }) => {
     <div className="relative z-10 flex-shrink-0 flex h-16 bg-white shadow">
       <IconButton
         className="px-4 border-r border-gray-200 text-gray-500 md:hidden"
-        srText="Open sidebar"
         onClick={() => setIsOpen(true)}
       >
         <MenuAlt1Icon className="h-6 w-6" aria-hidden="true" />
@@ -30,7 +29,6 @@ const Navbar: React.FC<Props> = ({ setIsOpen }) => {
         </div>
         <div className="ml-4 flex items-center md:ml-6">
           <IconButton
-            srText="View notification"
             className="bg-white p-1 rounded-full text-gray-400 hover:text-gray-500"
             onClick={handleClick}
           >

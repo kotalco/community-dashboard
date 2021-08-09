@@ -57,10 +57,7 @@ const KubernetesSecrets = ({
                     </div>
                   </div>
                   <div className="ml-5 flex-shrink-0 opacity-0 transition-opacity group-hover:opacity-100">
-                    <IconButton
-                      srText="delete"
-                      onClick={() => confirmDelete(name)}
-                    >
+                    <IconButton onClick={() => confirmDelete(name)}>
                       <TrashIcon className="h-5 w-5 text-red-600" />
                     </IconButton>
                   </div>

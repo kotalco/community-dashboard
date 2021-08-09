@@ -68,7 +68,6 @@ const Modal: React.FC<Props> = ({
               <div className="hidden sm:block absolute top-0 right-0 pt-4 pr-4">
                 <IconButton
                   ref={closeButtonRef}
-                  srText="Close"
                   className="bg-white rounded-md text-gray-400 hover:text-gray-500"
                   onClick={close}
                 >

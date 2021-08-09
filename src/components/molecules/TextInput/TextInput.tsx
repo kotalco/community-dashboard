@@ -68,7 +68,7 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>(function TextInput(
         )}
         {type === 'password' && (
           <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
-            <IconButton srText="show" onClick={togglePassword}>
+            <IconButton onClick={togglePassword}>
               {inputType === 'password' ? (
                 <EyeIcon className="h-5 w-5 text-gray-400" />
               ) : (
