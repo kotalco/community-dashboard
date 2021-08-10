@@ -7,15 +7,23 @@ interface IconProps {
   className?: string;
 }
 
-interface Props {
-  url?: string;
-  Icon: React.ComponentType<IconProps>;
-  subLinks?: { name: string; href: string; protocol: string }[];
+interface URL {
+  type: 'link';
+  url: string;
 }
 
-const NavLink: React.FC<Props> = ({ children, url, Icon, subLinks }) => {
+interface Button {
+  type: 'button';
+  subLinks: { name: string; href: string; protocol: string }[];
+}
+
+type Props = { Icon: React.ComponentType<IconProps> } & (URL | Button);
+
+const NavLink: React.FC<Props> = ({ children, ...props }) => {
   const { pathname } = useRouter();
-  const active = subLinks?.some(({ protocol }) => pathname.includes(protocol));
+  const active =
+    props.type === 'button' &&
+    props.subLinks.some(({ protocol }) => pathname.includes(protocol));
   const activeClassNames = {
     link: 'bg-gray-100 text-gray-900',
     icon: 'text-gray-500',
@@ -25,25 +33,25 @@ const NavLink: React.FC<Props> = ({ children, url, Icon, subLinks }) => {
     icon: 'text-gray-400 group-hover:text-gray-500',
   };
 
-  if (url) {
+  if (props.type === 'link') {
     return (
       <div>
-        <Link href={url}>
+        <Link href={props.url}>
           <a
             className={`${
-              pathname === url ? activeClassNames.link : defaultClassNames.link
+              pathname === props.url
+                ? activeClassNames.link
+                : defaultClassNames.link
             } group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md`}
           >
             {/* <!-- Current: "text-gray-500", Default: "text-gray-400 group-hover:text-gray-500" --> */}
-            {Icon && (
-              <Icon
-                className={`${
-                  pathname === url
-                    ? activeClassNames.icon
-                    : defaultClassNames.icon
-                } mr-3 h-6 w-6`}
-              />
-            )}
+            <props.Icon
+              className={`${
+                pathname === props.url
+                  ? activeClassNames.icon
+                  : defaultClassNames.icon
+              } mr-3 h-6 w-6`}
+            />
             {children}
           </a>
         </Link>
@@ -60,7 +68,7 @@ const NavLink: React.FC<Props> = ({ children, url, Icon, subLinks }) => {
               active ? activeClassNames.link : defaultClassNames.link
             } group w-full flex items-center pl-2 pr-1 py-2 text-sm font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500`}
           >
-            <Icon
+            <props.Icon
               className="text-gray-400 group-hover:text-gray-500 mr-3 h-6 w-6"
               aria-hidden="true"
             />
@@ -73,7 +81,7 @@ const NavLink: React.FC<Props> = ({ children, url, Icon, subLinks }) => {
           </Disclosure.Button>
 
           <Disclosure.Panel className="space-y-1">
-            {subLinks?.map(({ href, name, protocol }) => (
+            {props.subLinks.map(({ href, name, protocol }) => (
               <Link key={name} href={href}>
                 <a
                   className={`group w-full flex items-center pl-11 pr-2 py-2 text-sm text-gray-600 rounded-md hover:text-gray-900 hover:bg-gray-50 ${

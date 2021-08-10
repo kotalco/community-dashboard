@@ -1,8 +1,25 @@
+import { SVGProps } from 'react';
 import { HomeIcon, CubeIcon, KeyIcon } from '@heroicons/react/outline';
 
-export const navigation = [
-  { name: 'Dashboard', icon: HomeIcon, href: '/' },
+interface URL {
+  type: 'link';
+  href: string;
+}
+
+interface Button {
+  type: 'button';
+  children: { name: string; href: string; protocol: string }[];
+}
+
+type Navigation = {
+  name: string;
+  icon: (props: SVGProps<SVGSVGElement>) => JSX.Element;
+} & (URL | Button);
+
+export const navigation: Navigation[] = [
+  { type: 'link', name: 'Dashboard', icon: HomeIcon, href: '/' },
   {
+    type: 'button',
     name: 'Deployments',
     icon: CubeIcon,
     children: [
@@ -19,5 +36,5 @@ export const navigation = [
       { name: 'IPFS', href: '/deployments/ipfs/peers', protocol: 'ipfs' },
     ],
   },
-  { name: 'Secrets', icon: KeyIcon, href: '/core/secrets' },
+  { type: 'link', name: 'Secrets', icon: KeyIcon, href: '/core/secrets' },
 ];
