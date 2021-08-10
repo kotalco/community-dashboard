@@ -37,15 +37,17 @@ const ButtonGroup: React.FC<Props> = ({ buttons, label }) => {
                   {buttons.map(({ name, href }) => (
                     <Menu.Item key={name}>
                       {({ active }) => (
-                        <div
-                          className={`${
-                            active
-                              ? 'bg-gray-100 text-gray-900'
-                              : 'text-gray-700'
-                          } block px-4 py-2 text-sm`}
-                        >
+                        <div>
                           <Link href={href}>
-                            <a className="block w-full">{name}</a>
+                            <a
+                              className={`${
+                                active
+                                  ? 'bg-gray-100 text-gray-900'
+                                  : 'text-gray-700'
+                              } block px-4 py-2 text-sm`}
+                            >
+                              {name}
+                            </a>
                           </Link>
                         </div>
                       )}

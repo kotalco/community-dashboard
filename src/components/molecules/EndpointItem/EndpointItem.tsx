@@ -1,8 +1,6 @@
 import Link from 'next/link';
 import CubeIcon from '@heroicons/react/outline/CubeIcon';
 
-import Typography from '@components/atoms/Typgraphy/Typography';
-
 interface Props {
   name: string;
   nodeName: string;
@@ -15,22 +13,16 @@ const EndpointItem: React.FC<Props> = ({ name, nodeName }) => {
         <a className="block hover:bg-gray-50">
           <div className="px-4 py-4 sm:px-6">
             <div className="flex items-center justify-between">
-              <Typography
-                variant="p"
-                className="text-sm font-medium text-indigo-600 truncate"
-              >
+              <p className="text-sm font-medium text-indigo-600 truncate">
                 {name}
-              </Typography>
+              </p>
             </div>
             <div className="mt-2 sm:flex sm:justify-between">
               <div className="sm:flex">
-                <Typography
-                  variant="p"
-                  className="flex items-center text-sm text-gray-500"
-                >
+                <p className="flex items-center text-sm text-gray-500">
                   <CubeIcon />
                   {nodeName}
-                </Typography>
+                </p>
               </div>
             </div>
           </div>

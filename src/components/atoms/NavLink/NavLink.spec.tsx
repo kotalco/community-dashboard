@@ -21,7 +21,7 @@ const subLinks = [
   },
 ];
 
-describe('navigation link with direct url', () => {
+describe('navigation link', () => {
   it('render link', () => {
     render(
       <NavLink type="link" url="/" Icon={ChevronRightIcon}>
