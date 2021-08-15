@@ -123,7 +123,7 @@ const Select: React.FC<Props> = ({
                 ))}
                 {href && hrefTitle && (
                   <Link href={href}>
-                    <a className="pl-3 text-sm text-indigo-600 hover:underline">
+                    <a className="pl-3 py-1 text-sm text-indigo-600 hover:underline">
                       {hrefTitle}
                     </a>
                   </Link>

@@ -136,6 +136,8 @@ const CreateValidator: React.FC = () => {
                   error={errors.keystores?.message}
                   onChange={field.onChange}
                   value={field.value}
+                  href="/core/secrets/create"
+                  hrefTitle="Create New Keystore"
                 />
               )}
             />
@@ -156,6 +158,8 @@ const CreateValidator: React.FC = () => {
                     error={errors.walletPasswordSecretName?.message}
                     options={walletPasswordOptions}
                     onChange={field.onChange}
+                    href="/core/secrets/create"
+                    hrefTitle="Create New Password"
                   />
                 )}
               />
