@@ -25,6 +25,7 @@ function BeaconnodesPage({
   const { notificationData, removeNotification } = useNotification();
   const { data } = useBeaconnodes({
     initialData: { beaconnodes },
+    revalidateOnMount: true,
   });
 
   useEffect(() => {

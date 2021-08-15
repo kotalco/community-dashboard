@@ -22,7 +22,10 @@ export const IPFSPeers = ({
   clusterpeers,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { notificationData, removeNotification } = useNotification();
-  const { data } = useClusterPeers({ initialData: { clusterpeers } });
+  const { data } = useClusterPeers({
+    initialData: { clusterpeers },
+    revalidateOnMount: true,
+  });
 
   useEffect(() => {
     return () => {
