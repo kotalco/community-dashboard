@@ -17,7 +17,7 @@ export const secretTypesOptions: SelectOption[] = [
     value: KubernetesSecretTypes.ipfsClusterSecret,
   },
   {
-    label: 'IPFS Cluster Key Privatekey',
+    label: 'IPFS Cluster Key',
     value: KubernetesSecretTypes.ipfsClusterPeerPrivatekey,
   },
 ];
