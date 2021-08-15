@@ -42,7 +42,7 @@ function BeaconnodesPage({
         <LinkedTabs tabs={resourcesTab} />
         {data?.length ? (
           <List>
-            {beaconnodes.map(({ name, client, network }) => (
+            {data.map(({ name, client, network }) => (
               <ListItem
                 key={name}
                 link={`/deployments/ethereum2/beaconnodes/${name}`}
