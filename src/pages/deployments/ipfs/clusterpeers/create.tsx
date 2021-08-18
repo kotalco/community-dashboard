@@ -121,7 +121,7 @@ const CreateClusterPeerPage: React.FC = () => {
                   label="Cluster Secret Name"
                   placeholder="Choose a secret..."
                   error={errors.clusterSecretName?.message}
-                  href="/core/secrets/create"
+                  href={`/core/secrets/create?type=${KubernetesSecretTypes.ipfsClusterSecret}`}
                   hrefTitle="Create new secret..."
                   options={clusterSecretNames}
                   onChange={field.onChange}
@@ -160,7 +160,7 @@ const CreateClusterPeerPage: React.FC = () => {
                         options={privateKeyNames}
                         error={errors.privatekeySecretName?.message}
                         placeholder="Choose a private key..."
-                        href="/core/secrets/create"
+                        href={`/core/secrets/create?type=${KubernetesSecretTypes.ipfsClusterPeerPrivatekey}`}
                         hrefTitle="Create new private key..."
                         onChange={field.onChange}
                       />

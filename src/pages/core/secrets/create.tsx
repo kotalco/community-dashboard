@@ -77,6 +77,7 @@ const CreateSecret: React.FC = () => {
                   error={errors.type?.message}
                   options={secretTypesOptions}
                   onChange={field.onChange}
+                  value={field.value}
                 />
               )}
             />
