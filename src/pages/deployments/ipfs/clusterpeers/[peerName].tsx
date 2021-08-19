@@ -3,8 +3,14 @@ import { useRouter } from 'next/router';
 import { Tab } from '@headlessui/react';
 
 import { fetcher } from '@utils/axios';
-import { IPFSClusterPeer } from '@interfaces/ipfs/IPFSClusterPeer';
-import { useClusterPeer } from '@utils/requests/ipfs/clusterPeers';
+import {
+  IPFSClusterPeer,
+  UpdateIPFSClusterPeer,
+} from '@interfaces/ipfs/IPFSClusterPeer';
+import {
+  useClusterPeer,
+  updateClusterPeer,
+} from '@utils/requests/ipfs/clusterPeers';
 import { tabTitles } from '@data/ipfs/clusterPeers/tabTitles';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import Layout from '@components/templates/Layout/Layout';
@@ -22,9 +28,20 @@ interface Props {
 
 const ClusterPeerDetailsPage: React.FC<Props> = ({ initialClusterpeer }) => {
   const { isFallback } = useRouter();
-  const { data: clusterpeer } = useClusterPeer(initialClusterpeer?.name, {
-    initialData: { clusterpeer: initialClusterpeer },
-  });
+  const { data: clusterpeer, mutate } = useClusterPeer(
+    initialClusterpeer?.name,
+    {
+      initialData: { clusterpeer: initialClusterpeer },
+    }
+  );
+
+  const updateResources = async (
+    name: string,
+    values: UpdateIPFSClusterPeer
+  ) => {
+    const clusterPeer = await updateClusterPeer(name, values);
+    void mutate({ clusterpeer: clusterPeer });
+  };
 
   if (!clusterpeer || isFallback) return <LoadingIndicator />;
 
@@ -60,6 +77,7 @@ const ClusterPeerDetailsPage: React.FC<Props> = ({ initialClusterpeer }) => {
               memoryLimit={clusterpeer.memoryLimit}
               storage={clusterpeer.storage}
               name={clusterpeer.name}
+              updateResources={updateResources}
             />
           </Tab.Panel>
           <Tab.Panel>

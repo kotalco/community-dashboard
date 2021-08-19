@@ -8,10 +8,6 @@ import { updateResourcesSchema } from '@schemas/ethereum2/beaconNode/updateBeaco
 import UnitTextInput from '@components/molecules/UnitTextInput/UnitTextInput';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
-import {
-  updateClusterPeer,
-  useClusterPeer,
-} from '@utils/requests/ipfs/clusterPeers';
 import { Resources } from '@interfaces/Resources';
 
 interface Props {
@@ -21,6 +17,7 @@ interface Props {
   memory: string;
   memoryLimit: string;
   name: string;
+  updateResources: (name: string, values: Resources) => Promise<void>;
 }
 
 const unitOptions = (value: number) => [
@@ -36,8 +33,8 @@ const ResourcesTab: React.FC<Props> = ({
   memoryLimit,
   storage,
   name,
+  updateResources,
 }) => {
-  const { mutate } = useClusterPeer(name);
   const [submitError, setSubmitError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
   const defaultValues = { cpu, cpuLimit, memory, memoryLimit, storage };
@@ -57,10 +54,9 @@ const ResourcesTab: React.FC<Props> = ({
     setSubmitSuccess('');
 
     try {
-      const clusterpeer = await updateClusterPeer(name, values);
-      void mutate({ clusterpeer });
+      await updateResources(name, values);
       reset(values);
-      setSubmitSuccess('Cluster peer has been updated');
+      setSubmitSuccess('Resources has been updated');
     } catch (e) {
       if (axios.isAxiosError(e)) {
         const error = handleAxiosError<ServerError>(e);

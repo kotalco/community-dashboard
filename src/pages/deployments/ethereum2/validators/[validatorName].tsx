@@ -3,7 +3,10 @@ import { useRouter } from 'next/router';
 import useSWR from 'swr';
 import { Tab } from '@headlessui/react';
 
-import { getValidator } from '@utils/requests/ethereum2/validators';
+import {
+  getValidator,
+  updateValidator,
+} from '@utils/requests/ethereum2/validators';
 import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
@@ -12,10 +15,13 @@ import ValidatorProtocolTab from '@components/organisms/Ethereum2/Validator/Vali
 import ValidatorGraffitiTab from '@components/organisms/Ethereum2/Validator/ValidatorGarfittiTab/ValidatorGarfittiTab';
 import ValidatorKeystoreTab from '@components/organisms/Ethereum2/Validator/ValidatorKeystoreTab/ValidatorKeystoreTab';
 import ValidatorBeaconNodeTab from '@components/organisms/Ethereum2/Validator/ValidatorBeaconNodeTab/ValidatorBeaconNodeTab';
-import ValidatorResourcesTab from '@components/organisms/Ethereum2/Validator/ValidatorResourcesTab/ValidatorResourcesTab';
+import Resources from '@components/organisms/Resources/Resources';
 import DeleteValidator from '@components/organisms/Ethereum2/Validator/DeleteValidator/DeleteValidator';
 import { tabTitles } from '@data/ethereum2/validator/tabTitles';
-import { Ethereum2Validator } from '@interfaces/ethereum2/Ethereum2Validator';
+import {
+  Ethereum2Validator,
+  UpdateEthereum2Validator,
+} from '@interfaces/ethereum2/Ethereum2Validator';
 
 interface Props {
   validator: Ethereum2Validator;
@@ -25,7 +31,7 @@ const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
   const { isFallback, query } = useRouter();
   const { validatorName } = query;
 
-  const { data } = useSWR(
+  const { data, mutate } = useSWR(
     typeof validatorName === 'string' ? validatorName : null,
     getValidator,
     {
@@ -33,6 +39,14 @@ const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
       revalidateOnMount: true,
     }
   );
+
+  const updateResources = async (
+    name: string,
+    values: UpdateEthereum2Validator
+  ) => {
+    const validator = await updateValidator(name, values);
+    void mutate(validator);
+  };
 
   if (!data || isFallback) return <LoadingIndicator />;
   return (
@@ -63,13 +77,14 @@ const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
             />
           </Tab.Panel>
           <Tab.Panel>
-            <ValidatorResourcesTab
+            <Resources
               name={data.name}
               cpu={data.cpu}
               cpuLimit={data.cpuLimit}
               memory={data.memory}
               memoryLimit={data.memoryLimit}
               storage={data.storage}
+              updateResources={updateResources}
             />
           </Tab.Panel>
           <Tab.Panel>

@@ -2,17 +2,23 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import { Tab } from '@headlessui/react';
 import { useRouter } from 'next/router';
 
-import { useBeaconnode } from '@utils/requests/ethereum2/beaconNodes';
+import {
+  updateBeaconNode,
+  useBeaconnode,
+} from '@utils/requests/ethereum2/beaconNodes';
 import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import BeaconNodeProtocolTab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeProtocolTab/BeaconNodeProtocolTab';
 import BeaconNodeAPITab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeAPITab/BeaconNodeAPITab';
 import BeaconNodeEthereumTab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeEthereumTab/BeaconNodeEthereumTab';
-import BeaconNodeResourcesTab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeResourcesTab/BeaconNodeResourcesTab';
 import DeleteBeaconNode from '@components/organisms/Ethereum2/BeaconNode/DeleteBeaconNode/DeleteBeaconNode';
+import Resources from '@components/organisms/Resources/Resources';
 import { tabTitles } from '@data/ethereum2/beaconNode/tabTitles';
-import { Ethereum2BeaconNode } from '@interfaces/ethereum2/Ethereum2BeaconNode';
+import {
+  Ethereum2BeaconNode,
+  UpdateEthereum2BeaconNode,
+} from '@interfaces/ethereum2/Ethereum2BeaconNode';
 import { fetcher } from '@utils/axios';
 import React from 'react';
 import Heading from '@components/templates/Heading/Heading';
@@ -23,9 +29,17 @@ interface Props {
 
 const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconnode }) => {
   const { isFallback } = useRouter();
-  const { data } = useBeaconnode(beaconnode?.name, {
+  const { data, mutate } = useBeaconnode(beaconnode?.name, {
     initialData: { beaconnode },
   });
+
+  const updateResources = async (
+    name: string,
+    values: UpdateEthereum2BeaconNode
+  ) => {
+    const beaconnode = await updateBeaconNode(name, values);
+    void mutate({ beaconnode });
+  };
 
   if (!data || isFallback) return <LoadingIndicator />;
 
@@ -66,7 +80,15 @@ const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconnode }) => {
             />
           </Tab.Panel>
           <Tab.Panel>
-            <BeaconNodeResourcesTab beaconnode={data} />
+            <Resources
+              name={data.name}
+              cpu={data.cpu}
+              cpuLimit={data.cpuLimit}
+              memory={data.memory}
+              memoryLimit={data.memoryLimit}
+              storage={data.storage}
+              updateResources={updateResources}
+            />
           </Tab.Panel>
           <Tab.Panel>
             <DeleteBeaconNode nodeName={data.name} />
