@@ -23,10 +23,10 @@ interface Props {
   name: string;
 }
 
-const unitOptions = [
-  { label: 'Megabytes', value: 'Mi' },
-  { label: 'Gegabytes', value: 'Gi' },
-  { label: 'Terabytes', value: 'Ti' },
+const unitOptions = (value: number) => [
+  { label: value === 1 ? 'Megabyte' : 'Megabytes', value: 'Mi' },
+  { label: value === 1 ? 'Gegabyte' : 'Gegabytes', value: 'Gi' },
+  { label: value === 1 ? 'Terabyte' : 'Terabytes', value: 'Ti' },
 ];
 
 const ResourcesTab: React.FC<Props> = ({
@@ -81,7 +81,7 @@ const ResourcesTab: React.FC<Props> = ({
             render={({ field }) => (
               <UnitTextInput
                 label="CPU Cores Required"
-                unit="Core(s)"
+                unit={parseInt(field.value) === 1 ? 'Core' : 'Cores'}
                 error={errors.cpu?.message}
                 {...field}
               />
@@ -95,7 +95,7 @@ const ResourcesTab: React.FC<Props> = ({
             render={({ field }) => (
               <UnitTextInput
                 label="Maximum CPU Cores"
-                unit="Core(s)"
+                unit={parseInt(field.value) === 1 ? 'Core' : 'Cores'}
                 error={errors.cpuLimit?.message}
                 {...field}
               />
@@ -109,7 +109,7 @@ const ResourcesTab: React.FC<Props> = ({
             render={({ field }) => (
               <UnitTextInput
                 label="Memory Required"
-                unit={unitOptions}
+                unit={unitOptions(parseInt(field.value))}
                 error={errors.memory?.message}
                 {...field}
               />
@@ -123,7 +123,7 @@ const ResourcesTab: React.FC<Props> = ({
             render={({ field }) => (
               <UnitTextInput
                 label="Max Memory"
-                unit={unitOptions}
+                unit={unitOptions(parseInt(field.value))}
                 error={errors.memoryLimit?.message}
                 {...field}
               />
@@ -137,7 +137,7 @@ const ResourcesTab: React.FC<Props> = ({
             render={({ field }) => (
               <UnitTextInput
                 label="Disk Space Required"
-                unit={unitOptions}
+                unit={unitOptions(parseInt(field.value))}
                 error={errors.storage?.message}
                 {...field}
               />
