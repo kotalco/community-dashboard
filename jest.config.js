@@ -7,7 +7,10 @@ module.exports = {
     },
   },
   setupFilesAfterEnv: ['./src/utils/jest.setup.ts'],
-  moduleNameMapper: { '^@components(.*)$': '<rootDir>/src/components$1' },
+  moduleNameMapper: {
+    '^@components(.*)$': '<rootDir>/src/components$1',
+    '^@data(.*)$': '<rootDir>/src/data$1',
+  },
   coverageThreshold: {
     global: {
       branches: 90,
