@@ -42,17 +42,17 @@ const IPFSPeerDetailsPage: React.FC<Props> = ({ ipfsPeer }) => {
 
       <div className="bg-white shadow rounded-lg divided-y divided-gray-200 mt-4">
         <Tabs tabs={tabsTitles}>
-          <Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
             <IPFSProtocolDetails />
           </Tab.Panel>
-          <Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
             <IPFSConfigrationProfiles
               peerName={data.name}
               profiles={data.profiles}
               initProfiles={data.initProfiles}
             />
           </Tab.Panel>
-          <Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
             <IPFSApiDetails
               peerName={data.name}
               apiPort={data.apiPort}
@@ -60,7 +60,7 @@ const IPFSPeerDetailsPage: React.FC<Props> = ({ ipfsPeer }) => {
             />
           </Tab.Panel>
 
-          <Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
             <IPFSGatewayDetails
               peerName={data.name}
               gatewayPort={data.gatewayPort}
@@ -68,10 +68,10 @@ const IPFSPeerDetailsPage: React.FC<Props> = ({ ipfsPeer }) => {
             />
           </Tab.Panel>
 
-          <Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
             <IPFSRoutingDetails peerName={data.name} routing={data.routing} />
           </Tab.Panel>
-          <Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
             <DeleteIPFSPeer peerName={data.name} />
           </Tab.Panel>
         </Tabs>

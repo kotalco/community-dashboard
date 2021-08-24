@@ -49,13 +49,13 @@ const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconnode }) => {
 
       <div className="bg-white shadow rounded-lg mt-4">
         <Tabs tabs={tabTitles}>
-          <Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
             <BeaconNodeProtocolTab
               client={data.client}
               network={data.network}
             />
           </Tab.Panel>
-          <Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
             <BeaconNodeEthereumTab
               name={data.name}
               client={data.client}
@@ -64,7 +64,7 @@ const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconnode }) => {
             />
           </Tab.Panel>
 
-          <Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
             <BeaconNodeAPITab
               name={data.name}
               rest={data.rest}
@@ -79,7 +79,7 @@ const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconnode }) => {
               client={data.client}
             />
           </Tab.Panel>
-          <Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
             <Resources
               name={data.name}
               cpu={data.cpu}
@@ -90,7 +90,7 @@ const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconnode }) => {
               updateResources={updateResources}
             />
           </Tab.Panel>
-          <Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
             <DeleteBeaconNode nodeName={data.name} />
           </Tab.Panel>
         </Tabs>

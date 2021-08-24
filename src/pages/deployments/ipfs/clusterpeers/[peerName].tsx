@@ -51,14 +51,14 @@ const ClusterPeerDetailsPage: React.FC<Props> = ({ initialClusterpeer }) => {
 
       <div className="bg-white shadow rounded-lg mt-4">
         <Tabs tabs={tabTitles}>
-          <Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
             <Protocol
               consensus={clusterpeer.consensus}
               id={clusterpeer.id}
               privatekeySecretName={clusterpeer.privatekeySecretName}
             />
           </Tab.Panel>
-          <Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
             <Peers
               peerEndpoint={clusterpeer.peerEndpoint}
               trustedPeers={clusterpeer.trustedPeers || []}
@@ -66,10 +66,10 @@ const ClusterPeerDetailsPage: React.FC<Props> = ({ initialClusterpeer }) => {
               name={clusterpeer.name}
             />
           </Tab.Panel>
-          <Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
             <Security clusterSecretName={clusterpeer.clusterSecretName} />
           </Tab.Panel>
-          <Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
             <Resources
               cpu={clusterpeer.cpu}
               cpuLimit={clusterpeer.cpuLimit}
@@ -80,7 +80,7 @@ const ClusterPeerDetailsPage: React.FC<Props> = ({ initialClusterpeer }) => {
               updateResources={updateResources}
             />
           </Tab.Panel>
-          <Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
             <DeleteDeployment name={clusterpeer.name} />
           </Tab.Panel>
         </Tabs>

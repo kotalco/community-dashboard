@@ -55,13 +55,13 @@ const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
 
       <div className="bg-white shadow rounded-lg divided-y divided-gray-200 mt-4">
         <Tabs tabs={tabTitles}>
-          <Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
             <ValidatorProtocolTab client={data.client} network={data.network} />
           </Tab.Panel>
-          <Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
             <ValidatorGraffitiTab name={data.name} graffiti={data.graffiti} />
           </Tab.Panel>
-          <Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
             <ValidatorKeystoreTab
               name={data.name}
               keystores={data.keystores}
@@ -69,14 +69,14 @@ const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
               client={data.client}
             />
           </Tab.Panel>
-          <Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
             <ValidatorBeaconNodeTab
               name={data.name}
               beaconEndpoints={data.beaconEndpoints}
               client={data.client}
             />
           </Tab.Panel>
-          <Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
             <Resources
               name={data.name}
               cpu={data.cpu}
@@ -87,7 +87,7 @@ const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
               updateResources={updateResources}
             />
           </Tab.Panel>
-          <Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
             <DeleteValidator validatorName={data.name} />
           </Tab.Panel>
         </Tabs>

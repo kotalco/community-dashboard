@@ -37,10 +37,10 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ ethereumNode }) => {
 
       <div className="bg-white overflow-hidden shadow rounded-lg divided-y divided-gray-200 mt-4">
         <Tabs tabs={tabTitles}>
-          <Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
             <EthereumNodeDetails node={data} />
           </Tab.Panel>
-          <Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
             <DeleteEthereumNode nodeName={data.name} />
           </Tab.Panel>
         </Tabs>
