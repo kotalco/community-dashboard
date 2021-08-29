@@ -1,18 +1,22 @@
 import { useEffect } from 'react';
-import { GetStaticProps } from 'next';
-import { GlobeAltIcon } from '@heroicons/react/solid';
+import { GetServerSideProps } from 'next';
+import { GlobeAltIcon, PlusIcon } from '@heroicons/react/solid';
 import { ChipIcon } from '@heroicons/react/outline';
-import useSWR from 'swr';
+// import useSWR from 'swr';
 
 import Button from '@components/atoms/Button/Button';
 import Layout from '@components/templates/Layout/Layout';
 import List from '@components/organisms/List/List';
 import ListItem from '@components/molecules/ListItem/ListItem';
+import EthereumIcon from '@components/Icons/EthereumIcon/EthereumIcon';
+import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import { useNotification } from '@components/contexts/NotificationContext';
 import { getAllNodes } from '@utils/requests/ethereumNodeRequests';
 import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
+import { resourcesTab } from '@data/ethereum/links';
 import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
-import { AxiosError } from 'axios';
+import Heading from '@components/templates/Heading/Heading';
+// import { AxiosError } from 'axios';
 
 interface Props {
   ethereumNodes: EthereumNode[];
@@ -21,39 +25,35 @@ interface Props {
 const EthereumNodes: React.FC<Props> = ({ ethereumNodes }) => {
   const { notificationData, removeNotification } = useNotification();
 
-  const { data, error } = useSWR<EthereumNode[], AxiosError>(
-    '/ethereum/nodes',
-    getAllNodes,
-    {
-      initialData: ethereumNodes,
-      revalidateOnMount: true,
-    }
-  );
+  // const { data, error } = useSWR<EthereumNode[], AxiosError>(
+  //   '/ethereum/nodes',
+  //   getAllNodes,
+  //   {
+  //     initialData: ethereumNodes,
+  //     revalidateOnMount: true,
+  //   }
+  // );
 
   useEffect(() => {
     return () => removeNotification();
   }, [removeNotification]);
 
-  if (error) return <p>failed to load nodes</p>;
-
   return (
     <Layout>
-      <div className="flex">
-        <h1 className="text-2xl font-semibold text-gray-900 flex-grow">
-          Nodes
-        </h1>
+      <Heading title="Nodes">
         <Button
           href="/deployments/ethereum/nodes/create"
           className="btn btn-primary"
         >
           Create New Node
         </Button>
-      </div>
+      </Heading>
 
       <div className="py-4">
-        {data && data.length > 0 ? (
+        <LinkedTabs tabs={resourcesTab} />
+        {ethereumNodes.length ? (
           <List>
-            {data.map(({ name, client, network }) => (
+            {ethereumNodes.map(({ name, client, network }) => (
               <ListItem
                 key={name}
                 link={`/deployments/ethereum/nodes/${name}`}
@@ -67,7 +67,24 @@ const EthereumNodes: React.FC<Props> = ({ ethereumNodes }) => {
             ))}
           </List>
         ) : (
-          <p>There is no nodes created</p>
+          <div className="text-center bg-white py-6 rounded-tr-md rounded-b-md">
+            <EthereumIcon className="mx-auto w-12 h-12 text-gray-400" />
+            <h3 className="mt-2 text-sm font-medium text-gray-900">
+              There is no nodes created
+            </h3>
+            <p className="mt-1 text-sm text-gray-500">
+              Get started by creating a new node.
+            </p>
+            <div className="mt-6">
+              <Button
+                href="/deployments/ethereum/nodes/create"
+                className="btn btn-primary"
+              >
+                <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
+                New Node
+              </Button>
+            </div>
+          </div>
         )}
       </div>
 
@@ -88,10 +105,10 @@ const EthereumNodes: React.FC<Props> = ({ ethereumNodes }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   try {
     const ethereumNodes = await getAllNodes();
-    return { props: { ethereumNodes }, revalidate: 10 };
+    return { props: { ethereumNodes } };
   } catch (e) {
     return { notFound: true };
   }
