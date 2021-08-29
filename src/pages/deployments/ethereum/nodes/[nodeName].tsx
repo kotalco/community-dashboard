@@ -42,9 +42,9 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
           <Tab.Panel className="focus:outline-none">
             <ProtocolDetails dataList={dataList} />
           </Tab.Panel>
-          {/* <Tab.Panel className="focus:outline-none">
-            <DeleteEthereumNode nodeName={data.name} />
-          </Tab.Panel> */}
+          <Tab.Panel className="focus:outline-none">
+            <DeleteEthereumNode nodeName={node.name} />
+          </Tab.Panel>
         </Tabs>
       </div>
     </Layout>

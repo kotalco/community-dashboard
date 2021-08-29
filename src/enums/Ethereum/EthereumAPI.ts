@@ -1,0 +1,15 @@
+export enum EthereumAPI {
+  admin = 'admin',
+  clique = 'clique',
+  debug = 'debug',
+  eea = 'eea',
+  eth = 'eth',
+  ibft = 'ibft',
+  net = 'net',
+  miner = 'miner',
+  perm = 'perm',
+  privacy = 'privacy',
+  plugins = 'plugins',
+  txpool = 'txpool',
+  web3 = 'web3',
+}
