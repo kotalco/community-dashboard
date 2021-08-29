@@ -14,6 +14,8 @@ import { useNotification } from '@components/contexts/NotificationContext';
 import { getAllNodes } from '@utils/requests/ethereumNodeRequests';
 import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { resourcesTab } from '@data/ethereum/links';
+import { getClientLabel } from '@data/ethereum/node/clientOptions';
+import { getNetworkLabel } from '@data/ethereum/node/networkOptions';
 import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
 import Heading from '@components/templates/Heading/Heading';
 // import { AxiosError } from 'axios';
@@ -41,12 +43,14 @@ const EthereumNodes: React.FC<Props> = ({ ethereumNodes }) => {
   return (
     <Layout>
       <Heading title="Nodes">
-        <Button
-          href="/deployments/ethereum/nodes/create"
-          className="btn btn-primary"
-        >
-          Create New Node
-        </Button>
+        {!!ethereumNodes.length && (
+          <Button
+            href="/deployments/ethereum/nodes/create"
+            className="btn btn-primary"
+          >
+            Create New Node
+          </Button>
+        )}
       </Heading>
 
       <div className="py-4">
@@ -60,9 +64,9 @@ const EthereumNodes: React.FC<Props> = ({ ethereumNodes }) => {
                 title={name}
               >
                 <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                <p>{client}</p>
+                <p>{getClientLabel(client)}</p>
                 <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
-                <p>{network}</p>
+                <p>{getNetworkLabel(network)}</p>
               </ListItem>
             ))}
           </List>

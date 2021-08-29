@@ -7,3 +7,8 @@ export const networkOptions: SelectOption[] = [
   { label: 'Ropsten', value: EthereumNodeNetwork.ropsten },
   { label: 'Goerli', value: EthereumNodeNetwork.goerli },
 ];
+
+export const getNetworkLabel = (value: string) => {
+  const network = networkOptions.find((network) => value === network.value);
+  return network?.label || value;
+};
