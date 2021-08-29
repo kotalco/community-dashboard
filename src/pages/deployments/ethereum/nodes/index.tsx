@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { GetServerSideProps } from 'next';
-import { GlobeAltIcon, PlusIcon } from '@heroicons/react/solid';
+import { GlobeAltIcon } from '@heroicons/react/solid';
 import { ChipIcon } from '@heroicons/react/outline';
 // import useSWR from 'swr';
 
