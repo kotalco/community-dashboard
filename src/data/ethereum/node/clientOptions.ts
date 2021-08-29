@@ -10,5 +10,5 @@ export const clientOptions: SelectOption[] = [
 
 export const getClientLabel = (value: EthereumNodeClient) => {
   const client = clientOptions.find((client) => value === client.value);
-  return client?.label;
+  return client?.label || value;
 };

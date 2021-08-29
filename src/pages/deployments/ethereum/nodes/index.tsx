@@ -12,7 +12,7 @@ import EthereumIcon from '@components/Icons/EthereumIcon/EthereumIcon';
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import EmptyState from '@components/molecules/EmptyState/EmptyState';
 import { useNotification } from '@components/contexts/NotificationContext';
-import { getAllNodes } from '@utils/requests/ethereumNodeRequests';
+import { getAllNodes } from '@utils/requests/ethereum';
 import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { resourcesTab } from '@data/ethereum/links';
 import { getClientLabel } from '@data/ethereum/node/clientOptions';

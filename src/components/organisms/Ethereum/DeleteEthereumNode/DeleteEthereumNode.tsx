@@ -6,7 +6,7 @@ import axios from 'axios';
 import Button from '@components/atoms/Button/Button';
 import DeleteModal from '@components/molecules/Dialog/Dialog';
 import TextInput from '@components/molecules/TextInput/TextInput';
-import { deleteNode } from '@utils/requests/ethereumNodeRequests';
+import { deleteNode } from '@utils/requests/ethereum';
 import { useNotification } from '@components/contexts/NotificationContext';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';

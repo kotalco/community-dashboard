@@ -9,7 +9,7 @@ import Select from '@components/molecules/Select/Select';
 import { useNotification } from '@components/contexts/NotificationContext';
 import { clientOptions } from '@data/ethereum/node/clientOptions';
 import { networkOptions } from '@data/ethereum/node/networkOptions';
-import { createEthereumNode } from '@utils/requests/ethereumNodeRequests';
+import { createEthereumNode } from '@utils/requests/ethereum';
 import { schema } from '@schemas/ethereumNode/createNode';
 import { CreateEthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import axios from 'axios';

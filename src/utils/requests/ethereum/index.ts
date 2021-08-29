@@ -1,5 +1,6 @@
-import axios from '../axios';
+import axios, { fetcher } from '../../axios';
 import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
+import useSWR, { SWRConfiguration } from 'swr';
 
 export const getAllNodes = async (): Promise<EthereumNode[]> => {
   const { data } = await axios.get<{ nodes: EthereumNode[] }>(
@@ -27,13 +28,18 @@ export const createEthereumNode = async (
 /**
  * Find ethereum node by its name
  * @param name ethereum node name
+ * @param config SWR Configrations
  * @returns the found node or error 404 in not found
  */
-export const getEthereumNode = async (name: string): Promise<EthereumNode> => {
-  const { data } = await axios.get<{ node: EthereumNode }>(
-    `/ethereum/nodes/${name}`
+export const useNode = (nodeName?: string, config?: SWRConfiguration) => {
+  const swr = useSWR<{ node: EthereumNode }>(
+    !nodeName ? null : `/ethereum/nodes/${nodeName}`,
+    fetcher,
+    config
   );
-  return data.node;
+  const data = swr.data?.node;
+
+  return { ...swr, data };
 };
 
 /**
