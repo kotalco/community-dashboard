@@ -10,6 +10,7 @@ import List from '@components/organisms/List/List';
 import ListItem from '@components/molecules/ListItem/ListItem';
 import EthereumIcon from '@components/Icons/EthereumIcon/EthereumIcon';
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
+import EmptyState from '@components/molecules/EmptyState/EmptyState';
 import { useNotification } from '@components/contexts/NotificationContext';
 import { getAllNodes } from '@utils/requests/ethereumNodeRequests';
 import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
@@ -71,24 +72,14 @@ const EthereumNodes: React.FC<Props> = ({ ethereumNodes }) => {
             ))}
           </List>
         ) : (
-          <div className="text-center bg-white py-6 rounded-tr-md rounded-b-md">
+          <EmptyState
+            title="There is no nodes created"
+            description="Get started by creating a new node."
+            linkUrl="/deployments/ethereum/nodes/create"
+            linkName="New Node"
+          >
             <EthereumIcon className="mx-auto w-12 h-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">
-              There is no nodes created
-            </h3>
-            <p className="mt-1 text-sm text-gray-500">
-              Get started by creating a new node.
-            </p>
-            <div className="mt-6">
-              <Button
-                href="/deployments/ethereum/nodes/create"
-                className="btn btn-primary"
-              >
-                <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                New Node
-              </Button>
-            </div>
-          </div>
+          </EmptyState>
         )}
       </div>
 
