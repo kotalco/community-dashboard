@@ -1,5 +1,8 @@
 import axios, { fetcher } from '../../axios';
-import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
+import {
+  CreateEthereumNode,
+  EthereumNode,
+} from '@interfaces/Ethereum/ِEthereumNode';
 import useSWR, { SWRConfiguration } from 'swr';
 
 export const getAllNodes = async (): Promise<EthereumNode[]> => {
@@ -15,7 +18,7 @@ export const getAllNodes = async (): Promise<EthereumNode[]> => {
  * @returns the newly created node
  */
 export const createEthereumNode = async (
-  body: EthereumNode
+  body: CreateEthereumNode
 ): Promise<EthereumNode> => {
   const { data } = await axios.post<{ node: EthereumNode }>(
     `/ethereum/nodes`,
@@ -44,17 +47,17 @@ export const useNode = (nodeName?: string, config?: SWRConfiguration) => {
 
 /**
  * Find ethereum node by its name and updates its data
- * @param body new data to be updates, (client)
- * @param name ethereum node name
+ * @param nodeData new data to be updates, (client)
+ * @param nodeName ethereum node name
  * @returns the updated node data after update is done
  */
 export const updateEthereumNode = async (
-  name: string,
-  body: { client: string }
+  nodeName: string,
+  nodeData: Partial<EthereumNode>
 ): Promise<EthereumNode> => {
   const { data } = await axios.put<{ node: EthereumNode }>(
-    `/ethereum/nodes/${name}`,
-    body
+    `/ethereum/nodes/${nodeName}`,
+    nodeData
   );
   return data.node;
 };

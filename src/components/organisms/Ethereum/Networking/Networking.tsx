@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { useState } from 'react';
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
@@ -6,15 +7,19 @@ import TextInput from '@components/molecules/TextInput/TextInput';
 import Button from '@components/atoms/Button/Button';
 import Select from '@components/molecules/Select/Select';
 import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
+import { updateEthereumNode } from '@utils/requests/ethereum';
 import { Networking } from '@interfaces/Ethereum/ِEthereumNode';
 import { useNode } from '@utils/requests/ethereum';
 import { syncModeOptions } from '@data/ethereum/node/syncModeOptions';
 import { updateNetworkingSchema } from '@schemas/ethereumNode/updateNodeSchema';
+import { handleAxiosError } from '@utils/axios';
+import { ServerError } from '@interfaces/ServerError';
 
 interface Props extends Networking {
   name: string;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const NetworkingDetails: React.FC<Props> = ({ name, children, ...rest }) => {
   const { mutate } = useNode(name);
   const [submitSuccess, setSubmitSuccess] = useState('');
@@ -22,14 +27,30 @@ const NetworkingDetails: React.FC<Props> = ({ name, children, ...rest }) => {
     handleSubmit,
     control,
     register,
-    formState: { isDirty, isSubmitting, errors },
+    reset,
+    setError,
+    formState: { isDirty, isSubmitting, errors, isValid },
   } = useForm<Networking>({
     defaultValues: rest,
     resolver: joiResolver(updateNetworkingSchema),
   });
 
-  const onSubmit: SubmitHandler<Networking> = (values) => {
-    console.log(values);
+  const onSubmit: SubmitHandler<Networking> = async (values) => {
+    setSubmitSuccess('');
+    try {
+      const node = await updateEthereumNode(name, values);
+      void mutate({ node });
+      reset(values);
+      setSubmitSuccess('Networking data has been updated');
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+        const error = handleAxiosError<ServerError>(e);
+        setError('bootnodes', {
+          type: 'server',
+          message: error.response?.data.error,
+        });
+      }
+    }
   };
 
   return (
@@ -101,7 +122,7 @@ const NetworkingDetails: React.FC<Props> = ({ name, children, ...rest }) => {
         <Button
           type="submit"
           className="btn btn-primary"
-          disabled={!isDirty || isSubmitting}
+          disabled={!isDirty || isSubmitting || !isValid}
           loading={isSubmitting}
         >
           Save
