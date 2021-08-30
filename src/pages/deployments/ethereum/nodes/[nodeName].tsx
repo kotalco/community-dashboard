@@ -2,18 +2,19 @@ import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 
 import { useNode } from '@utils/requests/ethereum';
+import Heading from '@components/templates/Heading/Heading';
 import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
 import DeleteEthereumNode from '@components/organisms/Ethereum/DeleteEthereumNode/DeleteEthereumNode';
+import Networking from '@components/organisms/Ethereum/Networking/Networking';
 import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { tabTitles } from '@data/ethereum/node/tabTitles';
 import { getClientLabel } from '@data/ethereum/node/clientOptions';
 import { getNetworkLabel } from '@data/ethereum/node/networkOptions';
 import { Tab } from '@headlessui/react';
 import { fetcher } from '@utils/axios';
-import Heading from '@components/templates/Heading/Heading';
 
 interface Props {
   initialNode?: EthereumNode;
@@ -33,14 +34,24 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
     { label: 'Chain', value: getNetworkLabel(node.network) },
     { label: 'Client', value: getClientLabel(node.client) },
   ];
+
   return (
     <Layout>
       <Heading title={node.name} />
 
-      <div className="bg-white overflow-hidden shadow rounded-lg divided-y divided-gray-200 mt-4">
+      <div className="bg-white shadow rounded-lg divided-y divided-gray-200 mt-4">
         <Tabs tabs={tabTitles}>
           <Tab.Panel className="focus:outline-none">
             <ProtocolDetails dataList={dataList} />
+          </Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
+            <Networking
+              name={node.name}
+              p2pPort={node.p2pPort}
+              syncMode={node.syncMode}
+              bootnodes={node.bootnodes}
+              staticNodes={node.staticNodes}
+            />
           </Tab.Panel>
           <Tab.Panel className="focus:outline-none">
             <DeleteEthereumNode nodeName={node.name} />
@@ -57,7 +68,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
     const { node } = await fetcher<{ node: EthereumNode }>(
       `/ethereum/nodes/${nodeName}`
     );
-    console.log(node);
     return { props: { initialNode: node }, revalidate: 10 };
   } catch (e) {
     return { notFound: true };

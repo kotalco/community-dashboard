@@ -1,0 +1,115 @@
+import { useState } from 'react';
+import { Controller, useForm, SubmitHandler } from 'react-hook-form';
+import { joiResolver } from '@hookform/resolvers/joi';
+
+import TextInput from '@components/molecules/TextInput/TextInput';
+import Button from '@components/atoms/Button/Button';
+import Select from '@components/molecules/Select/Select';
+import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
+import { Networking } from '@interfaces/Ethereum/ِEthereumNode';
+import { useNode } from '@utils/requests/ethereum';
+import { syncModeOptions } from '@data/ethereum/node/syncModeOptions';
+import { updateNetworkingSchema } from '@schemas/ethereumNode/updateNodeSchema';
+
+interface Props extends Networking {
+  name: string;
+}
+
+const NetworkingDetails: React.FC<Props> = ({ name, children, ...rest }) => {
+  const { mutate } = useNode(name);
+  const [submitSuccess, setSubmitSuccess] = useState('');
+  const {
+    handleSubmit,
+    control,
+    register,
+    formState: { isDirty, isSubmitting, errors },
+  } = useForm<Networking>({
+    defaultValues: rest,
+    resolver: joiResolver(updateNetworkingSchema),
+  });
+
+  const onSubmit: SubmitHandler<Networking> = (values) => {
+    console.log(values);
+  };
+
+  return (
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="px-4 py-5 sm:p-6">
+        {/* P2P Port */}
+        <TextInput
+          label="P2P Port"
+          {...register('p2pPort')}
+          error={errors.p2pPort?.message}
+        />
+
+        {/* Sync Mode */}
+        <div className="mt-5 max-w-xs">
+          <Controller
+            control={control}
+            name="syncMode"
+            render={({ field }) => (
+              <Select
+                error={errors.syncMode?.message}
+                options={syncModeOptions}
+                placeholder="Choose your sync mode..."
+                onChange={field.onChange}
+                value={field.value}
+                label="Sync Mode"
+              />
+            )}
+          />
+        </div>
+
+        {/* Static Nodes */}
+        <div className="mt-5 max-w-xs">
+          <Controller
+            control={control}
+            name="staticNodes"
+            render={({ field }) => (
+              <TextareaWithInput
+                multiple
+                name={field.name}
+                label="Static Nodes"
+                value={field.value}
+                onChange={field.onChange}
+                error={errors.staticNodes?.message}
+              />
+            )}
+          />
+        </div>
+
+        {/* Boot Nodes */}
+        <div className="mt-5 max-w-xs">
+          <Controller
+            control={control}
+            name="bootnodes"
+            render={({ field }) => (
+              <TextareaWithInput
+                multiple
+                name={field.name}
+                label="Bootnodes"
+                value={field.value}
+                onChange={field.onChange}
+                error={errors.bootnodes?.message}
+              />
+            )}
+          />
+        </div>
+      </div>
+
+      <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
+        <Button
+          type="submit"
+          className="btn btn-primary"
+          disabled={!isDirty || isSubmitting}
+          loading={isSubmitting}
+        >
+          Save
+        </Button>
+        {submitSuccess && <p>{submitSuccess}</p>}
+      </div>
+    </form>
+  );
+};
+
+export default NetworkingDetails;

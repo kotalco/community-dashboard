@@ -5,15 +5,18 @@ import { SyncMode } from '@enums/Ethereum/SyncMode';
 import { NestedValue } from 'react-hook-form';
 import { Resources } from '@interfaces/Resources';
 
-export interface EthereumNode extends Resources {
-  name: string;
-  network: string;
-  client: EthereumNodeClient;
-  logging: Logging;
+export interface Networking {
   p2pPort: number;
   syncMode: SyncMode;
   staticNodes: NestedValue<string[]>;
   bootnodes: NestedValue<string[]>;
+}
+
+export interface EthereumNode extends Networking, Resources {
+  name: string;
+  network: string;
+  client: EthereumNodeClient;
+  logging: Logging;
   miner: boolean;
   coinbase: string;
   rpc: boolean;
