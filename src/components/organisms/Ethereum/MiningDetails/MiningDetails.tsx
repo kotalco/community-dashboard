@@ -4,11 +4,10 @@ import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 
 import Button from '@components/atoms/Button/Button';
-import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
 import { updateEthereumNode } from '@utils/requests/ethereum';
-import { AccessControl, Mining } from '@interfaces/Ethereum/ِEthereumNode';
+import { Mining } from '@interfaces/Ethereum/ِEthereumNode';
 import { useNode } from '@utils/requests/ethereum';
-import { updateAccessControlSchema } from '@schemas/ethereumNode/updateNodeSchema';
+import { updateMiningSchema } from '@schemas/ethereumNode/updateNodeSchema';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
 import Toggle from '@components/molecules/Toggle/Toggle';
@@ -32,28 +31,27 @@ const MiningDetails: React.FC<Props> = ({ name, children, ...rest }) => {
     formState: { isDirty, isSubmitting, errors, isValid },
   } = useForm<Mining>({
     defaultValues: rest,
-    // resolver: joiResolver(updateAccessControlSchema),
+    resolver: joiResolver(updateMiningSchema),
   });
 
   const miner = watch('miner');
 
-  const onSubmit: SubmitHandler<Mining> = (values) => {
-    console.log(values);
-    // setSubmitSuccess('');
-    // try {
-    //   const node = await updateEthereumNode(name, values);
-    //   void mutate({ node });
-    //   reset(values);
-    //   setSubmitSuccess('Access control data has been updated');
-    // } catch (e) {
-    //   if (axios.isAxiosError(e)) {
-    //     const error = handleAxiosError<ServerError>(e);
-    //     setError('corsDomains', {
-    //       type: 'server',
-    //       message: error.response?.data.error,
-    //     });
-    //   }
-    // }
+  const onSubmit: SubmitHandler<Mining> = async (values) => {
+    setSubmitSuccess('');
+    try {
+      const node = await updateEthereumNode(name, values);
+      void mutate({ node });
+      reset(values);
+      setSubmitSuccess('Access control data has been updated');
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+        const error = handleAxiosError<ServerError>(e);
+        setError('coinbase', {
+          type: 'server',
+          message: error.response?.data.error,
+        });
+      }
+    }
   };
 
   return (

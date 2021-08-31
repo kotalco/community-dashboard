@@ -3,6 +3,7 @@ import { apiOptions } from '@data/ethereum/node/apiOptions';
 import {
   AccessControl,
   API,
+  Mining,
   Networking,
 } from '@interfaces/Ethereum/ِEthereumNode';
 
@@ -80,5 +81,17 @@ export const updateAccessControlSchema = Joi.object<AccessControl>({
   corsDomains: Joi.array().default([]).min(1).messages({
     'array.min':
       'Please specify your CORS domains or "*" to whitelist all domains',
+  }),
+});
+
+export const updateMiningSchema = Joi.object<Mining>({
+  miner: Joi.boolean(),
+  coinbase: Joi.when('miner', {
+    is: false,
+    then: Joi.any().strip(),
+    otherwise: Joi.string().trim().required().messages({
+      'any.required': 'Please type your coinbase account',
+      'string.empty': 'Please type your coinbase account',
+    }),
   }),
 });
