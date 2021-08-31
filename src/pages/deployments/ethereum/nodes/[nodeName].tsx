@@ -13,6 +13,7 @@ import APIDetails from '@components/organisms/Ethereum/APIDetails/APIDetails';
 import AccessControlDetails from '@components/organisms/Ethereum/AccessControlDetails/AccessControlDetails';
 import MiningDetails from '@components/organisms/Ethereum/MiningDetails/MiningDetails';
 import ResourcesDetails from '@components/organisms/Resources/Resources';
+import LoggingDetails from '@components/organisms/Ethereum/LogginDetails/LoggingDetails';
 import { Resources } from '@interfaces/Resources';
 import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { tabTitles } from '@data/ethereum/node/tabTitles';
@@ -111,6 +112,11 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
               name={node.name}
               updateResources={updateResources}
             />
+          </Tab.Panel>
+
+          {/* Logging */}
+          <Tab.Panel className="focus:outline-none">
+            <LoggingDetails logging={node.logging} name={node.name} />
           </Tab.Panel>
 
           {/* Danger Zone */}
