@@ -10,6 +10,7 @@ import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetai
 import DeleteEthereumNode from '@components/organisms/Ethereum/DeleteEthereumNode/DeleteEthereumNode';
 import NetworkingDetails from '@components/organisms/Ethereum/Networking/Networking';
 import APIDetails from '@components/organisms/Ethereum/APIDetails/APIDetails';
+import AccessControlDetails from '@components/organisms/Ethereum/AccessControlDetails/AccessControlDetails';
 import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { tabTitles } from '@data/ethereum/node/tabTitles';
 import { getClientLabel } from '@data/ethereum/node/clientOptions';
@@ -64,6 +65,14 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
               wsAPI={node.wsAPI}
               graphql={node.graphql}
               graphqlPort={node.graphqlPort}
+              name={node.name}
+            />
+          </Tab.Panel>
+
+          <Tab.Panel className="focus:outline-none">
+            <AccessControlDetails
+              hosts={node.hosts}
+              corsDomains={node.corsDomains}
               name={node.name}
             />
           </Tab.Panel>

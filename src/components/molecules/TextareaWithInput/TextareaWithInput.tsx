@@ -1,10 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { InformationCircleIcon } from '@heroicons/react/solid';
 
 interface Props {
   name: string;
   label: string;
   value: string[] | undefined;
   multiple?: boolean;
+  tooltip?: string;
   helperText?: string;
   error?: string;
   onChange: (value: string[]) => void;
@@ -18,6 +20,7 @@ const TextareaWithInput: React.FC<Props> = ({
   helperText,
   onChange,
   multiple,
+  tooltip,
 }) => {
   const [text, setText] = useState(value?.join('\n') || '');
   const isMounted = useRef(false);
@@ -42,9 +45,26 @@ const TextareaWithInput: React.FC<Props> = ({
 
   return (
     <div className="sm:col-span-6">
-      <label htmlFor={name} className="block text-sm font-medium text-gray-700">
-        {label}
-      </label>
+      <div className="flex items-center">
+        <label
+          htmlFor={name}
+          className="relative text-sm font-medium text-gray-700"
+        >
+          {label}
+        </label>
+        {tooltip && (
+          <div className="inline-flex flex-col justify-center items-center relative group ml-1">
+            <InformationCircleIcon className="h-4 w-4 text-indigo-400" />
+            <div className="absolute bottom-0 group-hover:flex flex-col items-center hidden mb-6">
+              <span className="relative z-10 p-2 text-xs rounded leading-none text-white whitespace-nowrap bg-gray-700 shadow-lg">
+                {tooltip}
+              </span>
+              <div className="w-3 h-3 -mt-2 rotate-45 bg-gray-700" />
+            </div>
+          </div>
+        )}
+      </div>
+
       <div className="mt-1 max-w-xs">
         {multiple ? (
           <textarea

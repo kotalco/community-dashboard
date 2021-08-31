@@ -23,15 +23,22 @@ export interface API {
   graphqlPort: number;
 }
 
-export interface EthereumNode extends Networking, API, Resources {
+export interface AccessControl {
+  hosts: NestedValue<string[]>;
+  corsDomains: NestedValue<string[]>;
+}
+
+export interface EthereumNode
+  extends Networking,
+    API,
+    AccessControl,
+    Resources {
   name: string;
   network: string;
   client: EthereumNodeClient;
   logging: Logging;
   miner: boolean;
   coinbase: string;
-  hosts: NestedValue<string[]>;
-  corsDomains: NestedValue<string[]>;
 }
 
 export interface CreateEthereumNode {
