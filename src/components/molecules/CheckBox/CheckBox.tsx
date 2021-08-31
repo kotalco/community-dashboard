@@ -25,7 +25,7 @@ const Checkbox = React.forwardRef<HTMLInputElement, Props>(function Checkbox(
           name={name}
           type="checkbox"
           disabled={disabled}
-          className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded disabled:text-gray-300"
+          className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded disabled:bg-gray-100 disabled:checked:bg-gray-300"
         />
       </div>
       <div className="ml-3 text-sm">

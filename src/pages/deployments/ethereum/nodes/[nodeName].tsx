@@ -8,7 +8,8 @@ import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
 import DeleteEthereumNode from '@components/organisms/Ethereum/DeleteEthereumNode/DeleteEthereumNode';
-import Networking from '@components/organisms/Ethereum/Networking/Networking';
+import NetworkingDetails from '@components/organisms/Ethereum/Networking/Networking';
+import APIDetails from '@components/organisms/Ethereum/APIDetails/APIDetails';
 import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { tabTitles } from '@data/ethereum/node/tabTitles';
 import { getClientLabel } from '@data/ethereum/node/clientOptions';
@@ -45,12 +46,25 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
             <ProtocolDetails dataList={dataList} />
           </Tab.Panel>
           <Tab.Panel className="focus:outline-none">
-            <Networking
+            <NetworkingDetails
               name={node.name}
               p2pPort={node.p2pPort}
               syncMode={node.syncMode}
               bootnodes={node.bootnodes}
               staticNodes={node.staticNodes}
+            />
+          </Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
+            <APIDetails
+              rpc={node.rpc}
+              rpcPort={node.rpcPort}
+              rpcAPI={node.rpcAPI}
+              ws={node.ws}
+              wsPort={node.wsPort}
+              wsAPI={node.wsAPI}
+              graphql={node.graphql}
+              graphqlPort={node.graphqlPort}
+              name={node.name}
             />
           </Tab.Panel>
           <Tab.Panel className="focus:outline-none">

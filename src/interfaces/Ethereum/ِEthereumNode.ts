@@ -12,13 +12,7 @@ export interface Networking {
   bootnodes: NestedValue<string[]>;
 }
 
-export interface EthereumNode extends Networking, Resources {
-  name: string;
-  network: string;
-  client: EthereumNodeClient;
-  logging: Logging;
-  miner: boolean;
-  coinbase: string;
+export interface API {
   rpc: boolean;
   rpcPort: number;
   rpcAPI: EthereumAPI;
@@ -27,6 +21,15 @@ export interface EthereumNode extends Networking, Resources {
   wsAPI: EthereumAPI;
   graphql: boolean;
   graphqlPort: number;
+}
+
+export interface EthereumNode extends Networking, API, Resources {
+  name: string;
+  network: string;
+  client: EthereumNodeClient;
+  logging: Logging;
+  miner: boolean;
+  coinbase: string;
   hosts: NestedValue<string[]>;
   corsDomains: NestedValue<string[]>;
 }
