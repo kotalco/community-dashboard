@@ -11,6 +11,7 @@ import DeleteEthereumNode from '@components/organisms/Ethereum/DeleteEthereumNod
 import NetworkingDetails from '@components/organisms/Ethereum/Networking/Networking';
 import APIDetails from '@components/organisms/Ethereum/APIDetails/APIDetails';
 import AccessControlDetails from '@components/organisms/Ethereum/AccessControlDetails/AccessControlDetails';
+import MiningDetails from '@components/organisms/Ethereum/MiningDetails/MiningDetails';
 import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { tabTitles } from '@data/ethereum/node/tabTitles';
 import { getClientLabel } from '@data/ethereum/node/clientOptions';
@@ -43,9 +44,12 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
 
       <div className="bg-white shadow rounded-lg divided-y divided-gray-200 mt-4">
         <Tabs tabs={tabTitles}>
+          {/* Protocol */}
           <Tab.Panel className="focus:outline-none">
             <ProtocolDetails dataList={dataList} />
           </Tab.Panel>
+
+          {/* Networking */}
           <Tab.Panel className="focus:outline-none">
             <NetworkingDetails
               name={node.name}
@@ -55,6 +59,8 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
               staticNodes={node.staticNodes}
             />
           </Tab.Panel>
+
+          {/* API */}
           <Tab.Panel className="focus:outline-none">
             <APIDetails
               rpc={node.rpc}
@@ -69,6 +75,7 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
             />
           </Tab.Panel>
 
+          {/* Access Control */}
           <Tab.Panel className="focus:outline-none">
             <AccessControlDetails
               hosts={node.hosts}
@@ -76,6 +83,16 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
               name={node.name}
             />
           </Tab.Panel>
+
+          <Tab.Panel className="focus:outline-none">
+            <MiningDetails
+              miner={node.miner}
+              coinbase={node.coinbase}
+              name={node.name}
+            />
+          </Tab.Panel>
+
+          {/* Danger Zone */}
           <Tab.Panel className="focus:outline-none">
             <DeleteEthereumNode nodeName={node.name} />
           </Tab.Panel>

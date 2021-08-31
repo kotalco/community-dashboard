@@ -5,6 +5,12 @@ import { SyncMode } from '@enums/Ethereum/SyncMode';
 import { NestedValue } from 'react-hook-form';
 import { Resources } from '@interfaces/Resources';
 
+export interface CreateEthereumNode {
+  name: string;
+  client: EthereumNodeClient;
+  network: string;
+}
+
 export interface Networking {
   p2pPort: number;
   syncMode: SyncMode;
@@ -28,21 +34,20 @@ export interface AccessControl {
   corsDomains: NestedValue<string[]>;
 }
 
-export interface EthereumNode
-  extends Networking,
-    API,
-    AccessControl,
-    Resources {
-  name: string;
-  network: string;
-  client: EthereumNodeClient;
-  logging: Logging;
+export interface Mining {
   miner: boolean;
   coinbase: string;
 }
 
-export interface CreateEthereumNode {
-  name: string;
-  client: EthereumNodeClient;
-  network: string;
+export interface LoggingInterface {
+  logging: Logging;
 }
+
+export interface EthereumNode
+  extends CreateEthereumNode,
+    Networking,
+    API,
+    AccessControl,
+    Mining,
+    LoggingInterface,
+    Resources {}
