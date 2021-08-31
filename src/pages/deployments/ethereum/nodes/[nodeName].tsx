@@ -1,7 +1,7 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 
-import { useNode } from '@utils/requests/ethereum';
+import { updateEthereumNode, useNode } from '@utils/requests/ethereum';
 import Heading from '@components/templates/Heading/Heading';
 import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
@@ -12,6 +12,8 @@ import NetworkingDetails from '@components/organisms/Ethereum/Networking/Network
 import APIDetails from '@components/organisms/Ethereum/APIDetails/APIDetails';
 import AccessControlDetails from '@components/organisms/Ethereum/AccessControlDetails/AccessControlDetails';
 import MiningDetails from '@components/organisms/Ethereum/MiningDetails/MiningDetails';
+import ResourcesDetails from '@components/organisms/Resources/Resources';
+import { Resources } from '@interfaces/Resources';
 import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { tabTitles } from '@data/ethereum/node/tabTitles';
 import { getClientLabel } from '@data/ethereum/node/clientOptions';
@@ -26,9 +28,14 @@ interface Props {
 const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
   const { isFallback } = useRouter();
 
-  const { data: node } = useNode(initialNode?.name, {
+  const { data: node, mutate } = useNode(initialNode?.name, {
     initialData: { node: initialNode },
   });
+
+  const updateResources = async (name: string, values: Resources) => {
+    const node = await updateEthereumNode(name, values);
+    void mutate({ node });
+  };
 
   if (!node || isFallback) return <LoadingIndicator />;
 
@@ -84,11 +91,25 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
             />
           </Tab.Panel>
 
+          {/* Mining */}
           <Tab.Panel className="focus:outline-none">
             <MiningDetails
               miner={node.miner}
               coinbase={node.coinbase}
               name={node.name}
+            />
+          </Tab.Panel>
+
+          {/* Resources */}
+          <Tab.Panel className="focus:outline-none">
+            <ResourcesDetails
+              cpu={node.cpu}
+              cpuLimit={node.cpuLimit}
+              memory={node.memory}
+              memoryLimit={node.memoryLimit}
+              storage={node.storage}
+              name={node.name}
+              updateResources={updateResources}
             />
           </Tab.Panel>
 
