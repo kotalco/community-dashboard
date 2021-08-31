@@ -1,6 +1,10 @@
 import Joi from 'joi';
 import { apiOptions } from '@data/ethereum/node/apiOptions';
-import { API, Networking } from '@interfaces/Ethereum/ِEthereumNode';
+import {
+  AccessControl,
+  API,
+  Networking,
+} from '@interfaces/Ethereum/ِEthereumNode';
 
 const apiValus = apiOptions.map(({ value }) => value);
 
@@ -65,5 +69,16 @@ export const updateAPISchema = Joi.object<API>({
       'number.port': 'Please provide a valid port number',
       'any.invalid': 'Please provide a valid port number',
     }),
+  }),
+});
+
+export const updateAccessControlSchema = Joi.object<AccessControl>({
+  hosts: Joi.array().default([]).min(1).messages({
+    'array.min':
+      'Please specify your whitelisted hosts or "*" to whitelist all hosts',
+  }),
+  corsDomains: Joi.array().default([]).min(1).messages({
+    'array.min':
+      'Please specify your CORS domains or "*" to whitelist all domains',
   }),
 });

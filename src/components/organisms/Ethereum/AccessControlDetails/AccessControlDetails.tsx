@@ -10,7 +10,10 @@ import { updateEthereumNode } from '@utils/requests/ethereum';
 import { AccessControl, API } from '@interfaces/Ethereum/ِEthereumNode';
 import { useNode } from '@utils/requests/ethereum';
 import { apiOptions } from '@data/ethereum/node/apiOptions';
-import { updateAPISchema } from '@schemas/ethereumNode/updateNodeSchema';
+import {
+  updateAccessControlSchema,
+  updateAPISchema,
+} from '@schemas/ethereumNode/updateNodeSchema';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
 import Checkbox from '@components/molecules/CheckBox/CheckBox';
@@ -35,26 +38,25 @@ const AccessControlDetails: React.FC<Props> = ({ name, children, ...rest }) => {
     formState: { isDirty, isSubmitting, errors, isValid },
   } = useForm<AccessControl>({
     defaultValues: rest,
-    // resolver: joiResolver(updateAPISchema),
+    resolver: joiResolver(updateAccessControlSchema),
   });
 
-  const onSubmit: SubmitHandler<API> = (values) => {
-    console.log(values);
-    // setSubmitSuccess('');
-    // try {
-    //   const node = await updateEthereumNode(name, values);
-    //   void mutate({ node });
-    //   reset(values);
-    //   setSubmitSuccess('API data has been updated');
-    // } catch (e) {
-    //   if (axios.isAxiosError(e)) {
-    //     const error = handleAxiosError<ServerError>(e);
-    //     setError('graphqlPort', {
-    //       type: 'server',
-    //       message: error.response?.data.error,
-    //     });
-    //   }
-    // }
+  const onSubmit: SubmitHandler<AccessControl> = async (values) => {
+    setSubmitSuccess('');
+    try {
+      const node = await updateEthereumNode(name, values);
+      void mutate({ node });
+      reset(values);
+      setSubmitSuccess('Access control data has been updated');
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+        const error = handleAxiosError<ServerError>(e);
+        setError('corsDomains', {
+          type: 'server',
+          message: error.response?.data.error,
+        });
+      }
+    }
   };
 
   return (
@@ -67,6 +69,7 @@ const AccessControlDetails: React.FC<Props> = ({ name, children, ...rest }) => {
           render={({ field }) => (
             <TextareaWithInput
               multiple
+              error={errors.hosts?.message}
               tooltip="Server Enforced"
               name={field.name}
               value={field.value}
@@ -84,6 +87,7 @@ const AccessControlDetails: React.FC<Props> = ({ name, children, ...rest }) => {
             render={({ field }) => (
               <TextareaWithInput
                 multiple
+                error={errors.corsDomains?.message}
                 tooltip="Browser Enforced"
                 name={field.name}
                 value={field.value}
