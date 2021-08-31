@@ -5,15 +5,12 @@ import { joiResolver } from '@hookform/resolvers/joi';
 
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Button from '@components/atoms/Button/Button';
-import Select from '@components/molecules/Select/Select';
-import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
 import Toggle from '@components/molecules/Toggle/Toggle';
 import { updateEthereumNode } from '@utils/requests/ethereum';
-import { API, Networking } from '@interfaces/Ethereum/ِEthereumNode';
+import { API } from '@interfaces/Ethereum/ِEthereumNode';
 import { useNode } from '@utils/requests/ethereum';
-import { syncModeOptions } from '@data/ethereum/node/syncModeOptions';
 import { apiOptions } from '@data/ethereum/node/apiOptions';
-import { updateNetworkingSchema } from '@schemas/ethereumNode/updateNodeSchema';
+import { updateAPISchema } from '@schemas/ethereumNode/updateNodeSchema';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
 import Checkbox from '@components/molecules/CheckBox/CheckBox';
@@ -36,29 +33,35 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
     watch,
     formState: { isDirty, isSubmitting, errors, isValid },
   } = useForm<API>({
-    defaultValues: rest,
-    // resolver: joiResolver(updateNetworkingSchema),
+    defaultValues: {
+      ...rest,
+      rpcPort: rest.rpcPort || 8545,
+      rpcAPI: rest.rpcAPI || ['eth', 'net', 'web3'],
+      wsPort: rest.wsPort || 8546,
+      wsAPI: rest.wsAPI || ['eth', 'net', 'web3'],
+      graphqlPort: rest.graphqlPort || 8547,
+    },
+    resolver: joiResolver(updateAPISchema),
   });
 
   const [rpc, ws, graphql] = watch(['rpc', 'ws', 'graphql']);
 
-  const onSubmit: SubmitHandler<Networking> = (values) => {
-    console.log(values);
-    // setSubmitSuccess('');
-    // try {
-    //   const node = await updateEthereumNode(name, values);
-    //   void mutate({ node });
-    //   reset(values);
-    //   setSubmitSuccess('Networking data has been updated');
-    // } catch (e) {
-    //   if (axios.isAxiosError(e)) {
-    //     const error = handleAxiosError<ServerError>(e);
-    //     setError('bootnodes', {
-    //       type: 'server',
-    //       message: error.response?.data.error,
-    //     });
-    //   }
-    // }
+  const onSubmit: SubmitHandler<API> = async (values) => {
+    setSubmitSuccess('');
+    try {
+      const node = await updateEthereumNode(name, values);
+      void mutate({ node });
+      reset(values);
+      setSubmitSuccess('API data has been updated');
+    } catch (e) {
+      if (axios.isAxiosError(e)) {
+        const error = handleAxiosError<ServerError>(e);
+        setError('graphqlPort', {
+          type: 'server',
+          message: error.response?.data.error,
+        });
+      }
+    }
   };
 
   return (
@@ -104,6 +107,9 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
               </div>
             ))}
           </div>
+          <p role="alert" className="mt-2 text-sm text-red-600">
+            {errors.rpcAPI?.message}
+          </p>
         </div>
 
         <Separator />
@@ -126,7 +132,7 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
           <TextInput
             disabled={!ws}
             label="Web Socket Server Port"
-            error={errors.rpcPort?.message}
+            error={errors.wsPort?.message}
             {...register('wsPort')}
           />
         </div>
@@ -148,6 +154,9 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
               </div>
             ))}
           </div>
+          <p role="alert" className="mt-2 text-sm text-red-600">
+            {errors.wsAPI?.message}
+          </p>
         </div>
         <Separator />
 
@@ -169,7 +178,7 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
           <TextInput
             disabled={!graphql}
             label="GraphQl Server Port"
-            error={errors.rpcPort?.message}
+            error={errors.graphqlPort?.message}
             {...register('graphqlPort')}
           />
         </div>
