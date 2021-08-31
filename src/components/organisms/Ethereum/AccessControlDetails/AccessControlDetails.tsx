@@ -3,22 +3,14 @@ import { useState } from 'react';
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 
-import TextInput from '@components/molecules/TextInput/TextInput';
 import Button from '@components/atoms/Button/Button';
-import Toggle from '@components/molecules/Toggle/Toggle';
+import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
 import { updateEthereumNode } from '@utils/requests/ethereum';
-import { AccessControl, API } from '@interfaces/Ethereum/ِEthereumNode';
+import { AccessControl } from '@interfaces/Ethereum/ِEthereumNode';
 import { useNode } from '@utils/requests/ethereum';
-import { apiOptions } from '@data/ethereum/node/apiOptions';
-import {
-  updateAccessControlSchema,
-  updateAPISchema,
-} from '@schemas/ethereumNode/updateNodeSchema';
+import { updateAccessControlSchema } from '@schemas/ethereumNode/updateNodeSchema';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
-import Checkbox from '@components/molecules/CheckBox/CheckBox';
-import Separator from '@components/atoms/Separator/Separator';
-import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
 
 interface Props extends AccessControl {
   name: string;
@@ -31,10 +23,8 @@ const AccessControlDetails: React.FC<Props> = ({ name, children, ...rest }) => {
   const {
     handleSubmit,
     control,
-    register,
     reset,
     setError,
-    watch,
     formState: { isDirty, isSubmitting, errors, isValid },
   } = useForm<AccessControl>({
     defaultValues: rest,
