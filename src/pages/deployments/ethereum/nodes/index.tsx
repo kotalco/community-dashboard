@@ -66,9 +66,9 @@ const EthereumNodes: React.FC<Props> = ({ ethereumNodes }) => {
                 title={name}
               >
                 <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                <p>{getLabel(client, clientOptions)}</p>
-                <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
                 <p>{getLabel(network, networkOptions)}</p>
+                <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
+                <p>{getLabel(client, clientOptions)}</p>
               </ListItem>
             ))}
           </List>
