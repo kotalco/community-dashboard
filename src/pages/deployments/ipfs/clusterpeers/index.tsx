@@ -2,16 +2,15 @@ import { useEffect } from 'react';
 import { InferGetStaticPropsType } from 'next';
 import { GlobeAltIcon } from '@heroicons/react/solid';
 import { ChipIcon, CubeIcon } from '@heroicons/react/outline';
-import { PlusIcon } from '@heroicons/react/solid';
 
 import Layout from '@components/templates/Layout/Layout';
 import List from '@components/organisms/List/List';
 import ListItem from '@components/molecules/ListItem/ListItem';
-import Button from '@components/atoms/Button/Button';
 import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
 import Heading from '@components/templates/Heading/Heading';
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import ButtonGroup from '@components/molecules/ButtonGroup/ButtonGroup';
+import EmptyState from '@components/molecules/EmptyState/EmptyState';
 import { createButtons, resourcesTab } from '@data/ipfs/links';
 import { useClusterPeers } from '@utils/requests/ipfs/clusterPeers';
 import { IPFSPeer } from '@interfaces/ipfs/IPFSPeer';
@@ -57,24 +56,14 @@ export const IPFSPeers = ({
             ))}
           </List>
         ) : (
-          <div className="text-center bg-white py-6 rounded-tr-md rounded-b-md">
+          <EmptyState
+            title="There is no cluster peers created"
+            description="Get started by creating a new cluster peer."
+            linkUrl="/deployments/ipfs/clusterpeers/create"
+            linkName="New Cluster Peer"
+          >
             <CubeIcon className="mx-auto w-12 h-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">
-              No Cluster Peers
-            </h3>
-            <p className="mt-1 text-sm text-gray-500">
-              Get started by creating a new Cluster Peer.
-            </p>
-            <div className="mt-6">
-              <Button
-                href="/deployments/ipfs/clusterpeers/create"
-                className="btn btn-primary"
-              >
-                <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                New Cluster Peer
-              </Button>
-            </div>
-          </div>
+          </EmptyState>
         )}
       </div>
 

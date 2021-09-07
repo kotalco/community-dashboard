@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { GetStaticProps } from 'next';
 import { GlobeAltIcon } from '@heroicons/react/solid';
 import { ChipIcon, CubeIcon } from '@heroicons/react/outline';
-import { PlusIcon } from '@heroicons/react/solid';
 
 import Layout from '@components/templates/Layout/Layout';
 import List from '@components/organisms/List/List';
@@ -11,7 +10,7 @@ import NotificationPanel from '@components/organisms/NotificationPanel/Notificat
 import Heading from '@components/templates/Heading/Heading';
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import ButtonGroup from '@components/molecules/ButtonGroup/ButtonGroup';
-import Button from '@components/atoms/Button/Button';
+import EmptyState from '@components/molecules/EmptyState/EmptyState';
 import { createButtons, resourcesTab } from '@data/ipfs/links';
 import { usePeers } from '@utils/requests/ipfs/peers';
 import { IPFSPeer } from '@interfaces/ipfs/IPFSPeer';
@@ -56,22 +55,14 @@ export const IPFSPeers: React.FC<Props> = ({ initialPeers }) => {
             ))}
           </List>
         ) : (
-          <div className="text-center bg-white py-6 rounded-tr-md rounded-b-md">
+          <EmptyState
+            title="There is no peers created"
+            description="Get started by creating a new peer."
+            linkUrl="/deployments/ipfs/peers/create"
+            linkName="New Peer"
+          >
             <CubeIcon className="mx-auto w-12 h-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">No Peers</h3>
-            <p className="mt-1 text-sm text-gray-500">
-              Get started by creating a new Peer.
-            </p>
-            <div className="mt-6">
-              <Button
-                href="/deployments/ipfs/peers/create"
-                className="btn btn-primary"
-              >
-                <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                New Peer
-              </Button>
-            </div>
-          </div>
+          </EmptyState>
         )}
       </div>
 
@@ -93,12 +84,8 @@ export const IPFSPeers: React.FC<Props> = ({ initialPeers }) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  try {
-    const peers = await fetcher<{ peers: IPFSPeer[] }>('/ipfs/peers');
-    return { props: { initialPeers: peers }, revalidate: 10 };
-  } catch (e) {
-    return { notFound: true };
-  }
+  const peers = await fetcher<{ peers: IPFSPeer[] }>('/ipfs/peers');
+  return { props: { initialPeers: peers }, revalidate: 10 };
 };
 
 export default IPFSPeers;

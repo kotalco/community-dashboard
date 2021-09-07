@@ -1,17 +1,17 @@
 import { useEffect } from 'react';
 import { GetStaticProps } from 'next';
-import { GlobeAltIcon, PlusIcon } from '@heroicons/react/solid';
+import { GlobeAltIcon } from '@heroicons/react/solid';
 import { ChipIcon } from '@heroicons/react/outline';
 import useSWR from 'swr';
 
 import EthereumIcon from '@components/Icons/EthereumIcon/EthereumIcon';
-import Button from '@components/atoms/Button/Button';
 import Layout from '@components/templates/Layout/Layout';
 import List from '@components/organisms/List/List';
 import ListItem from '@components/molecules/ListItem/ListItem';
 import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import ButtonGroup from '@components/molecules/ButtonGroup/ButtonGroup';
+import EmptyState from '@components/molecules/EmptyState/EmptyState';
 import { useNotification } from '@components/contexts/NotificationContext';
 import { getAllValidators } from '@utils/requests/ethereum2/validators';
 import { Ethereum2Validator } from '@interfaces/ethereum2/Ethereum2Validator';
@@ -68,24 +68,14 @@ const Ethereum2Validators: React.FC<Props> = ({ validators }) => {
             ))}
           </List>
         ) : (
-          <div className="text-center bg-white py-6 rounded-tr-md rounded-b-md">
+          <EmptyState
+            title="There is no validators created"
+            description="Get started by creating a new validator."
+            linkUrl="/deployments/ethereum2/validators/create"
+            linkName="New Validator"
+          >
             <EthereumIcon className="mx-auto w-12 h-12 text-gray-400" />
-            <h3 className="mt-2 text-sm font-medium text-gray-900">
-              No Validators
-            </h3>
-            <p className="mt-1 text-sm text-gray-500">
-              Get started by creating a new validator.
-            </p>
-            <div className="mt-6">
-              <Button
-                href="/deployments/ethereum2/validators/create"
-                className="btn btn-primary"
-              >
-                <PlusIcon className="-ml-1 mr-2 h-5 w-5" aria-hidden="true" />
-                New Validator
-              </Button>
-            </div>
-          </div>
+          </EmptyState>
         )}
       </div>
 
@@ -107,12 +97,8 @@ const Ethereum2Validators: React.FC<Props> = ({ validators }) => {
 };
 
 export const getStaticProps: GetStaticProps = async () => {
-  try {
-    const validators = await getAllValidators();
-    return { props: { validators }, revalidate: 10 };
-  } catch (e) {
-    return { notFound: true };
-  }
+  const validators = await getAllValidators();
+  return { props: { validators }, revalidate: 10 };
 };
 
 export default Ethereum2Validators;
