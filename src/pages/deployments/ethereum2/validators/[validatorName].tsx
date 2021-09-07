@@ -11,7 +11,6 @@ import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import Heading from '@components/templates/Heading/Heading';
-import ValidatorProtocolTab from '@components/organisms/Ethereum2/Validator/ValidatorProtocolTab/ValidatorProtocolTab';
 import ValidatorGraffitiTab from '@components/organisms/Ethereum2/Validator/ValidatorGarfittiTab/ValidatorGarfittiTab';
 import ValidatorKeystoreTab from '@components/organisms/Ethereum2/Validator/ValidatorKeystoreTab/ValidatorKeystoreTab';
 import ValidatorBeaconNodeTab from '@components/organisms/Ethereum2/Validator/ValidatorBeaconNodeTab/ValidatorBeaconNodeTab';
@@ -22,6 +21,10 @@ import {
   Ethereum2Validator,
   UpdateEthereum2Validator,
 } from '@interfaces/ethereum2/Ethereum2Validator';
+import { getLabel } from '@utils/helpers/getLabel';
+import { networkOptions } from '@data/ethereum2/networkOptions';
+import { clientOptions } from '@data/ethereum2/clientOptions';
+import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
 
 interface Props {
   validator: Ethereum2Validator;
@@ -49,6 +52,13 @@ const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
   };
 
   if (!data || isFallback) return <LoadingIndicator />;
+
+  const dataList = [
+    { label: 'Protocol', value: 'Ethereum 2.0' },
+    { label: 'Chain', value: getLabel(data.network, networkOptions) },
+    { label: 'Client', value: getLabel(data.client, clientOptions) },
+  ];
+
   return (
     <Layout>
       <Heading title={validator.name} />
@@ -56,7 +66,7 @@ const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
       <div className="bg-white shadow rounded-lg divided-y divided-gray-200 mt-4">
         <Tabs tabs={tabTitles}>
           <Tab.Panel className="focus:outline-none">
-            <ValidatorProtocolTab client={data.client} network={data.network} />
+            <ProtocolDetails dataList={dataList} />
           </Tab.Panel>
           <Tab.Panel className="focus:outline-none">
             <ValidatorGraffitiTab name={data.name} graffiti={data.graffiti} />

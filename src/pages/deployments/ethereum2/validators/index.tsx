@@ -17,6 +17,9 @@ import { getAllValidators } from '@utils/requests/ethereum2/validators';
 import { Ethereum2Validator } from '@interfaces/ethereum2/Ethereum2Validator';
 import { resourcesTab, createButtons } from '@data/ethereum2/links';
 import { AxiosError } from 'axios';
+import { getLabel } from '@utils/helpers/getLabel';
+import { networkOptions } from '@data/ethereum2/networkOptions';
+import { clientOptions } from '@data/ethereum2/clientOptions';
 
 interface Props {
   validators: Ethereum2Validator[];
@@ -61,9 +64,9 @@ const Ethereum2Validators: React.FC<Props> = ({ validators }) => {
                 title={name}
               >
                 <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                <p>{network}</p>
+                <p>{getLabel(network, networkOptions)}</p>
                 <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
-                <p>{client}</p>
+                <p>{getLabel(client, clientOptions)}</p>
               </ListItem>
             ))}
           </List>

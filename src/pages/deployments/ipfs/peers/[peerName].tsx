@@ -4,9 +4,9 @@ import useSWR from 'swr';
 
 import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
+import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
 import DeleteIPFSPeer from '@components/organisms/IPFS/DeleteIPFSPeer/DeleteIPFSPeer';
 import Tabs from '@components/organisms/Tabs/Tabs';
-import IPFSProtocolDetails from '@components/organisms/IPFS/IPFSProtocolDetails/IPFSProtocolDetails';
 import IPFSConfigrationProfiles from '@components/organisms/IPFS/IPFSConfigrationProfiles/IPFSConfigrationProfiles';
 import IPFSApiDetails from '@components/organisms/IPFS/IPFSApiDetails/IPFSApiDetails';
 import IPFSGatewayDetails from '@components/organisms/IPFS/IPFSGatewayDetails/IPFSGatewayDetails';
@@ -36,6 +36,12 @@ const IPFSPeerDetailsPage: React.FC<Props> = ({ ipfsPeer }) => {
 
   if (!data || isFallback) return <LoadingIndicator />;
 
+  const dataList = [
+    { label: 'Protocol', value: 'IPFS' },
+    { label: 'Chain', value: 'public-swarm' },
+    { label: 'client', value: 'go-ipfs' },
+  ];
+
   return (
     <Layout>
       <Heading title={data.name} />
@@ -43,7 +49,7 @@ const IPFSPeerDetailsPage: React.FC<Props> = ({ ipfsPeer }) => {
       <div className="bg-white shadow rounded-lg divided-y divided-gray-200 mt-4">
         <Tabs tabs={tabsTitles}>
           <Tab.Panel className="focus:outline-none">
-            <IPFSProtocolDetails />
+            <ProtocolDetails dataList={dataList} />
           </Tab.Panel>
           <Tab.Panel className="focus:outline-none">
             <IPFSConfigrationProfiles

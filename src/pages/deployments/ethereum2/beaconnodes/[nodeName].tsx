@@ -9,12 +9,14 @@ import {
 import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
-import BeaconNodeProtocolTab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeProtocolTab/BeaconNodeProtocolTab';
+import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
 import BeaconNodeAPITab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeAPITab/BeaconNodeAPITab';
 import BeaconNodeEthereumTab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeEthereumTab/BeaconNodeEthereumTab';
 import DeleteBeaconNode from '@components/organisms/Ethereum2/BeaconNode/DeleteBeaconNode/DeleteBeaconNode';
 import Resources from '@components/organisms/Resources/Resources';
 import { tabTitles } from '@data/ethereum2/beaconNode/tabTitles';
+import { clientOptions } from '@data/ethereum2/clientOptions';
+import { networkOptions } from '@data/ethereum2/networkOptions';
 import {
   Ethereum2BeaconNode,
   UpdateEthereum2BeaconNode,
@@ -22,6 +24,7 @@ import {
 import { fetcher } from '@utils/axios';
 import React from 'react';
 import Heading from '@components/templates/Heading/Heading';
+import { getLabel } from '@utils/helpers/getLabel';
 
 interface Props {
   beaconnode?: Ethereum2BeaconNode;
@@ -43,6 +46,11 @@ const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconnode }) => {
 
   if (!data || isFallback) return <LoadingIndicator />;
 
+  const dataList = [
+    { label: 'Protocol', value: 'Ethereum 2.0' },
+    { label: 'Chain', value: getLabel(data.network, networkOptions) },
+    { label: 'Client', value: getLabel(data.client, clientOptions) },
+  ];
   return (
     <Layout>
       <Heading title={data.name} />
@@ -50,10 +58,7 @@ const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconnode }) => {
       <div className="bg-white shadow rounded-lg mt-4">
         <Tabs tabs={tabTitles}>
           <Tab.Panel className="focus:outline-none">
-            <BeaconNodeProtocolTab
-              client={data.client}
-              network={data.network}
-            />
+            <ProtocolDetails dataList={dataList} />
           </Tab.Panel>
           <Tab.Panel className="focus:outline-none">
             <BeaconNodeEthereumTab

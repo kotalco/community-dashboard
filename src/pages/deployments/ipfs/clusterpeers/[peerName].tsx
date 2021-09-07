@@ -12,15 +12,17 @@ import {
   updateClusterPeer,
 } from '@utils/requests/ipfs/clusterPeers';
 import { tabTitles } from '@data/ipfs/clusterPeers/tabTitles';
+import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import Layout from '@components/templates/Layout/Layout';
 import Heading from '@components/templates/Heading/Heading';
 import Tabs from '@components/organisms/Tabs/Tabs';
-import Protocol from '@components/organisms/IPFS/ClusterPeer/Protocol/Protocol';
 import Security from '@components/organisms/IPFS/ClusterPeer/Security/Security';
 import Peers from '@components/organisms/IPFS/ClusterPeer/Peers/Peers';
 import Resources from '@components/organisms/Resources/Resources';
 import DeleteDeployment from '@components/organisms/DeleteDeployment/DeleteDeployment';
+import { getLabel } from '@utils/helpers/getLabel';
+import { consensusOptions } from '@data/ipfs/clusterPeers/consensusOptions';
 
 interface Props {
   initialClusterpeer?: IPFSClusterPeer;
@@ -45,6 +47,18 @@ const ClusterPeerDetailsPage: React.FC<Props> = ({ initialClusterpeer }) => {
 
   if (!clusterpeer || isFallback) return <LoadingIndicator />;
 
+  const dataList = [
+    { label: 'Protocol', value: 'IPFS' },
+    { label: 'Chain', value: 'public-swarm' },
+    { label: 'Client', value: 'ipfs-cluster-service' },
+    {
+      label: 'Consensus',
+      value: getLabel(clusterpeer.consensus, consensusOptions),
+    },
+    { label: 'ID', value: clusterpeer.id || 'N/A' },
+    { label: 'From', value: clusterpeer.privatekeySecretName || 'N/A' },
+  ];
+
   return (
     <Layout>
       <Heading title={clusterpeer.name} />
@@ -52,11 +66,7 @@ const ClusterPeerDetailsPage: React.FC<Props> = ({ initialClusterpeer }) => {
       <div className="bg-white shadow rounded-lg mt-4">
         <Tabs tabs={tabTitles}>
           <Tab.Panel className="focus:outline-none">
-            <Protocol
-              consensus={clusterpeer.consensus}
-              id={clusterpeer.id}
-              privatekeySecretName={clusterpeer.privatekeySecretName}
-            />
+            <ProtocolDetails dataList={dataList} />
           </Tab.Panel>
           <Tab.Panel className="focus:outline-none">
             <Peers

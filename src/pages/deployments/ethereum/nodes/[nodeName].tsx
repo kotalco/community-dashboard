@@ -17,10 +17,11 @@ import LoggingDetails from '@components/organisms/Ethereum/LogginDetails/Logging
 import { Resources } from '@interfaces/Resources';
 import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { tabTitles } from '@data/ethereum/node/tabTitles';
-import { getClientLabel } from '@data/ethereum/node/clientOptions';
-import { getNetworkLabel } from '@data/ethereum/node/networkOptions';
+import { clientOptions } from '@data/ethereum/node/clientOptions';
+import { networkOptions } from '@data/ethereum/node/networkOptions';
 import { Tab } from '@headlessui/react';
 import { fetcher } from '@utils/axios';
+import { getLabel } from '@utils/helpers/getLabel';
 
 interface Props {
   initialNode?: EthereumNode;
@@ -42,8 +43,8 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
 
   const dataList = [
     { label: 'Protocol', value: 'Ethereum' },
-    { label: 'Chain', value: getNetworkLabel(node.network) },
-    { label: 'Client', value: getClientLabel(node.client) },
+    { label: 'Chain', value: getLabel(node.network, networkOptions) },
+    { label: 'Client', value: getLabel(node.client, clientOptions) },
   ];
 
   return (

@@ -17,6 +17,9 @@ import { useBeaconnodes } from '@utils/requests/ethereum2/beaconNodes';
 import { Ethereum2BeaconNode } from '@interfaces/ethereum2/Ethereum2BeaconNode';
 import { resourcesTab, createButtons } from '@data/ethereum2/links';
 import { fetcher } from '@utils/axios';
+import { getLabel } from '@utils/helpers/getLabel';
+import { networkOptions } from '@data/ethereum2/networkOptions';
+import { clientOptions } from '@data/ethereum2/clientOptions';
 
 function BeaconnodesPage({
   beaconnodes,
@@ -48,9 +51,9 @@ function BeaconnodesPage({
                 title={name}
               >
                 <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                <p>{network}</p>
+                <p>{getLabel(network, networkOptions)}</p>
                 <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
-                <p>{client}</p>
+                <p>{getLabel(client, clientOptions)}</p>
               </ListItem>
             ))}
           </List>

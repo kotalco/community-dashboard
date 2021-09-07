@@ -4,6 +4,7 @@ import { GlobeAltIcon } from '@heroicons/react/solid';
 import { ChipIcon } from '@heroicons/react/outline';
 // import useSWR from 'swr';
 
+import Heading from '@components/templates/Heading/Heading';
 import Button from '@components/atoms/Button/Button';
 import Layout from '@components/templates/Layout/Layout';
 import List from '@components/organisms/List/List';
@@ -11,14 +12,14 @@ import ListItem from '@components/molecules/ListItem/ListItem';
 import EthereumIcon from '@components/Icons/EthereumIcon/EthereumIcon';
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import EmptyState from '@components/molecules/EmptyState/EmptyState';
+import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
 import { useNotification } from '@components/contexts/NotificationContext';
 import { getAllNodes } from '@utils/requests/ethereum';
 import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { resourcesTab } from '@data/ethereum/links';
-import { getClientLabel } from '@data/ethereum/node/clientOptions';
-import { getNetworkLabel } from '@data/ethereum/node/networkOptions';
-import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
-import Heading from '@components/templates/Heading/Heading';
+import { clientOptions } from '@data/ethereum/node/clientOptions';
+import { networkOptions } from '@data/ethereum/node/networkOptions';
+import { getLabel } from '@utils/helpers/getLabel';
 // import { AxiosError } from 'axios';
 
 interface Props {
@@ -65,9 +66,9 @@ const EthereumNodes: React.FC<Props> = ({ ethereumNodes }) => {
                 title={name}
               >
                 <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                <p>{getClientLabel(client)}</p>
+                <p>{getLabel(client, clientOptions)}</p>
                 <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
-                <p>{getNetworkLabel(network)}</p>
+                <p>{getLabel(network, networkOptions)}</p>
               </ListItem>
             ))}
           </List>
