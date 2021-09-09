@@ -102,6 +102,11 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
             />
           </Tab.Panel>
 
+          {/* Logging */}
+          <Tab.Panel className="focus:outline-none">
+            <LoggingDetails logging={node.logging} name={node.name} />
+          </Tab.Panel>
+
           {/* Resources */}
           <Tab.Panel className="focus:outline-none">
             <ResourcesDetails
@@ -113,11 +118,6 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
               name={node.name}
               updateResources={updateResources}
             />
-          </Tab.Panel>
-
-          {/* Logging */}
-          <Tab.Panel className="focus:outline-none">
-            <LoggingDetails logging={node.logging} name={node.name} />
           </Tab.Panel>
 
           {/* Danger Zone */}

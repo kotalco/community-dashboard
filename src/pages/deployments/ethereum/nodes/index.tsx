@@ -44,7 +44,7 @@ const EthereumNodes: React.FC<Props> = ({ ethereumNodes }) => {
 
   return (
     <Layout>
-      <Heading title="Nodes">
+      <Heading title="Ethereum Deployments">
         {!!ethereumNodes.length && (
           <Button
             href="/deployments/ethereum/nodes/create"

@@ -47,7 +47,7 @@ const Ethereum2Validators: React.FC<Props> = ({ validators }) => {
     <Layout>
       <div className="flex">
         <h1 className="text-2xl font-semibold text-gray-900 flex-grow">
-          Ethereum 2.0
+          Ethereum 2.0 Deployments
         </h1>
 
         <ButtonGroup label="Create New" buttons={createButtons} />

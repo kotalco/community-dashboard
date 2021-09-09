@@ -33,7 +33,7 @@ export const IPFSPeers: React.FC<Props> = ({ initialPeers }) => {
 
   return (
     <Layout>
-      <Heading title="IPFS Peers">
+      <Heading title="IPFS Deployments">
         <ButtonGroup label="Create New" buttons={createButtons} />
       </Heading>
 

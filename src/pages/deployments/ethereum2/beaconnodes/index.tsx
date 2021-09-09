@@ -36,7 +36,7 @@ function BeaconnodesPage({
 
   return (
     <Layout>
-      <Heading title="Ethereum 2.0">
+      <Heading title="Ethereum 2.0 Deployments">
         <ButtonGroup label="Create New" buttons={createButtons} />
       </Heading>
 

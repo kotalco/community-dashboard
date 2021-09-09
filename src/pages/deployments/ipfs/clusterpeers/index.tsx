@@ -34,7 +34,7 @@ export const IPFSPeers = ({
 
   return (
     <Layout>
-      <Heading title="IPFS Cluster Peers">
+      <Heading title="IPFS Deployments">
         <ButtonGroup label="Create New" buttons={createButtons} />
       </Heading>
 
