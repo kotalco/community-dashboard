@@ -81,36 +81,40 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
         />
 
         {/* JSON-RPC HTTP Server Port */}
-        <div className="max-w-xs mt-5">
-          <TextInput
-            disabled={!rpc}
-            label="JSON-RPC Server Port"
-            error={errors.rpcPort?.message}
-            {...register('rpcPort')}
-          />
-        </div>
+        {rpc && (
+          <>
+            <div className="max-w-xs mt-5">
+              <TextInput
+                disabled={!rpc}
+                label="JSON-RPC Server Port"
+                error={errors.rpcPort?.message}
+                {...register('rpcPort')}
+              />
+            </div>
 
-        {/* JSON-RPC Server APIs */}
-        <div className="mt-5">
-          <p className="block text-sm font-md text-gray-900">
-            JSON-RPC Server APIs
-          </p>
-          <div className="flex flex-wrap ml-5 mt-1">
-            {apiOptions.map(({ label, value }) => (
-              <div key={value} className="w-1/2 sm:w-1/3 md:w-1/4">
-                <Checkbox
-                  disabled={!rpc}
-                  label={label}
-                  value={value}
-                  {...register('rpcAPI')}
-                />
+            {/* JSON-RPC Server APIs */}
+            <div className="mt-5">
+              <p className="block text-sm font-md text-gray-900">
+                JSON-RPC Server APIs
+              </p>
+              <div className="flex flex-wrap ml-5 mt-1">
+                {apiOptions.map(({ label, value }) => (
+                  <div key={value} className="w-1/2 sm:w-1/3 md:w-1/4">
+                    <Checkbox
+                      disabled={!rpc}
+                      label={label}
+                      value={value}
+                      {...register('rpcAPI')}
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <p role="alert" className="mt-2 text-sm text-red-600">
-            {errors.rpcAPI?.message}
-          </p>
-        </div>
+              <p role="alert" className="mt-2 text-sm text-red-600">
+                {errors.rpcAPI?.message}
+              </p>
+            </div>
+          </>
+        )}
 
         <Separator />
 
@@ -128,36 +132,40 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
         />
 
         {/* Web Socket Server Port */}
-        <div className="max-w-xs mt-5">
-          <TextInput
-            disabled={!ws}
-            label="Web Socket Server Port"
-            error={errors.wsPort?.message}
-            {...register('wsPort')}
-          />
-        </div>
+        {ws && (
+          <>
+            <div className="max-w-xs mt-5">
+              <TextInput
+                disabled={!ws}
+                label="Web Socket Server Port"
+                error={errors.wsPort?.message}
+                {...register('wsPort')}
+              />
+            </div>
 
-        {/* Web Socket Server APIs */}
-        <div className="mt-5">
-          <p className="block text-sm font-md text-gray-900">
-            Web Socket Server APIs
-          </p>
-          <div className="flex flex-wrap ml-5 mt-1">
-            {apiOptions.map(({ label, value }) => (
-              <div key={value} className="w-1/2 sm:w-1/3 md:w-1/4">
-                <Checkbox
-                  disabled={!ws}
-                  label={label}
-                  value={value}
-                  {...register('wsAPI')}
-                />
+            {/* Web Socket Server APIs */}
+            <div className="mt-5">
+              <p className="block text-sm font-md text-gray-900">
+                Web Socket Server APIs
+              </p>
+              <div className="flex flex-wrap ml-5 mt-1">
+                {apiOptions.map(({ label, value }) => (
+                  <div key={value} className="w-1/2 sm:w-1/3 md:w-1/4">
+                    <Checkbox
+                      disabled={!ws}
+                      label={label}
+                      value={value}
+                      {...register('wsAPI')}
+                    />
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <p role="alert" className="mt-2 text-sm text-red-600">
-            {errors.wsAPI?.message}
-          </p>
-        </div>
+              <p role="alert" className="mt-2 text-sm text-red-600">
+                {errors.wsAPI?.message}
+              </p>
+            </div>
+          </>
+        )}
         <Separator />
 
         {/* Enable GraphQl Server */}
@@ -174,14 +182,16 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
         />
 
         {/* GraphQl Server Port */}
-        <div className="max-w-xs mt-5">
-          <TextInput
-            disabled={!graphql}
-            label="GraphQl Server Port"
-            error={errors.graphqlPort?.message}
-            {...register('graphqlPort')}
-          />
-        </div>
+        {graphql && (
+          <div className="max-w-xs mt-5">
+            <TextInput
+              disabled={!graphql}
+              label="GraphQl Server Port"
+              error={errors.graphqlPort?.message}
+              {...register('graphqlPort')}
+            />
+          </div>
+        )}
       </div>
 
       <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">

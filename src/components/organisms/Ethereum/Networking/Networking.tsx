@@ -89,6 +89,7 @@ const NetworkingDetails: React.FC<Props> = ({ name, children, ...rest }) => {
             render={({ field }) => (
               <TextareaWithInput
                 multiple
+                helperText="One enodeURL per line"
                 name={field.name}
                 label="Static Nodes"
                 value={field.value}
@@ -107,6 +108,7 @@ const NetworkingDetails: React.FC<Props> = ({ name, children, ...rest }) => {
             render={({ field }) => (
               <TextareaWithInput
                 multiple
+                helperText="One enodeURL per line"
                 name={field.name}
                 label="Bootnodes"
                 value={field.value}
