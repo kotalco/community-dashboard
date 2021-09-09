@@ -59,6 +59,7 @@ const AccessControlDetails: React.FC<Props> = ({ name, children, ...rest }) => {
           render={({ field }) => (
             <TextareaWithInput
               multiple
+              helperText="* (asterisk) means trust all hosts"
               error={errors.hosts?.message}
               tooltip="Server Enforced"
               name={field.name}
@@ -77,6 +78,7 @@ const AccessControlDetails: React.FC<Props> = ({ name, children, ...rest }) => {
             render={({ field }) => (
               <TextareaWithInput
                 multiple
+                helperText="* (asterisk) means trust all domains"
                 error={errors.corsDomains?.message}
                 tooltip="Browser Enforced"
                 name={field.name}
