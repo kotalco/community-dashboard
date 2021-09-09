@@ -175,7 +175,7 @@ const CreateValidator: React.FC = () => {
               render={({ field }) => (
                 <TextareaWithInput
                   multiple={client === ValidatorsClients.lighthouse}
-                  label="Ethereum Node JSON-RPC Endpoints"
+                  label="Beacon Node Endpoints"
                   helperText={
                     client === ValidatorsClients.lighthouse
                       ? 'One endpoint per each line'
