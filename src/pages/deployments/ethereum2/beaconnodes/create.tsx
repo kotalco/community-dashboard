@@ -10,8 +10,8 @@ import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaW
 import Heading from '@components/templates/Heading/Heading';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 import { useNotification } from '@components/contexts/NotificationContext';
-import { clientOptions } from '@data/ethereum2/beaconNode/clientOptions';
-import { networkOptions } from '@data/ethereum2/beaconNode/networkOption';
+import { clientOptions } from '@data/ethereum2/clientOptions';
+import { networkOptions } from '@data/ethereum2/networkOptions';
 import { createBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
 import schema from '@schemas/ethereum2/beaconNode/createBeaconNode';
 import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
