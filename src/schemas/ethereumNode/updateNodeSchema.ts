@@ -3,6 +3,7 @@ import { apiOptions } from '@data/ethereum/node/apiOptions';
 import {
   AccessControl,
   API,
+  Import,
   Mining,
   Networking,
 } from '@interfaces/Ethereum/ِEthereumNode';
@@ -92,6 +93,20 @@ export const updateMiningSchema = Joi.object<Mining>({
     otherwise: Joi.string().trim().required().messages({
       'any.required': 'Please type your coinbase account',
       'string.empty': 'Please type your coinbase account',
+    }),
+  }),
+  import: Joi.when('miner', {
+    is: false,
+    then: Joi.any().strip(),
+    otherwise: Joi.object<Import>({
+      privateKeySecretName: Joi.string().required().messages({
+        'any.required': 'Please choose a private key',
+        'string.base': 'Please choose a private key',
+      }),
+      passwordSecretName: Joi.string().required().messages({
+        'any.required': 'Please choose a password',
+        'string.base': 'Please choose a password',
+      }),
     }),
   }),
 });

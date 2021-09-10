@@ -34,9 +34,15 @@ export interface AccessControl {
   corsDomains: NestedValue<string[]>;
 }
 
+export type Import = {
+  privateKeySecretName: string;
+  passwordSecretName: string;
+};
+
 export interface Mining {
   miner: boolean;
   coinbase: string;
+  import: Import;
 }
 
 export interface LoggingInterface {

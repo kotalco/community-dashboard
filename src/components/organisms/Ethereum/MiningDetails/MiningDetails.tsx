@@ -12,6 +12,9 @@ import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
 import Toggle from '@components/molecules/Toggle/Toggle';
 import TextInput from '@components/molecules/TextInput/TextInput';
+import { useSecretsByType } from '@utils/requests/secrets';
+import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
+import Select from '@components/molecules/Select/Select';
 
 interface Props extends Mining {
   name: string;
@@ -20,6 +23,10 @@ interface Props extends Mining {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const MiningDetails: React.FC<Props> = ({ name, children, ...rest }) => {
   const { mutate } = useNode(name);
+  const { data: privateKeys } = useSecretsByType(
+    KubernetesSecretTypes.ethereumPrivatekey
+  );
+  const { data: passwords } = useSecretsByType(KubernetesSecretTypes.password);
   const [submitSuccess, setSubmitSuccess] = useState('');
   const {
     handleSubmit,
@@ -28,7 +35,7 @@ const MiningDetails: React.FC<Props> = ({ name, children, ...rest }) => {
     reset,
     setError,
     register,
-    formState: { isDirty, isSubmitting, errors, isValid },
+    formState: { isDirty, isSubmitting, errors },
   } = useForm<Mining>({
     defaultValues: rest,
     resolver: joiResolver(updateMiningSchema),
@@ -70,22 +77,66 @@ const MiningDetails: React.FC<Props> = ({ name, children, ...rest }) => {
           )}
         />
 
-        {/* Coinbase Account */}
-        <div className="mt-5">
-          <TextInput
-            label="Coinbase Account"
-            error={errors.coinbase?.message}
-            disabled={!miner}
-            {...register('coinbase')}
-          />
-        </div>
+        {miner && (
+          <>
+            {/* Coinbase Account */}
+            <div className="mt-5">
+              <TextInput
+                label="Coinbase Account"
+                error={errors.coinbase?.message}
+                disabled={!miner}
+                {...register('coinbase')}
+              />
+            </div>
+
+            {/* Ethereum Private Keys */}
+            <div className="mt-5 max-w-xs">
+              <Controller
+                control={control}
+                name="import.privateKeySecretName"
+                render={({ field }) => (
+                  <Select
+                    label="Account Private Key"
+                    options={privateKeys}
+                    placeholder="Choose a private key..."
+                    hrefTitle="Create a new ethereum provate key..."
+                    href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}
+                    error={errors.import?.privateKeySecretName?.message}
+                    onChange={field.onChange}
+                    value={field.value}
+                  />
+                )}
+              />
+            </div>
+
+            {/* Account Password */}
+            <div className="mt-5 max-w-xs">
+              <Controller
+                control={control}
+                name="import.passwordSecretName"
+                render={({ field }) => (
+                  <Select
+                    label="Account Password"
+                    options={passwords}
+                    placeholder="Choose a password..."
+                    hrefTitle="Create a new password..."
+                    href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
+                    error={errors.import?.passwordSecretName?.message}
+                    onChange={field.onChange}
+                    value={field.value}
+                  />
+                )}
+              />
+            </div>
+          </>
+        )}
       </div>
 
       <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"
-          disabled={!isDirty || isSubmitting || !isValid}
+          disabled={!isDirty || isSubmitting}
           loading={isSubmitting}
         >
           Save
