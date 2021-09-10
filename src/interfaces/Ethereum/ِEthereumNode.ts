@@ -9,6 +9,7 @@ export interface CreateEthereumNode {
   name: string;
   client: EthereumNodeClient;
   network: string;
+  nodePrivateKeySecretName: string;
 }
 
 export interface Networking {

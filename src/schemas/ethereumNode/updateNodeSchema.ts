@@ -12,6 +12,7 @@ const apiValus = apiOptions.map(({ value }) => value);
 const coinbaseRegex = /^0[xX][0-9a-fA-F]{40}$/;
 
 export const updateNetworkingSchema = Joi.object<Networking>({
+  nodePrivateKeySecretName: Joi.string().default(''),
   p2pPort: Joi.number().port().invalid(0).messages({
     'number.base': 'Please proivde a valid port number',
     'number.port': 'Please provide a valid port number',

@@ -14,6 +14,8 @@ import { syncModeOptions } from '@data/ethereum/node/syncModeOptions';
 import { updateNetworkingSchema } from '@schemas/ethereumNode/updateNodeSchema';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
+import { useSecretsByType } from '@utils/requests/secrets';
+import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 
 interface Props extends Networking {
   name: string;
@@ -22,6 +24,9 @@ interface Props extends Networking {
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const NetworkingDetails: React.FC<Props> = ({ name, children, ...rest }) => {
   const { mutate } = useNode(name);
+  const { data: privateKeys } = useSecretsByType(
+    KubernetesSecretTypes.ethereumPrivatekey
+  );
   const [submitSuccess, setSubmitSuccess] = useState('');
   const {
     handleSubmit,
@@ -29,7 +34,7 @@ const NetworkingDetails: React.FC<Props> = ({ name, children, ...rest }) => {
     register,
     reset,
     setError,
-    formState: { isDirty, isSubmitting, errors, isValid },
+    formState: { isDirty, isSubmitting, errors },
   } = useForm<Networking>({
     defaultValues: rest,
     resolver: joiResolver(updateNetworkingSchema),
@@ -56,12 +61,34 @@ const NetworkingDetails: React.FC<Props> = ({ name, children, ...rest }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
+        {/* Node Private key */}
+        <div className="max-w-xs">
+          <Controller
+            name="nodePrivateKeySecretName"
+            control={control}
+            render={({ field }) => (
+              <Select
+                placeholder="Choose a private key..."
+                label="Node private key"
+                error={errors.nodePrivateKeySecretName?.message}
+                options={privateKeys}
+                onChange={field.onChange}
+                value={field.value}
+                href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}
+                hrefTitle="Create new private key..."
+              />
+            )}
+          />
+        </div>
+
         {/* P2P Port */}
-        <TextInput
-          label="P2P Port"
-          {...register('p2pPort')}
-          error={errors.p2pPort?.message}
-        />
+        <div className="mt-5 max-w-xs">
+          <TextInput
+            label="P2P Port"
+            {...register('p2pPort')}
+            error={errors.p2pPort?.message}
+          />
+        </div>
 
         {/* Sync Mode */}
         <div className="mt-5 max-w-xs">
@@ -124,7 +151,7 @@ const NetworkingDetails: React.FC<Props> = ({ name, children, ...rest }) => {
         <Button
           type="submit"
           className="btn btn-primary"
-          disabled={!isDirty || isSubmitting || !isValid}
+          disabled={!isDirty || isSubmitting}
           loading={isSubmitting}
         >
           Save

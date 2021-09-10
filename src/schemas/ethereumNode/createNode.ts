@@ -1,6 +1,7 @@
 import Joi from 'joi';
+import { CreateEthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 
-export const schema = Joi.object({
+export const schema = Joi.object<CreateEthereumNode>({
   name: Joi.string().trim().required().pattern(/^\S*$/).messages({
     'string.empty': `Please provide a name for your node`,
     'string.pattern.base': `Node name shouldn't contain whitespaces`,
@@ -18,5 +19,6 @@ export const schema = Joi.object({
     'any.required': `Please choose your network`,
     'any.only': `Please choose your network`,
   }),
+  nodePrivateKeySecretName: Joi.string().default(''),
 });
 export default schema;

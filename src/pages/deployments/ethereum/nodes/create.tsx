@@ -1,25 +1,30 @@
-import Layout from '@components/templates/Layout/Layout';
-import FormLayout from '@components/templates/FormLayout/FormLayout';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import axios from 'axios';
 import { useRouter } from 'next/router';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 
+import Layout from '@components/templates/Layout/Layout';
+import FormLayout from '@components/templates/FormLayout/FormLayout';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Select from '@components/molecules/Select/Select';
+import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 import { useNotification } from '@components/contexts/NotificationContext';
 import { clientOptions } from '@data/ethereum/node/clientOptions';
 import { networkOptions } from '@data/ethereum/node/networkOptions';
 import { createEthereumNode } from '@utils/requests/ethereum';
 import { schema } from '@schemas/ethereumNode/createNode';
 import { CreateEthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
-import axios from 'axios';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
-import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
+import { useSecretsByType } from '@utils/requests/secrets';
+import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 
 const CreateNode: React.FC = () => {
   const router = useRouter();
   const { createNotification } = useNotification();
+  const { data: privateKeys } = useSecretsByType(
+    KubernetesSecretTypes.ethereumPrivatekey
+  );
   const {
     register,
     handleSubmit,
@@ -103,6 +108,26 @@ const CreateNode: React.FC = () => {
                     name={field.name}
                     onChange={field.onChange}
                     value={field.value}
+                  />
+                )}
+              />
+            </div>
+
+            {/* Node Private Key */}
+            <div className="mt-4 max-w-xs">
+              <Controller
+                name="nodePrivateKeySecretName"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    placeholder="Choose a private key..."
+                    label="Node private key (optional)"
+                    error={errors.nodePrivateKeySecretName?.message}
+                    options={privateKeys}
+                    onChange={field.onChange}
+                    value={field.value}
+                    href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}
+                    hrefTitle="Create new private key..."
                   />
                 )}
               />
