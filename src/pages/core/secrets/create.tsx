@@ -25,6 +25,7 @@ import { ServerError } from '@interfaces/ServerError';
 
 const CreateSecret: React.FC = () => {
   const router = useRouter();
+  const secretTypeQuery = router.query.type as KubernetesSecretTypes;
   const {
     register,
     handleSubmit,
@@ -32,7 +33,9 @@ const CreateSecret: React.FC = () => {
     setError,
     control,
     formState: { errors, isSubmitted, isValid, isSubmitting },
-  } = useForm<CreateKubernetesSecret>();
+  } = useForm<CreateKubernetesSecret>({
+    defaultValues: { type: secretTypeQuery },
+  });
   const type = watch('type');
 
   const onSubmit: SubmitHandler<CreateKubernetesSecret> = async (values) => {
