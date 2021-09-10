@@ -9,6 +9,7 @@ import {
 } from '@interfaces/Ethereum/ِEthereumNode';
 
 const apiValus = apiOptions.map(({ value }) => value);
+const coinbaseRegex = /^0[xX][0-9a-fA-F]{40}$/;
 
 export const updateNetworkingSchema = Joi.object<Networking>({
   p2pPort: Joi.number().port().invalid(0).messages({
@@ -90,9 +91,10 @@ export const updateMiningSchema = Joi.object<Mining>({
   coinbase: Joi.when('miner', {
     is: false,
     then: Joi.any().strip(),
-    otherwise: Joi.string().trim().required().messages({
+    otherwise: Joi.string().trim().required().pattern(coinbaseRegex).messages({
       'any.required': 'Please type your coinbase account',
       'string.empty': 'Please type your coinbase account',
+      'string.pattern.base': 'Please enter a valid coinbase',
     }),
   }),
   import: Joi.when('miner', {

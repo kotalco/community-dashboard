@@ -16,6 +16,7 @@ export interface Networking {
   syncMode: SyncMode;
   staticNodes: NestedValue<string[]>;
   bootnodes: NestedValue<string[]>;
+  nodePrivateKeySecretName: string;
 }
 
 export interface API {

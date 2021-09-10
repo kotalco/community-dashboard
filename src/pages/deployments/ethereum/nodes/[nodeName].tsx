@@ -66,6 +66,7 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
               syncMode={node.syncMode}
               bootnodes={node.bootnodes}
               staticNodes={node.staticNodes}
+              nodePrivateKeySecretName={node.nodePrivateKeySecretName}
             />
           </Tab.Panel>
 

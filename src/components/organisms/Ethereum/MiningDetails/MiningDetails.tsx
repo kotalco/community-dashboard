@@ -77,7 +77,7 @@ const MiningDetails: React.FC<Props> = ({ name, children, ...rest }) => {
           )}
         />
 
-        {miner && (
+        {miner && passwords.length && privateKeys.length && (
           <>
             {/* Coinbase Account */}
             <div className="mt-5">
