@@ -179,10 +179,12 @@ const CreateClusterPeerPage: React.FC = () => {
                 name="trustedPeers"
                 control={control}
                 rules={schema.trustedPeers}
+                defaultValue={['*']}
                 render={({ field }) => (
                   <TextareaWithInput
                     multiple
                     label="Trusted Peers"
+                    helperText="* (astrisk) means trust all peers"
                     error={errors.trustedPeers?.message}
                     value={field.value}
                     name={field.name}
