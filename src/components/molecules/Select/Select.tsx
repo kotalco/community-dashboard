@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { Listbox, Transition } from '@headlessui/react';
 import {
@@ -30,7 +30,10 @@ const Select: React.FC<Props> = ({
   hrefTitle,
   value,
 }) => {
-  const allOptions = [{ label: placeholder, value: '' }, ...options];
+  const allOptions = useMemo(
+    () => [{ label: placeholder, value: '' }, ...options],
+    [options, placeholder]
+  );
   const defaultValue =
     allOptions.find((option) => option.value === value) || allOptions[0];
   const [selected, setSelected] = useState<SelectOption>(defaultValue);
@@ -39,6 +42,12 @@ const Select: React.FC<Props> = ({
     setSelected(option);
     onChange(option.value);
   };
+
+  useEffect(() => {
+    const newValue =
+      allOptions.find((option) => option.value === value) || allOptions[0];
+    setSelected(newValue);
+  }, [allOptions, value]);
 
   return (
     <Listbox value={selected} onChange={handleChange}>

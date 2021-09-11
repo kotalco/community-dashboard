@@ -49,7 +49,7 @@ const MiningDetails: React.FC<Props> = ({ name, children, ...rest }) => {
       const node = await updateEthereumNode(name, values);
       void mutate({ node });
       reset(values);
-      setSubmitSuccess('Access control data has been updated');
+      setSubmitSuccess('Mining data has been updated');
     } catch (e) {
       if (axios.isAxiosError(e)) {
         const error = handleAxiosError<ServerError>(e);
@@ -77,7 +77,7 @@ const MiningDetails: React.FC<Props> = ({ name, children, ...rest }) => {
           )}
         />
 
-        {miner && passwords.length && privateKeys.length && (
+        {miner && (
           <>
             {/* Coinbase Account */}
             <div className="mt-5">

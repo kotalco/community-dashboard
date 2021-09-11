@@ -27,6 +27,7 @@ const NetworkingDetails: React.FC<Props> = ({ name, children, ...rest }) => {
   const { data: privateKeys } = useSecretsByType(
     KubernetesSecretTypes.ethereumPrivatekey
   );
+
   const [submitSuccess, setSubmitSuccess] = useState('');
   const {
     handleSubmit,
