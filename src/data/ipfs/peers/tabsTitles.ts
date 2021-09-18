@@ -4,5 +4,6 @@ export const tabsTitles = [
   'API',
   'Gateway',
   'Routing',
+  'Resources',
   'Danger Zone',
 ];

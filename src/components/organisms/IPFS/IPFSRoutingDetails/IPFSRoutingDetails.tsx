@@ -5,7 +5,7 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import axios from 'axios';
 
 import Button from '@components/atoms/Button/Button';
-import { UpdateRouting } from '@interfaces/ipfs/IPFSPeer';
+import { Routing } from '@interfaces/ipfs/IPFSPeer';
 import Select from '@components/molecules/Select/Select';
 import { routingOptions } from '@data/ipfs/peers/routingOptions';
 import { updateRoutingSchema } from '@schemas/ipfs/peers/updateIPFSPeer';
@@ -28,12 +28,12 @@ const IPFSPeerDetails: React.FC<Props> = ({ routing, peerName }) => {
     handleSubmit,
     control,
     formState: { isDirty, isSubmitting, errors },
-  } = useForm<UpdateRouting>({
+  } = useForm<Routing>({
     defaultValues: { routing },
     resolver: joiResolver(updateRoutingSchema),
   });
 
-  const onSubmit: SubmitHandler<UpdateRouting> = async (values) => {
+  const onSubmit: SubmitHandler<Routing> = async (values) => {
     setSubmitError('');
     setSubmitSuccess('');
 

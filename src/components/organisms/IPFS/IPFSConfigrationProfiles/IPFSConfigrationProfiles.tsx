@@ -9,7 +9,7 @@ import Checkbox from '@components/molecules/CheckBox/CheckBox';
 import { initProfilesOptions } from '@data/ipfs/peers/initProfilesOptions';
 import { updateConfigProfilesSchema } from '@schemas/ipfs/peers/updateIPFSPeer';
 import { updateIPFSPeer } from '@utils/requests/ipfs/peers';
-import { UpdateConfigrationProfiles } from '@interfaces/ipfs/IPFSPeer';
+import { ConfigrationProfiles } from '@interfaces/ipfs/IPFSPeer';
 import { IPFSConfigurationProfile } from '@enums/IPFS/Peers/IPFSConfigurationProfile';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
@@ -36,14 +36,12 @@ const IPFSPeerDetails: React.FC<Props> = (props) => {
     register,
     handleSubmit,
     formState: { isDirty, isSubmitting },
-  } = useForm<UpdateConfigrationProfiles>({
+  } = useForm<ConfigrationProfiles>({
     defaultValues: { profiles: allProfiles },
     resolver: joiResolver(updateConfigProfilesSchema),
   });
 
-  const onSubmit: SubmitHandler<UpdateConfigrationProfiles> = async (
-    values
-  ) => {
+  const onSubmit: SubmitHandler<ConfigrationProfiles> = async (values) => {
     setSubmitError('');
     setSubmitSuccess('');
 

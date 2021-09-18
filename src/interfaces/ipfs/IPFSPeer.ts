@@ -1,45 +1,34 @@
 import { IPFSRouting } from '@enums/IPFS/Peers/IPFSRouting';
 import { IPFSConfigurationProfile } from '@enums/IPFS/Peers/IPFSConfigurationProfile';
-
-export interface IPFSPeer {
-  name: string;
-  apiPort: number;
-  apiHost: string;
-  gatewayPort: number;
-  gatewayHost: string;
-  routing: IPFSRouting;
-  profiles: IPFSConfigurationProfile[];
-  initProfiles: IPFSConfigurationProfile[];
-}
+import { Resources } from '@interfaces/Resources';
 
 export interface CreateIPFSPeer {
   name: string;
   initProfiles: IPFSConfigurationProfile[];
 }
 
-export interface UpdateIPFSPeer {
-  apiPort?: number;
-  apiHost?: string;
-  gatewayPort?: number;
-  gatewayHost?: string;
-  routing?: IPFSRouting;
-  profiles?: IPFSConfigurationProfile[];
-}
-
-export interface UpdateConfigrationProfiles {
+export interface ConfigrationProfiles {
   profiles: IPFSConfigurationProfile[];
 }
 
-export interface UpdateAPI {
+export interface API {
   apiPort: number;
   apiHost: string;
 }
 
-export interface UpdateGateway {
+export interface Gateway {
   gatewayPort: number;
   gatewayHost: string;
 }
 
-export interface UpdateRouting {
+export interface Routing {
   routing: IPFSRouting;
 }
+
+export interface IPFSPeer
+  extends CreateIPFSPeer,
+    ConfigrationProfiles,
+    API,
+    Gateway,
+    Routing,
+    Resources {}

@@ -6,7 +6,7 @@ import axios from 'axios';
 
 import Button from '@components/atoms/Button/Button';
 import TextInput from '@components/molecules/TextInput/TextInput';
-import { UpdateGateway } from '@interfaces/ipfs/IPFSPeer';
+import { Gateway } from '@interfaces/ipfs/IPFSPeer';
 import { updateGatewaySchema } from '@schemas/ipfs/peers/updateIPFSPeer';
 import { updateIPFSPeer } from '@utils/requests/ipfs/peers';
 import { handleAxiosError } from '@utils/axios';
@@ -29,12 +29,12 @@ const IPFSPeerDetails: React.FC<Props> = (props) => {
     register,
     handleSubmit,
     formState: { isDirty, isSubmitting, errors },
-  } = useForm<UpdateGateway>({
+  } = useForm<Gateway>({
     defaultValues: { gatewayHost, gatewayPort },
     resolver: joiResolver(updateGatewaySchema),
   });
 
-  const onSubmit: SubmitHandler<UpdateGateway> = async (values) => {
+  const onSubmit: SubmitHandler<Gateway> = async (values) => {
     setSubmitError('');
     setSubmitSuccess('');
 

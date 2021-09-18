@@ -2,11 +2,7 @@ import useSWR from 'swr';
 import axios, { fetcher } from '../../../axios';
 import { AxiosError } from 'axios';
 
-import {
-  CreateIPFSPeer,
-  IPFSPeer,
-  UpdateIPFSPeer,
-} from '@interfaces/ipfs/IPFSPeer';
+import { CreateIPFSPeer, IPFSPeer } from '@interfaces/ipfs/IPFSPeer';
 
 /**
  * Hook that get all peers from the server
@@ -54,7 +50,7 @@ export const getIPFSPeer = async (peerName: string): Promise<IPFSPeer> => {
  */
 export const updateIPFSPeer = async (
   peerName: string,
-  values: UpdateIPFSPeer
+  values: Partial<IPFSPeer>
 ): Promise<IPFSPeer> => {
   const { data } = await axios.put<{ peer: IPFSPeer }>(
     `ipfs/peers/${peerName}`,
