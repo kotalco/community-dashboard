@@ -7,6 +7,7 @@ import {
   Mining,
   Networking,
 } from '@interfaces/Ethereum/ِEthereumNode';
+import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
 
 const apiValus = apiOptions.map(({ value }) => value);
 const coinbaseRegex = /^0[xX][0-9a-fA-F]{40}$/;
@@ -87,28 +88,47 @@ export const updateAccessControlSchema = Joi.object<AccessControl>({
   }),
 });
 
-export const updateMiningSchema = Joi.object<Mining>({
+export const updateMiningSchema = Joi.object<
+  Mining & { client: EthereumNodeClient }
+>({
+  // Remove client from the schema
+  client: Joi.any().strip(),
+
   miner: Joi.boolean(),
-  coinbase: Joi.when('miner', {
-    is: false,
+  // If client is besu, do not import account else importing an account coinbase is required
+  coinbase: Joi.when('client', {
+    is: 'besu',
     then: Joi.any().strip(),
-    otherwise: Joi.string().trim().required().pattern(coinbaseRegex).messages({
-      'any.required': 'Please type your coinbase account',
-      'string.empty': 'Please type your coinbase account',
-      'string.pattern.base': 'Please enter a valid coinbase',
+    otherwise: Joi.when('miner', {
+      is: false,
+      then: Joi.any().strip(),
+      otherwise: Joi.string()
+        .trim()
+        .required()
+        .pattern(coinbaseRegex)
+        .messages({
+          'any.required': 'Please type your coinbase account',
+          'string.empty': 'Please type your coinbase account',
+          'string.pattern.base': 'Please enter a valid coinbase',
+        }),
     }),
   }),
-  import: Joi.when('miner', {
-    is: false,
+  // If client is besu, do not import account else importing an account is required
+  import: Joi.when('client', {
+    is: 'besu',
     then: Joi.any().strip(),
-    otherwise: Joi.object<Import>({
-      privateKeySecretName: Joi.string().required().messages({
-        'any.required': 'Please choose a private key',
-        'string.base': 'Please choose a private key',
-      }),
-      passwordSecretName: Joi.string().required().messages({
-        'any.required': 'Please choose a password',
-        'string.base': 'Please choose a password',
+    otherwise: Joi.when('miner', {
+      is: false,
+      then: Joi.any().strip(),
+      otherwise: Joi.object<Import>({
+        privateKeySecretName: Joi.string().required().messages({
+          'any.required': 'Please choose a private key',
+          'string.base': 'Please choose a private key',
+        }),
+        passwordSecretName: Joi.string().required().messages({
+          'any.required': 'Please choose a password',
+          'string.base': 'Please choose a password',
+        }),
       }),
     }),
   }),

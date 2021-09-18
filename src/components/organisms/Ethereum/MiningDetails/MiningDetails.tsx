@@ -4,24 +4,30 @@ import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 
 import Button from '@components/atoms/Button/Button';
+import Toggle from '@components/molecules/Toggle/Toggle';
+import TextInput from '@components/molecules/TextInput/TextInput';
+import Select from '@components/molecules/Select/Select';
 import { updateEthereumNode } from '@utils/requests/ethereum';
 import { Mining } from '@interfaces/Ethereum/ِEthereumNode';
 import { useNode } from '@utils/requests/ethereum';
 import { updateMiningSchema } from '@schemas/ethereumNode/updateNodeSchema';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
-import Toggle from '@components/molecules/Toggle/Toggle';
-import TextInput from '@components/molecules/TextInput/TextInput';
 import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
-import Select from '@components/molecules/Select/Select';
+import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
 
 interface Props extends Mining {
+  client: EthereumNodeClient;
   name: string;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const MiningDetails: React.FC<Props> = ({ name, children, ...rest }) => {
+const MiningDetails: React.FC<Props> = ({
+  name,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  children,
+  ...rest
+}) => {
   const { mutate } = useNode(name);
   const { data: privateKeys } = useSecretsByType(
     KubernetesSecretTypes.ethereumPrivatekey
@@ -77,7 +83,7 @@ const MiningDetails: React.FC<Props> = ({ name, children, ...rest }) => {
           )}
         />
 
-        {miner && (
+        {miner && rest.client !== EthereumNodeClient.besu && (
           <>
             {/* Coinbase Account */}
             <div className="mt-5">

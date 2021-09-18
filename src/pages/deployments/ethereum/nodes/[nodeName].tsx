@@ -97,6 +97,7 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
           {/* Mining */}
           <Tab.Panel className="focus:outline-none">
             <MiningDetails
+              client={node.client}
               miner={node.miner}
               coinbase={node.coinbase}
               import={node.import}
