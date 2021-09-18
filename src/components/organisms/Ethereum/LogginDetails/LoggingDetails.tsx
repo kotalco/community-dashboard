@@ -9,14 +9,34 @@ import { useNode } from '@utils/requests/ethereum';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
 import Select from '@components/molecules/Select/Select';
-import { loggingOptions } from '@data/ethereum/node/loggingOptions';
+// import { loggingOptions } from '@data/ethereum/node/loggingOptions';
+import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
+import { Logging } from '@enums/Ethereum/Logging';
+import { SelectOption } from '@interfaces/SelectOption';
+
+export let loggingOptions: SelectOption[] = [
+  { label: 'All', value: Logging.all },
+  { label: 'Debug', value: Logging.debug },
+  { label: 'Error', value: Logging.error },
+  { label: 'Info', value: Logging.info },
+  { label: 'Trace', value: Logging.trace },
+  { label: 'Warn', value: Logging.warn },
+  { label: 'Fatal', value: Logging.fatal },
+  { label: 'Off', value: Logging.off },
+];
 
 interface Props extends LoggingInterface {
+  client: EthereumNodeClient;
   name: string;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const LoggingDetails: React.FC<Props> = ({ name, children, ...rest }) => {
+const LoggingDetails: React.FC<Props> = ({
+  name,
+  children,
+  client,
+  ...rest
+}) => {
   const { mutate } = useNode(name);
   const [submitSuccess, setSubmitSuccess] = useState('');
   const {
@@ -46,6 +66,12 @@ const LoggingDetails: React.FC<Props> = ({ name, children, ...rest }) => {
       }
     }
   };
+
+  if (client === EthereumNodeClient.geth) {
+    loggingOptions = loggingOptions.filter(
+      ({ value }) => value !== Logging.fatal && value !== Logging.trace
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
