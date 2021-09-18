@@ -1,8 +1,10 @@
 export enum Logging {
-  info = 'info',
+  all = 'all',
   debug = 'debug',
-  warn = 'warn',
   error = 'error',
+  fatal = 'fatal',
+  info = 'info',
+  warn = 'warn',
   trace = 'trace',
   off = 'off',
 }
