@@ -20,5 +20,17 @@ export const loggingOptions = (value: EthereumNodeClient): SelectOption[] => {
     );
   }
 
+  if (
+    value === EthereumNodeClient.parity ||
+    value === EthereumNodeClient.nethermind
+  ) {
+    options = options.filter(
+      ({ value }) =>
+        value !== Logging.off &&
+        value !== Logging.fatal &&
+        value !== Logging.all
+    );
+  }
+
   return options;
 };
