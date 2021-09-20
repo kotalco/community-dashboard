@@ -7,8 +7,9 @@ import Button from '@components/atoms/Button/Button';
 import Toggle from '@components/molecules/Toggle/Toggle';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Select from '@components/molecules/Select/Select';
+import Dialog from '@components/molecules/Dialog/Dialog';
 import { updateEthereumNode } from '@utils/requests/ethereum';
-import { Mining } from '@interfaces/Ethereum/ِEthereumNode';
+import { Mining, API } from '@interfaces/Ethereum/ِEthereumNode';
 import { useNode } from '@utils/requests/ethereum';
 import { updateMiningSchema } from '@schemas/ethereumNode/updateNodeSchema';
 import { handleAxiosError } from '@utils/axios';
@@ -18,22 +19,22 @@ import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretT
 import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
 
 interface Props extends Mining {
+  rpc: boolean;
+  ws: boolean;
+  graphql: boolean;
   client: EthereumNodeClient;
   name: string;
 }
 
-const MiningDetails: React.FC<Props> = ({
-  name,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  children,
-  ...rest
-}) => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const MiningDetails: React.FC<Props> = ({ name, children, ...rest }) => {
   const { mutate } = useNode(name);
   const { data: privateKeys } = useSecretsByType(
     KubernetesSecretTypes.ethereumPrivatekey
   );
   const { data: passwords } = useSecretsByType(KubernetesSecretTypes.password);
   const [submitSuccess, setSubmitSuccess] = useState('');
+  const [open, setOpen] = useState(false);
   const {
     handleSubmit,
     control,
@@ -41,13 +42,58 @@ const MiningDetails: React.FC<Props> = ({
     reset,
     setError,
     register,
+    setValue,
     formState: { isDirty, isSubmitting, errors },
-  } = useForm<Mining>({
+  } = useForm<Mining & API>({
     defaultValues: rest,
     resolver: joiResolver(updateMiningSchema),
   });
 
   const miner = watch('miner');
+
+  // const confirmUpdate = async (values: Mining & Partial<API>) => {
+  //   setSubmitSuccess('');
+  //   try {
+  //     const node = await updateEthereumNode(name, values);
+  //     void mutate({ node });
+  //     reset(values);
+  //     setSubmitSuccess('Mining data has been updated');
+  //   } catch (e) {
+  //     if (axios.isAxiosError(e)) {
+  //       const error = handleAxiosError<ServerError>(e);
+  //       setError('coinbase', {
+  //         type: 'server',
+  //         message: error.response?.data.error,
+  //       });
+  //     }
+  //   }
+  // };
+
+  // const handleConfirmUpdate = async () => {
+  //   const values = getValues();
+  //   const value = updateMiningSchema.validate(values).value as Mining &
+  //     Partial<API>;
+  //   const newValues = { ...value, rpc: false, ws: false, graphql: false };
+  //   await confirmUpdate(newValues);
+  // };
+
+  // Open Dialog if any APIs is activated
+  const minerChange = (value: boolean) => {
+    if (value && (rest.rpc || rest.ws || rest.graphql)) {
+      setOpen(true);
+    } else {
+      setValue('miner', value, { shouldDirty: true });
+    }
+  };
+
+  // Confirm activating mining and disable any active APIs
+  const confirmMiner = () => {
+    setValue('rpc', false);
+    setValue('ws', false);
+    setValue('graphql', false);
+    setValue('miner', true, { shouldDirty: true });
+    setOpen(false);
+  };
 
   const onSubmit: SubmitHandler<Mining> = async (values) => {
     setSubmitSuccess('');
@@ -78,7 +124,7 @@ const MiningDetails: React.FC<Props> = ({
             <Toggle
               label="Miner"
               checked={field.value}
-              onChange={field.onChange}
+              onChange={minerChange.bind(field.value)}
             />
           )}
         />
@@ -105,7 +151,7 @@ const MiningDetails: React.FC<Props> = ({
                     label="Account Private Key"
                     options={privateKeys}
                     placeholder="Choose a private key..."
-                    hrefTitle="Create a new ethereum provate key..."
+                    hrefTitle="Create a new ethereum private key..."
                     href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}
                     error={errors.import?.privateKeySecretName?.message}
                     onChange={field.onChange}
@@ -149,6 +195,25 @@ const MiningDetails: React.FC<Props> = ({
         </Button>
         {submitSuccess && <p>{submitSuccess}</p>}
       </div>
+
+      {/* Confirmation Dialog if any APIs activated */}
+      <Dialog
+        open={open}
+        close={() => setOpen(false)}
+        cancel
+        action={
+          <Button
+            loading={isSubmitting}
+            className="btn btn-primary"
+            onClick={confirmMiner}
+          >
+            Confirm
+          </Button>
+        }
+      >
+        Activating mining will disable any activated APIs (JSON-RPC Server, Web
+        Socket Server and GraphQl Server). Are you sure you want to continue?
+      </Dialog>
     </form>
   );
 };

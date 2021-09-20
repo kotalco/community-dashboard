@@ -96,6 +96,9 @@ export const updateMiningSchema = Joi.object<
     graphql: boolean;
   }
 >({
+  rpc: Joi.boolean(),
+  ws: Joi.boolean(),
+  graphql: Joi.boolean(),
   // Remove client from the schema
   client: Joi.any().strip(),
 
