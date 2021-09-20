@@ -51,32 +51,6 @@ const MiningDetails: React.FC<Props> = ({ name, children, ...rest }) => {
 
   const miner = watch('miner');
 
-  // const confirmUpdate = async (values: Mining & Partial<API>) => {
-  //   setSubmitSuccess('');
-  //   try {
-  //     const node = await updateEthereumNode(name, values);
-  //     void mutate({ node });
-  //     reset(values);
-  //     setSubmitSuccess('Mining data has been updated');
-  //   } catch (e) {
-  //     if (axios.isAxiosError(e)) {
-  //       const error = handleAxiosError<ServerError>(e);
-  //       setError('coinbase', {
-  //         type: 'server',
-  //         message: error.response?.data.error,
-  //       });
-  //     }
-  //   }
-  // };
-
-  // const handleConfirmUpdate = async () => {
-  //   const values = getValues();
-  //   const value = updateMiningSchema.validate(values).value as Mining &
-  //     Partial<API>;
-  //   const newValues = { ...value, rpc: false, ws: false, graphql: false };
-  //   await confirmUpdate(newValues);
-  // };
-
   // Open Dialog if any APIs is activated
   const minerChange = (value: boolean) => {
     if (value && (rest.rpc || rest.ws || rest.graphql)) {
