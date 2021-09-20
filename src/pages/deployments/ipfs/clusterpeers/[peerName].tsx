@@ -33,7 +33,7 @@ const ClusterPeerDetailsPage: React.FC<Props> = ({ initialClusterpeer }) => {
   const { data: clusterpeer, mutate } = useClusterPeer(
     initialClusterpeer?.name,
     {
-      initialData: { clusterpeer: initialClusterpeer },
+      fallbackData: { clusterpeer: initialClusterpeer },
     }
   );
 

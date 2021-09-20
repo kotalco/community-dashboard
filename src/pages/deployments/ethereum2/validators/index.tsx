@@ -32,7 +32,7 @@ const Ethereum2Validators: React.FC<Props> = ({ validators }) => {
     '/ethereum2/validators',
     getAllValidators,
     {
-      initialData: validators,
+      fallbackData: validators,
       revalidateOnMount: true,
     }
   );

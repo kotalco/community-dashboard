@@ -17,7 +17,7 @@ const KubernetesSecrets = ({
   secrets,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const { data } = useSecrets({
-    initialData: { secrets },
+    fallbackData: { secrets },
     revalidateOnMount: true,
   });
   const [openDelete, setOpenDelete] = useState(false);

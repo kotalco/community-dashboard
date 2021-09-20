@@ -31,7 +31,7 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
   const { isFallback } = useRouter();
 
   const { data: node, mutate } = useNode(initialNode?.name, {
-    initialData: { node: initialNode },
+    fallbackData: { node: initialNode },
   });
 
   const updateResources = async (name: string, values: Resources) => {

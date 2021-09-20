@@ -31,7 +31,7 @@ const IPFSPeerDetailsPage: React.FC<Props> = ({ ipfsPeer }) => {
     typeof peerName === 'string' ? peerName : null,
     getIPFSPeer,
     {
-      initialData: ipfsPeer,
+      fallbackData: ipfsPeer,
       revalidateOnMount: true,
     }
   );

@@ -33,7 +33,7 @@ interface Props {
 const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconnode }) => {
   const { isFallback } = useRouter();
   const { data, mutate } = useBeaconnode(beaconnode?.name, {
-    initialData: { beaconnode },
+    fallbackData: { beaconnode },
   });
 
   const updateResources = async (

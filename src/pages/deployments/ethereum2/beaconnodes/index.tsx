@@ -26,7 +26,7 @@ function BeaconnodesPage({
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const { notificationData, removeNotification } = useNotification();
   const { data } = useBeaconnodes({
-    initialData: { beaconnodes },
+    fallbackData: { beaconnodes },
     revalidateOnMount: true,
   });
 

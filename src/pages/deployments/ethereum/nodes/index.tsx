@@ -33,7 +33,7 @@ const EthereumNodes: React.FC<Props> = ({ ethereumNodes }) => {
   //   '/ethereum/nodes',
   //   getAllNodes,
   //   {
-  //     initialData: ethereumNodes,
+  //     fallbackData: ethereumNodes,
   //     revalidateOnMount: true,
   //   }
   // );

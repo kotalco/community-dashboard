@@ -89,12 +89,18 @@ export const updateAccessControlSchema = Joi.object<AccessControl>({
 });
 
 export const updateMiningSchema = Joi.object<
-  Mining & { client: EthereumNodeClient }
+  Mining & {
+    client: EthereumNodeClient;
+    rpc: boolean;
+    ws: boolean;
+    graphql: boolean;
+  }
 >({
   // Remove client from the schema
   client: Joi.any().strip(),
 
   miner: Joi.boolean(),
+
   // If client is besu, do not import account else importing an account coinbase is required
   coinbase: Joi.when('client', {
     is: 'besu',

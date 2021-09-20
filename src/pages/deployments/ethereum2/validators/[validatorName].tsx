@@ -38,7 +38,7 @@ const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
     typeof validatorName === 'string' ? validatorName : null,
     getValidator,
     {
-      initialData: validator,
+      fallbackData: validator,
       revalidateOnMount: true,
     }
   );

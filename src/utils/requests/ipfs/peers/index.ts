@@ -15,7 +15,7 @@ export const usePeers = (initialPeers?: {
   const { data, error } = useSWR<{ peers: IPFSPeer[] }, AxiosError>(
     '/ipfs/peers',
     fetcher,
-    { initialData: initialPeers, revalidateOnMount: true }
+    { fallbackData: initialPeers, revalidateOnMount: true }
   );
 
   return { peers: data?.peers, isError: !!error };
