@@ -16,13 +16,20 @@ import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
 import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
+import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
 
 interface Props extends Networking {
   name: string;
+  client: EthereumNodeClient;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const NetworkingDetails: React.FC<Props> = ({ name, children, ...rest }) => {
+const NetworkingDetails: React.FC<Props> = ({
+  name,
+  children,
+  client,
+  ...rest
+}) => {
   const { mutate } = useNode(name);
   const { data: privateKeys } = useSecretsByType(
     KubernetesSecretTypes.ethereumPrivatekey
@@ -99,7 +106,7 @@ const NetworkingDetails: React.FC<Props> = ({ name, children, ...rest }) => {
             render={({ field }) => (
               <Select
                 error={errors.syncMode?.message}
-                options={syncModeOptions}
+                options={syncModeOptions(client)}
                 placeholder="Choose your sync mode..."
                 onChange={field.onChange}
                 value={field.value}

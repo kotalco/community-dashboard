@@ -62,6 +62,7 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
           {/* Networking */}
           <Tab.Panel className="focus:outline-none">
             <NetworkingDetails
+              client={node.client}
               name={node.name}
               p2pPort={node.p2pPort}
               syncMode={node.syncMode}
