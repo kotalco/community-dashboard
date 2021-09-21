@@ -4,6 +4,7 @@ import {
   EthereumNode,
 } from '@interfaces/Ethereum/ِEthereumNode';
 import useSWR, { SWRConfiguration } from 'swr';
+import { UnpackNestedValue } from 'react-hook-form';
 
 export const getAllNodes = async (): Promise<EthereumNode[]> => {
   const { data } = await axios.get<{ nodes: EthereumNode[] }>(
@@ -53,7 +54,7 @@ export const useNode = (nodeName?: string, config?: SWRConfiguration) => {
  */
 export const updateEthereumNode = async (
   nodeName: string,
-  nodeData: Partial<EthereumNode>
+  nodeData: Partial<UnpackNestedValue<EthereumNode>>
 ): Promise<EthereumNode> => {
   const { data } = await axios.put<{ node: EthereumNode }>(
     `/ethereum/nodes/${nodeName}`,

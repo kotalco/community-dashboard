@@ -7,6 +7,7 @@ import {
   Ethereum2BeaconNode,
   UpdateEthereum2BeaconNode,
 } from '@interfaces/ethereum2/Ethereum2BeaconNode';
+import { UnpackNestedValue } from 'react-hook-form';
 
 /**
  * Send a get request to find all ethereum 2.0 beacon nodes
@@ -30,7 +31,7 @@ export const useBeaconnodes = (config?: SWRConfiguration) => {
  * @returns The newly created beacon node
  */
 export const createBeaconNode = async (
-  values: CreateEthereum2BeaconNode
+  values: UnpackNestedValue<CreateEthereum2BeaconNode>
 ): Promise<Ethereum2BeaconNode> => {
   const { data } = await axios.post<{ beaconnode: Ethereum2BeaconNode }>(
     '/ethereum2/beaconnodes',

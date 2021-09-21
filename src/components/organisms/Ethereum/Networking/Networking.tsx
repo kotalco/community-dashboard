@@ -23,9 +23,9 @@ interface Props extends Networking {
   client: EthereumNodeClient;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const NetworkingDetails: React.FC<Props> = ({
   name,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   children,
   client,
   ...rest

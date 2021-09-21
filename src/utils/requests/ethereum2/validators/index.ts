@@ -5,6 +5,7 @@ import {
   Ethereum2Validator,
   UpdateEthereum2Validator,
 } from '@interfaces/ethereum2/Ethereum2Validator';
+import { UnpackNestedValue } from 'react-hook-form';
 
 /**
  * Send a get request to find all ethereum 2.0 validators
@@ -24,7 +25,7 @@ export const getAllValidators = async (): Promise<Ethereum2Validator[]> => {
  * @returns The newly created validator
  */
 export const createValidator = async (
-  values: CreateEthereum2Validator
+  values: UnpackNestedValue<CreateEthereum2Validator>
 ): Promise<Ethereum2Validator> => {
   const { keystores, ...rest } = values;
   const keystoresObject = keystores.map((key) => ({ secretName: key }));

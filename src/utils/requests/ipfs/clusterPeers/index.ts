@@ -7,6 +7,7 @@ import {
   IPFSClusterPeer,
   UpdateIPFSClusterPeer,
 } from '@interfaces/ipfs/IPFSClusterPeer';
+import { UnpackNestedValue } from 'react-hook-form';
 
 /**
  * Hook that get all cluster peers from the server
@@ -46,7 +47,7 @@ export const useClusterPeer = (name?: string, config?: SWRConfiguration) => {
  * @returns the IPFS Cluster Peer created by the server
  */
 export const createIPFSClusterPeer = async (
-  body: CreateIPFSClusterPeer
+  body: UnpackNestedValue<CreateIPFSClusterPeer>
 ): Promise<IPFSClusterPeer> => {
   const { data } = await axios.post<{ clusterpeer: IPFSClusterPeer }>(
     `/ipfs/clusterpeers`,
@@ -57,7 +58,7 @@ export const createIPFSClusterPeer = async (
 
 export const updateClusterPeer = async (
   name: string,
-  body: UpdateIPFSClusterPeer
+  body: UnpackNestedValue<UpdateIPFSClusterPeer>
 ): Promise<IPFSClusterPeer> => {
   const { data } = await axios.put<{ clusterpeer: IPFSClusterPeer }>(
     `/ipfs/clusterpeers/${name}`,
