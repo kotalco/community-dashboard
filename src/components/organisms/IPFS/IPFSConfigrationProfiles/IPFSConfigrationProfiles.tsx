@@ -26,10 +26,9 @@ const IPFSPeerDetails: React.FC<Props> = (props) => {
 
   const { peerName, profiles, initProfiles } = props;
 
-  // SHOULD FIX THIS AFTER UPDATING API TO RETURN PROFILES WITH [] BY DEFAULT
-  const allProfiles = profiles
-    ? [...initProfiles, ...profiles]
-    : [...initProfiles];
+  const remainingProfilesOptions = initProfilesOptions.filter(
+    ({ value }) => !initProfiles.includes(value)
+  );
 
   const {
     reset,
@@ -37,7 +36,7 @@ const IPFSPeerDetails: React.FC<Props> = (props) => {
     handleSubmit,
     formState: { isDirty, isSubmitting },
   } = useForm<ConfigrationProfiles>({
-    defaultValues: { profiles: allProfiles },
+    defaultValues: { profiles },
     resolver: joiResolver(updateConfigProfilesSchema),
   });
 
@@ -48,7 +47,7 @@ const IPFSPeerDetails: React.FC<Props> = (props) => {
     try {
       const peer = await updateIPFSPeer(peerName, values);
       void mutate(peerName, peer);
-      reset({ profiles: [...peer.profiles, ...peer.initProfiles] });
+      reset(values);
       setSubmitSuccess('Peer has been updated');
     } catch (e) {
       if (axios.isAxiosError(e)) {
@@ -61,17 +60,24 @@ const IPFSPeerDetails: React.FC<Props> = (props) => {
   return (
     <>
       <div className="px-4 py-5 sm:p-6">
+        <h2 className="mb-1 text-sm">Initial Configration Profiles</h2>
+        <ul className="ml-5 mb-5 text-sm">
+          {initProfiles.map((profile) => (
+            <li key={profile} className="list-disc text-gray-500">
+              {profile}
+            </li>
+          ))}
+        </ul>
         <dl>
           <dt className="block text-sm font-medium text-gray-700">
             Configration Profiles
           </dt>
-          <dd className="mt-3 ml-5">
-            {initProfilesOptions.map(({ label, value }) => (
+          <dd className="mt-1 ml-3">
+            {remainingProfilesOptions.map(({ label, value }) => (
               <Checkbox
                 key={value}
                 label={label}
                 value={value}
-                disabled={initProfiles.includes(value)}
                 {...register('profiles')}
               />
             ))}
