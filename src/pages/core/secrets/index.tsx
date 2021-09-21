@@ -12,6 +12,8 @@ import DeleteSecretDialog from '@components/organisms/KubernetesSecrets/DeleteSe
 import { useSecrets } from '@utils/requests/secrets';
 import { KubernetesSecret } from '@interfaces/KubernetesSecret/KubernetesSecret';
 import { fetcher } from '@utils/axios';
+import { getLabel } from '@utils/helpers/getLabel';
+import { secretTypesOptions } from '@data/kubernetesSecrets/secretTypesOptions';
 
 const KubernetesSecrets = ({
   secrets,
@@ -51,7 +53,7 @@ const KubernetesSecrets = ({
                       </div>
                       <div className="mt-2 flex">
                         <div className="flex items-center text-sm text-gray-500">
-                          {type}
+                          {getLabel(type, secretTypesOptions)}
                         </div>
                       </div>
                     </div>
