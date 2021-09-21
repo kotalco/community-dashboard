@@ -73,6 +73,7 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
           {/* API */}
           <Tab.Panel className="focus:outline-none">
             <APIDetails
+              client={node.client}
               rpc={node.rpc}
               rpcPort={node.rpcPort}
               rpcAPI={node.rpcAPI}

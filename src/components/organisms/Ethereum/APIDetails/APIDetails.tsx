@@ -6,6 +6,8 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Button from '@components/atoms/Button/Button';
 import Toggle from '@components/molecules/Toggle/Toggle';
+import Checkbox from '@components/molecules/CheckBox/CheckBox';
+import Separator from '@components/atoms/Separator/Separator';
 import { updateEthereumNode } from '@utils/requests/ethereum';
 import { API } from '@interfaces/Ethereum/ِEthereumNode';
 import { useNode } from '@utils/requests/ethereum';
@@ -13,11 +15,11 @@ import { apiOptions } from '@data/ethereum/node/apiOptions';
 import { updateAPISchema } from '@schemas/ethereumNode/updateNodeSchema';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
-import Checkbox from '@components/molecules/CheckBox/CheckBox';
-import Separator from '@components/atoms/Separator/Separator';
+import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
 
 interface Props extends API {
   name: string;
+  client: EthereumNodeClient;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -31,7 +33,7 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
     reset,
     setError,
     watch,
-    formState: { isDirty, isSubmitting, errors, isValid },
+    formState: { isDirty, isSubmitting, errors },
   } = useForm<API>({
     defaultValues: {
       ...rest,
@@ -166,39 +168,44 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
             </div>
           </>
         )}
-        <Separator />
+        {rest.client !== EthereumNodeClient.parity &&
+          rest.client !== EthereumNodeClient.nethermind && (
+            <>
+              <Separator />
 
-        {/* Enable GraphQl Server */}
-        <Controller
-          control={control}
-          name="graphql"
-          render={({ field }) => (
-            <Toggle
-              label="GraphQl Server"
-              checked={field.value}
-              onChange={(state) => field.onChange(state)}
-            />
+              {/* Enable GraphQl Server */}
+              <Controller
+                control={control}
+                name="graphql"
+                render={({ field }) => (
+                  <Toggle
+                    label="GraphQl Server"
+                    checked={field.value}
+                    onChange={(state) => field.onChange(state)}
+                  />
+                )}
+              />
+
+              {/* GraphQl Server Port */}
+              {graphql && (
+                <div className="max-w-xs mt-5">
+                  <TextInput
+                    disabled={!graphql}
+                    label="GraphQl Server Port"
+                    error={errors.graphqlPort?.message}
+                    {...register('graphqlPort')}
+                  />
+                </div>
+              )}
+            </>
           )}
-        />
-
-        {/* GraphQl Server Port */}
-        {graphql && (
-          <div className="max-w-xs mt-5">
-            <TextInput
-              disabled={!graphql}
-              label="GraphQl Server Port"
-              error={errors.graphqlPort?.message}
-              {...register('graphqlPort')}
-            />
-          </div>
-        )}
       </div>
 
       <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"
-          disabled={!isDirty || isSubmitting || !isValid}
+          disabled={!isDirty || isSubmitting}
           loading={isSubmitting}
         >
           Save
