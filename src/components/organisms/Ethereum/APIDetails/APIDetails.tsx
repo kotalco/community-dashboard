@@ -77,7 +77,7 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
             <Toggle
               label="JSON-RPC Server"
               checked={field.value}
-              onChange={(state) => field.onChange(state)}
+              onChange={field.onChange}
             />
           )}
         />
@@ -128,7 +128,7 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
             <Toggle
               label="Web Socket Server"
               checked={field.value}
-              onChange={(state) => field.onChange(state)}
+              onChange={field.onChange}
             />
           )}
         />
@@ -181,7 +181,7 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
                   <Toggle
                     label="GraphQl Server"
                     checked={field.value}
-                    onChange={(state) => field.onChange(state)}
+                    onChange={field.onChange}
                   />
                 )}
               />

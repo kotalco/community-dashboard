@@ -1,4 +1,6 @@
-export const tabTitles = [
+import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
+
+export const titles = [
   'Protocol',
   'Networking',
   'API',
@@ -8,3 +10,10 @@ export const tabTitles = [
   'Resources',
   'Danger Zone',
 ];
+
+export const tabTitles = (client: EthereumNodeClient) => {
+  if (client === EthereumNodeClient.nethermind) {
+    return titles.filter((title) => title !== 'Access Control');
+  }
+  return titles;
+};

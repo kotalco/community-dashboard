@@ -22,6 +22,7 @@ import { networkOptions } from '@data/ethereum/node/networkOptions';
 import { Tab } from '@headlessui/react';
 import { fetcher } from '@utils/axios';
 import { getLabel } from '@utils/helpers/getLabel';
+import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
 
 interface Props {
   initialNode?: EthereumNode;
@@ -52,7 +53,7 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
       <Heading title={node.name} />
 
       <div className="bg-white shadow rounded-lg divided-y divided-gray-200 mt-4">
-        <Tabs tabs={tabTitles}>
+        <Tabs tabs={tabTitles(node.client)}>
           {/* Protocol */}
           <Tab.Panel className="focus:outline-none">
             <ProtocolDetails dataList={dataList} />
@@ -87,13 +88,15 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
           </Tab.Panel>
 
           {/* Access Control */}
-          <Tab.Panel className="focus:outline-none">
-            <AccessControlDetails
-              hosts={node.hosts}
-              corsDomains={node.corsDomains}
-              name={node.name}
-            />
-          </Tab.Panel>
+          {node.client !== EthereumNodeClient.nethermind && (
+            <Tab.Panel className="focus:outline-none">
+              <AccessControlDetails
+                hosts={node.hosts}
+                corsDomains={node.corsDomains}
+                name={node.name}
+              />
+            </Tab.Panel>
+          )}
 
           {/* Mining */}
           <Tab.Panel className="focus:outline-none">
