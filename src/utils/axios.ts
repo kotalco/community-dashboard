@@ -10,6 +10,12 @@ export async function fetcher<T>(url: string): Promise<T> {
   return response.data;
 }
 
+export async function headers<T>(url: string) {
+  const response = await instance.head<T>(url);
+
+  return response;
+}
+
 export function handleAxiosError<T>(e: AxiosError<T>) {
   return e;
 }

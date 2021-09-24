@@ -53,7 +53,11 @@ const MiningDetails: React.FC<Props> = ({ name, children, ...rest }) => {
 
   // Open Dialog if any APIs is activated
   const minerChange = (value: boolean) => {
-    if (value && (rest.rpc || rest.ws || rest.graphql)) {
+    if (
+      value &&
+      (rest.rpc || rest.ws || rest.graphql) &&
+      rest.client !== EthereumNodeClient.besu
+    ) {
       setOpen(true);
     } else {
       setValue('miner', value, { shouldDirty: true });
@@ -185,8 +189,9 @@ const MiningDetails: React.FC<Props> = ({ name, children, ...rest }) => {
           </Button>
         }
       >
-        Activating mining will disable any activated APIs (JSON-RPC Server, Web
-        Socket Server and GraphQl Server). Are you sure you want to continue?
+        Importing account for mining will disable any activated APIs (JSON-RPC
+        Server, Web Socket Server and GraphQl Server). Are you sure you want to
+        continue?
       </Dialog>
     </form>
   );

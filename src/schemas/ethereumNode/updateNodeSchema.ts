@@ -24,65 +24,77 @@ export const updateNetworkingSchema = Joi.object<Networking>({
   bootnodes: Joi.array().default([]),
 });
 
-export const updateAPISchema = Joi.object<API & { client: EthereumNodeClient }>(
-  {
-    client: Joi.any().strip(),
-    rpc: Joi.boolean(),
-    rpcPort: Joi.when('rpc', {
-      is: false,
-      then: Joi.number().strip(),
-      otherwise: Joi.number().port().invalid(0).messages({
-        'number.base': 'Please proivde a valid port number',
-        'number.port': 'Please provide a valid port number',
-        'any.invalid': 'Please provide a valid port number',
+export const updateAPISchema = Joi.object<
+  API & { client: EthereumNodeClient; miner: boolean }
+>({
+  miner: Joi.boolean(),
+  client: Joi.any(),
+  rpc: Joi.when('client', {
+    is: 'geth',
+    otherwise: Joi.boolean(),
+    then: Joi.when('graphql', {
+      is: true,
+      then: Joi.boolean().valid(true).messages({
+        'any.only':
+          'JSON-RPC Server should be activated with GraphQl Server if client is Go Ethereum',
       }),
-    }),
-    rpcAPI: Joi.when('rpc', {
-      is: false,
-      then: Joi.array().default([]),
-      otherwise: Joi.array()
-        .min(1)
-        .items(Joi.string().valid(...apiValus))
-        .messages({
-          'array.min': 'Please choose your APIs',
-        }),
-    }),
-    ws: Joi.boolean(),
-    wsPort: Joi.when('ws', {
-      is: false,
-      then: Joi.number().strip(),
-      otherwise: Joi.number().port().invalid(0).messages({
-        'number.base': 'Please proivde a valid port number',
-        'number.port': 'Please provide a valid port number',
-        'any.invalid': 'Please provide a valid port number',
-      }),
-    }),
-    wsAPI: Joi.when('ws', {
-      is: false,
-      then: Joi.array().default([]),
-      otherwise: Joi.array()
-        .min(1)
-        .items(Joi.string().valid(...apiValus))
-        .messages({
-          'array.min': 'Please choose your APIs',
-        }),
-    }),
-    graphql: Joi.when('client', {
-      is: ['parity', 'nethermind'],
-      then: Joi.any().strip(),
       otherwise: Joi.boolean(),
     }),
-    graphqlPort: Joi.when('graphql', {
-      is: false,
-      then: Joi.number().strip(),
-      otherwise: Joi.number().port().invalid(0).messages({
-        'number.base': 'Please proivde a valid port number',
-        'number.port': 'Please provide a valid port number',
-        'any.invalid': 'Please provide a valid port number',
-      }),
+  }),
+  rpcPort: Joi.when('rpc', {
+    is: false,
+    then: Joi.number().strip(),
+    otherwise: Joi.number().port().invalid(0).messages({
+      'number.base': 'Please proivde a valid port number',
+      'number.port': 'Please provide a valid port number',
+      'any.invalid': 'Please provide a valid port number',
     }),
-  }
-);
+  }),
+  rpcAPI: Joi.when('rpc', {
+    is: false,
+    then: Joi.array().default([]),
+    otherwise: Joi.array()
+      .min(1)
+      .items(Joi.string().valid(...apiValus))
+      .messages({
+        'array.min': 'Please choose your APIs',
+      }),
+  }),
+  ws: Joi.boolean(),
+  wsPort: Joi.when('ws', {
+    is: false,
+    then: Joi.number().strip(),
+    otherwise: Joi.number().port().invalid(0).messages({
+      'number.base': 'Please proivde a valid port number',
+      'number.port': 'Please provide a valid port number',
+      'any.invalid': 'Please provide a valid port number',
+    }),
+  }),
+  wsAPI: Joi.when('ws', {
+    is: false,
+    then: Joi.array().default([]),
+    otherwise: Joi.array()
+      .min(1)
+      .items(Joi.string().valid(...apiValus))
+      .messages({
+        'array.min': 'Please choose your APIs',
+      }),
+  }),
+  graphql: Joi.when('client', {
+    is: ['parity', 'nethermind'],
+    then: Joi.any().strip(),
+    otherwise: Joi.boolean(),
+  }),
+  graphqlPort: Joi.when('graphql', {
+    is: false,
+    then: Joi.number().strip(),
+    otherwise: Joi.number().port().invalid(0).messages({
+      'number.base': 'Please proivde a valid port number',
+      'number.port': 'Please provide a valid port number',
+      'any.invalid': 'Please provide a valid port number',
+    }),
+  }),
+});
 
 export const updateAccessControlSchema = Joi.object<AccessControl>({
   hosts: Joi.array().default([]).min(1).messages({

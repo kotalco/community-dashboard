@@ -8,6 +8,7 @@ import Button from '@components/atoms/Button/Button';
 import Toggle from '@components/molecules/Toggle/Toggle';
 import Checkbox from '@components/molecules/CheckBox/CheckBox';
 import Separator from '@components/atoms/Separator/Separator';
+import Dialog from '@components/molecules/Dialog/Dialog';
 import { updateEthereumNode } from '@utils/requests/ethereum';
 import { API } from '@interfaces/Ethereum/ِEthereumNode';
 import { useNode } from '@utils/requests/ethereum';
@@ -20,11 +21,16 @@ import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
 interface Props extends API {
   name: string;
   client: EthereumNodeClient;
+  miner: boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
   const { mutate } = useNode(name);
+  const [open, setOpen] = useState(false);
+  const [selectedApi, setSelectedApi] = useState<'rpc' | 'ws' | 'graphql'>(
+    'rpc'
+  );
   const [submitSuccess, setSubmitSuccess] = useState('');
   const {
     handleSubmit,
@@ -33,8 +39,9 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
     reset,
     setError,
     watch,
+    setValue,
     formState: { isDirty, isSubmitting, errors },
-  } = useForm<API>({
+  } = useForm<API & { miner: boolean }>({
     defaultValues: {
       ...rest,
       rpcPort: rest.rpcPort || 8545,
@@ -47,6 +54,26 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
   });
 
   const [rpc, ws, graphql] = watch(['rpc', 'ws', 'graphql']);
+
+  const handleApiChange = (
+    state: boolean,
+    onChange: (value: boolean) => void,
+    name: 'rpc' | 'ws' | 'graphql'
+  ) => {
+    if (state && rest.miner && rest.client !== EthereumNodeClient.besu) {
+      setSelectedApi(name);
+      setOpen(true);
+      return;
+    }
+
+    onChange(state);
+  };
+
+  const confirmApis = () => {
+    setValue('miner', false);
+    setValue(selectedApi, true, { shouldDirty: true });
+    setOpen(false);
+  };
 
   const onSubmit: SubmitHandler<API> = async (values) => {
     setSubmitSuccess('');
@@ -67,152 +94,180 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="px-4 py-5 sm:p-6">
-        {/* Enable JSON-RPC HTTP Server */}
-        <Controller
-          control={control}
-          name="rpc"
-          render={({ field }) => (
-            <Toggle
-              label="JSON-RPC Server"
-              checked={field.value}
-              onChange={field.onChange}
-            />
-          )}
-        />
-
-        {/* JSON-RPC HTTP Server Port */}
-        {rpc && (
-          <>
-            <div className="max-w-xs mt-5">
-              <TextInput
-                disabled={!rpc}
-                label="JSON-RPC Server Port"
-                error={errors.rpcPort?.message}
-                {...register('rpcPort')}
+    <>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="px-4 py-5 sm:p-6">
+          {/* Enable JSON-RPC HTTP Server */}
+          <Controller
+            control={control}
+            name="rpc"
+            render={({ field }) => (
+              <Toggle
+                label="JSON-RPC Server"
+                checked={field.value}
+                error={errors.rpc?.message}
+                onChange={(state) =>
+                  handleApiChange(state, field.onChange, field.name)
+                }
               />
-            </div>
+            )}
+          />
 
-            {/* JSON-RPC Server APIs */}
-            <div className="mt-5">
-              <p className="block text-sm font-md text-gray-900">
-                JSON-RPC Server APIs
-              </p>
-              <div className="flex flex-wrap ml-5 mt-1">
-                {apiOptions.map(({ label, value }) => (
-                  <div key={value} className="w-1/2 sm:w-1/3 md:w-1/4">
-                    <Checkbox
-                      disabled={!rpc}
-                      label={label}
-                      value={value}
-                      {...register('rpcAPI')}
-                    />
-                  </div>
-                ))}
-              </div>
-              <p role="alert" className="mt-2 text-sm text-red-600">
-                {errors.rpcAPI?.message}
-              </p>
-            </div>
-          </>
-        )}
-
-        <Separator />
-
-        {/* Enable Web Socket Server */}
-        <Controller
-          control={control}
-          name="ws"
-          render={({ field }) => (
-            <Toggle
-              label="Web Socket Server"
-              checked={field.value}
-              onChange={field.onChange}
-            />
-          )}
-        />
-
-        {/* Web Socket Server Port */}
-        {ws && (
-          <>
-            <div className="max-w-xs mt-5">
-              <TextInput
-                disabled={!ws}
-                label="Web Socket Server Port"
-                error={errors.wsPort?.message}
-                {...register('wsPort')}
-              />
-            </div>
-
-            {/* Web Socket Server APIs */}
-            <div className="mt-5">
-              <p className="block text-sm font-md text-gray-900">
-                Web Socket Server APIs
-              </p>
-              <div className="flex flex-wrap ml-5 mt-1">
-                {apiOptions.map(({ label, value }) => (
-                  <div key={value} className="w-1/2 sm:w-1/3 md:w-1/4">
-                    <Checkbox
-                      disabled={!ws}
-                      label={label}
-                      value={value}
-                      {...register('wsAPI')}
-                    />
-                  </div>
-                ))}
-              </div>
-              <p role="alert" className="mt-2 text-sm text-red-600">
-                {errors.wsAPI?.message}
-              </p>
-            </div>
-          </>
-        )}
-        {rest.client !== EthereumNodeClient.parity &&
-          rest.client !== EthereumNodeClient.nethermind && (
+          {/* JSON-RPC HTTP Server Port */}
+          {rpc && (
             <>
-              <Separator />
+              <div className="max-w-xs mt-5">
+                <TextInput
+                  disabled={!rpc}
+                  label="JSON-RPC Server Port"
+                  error={errors.rpcPort?.message}
+                  {...register('rpcPort')}
+                />
+              </div>
 
-              {/* Enable GraphQl Server */}
-              <Controller
-                control={control}
-                name="graphql"
-                render={({ field }) => (
-                  <Toggle
-                    label="GraphQl Server"
-                    checked={field.value}
-                    onChange={field.onChange}
-                  />
-                )}
-              />
-
-              {/* GraphQl Server Port */}
-              {graphql && (
-                <div className="max-w-xs mt-5">
-                  <TextInput
-                    disabled={!graphql}
-                    label="GraphQl Server Port"
-                    error={errors.graphqlPort?.message}
-                    {...register('graphqlPort')}
-                  />
+              {/* JSON-RPC Server APIs */}
+              <div className="mt-5">
+                <p className="block text-sm font-md text-gray-900">
+                  JSON-RPC Server APIs
+                </p>
+                <div className="flex flex-wrap ml-5 mt-1">
+                  {apiOptions.map(({ label, value }) => (
+                    <div key={value} className="w-1/2 sm:w-1/3 md:w-1/4">
+                      <Checkbox
+                        disabled={!rpc}
+                        label={label}
+                        value={value}
+                        {...register('rpcAPI')}
+                      />
+                    </div>
+                  ))}
                 </div>
-              )}
+                <p role="alert" className="mt-2 text-sm text-red-600">
+                  {errors.rpcAPI?.message}
+                </p>
+              </div>
             </>
           )}
-      </div>
 
-      <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
-        <Button
-          type="submit"
-          className="btn btn-primary"
-          disabled={!isDirty || isSubmitting}
-          loading={isSubmitting}
-        >
-          Save
-        </Button>
-        {submitSuccess && <p>{submitSuccess}</p>}
-      </div>
-    </form>
+          <Separator />
+
+          {/* Enable Web Socket Server */}
+          <Controller
+            control={control}
+            name="ws"
+            render={({ field }) => (
+              <Toggle
+                label="Web Socket Server"
+                checked={field.value}
+                onChange={(state) =>
+                  handleApiChange(state, field.onChange, field.name)
+                }
+              />
+            )}
+          />
+
+          {/* Web Socket Server Port */}
+          {ws && (
+            <>
+              <div className="max-w-xs mt-5">
+                <TextInput
+                  disabled={!ws}
+                  label="Web Socket Server Port"
+                  error={errors.wsPort?.message}
+                  {...register('wsPort')}
+                />
+              </div>
+
+              {/* Web Socket Server APIs */}
+              <div className="mt-5">
+                <p className="block text-sm font-md text-gray-900">
+                  Web Socket Server APIs
+                </p>
+                <div className="flex flex-wrap ml-5 mt-1">
+                  {apiOptions.map(({ label, value }) => (
+                    <div key={value} className="w-1/2 sm:w-1/3 md:w-1/4">
+                      <Checkbox
+                        disabled={!ws}
+                        label={label}
+                        value={value}
+                        {...register('wsAPI')}
+                      />
+                    </div>
+                  ))}
+                </div>
+                <p role="alert" className="mt-2 text-sm text-red-600">
+                  {errors.wsAPI?.message}
+                </p>
+              </div>
+            </>
+          )}
+          {rest.client !== EthereumNodeClient.parity &&
+            rest.client !== EthereumNodeClient.nethermind && (
+              <>
+                <Separator />
+
+                {/* Enable GraphQl Server */}
+                <Controller
+                  control={control}
+                  name="graphql"
+                  render={({ field }) => (
+                    <Toggle
+                      label="GraphQl Server"
+                      checked={field.value}
+                      onChange={(state) =>
+                        handleApiChange(state, field.onChange, field.name)
+                      }
+                    />
+                  )}
+                />
+
+                {/* GraphQl Server Port */}
+                {graphql && (
+                  <div className="max-w-xs mt-5">
+                    <TextInput
+                      disabled={!graphql}
+                      label="GraphQl Server Port"
+                      error={errors.graphqlPort?.message}
+                      {...register('graphqlPort')}
+                    />
+                  </div>
+                )}
+              </>
+            )}
+        </div>
+
+        <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
+          <Button
+            type="submit"
+            className="btn btn-primary"
+            disabled={!isDirty || isSubmitting}
+            loading={isSubmitting}
+          >
+            Save
+          </Button>
+          {submitSuccess && <p>{submitSuccess}</p>}
+        </div>
+      </form>
+
+      {/* Confirmation Dialog if any APIs activated */}
+      <Dialog
+        open={open}
+        close={() => setOpen(false)}
+        cancel
+        action={
+          <Button
+            loading={isSubmitting}
+            className="btn btn-primary"
+            onClick={confirmApis}
+          >
+            Confirm
+          </Button>
+        }
+      >
+        Activating APIs (JSON-RPC Server, Web Socket Server or GraphQl Server)
+        will disable mining. Are you sure you want to continue?
+      </Dialog>
+    </>
   );
 };
 

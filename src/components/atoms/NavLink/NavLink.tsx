@@ -44,7 +44,6 @@ const NavLink: React.FC<Props> = ({ children, ...props }) => {
                 : defaultClassNames.link
             } group w-full flex items-center pl-2 py-2 text-sm font-medium rounded-md`}
           >
-            {/* <!-- Current: "text-gray-500", Default: "text-gray-400 group-hover:text-gray-500" --> */}
             <props.Icon
               className={`${
                 pathname === props.url
