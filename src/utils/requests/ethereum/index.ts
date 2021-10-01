@@ -6,13 +6,6 @@ import {
 import useSWR, { SWRConfiguration } from 'swr';
 import { UnpackNestedValue } from 'react-hook-form';
 
-export const getAllNodes = async (): Promise<EthereumNode[]> => {
-  const { data } = await axios.get<{ nodes: EthereumNode[] }>(
-    `/ethereum/nodes`
-  );
-  return data.nodes;
-};
-
 /**
  * Create a new node
  * @param body ethereum node data

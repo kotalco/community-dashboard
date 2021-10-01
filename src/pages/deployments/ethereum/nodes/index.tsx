@@ -13,39 +13,46 @@ import EthereumIcon from '@components/Icons/EthereumIcon/EthereumIcon';
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import EmptyState from '@components/molecules/EmptyState/EmptyState';
 import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
+import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import { useNotification } from '@components/contexts/NotificationContext';
-import { getAllNodes } from '@utils/requests/ethereum';
 import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { resourcesTab } from '@data/ethereum/links';
 import { clientOptions } from '@data/ethereum/node/clientOptions';
 import { networkOptions } from '@data/ethereum/node/networkOptions';
 import { getLabel } from '@utils/helpers/getLabel';
-// import { AxiosError } from 'axios';
+import { useEthereumNodes } from '@hooks/useEhereumNodes';
 
-interface Props {
-  ethereumNodes: EthereumNode[];
-}
+function EthereumNodes() {
+  const { nodes, isEmpty, isInitialLoading } = useEthereumNodes();
+  // const { notificationData, removeNotification } = useNotification();
 
-const EthereumNodes: React.FC<Props> = ({ ethereumNodes }) => {
-  const { notificationData, removeNotification } = useNotification();
+  // useEffect(() => {
+  //   return () => removeNotification();
+  // }, [removeNotification]);
+  if (isInitialLoading) {
+    return <LoadingIndicator />;
+  }
 
-  // const { data, error } = useSWR<EthereumNode[], AxiosError>(
-  //   '/ethereum/nodes',
-  //   getAllNodes,
-  //   {
-  //     fallbackData: ethereumNodes,
-  //     revalidateOnMount: true,
-  //   }
-  // );
-
-  useEffect(() => {
-    return () => removeNotification();
-  }, [removeNotification]);
+  if (isEmpty) {
+    return (
+      <Layout>
+        <Heading title="Ethereum Deployments" />
+        <EmptyState
+          title="There is no nodes created"
+          description="Get started by creating a new node."
+          linkUrl="/deployments/ethereum/nodes/create"
+          linkName="New Node"
+        >
+          <EthereumIcon className="mx-auto w-12 h-12 text-gray-400" />
+        </EmptyState>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
       <Heading title="Ethereum Deployments">
-        {!!ethereumNodes.length && (
+        {!isEmpty && (
           <Button
             href="/deployments/ethereum/nodes/create"
             className="btn btn-primary"
@@ -57,34 +64,23 @@ const EthereumNodes: React.FC<Props> = ({ ethereumNodes }) => {
 
       <div className="py-4">
         <LinkedTabs tabs={resourcesTab} />
-        {ethereumNodes.length ? (
-          <List>
-            {ethereumNodes.map(({ name, client, network }) => (
-              <ListItem
-                key={name}
-                link={`/deployments/ethereum/nodes/${name}`}
-                title={name}
-              >
-                <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                <p>{getLabel(network, networkOptions)}</p>
-                <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
-                <p>{getLabel(client, clientOptions)}</p>
-              </ListItem>
-            ))}
-          </List>
-        ) : (
-          <EmptyState
-            title="There is no nodes created"
-            description="Get started by creating a new node."
-            linkUrl="/deployments/ethereum/nodes/create"
-            linkName="New Node"
-          >
-            <EthereumIcon className="mx-auto w-12 h-12 text-gray-400" />
-          </EmptyState>
-        )}
+        <List>
+          {nodes.map(({ name, client, network }) => (
+            <ListItem
+              key={name}
+              link={`/deployments/ethereum/nodes/${name}`}
+              title={name}
+            >
+              <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
+              <p>{getLabel(network, networkOptions)}</p>
+              <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
+              <p>{getLabel(client, clientOptions)}</p>
+            </ListItem>
+          ))}
+        </List>
       </div>
 
-      <NotificationPanel
+      {/* <NotificationPanel
         show={!!notificationData}
         title={notificationData?.title}
         close={removeNotification}
@@ -96,18 +92,9 @@ const EthereumNodes: React.FC<Props> = ({ ethereumNodes }) => {
           {!!notificationData &&
             `${notificationData.protocol} has been ${notificationData.action}`}
         </p>
-      </NotificationPanel>
+      </NotificationPanel> */}
     </Layout>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async () => {
-  try {
-    const ethereumNodes = await getAllNodes();
-    return { props: { ethereumNodes } };
-  } catch (e) {
-    return { notFound: true };
-  }
-};
+}
 
 export default EthereumNodes;
