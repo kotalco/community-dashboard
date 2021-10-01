@@ -1,6 +1,7 @@
 import axios from 'axios';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
+import { io } from 'socket.io-client';
 
 import Button from '@components/atoms/Button/Button';
 import { updateEthereumNode } from '@utils/requests/ethereum';
@@ -35,6 +36,21 @@ const LoggingDetails: React.FC<Props> = ({
   } = useForm<LoggingInterface>({
     defaultValues: rest,
   });
+
+  useEffect(() => {
+    // const websocket = io(
+    //   'ws://localhost:5000/api/v1/ethereum/nodes/node-11/logs'
+    // );
+    // websocket.on('open', () => {
+    //   console.log('connected');
+    // });
+    // websocket.on('message', (message: string) => {
+    //   console.log(message);
+    // });
+    // websocket.on('close', () => {
+    //   console.log('closed');
+    // });
+  }, []);
 
   const onSubmit: SubmitHandler<LoggingInterface> = async (values) => {
     setSubmitSuccess('');

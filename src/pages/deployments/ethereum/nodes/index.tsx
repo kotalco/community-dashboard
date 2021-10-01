@@ -19,10 +19,19 @@ import { clientOptions } from '@data/ethereum/node/clientOptions';
 import { networkOptions } from '@data/ethereum/node/networkOptions';
 import { getLabel } from '@utils/helpers/getLabel';
 import { useEthereumNodes } from '@hooks/useEhereumNodes';
+import SpinnerIcon from '@components/Icons/SpinnerIcon/SpinnerIcon';
 
 function EthereumNodes() {
-  const { nodes, isEmpty, isInitialLoading } = useEthereumNodes();
-  console.log(nodes);
+  const {
+    nodes,
+    isEmpty,
+    isInitialLoading,
+    size,
+    setSize,
+    isReachedEnd,
+    isLoading,
+  } = useEthereumNodes();
+
   // const { notificationData, removeNotification } = useNotification();
 
   // useEffect(() => {
@@ -77,6 +86,17 @@ function EthereumNodes() {
             </ListItem>
           ))}
         </List>
+        {!isReachedEnd && (
+          <div className="flex justify-center items-center py-4">
+            <button
+              onClick={() => setSize(size + 1)}
+              disabled={isLoading}
+              className="text-sm text-indigo-500 hover:text-indigo-600 disabled:hover:text-indigo-500 disabled:pointer-events-none"
+            >
+              {isLoading ? <SpinnerIcon className="h-4 w-4" /> : 'Load More...'}
+            </button>
+          </div>
+        )}
       </div>
 
       {/* <NotificationPanel

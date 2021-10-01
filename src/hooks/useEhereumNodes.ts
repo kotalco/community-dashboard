@@ -1,8 +1,7 @@
-import useSWR, { KeyLoader } from 'swr';
+import { KeyLoader } from 'swr';
 import useSWRInfinite, { SWRInfiniteConfiguration } from 'swr/infinite';
 import { AxiosError } from 'axios';
 
-import { fetchHeader } from '@utils/axios';
 import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { sortByDate } from '@utils/helpers/sortByDate';
 
@@ -13,7 +12,7 @@ const key: KeyLoader<{ nodes: EthereumNode[] }> = (pageIndex, prevPageData) => {
   if (prevPageData && !prevPageData.nodes.length) return null;
   // If first page, we don't have prevPageData
   if (pageIndex === 0) return '/ethereum/nodes';
-  return `/ethereum/nodes?page=${pageIndex}`;
+  return `/ethereum/nodes?page=${pageIndex + 1}`;
 };
 
 export const useEthereumNodes = (config?: SWRInfiniteConfiguration) => {
@@ -22,9 +21,6 @@ export const useEthereumNodes = (config?: SWRInfiniteConfiguration) => {
     { nodes: EthereumNode[] },
     AxiosError
   >(key, config);
-
-  // Send HEAD requesto get the totol count of nodes
-  const { data: headers } = useSWR('/ethereum/nodes', fetchHeader);
 
   // Collect all data in single arrays instead of 2D arrays
   const initial: EthereumNode[] = [];
@@ -46,11 +42,11 @@ export const useEthereumNodes = (config?: SWRInfiniteConfiguration) => {
 
   return {
     nodes,
-    headers,
     isLoading,
     isInitialLoading,
     isEmpty,
     isReachedEnd,
-    rest,
+    size,
+    ...rest,
   };
 };
