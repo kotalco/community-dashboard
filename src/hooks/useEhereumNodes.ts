@@ -4,6 +4,7 @@ import { AxiosError } from 'axios';
 
 import { fetchHeader } from '@utils/axios';
 import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
+import { sortByDate } from '@utils/helpers/sortByDate';
 
 const PAGE_SIZE = 10;
 
@@ -27,8 +28,9 @@ export const useEthereumNodes = (config?: SWRInfiniteConfiguration) => {
 
   // Collect all data in single arrays instead of 2D arrays
   const initial: EthereumNode[] = [];
-  const nodes =
-    data?.reduce((prev, current) => prev.concat(current.nodes), initial) || [];
+  const nodes = sortByDate(
+    data?.reduce((prev, current) => prev.concat(current.nodes), initial)
+  );
 
   // Detect initial loading state
   const isInitialLoading = !data && !error;

@@ -58,4 +58,6 @@ export interface EthereumNode
     AccessControl,
     Mining,
     LoggingInterface,
-    Resources {}
+    Resources {
+  createdAt: string;
+}

@@ -1,5 +1,4 @@
 import { useEffect } from 'react';
-import { GetServerSideProps, GetServerSidePropsContext } from 'next';
 import { GlobeAltIcon } from '@heroicons/react/solid';
 import { ChipIcon } from '@heroicons/react/outline';
 // import useSWR from 'swr';
@@ -15,7 +14,6 @@ import EmptyState from '@components/molecules/EmptyState/EmptyState';
 import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import { useNotification } from '@components/contexts/NotificationContext';
-import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { resourcesTab } from '@data/ethereum/links';
 import { clientOptions } from '@data/ethereum/node/clientOptions';
 import { networkOptions } from '@data/ethereum/node/networkOptions';
@@ -24,6 +22,7 @@ import { useEthereumNodes } from '@hooks/useEhereumNodes';
 
 function EthereumNodes() {
   const { nodes, isEmpty, isInitialLoading } = useEthereumNodes();
+  console.log(nodes);
   // const { notificationData, removeNotification } = useNotification();
 
   // useEffect(() => {
