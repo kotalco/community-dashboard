@@ -20,6 +20,7 @@ import { networkOptions } from '@data/ethereum/node/networkOptions';
 import { getLabel } from '@utils/helpers/getLabel';
 import { useEthereumNodes } from '@hooks/useEhereumNodes';
 import SpinnerIcon from '@components/Icons/SpinnerIcon/SpinnerIcon';
+import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
 
 function EthereumNodes() {
   const {
@@ -30,7 +31,16 @@ function EthereumNodes() {
     setSize,
     isReachedEnd,
     isLoading,
+    totalCount,
   } = useEthereumNodes();
+
+  const tabs = [
+    {
+      name: 'Nodes',
+      href: '/deployments/ethereum/nodes',
+      count: totalCount,
+    },
+  ];
 
   // const { notificationData, removeNotification } = useNotification();
 
@@ -60,18 +70,16 @@ function EthereumNodes() {
   return (
     <Layout>
       <Heading title="Ethereum Deployments">
-        {!isEmpty && (
-          <Button
-            href="/deployments/ethereum/nodes/create"
-            className="btn btn-primary"
-          >
-            Create New Node
-          </Button>
-        )}
+        <Button
+          href="/deployments/ethereum/nodes/create"
+          className="btn btn-primary"
+        >
+          Create New Node
+        </Button>
       </Heading>
 
       <div className="py-4">
-        <LinkedTabs tabs={resourcesTab} />
+        <LinkedTabs tabs={tabs} />
         <List>
           {nodes.map(({ name, client, network }) => (
             <ListItem
@@ -87,15 +95,10 @@ function EthereumNodes() {
           ))}
         </List>
         {!isReachedEnd && (
-          <div className="flex justify-center items-center py-4">
-            <button
-              onClick={() => setSize(size + 1)}
-              disabled={isLoading}
-              className="text-sm text-indigo-500 hover:text-indigo-600 disabled:hover:text-indigo-500 disabled:pointer-events-none"
-            >
-              {isLoading ? <SpinnerIcon className="h-4 w-4" /> : 'Load More...'}
-            </button>
-          </div>
+          <LoadMoreButton
+            onChange={() => setSize(size + 1)}
+            isLoading={isLoading}
+          />
         )}
       </div>
 
