@@ -14,7 +14,6 @@ import EmptyState from '@components/molecules/EmptyState/EmptyState';
 import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import { useNotification } from '@components/contexts/NotificationContext';
-import { resourcesTab } from '@data/ethereum/links';
 import { clientOptions } from '@data/ethereum/node/clientOptions';
 import { networkOptions } from '@data/ethereum/node/networkOptions';
 import { getLabel } from '@utils/helpers/getLabel';
