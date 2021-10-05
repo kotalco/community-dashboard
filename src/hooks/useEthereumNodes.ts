@@ -22,7 +22,6 @@ export const useEthereumNodes = (config?: SWRInfiniteConfiguration) => {
     { nodes: EthereumNode[] },
     AxiosError
   >(key, config);
-  console.log('Data: ', data);
 
   // useSWR to get the x-total-count from headers
   const { data: headers } = useSWR('/ethereum/nodes', { fetcher: fetchHeader });

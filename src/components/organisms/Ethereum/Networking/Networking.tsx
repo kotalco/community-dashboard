@@ -39,7 +39,6 @@ const NetworkingDetails: React.FC<Props> = ({
   const {
     handleSubmit,
     control,
-    register,
     reset,
     setError,
     formState: { isDirty, isSubmitting, errors },
@@ -93,7 +92,8 @@ const NetworkingDetails: React.FC<Props> = ({
         <div className="mt-5 max-w-xs">
           <TextInput
             label="P2P Port"
-            {...register('p2pPort')}
+            control={control}
+            name="p2pPort"
             error={errors.p2pPort?.message}
           />
         </div>

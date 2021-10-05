@@ -25,7 +25,7 @@ const DeleteDeployment: React.FC<Props> = ({ name }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const router = useRouter();
   const {
-    register,
+    control,
     watch,
     handleSubmit,
     formState: { isSubmitting },
@@ -106,7 +106,7 @@ const DeleteDeployment: React.FC<Props> = ({ name }) => {
             Please type the cluster peer name (
             <span className="font-bold">{name}</span>) to confirm
           </p>
-          <TextInput {...register('name')} />
+          <TextInput control={control} name="name" />
         </div>
         {error && (
           <p className="text-sm text-red-600 font-medium mt-2">{error}</p>

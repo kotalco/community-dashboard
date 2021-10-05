@@ -1,5 +1,11 @@
-import React, { MouseEvent, useState } from 'react';
-import { ChangeHandler } from 'react-hook-form';
+import React, { InputHTMLAttributes, MouseEvent, useState } from 'react';
+import {
+  Control,
+  FieldPathWithValue,
+  FieldValues,
+  useController,
+  RegisterOptions,
+} from 'react-hook-form';
 import {
   ExclamationCircleIcon,
   EyeIcon,
@@ -9,31 +15,35 @@ import {
 import InputLabel from '@components/atoms/InputLabel/InputLabel';
 import IconButton from '@components/atoms/IconButton/IconButton';
 
-interface Props {
-  name: string;
-  placeholder?: string;
+interface Props<T> extends InputHTMLAttributes<HTMLInputElement> {
+  name: FieldPathWithValue<T, string | number>;
+  control: Control<T>;
+  rules?: Exclude<
+    RegisterOptions,
+    'valueAsNumber' | 'valueAsDate' | 'setValueAs'
+  >;
   helperText?: string;
   label?: string;
   error?: string;
-  disabled?: boolean;
-  type?: string;
-  onChange: ChangeHandler;
 }
 
-const TextInput = React.forwardRef<HTMLInputElement, Props>(function TextInput(
-  {
-    label,
+function TextInput<T extends FieldValues>({
+  name,
+  control,
+  label,
+  error,
+  helperText,
+  rules,
+  ...props
+}: Props<T>) {
+  const [inputType, setInputType] = useState(props.type);
+  const { field } = useController<T, string | number>({
     name,
-    placeholder = '',
-    onChange,
-    error,
-    disabled,
-    helperText,
-    type = 'text',
-  },
-  ref
-) {
-  const [inputType, setInputType] = useState(type);
+    control,
+    rules,
+    defaultValue: '',
+  });
+
   const togglePassword = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
     if (inputType === 'password') {
@@ -44,21 +54,19 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>(function TextInput(
   };
 
   return (
-    <div>
-      {label && <InputLabel htmlFor={name}>{label}</InputLabel>}
-      <fieldset disabled={disabled} className="relative max-w-xs">
+    <div className="mb-4">
+      {label && <InputLabel htmlFor={props.id}>{label}</InputLabel>}
+      <fieldset disabled={props.disabled} className="relative max-w-xs">
         <input
-          onChange={onChange}
-          placeholder={placeholder}
-          ref={ref}
-          name={name}
-          type={inputType}
-          id={name}
+          type={props.type}
+          id={props.id}
           className={`shadow-sm focus:ring-indigo-500 block w-full sm:text-sm disabled:bg-gray-100 disabled:text-gray-500 rounded-md ${
             error ? 'border-red-300' : 'border-gray-300'
           }`}
+          {...props}
+          {...field}
         />
-        {error && type !== 'password' && (
+        {error && props.type !== 'password' && (
           <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
             <ExclamationCircleIcon
               className="h-5 w-5 text-red-500"
@@ -66,7 +74,7 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>(function TextInput(
             />
           </div>
         )}
-        {type === 'password' && (
+        {props.type === 'password' && (
           <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
             <IconButton onClick={togglePassword}>
               {inputType === 'password' ? (
@@ -86,6 +94,6 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>(function TextInput(
       {helperText && <p className="mt-2 text-sm">{helperText}</p>}
     </div>
   );
-});
+}
 
 export default TextInput;

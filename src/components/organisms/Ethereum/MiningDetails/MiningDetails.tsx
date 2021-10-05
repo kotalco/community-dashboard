@@ -41,7 +41,6 @@ const MiningDetails: React.FC<Props> = ({ name, children, ...rest }) => {
     watch,
     reset,
     setError,
-    register,
     setValue,
     formState: { isDirty, isSubmitting, errors },
   } = useForm<Mining & API>({
@@ -115,7 +114,8 @@ const MiningDetails: React.FC<Props> = ({ name, children, ...rest }) => {
                 label="Coinbase Account"
                 error={errors.coinbase?.message}
                 disabled={!miner}
-                {...register('coinbase')}
+                control={control}
+                name="coinbase"
               />
             </div>
 

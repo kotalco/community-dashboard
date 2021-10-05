@@ -38,7 +38,6 @@ const CreateClusterPeerPage: React.FC = () => {
 
   const router = useRouter();
   const {
-    register,
     handleSubmit,
     setError,
     control,
@@ -83,7 +82,9 @@ const CreateClusterPeerPage: React.FC = () => {
           <TextInput
             label="Name"
             error={errors.name?.message}
-            {...register('name', schema.name)}
+            control={control}
+            name="name"
+            rules={schema.name}
           />
 
           {/* Peer Endpoint */}
@@ -91,7 +92,9 @@ const CreateClusterPeerPage: React.FC = () => {
             <TextInput
               label="IPFS Peer"
               error={errors.peerEndpoint?.message}
-              {...register('peerEndpoint', schema.peerEndpoint)}
+              control={control}
+              name="peerEndpoint"
+              rules={schema.peerEndpoint}
             />
           </div>
 
@@ -144,7 +147,9 @@ const CreateClusterPeerPage: React.FC = () => {
                   <TextInput
                     label="ID"
                     error={errors.id?.message}
-                    {...register('id', schema.id)}
+                    control={control}
+                    name="id"
+                    rules={schema.id}
                   />
                 </div>
                 {/* Cluster Peer Private Key */}

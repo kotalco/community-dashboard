@@ -25,7 +25,7 @@ const DangerousZoneContent: React.FC<Props> = ({ peerName }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const router = useRouter();
   const {
-    register,
+    control,
     watch,
     handleSubmit,
     formState: { isSubmitting },
@@ -106,7 +106,7 @@ const DangerousZoneContent: React.FC<Props> = ({ peerName }) => {
             Please type the peer name (
             <span className="font-bold">{peerName}</span>) to confirm
           </p>
-          <TextInput {...register('name')} />
+          <TextInput control={control} name="name" />
         </div>
         {error && (
           <p className="text-sm text-red-600 font-medium mt-2">{error}</p>

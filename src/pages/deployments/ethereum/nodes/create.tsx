@@ -26,7 +26,6 @@ const CreateNode: React.FC = () => {
     KubernetesSecretTypes.ethereumPrivatekey
   );
   const {
-    register,
     handleSubmit,
     setError,
     control,
@@ -48,7 +47,7 @@ const CreateNode: React.FC = () => {
           'created successfully, and will be up and running in few seconds.',
       });
 
-      void router.push('/deployments/ethereum/nodes');
+      router.push('/deployments/ethereum/nodes');
     } catch (e) {
       if (axios.isAxiosError(e)) {
         const error = handleAxiosError<ServerError>(e);
@@ -69,70 +68,65 @@ const CreateNode: React.FC = () => {
           isSubmitting={isSubmitting}
           isValid={isValid}
         >
-          <div className="px-4 py-5 sm:p-6">
-            {/* Node Name */}
-            <TextInput
-              {...register('name')}
-              label="Node Name"
-              error={errors.name?.message}
-            />
+          {/* Node Name */}
+          <TextInput
+            control={control}
+            name="name"
+            id="name"
+            type="text"
+            label="Node Name"
+            error={errors.name?.message}
+          />
 
-            {/* Client */}
-            <div className="mt-4 max-w-xs">
-              <Controller
-                name="client"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    placeholder="Choose a client..."
-                    label="Client"
-                    error={errors.client?.message}
-                    options={clientOptions}
-                    onChange={field.onChange}
-                  />
-                )}
+          {/* Client */}
+          <Controller
+            name="client"
+            control={control}
+            render={({ field }) => (
+              <Select
+                placeholder="Choose a client..."
+                label="Client"
+                error={errors.client?.message}
+                options={clientOptions}
+                onChange={field.onChange}
               />
-            </div>
+            )}
+          />
 
-            {/* Network */}
-            <div className="mt-4 max-w-xs">
-              <Controller
-                name="network"
-                control={control}
-                render={({ field }) => (
-                  <SelectWithInput
-                    placeholder="Choose a network..."
-                    label="Network"
-                    error={errors.network?.message}
-                    options={networkOptions}
-                    name={field.name}
-                    onChange={field.onChange}
-                    value={field.value}
-                  />
-                )}
+          {/* Network */}
+          <Controller
+            name="network"
+            control={control}
+            render={({ field }) => (
+              <SelectWithInput
+                placeholder="Choose a network..."
+                label="Network"
+                error={errors.network?.message}
+                options={networkOptions}
+                name={field.name}
+                onChange={field.onChange}
+                value={field.value}
               />
-            </div>
+            )}
+          />
 
-            {/* Node Private Key */}
-            <div className="mt-4 max-w-xs">
-              <Controller
-                name="nodePrivateKeySecretName"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    placeholder="Choose a private key..."
-                    label="Node private key (optional)"
-                    error={errors.nodePrivateKeySecretName?.message}
-                    options={privateKeys}
-                    onChange={field.onChange}
-                    value={field.value}
-                    href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}
-                    hrefTitle="Create new private key..."
-                  />
-                )}
+          {/* Node Private Key */}
+          <Controller
+            name="nodePrivateKeySecretName"
+            control={control}
+            render={({ field }) => (
+              <Select
+                placeholder="Choose a private key..."
+                label="Node private key (optional)"
+                error={errors.nodePrivateKeySecretName?.message}
+                options={privateKeys}
+                onChange={field.onChange}
+                value={field.value}
+                href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}
+                hrefTitle="Create new private key..."
               />
-            </div>
-          </div>
+            )}
+          />
         </FormLayout>
       </form>
     </Layout>

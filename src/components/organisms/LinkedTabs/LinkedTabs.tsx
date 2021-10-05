@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 interface Props {
-  tabs: { name: string; href: string; count?: number }[];
+  tabs: { name: string; href: string; count?: string }[];
 }
 
 const Tabs: React.FC<Props> = ({ tabs }) => {

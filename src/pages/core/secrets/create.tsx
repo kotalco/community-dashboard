@@ -65,7 +65,9 @@ const CreateSecret: React.FC = () => {
           <TextInput
             label="Secret Name"
             error={errors.name?.message}
-            {...register('name', nameValidations)}
+            control={control}
+            name="name"
+            rules={nameValidations}
           />
 
           <div className="mt-4 max-w-xs">
@@ -93,7 +95,9 @@ const CreateSecret: React.FC = () => {
                 label="Password"
                 type="password"
                 error={errors.data?.password?.message}
-                {...register('data.password', passwordValidations)}
+                control={control}
+                name="data.password"
+                rules={passwordValidations}
               />
             </div>
           )}

@@ -17,7 +17,7 @@ import { useNotification } from '@components/contexts/NotificationContext';
 import { clientOptions } from '@data/ethereum/node/clientOptions';
 import { networkOptions } from '@data/ethereum/node/networkOptions';
 import { getLabel } from '@utils/helpers/getLabel';
-import { useEthereumNodes } from '@hooks/useEhereumNodes';
+import { useEthereumNodes } from '@hooks/useEthereumNodes';
 import SpinnerIcon from '@components/Icons/SpinnerIcon/SpinnerIcon';
 import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
 

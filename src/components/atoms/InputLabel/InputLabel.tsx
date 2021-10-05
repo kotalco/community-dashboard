@@ -1,13 +1,14 @@
-interface Props {
-  htmlFor: string;
+import { LabelHTMLAttributes } from 'react';
+
+interface Props extends LabelHTMLAttributes<HTMLLabelElement> {
   children: string;
   labelClassName?: string;
 }
 
-const InputLabel: React.FC<Props> = ({ children, htmlFor, labelClassName }) => {
+function InputLabel({ children, labelClassName, ...props }: Props) {
   return (
     <label
-      htmlFor={htmlFor}
+      htmlFor={props.htmlFor}
       className={`${
         labelClassName ? labelClassName : ''
       } block text-sm font-medium text-gray-700 mb-1`}
@@ -15,6 +16,6 @@ const InputLabel: React.FC<Props> = ({ children, htmlFor, labelClassName }) => {
       {children}
     </label>
   );
-};
+}
 
 export default InputLabel;

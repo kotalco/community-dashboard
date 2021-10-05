@@ -13,7 +13,7 @@ export async function fetcher<T>(url: string): Promise<T> {
 export async function fetchHeader(url: string) {
   const response = await instance.head(url);
 
-  return response.headers as { 'x-total-count': number };
+  return response.headers as { 'x-total-count': string };
 }
 
 export function handleAxiosError<T>(e: AxiosError<T>) {

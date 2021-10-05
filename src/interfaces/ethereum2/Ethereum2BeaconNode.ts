@@ -53,13 +53,13 @@ export interface UpdateEth1Endpoints {
 }
 
 export interface UpdateAPI {
-  rest?: boolean;
-  restHost?: string;
-  restPort?: number;
-  rpc?: boolean;
-  rpcHost?: string;
-  rpcPort?: number;
-  grpc?: boolean;
-  grpcHost?: string;
-  grpcPort?: number;
+  rest: boolean;
+  restHost: string;
+  restPort: number;
+  rpc: boolean;
+  rpcHost: string;
+  rpcPort: number;
+  grpc: boolean;
+  grpcHost: string;
+  grpcPort: number;
 }

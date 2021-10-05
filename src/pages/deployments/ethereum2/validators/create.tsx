@@ -31,7 +31,6 @@ const CreateValidator: React.FC = () => {
   );
   const { createNotification } = useNotification();
   const {
-    register,
     watch,
     control,
     handleSubmit,
@@ -79,7 +78,9 @@ const CreateValidator: React.FC = () => {
         >
           {/* Beacon Node Name */}
           <TextInput
-            {...register('name', schema.name)}
+            control={control}
+            name="name"
+            rules={schema.name}
             label="Validator Name"
             error={errors.name?.message}
           />

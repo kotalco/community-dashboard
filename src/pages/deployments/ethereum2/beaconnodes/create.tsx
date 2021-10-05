@@ -24,7 +24,6 @@ const CreateBeaconNode: React.FC = () => {
   const router = useRouter();
   const { createNotification } = useNotification();
   const {
-    register,
     watch,
     control,
     handleSubmit,
@@ -70,7 +69,9 @@ const CreateBeaconNode: React.FC = () => {
         >
           {/* Beacon Node Name */}
           <TextInput
-            {...register('name', schema.name)}
+            control={control}
+            name="name"
+            rules={schema.name}
             label="Node Name"
             error={errors.name?.message}
           />

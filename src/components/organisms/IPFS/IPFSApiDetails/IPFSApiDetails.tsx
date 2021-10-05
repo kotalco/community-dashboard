@@ -24,7 +24,7 @@ const IPFSPeerDetails: React.FC<Props> = ({ peerName, apiPort, apiHost }) => {
 
   const {
     reset,
-    register,
+    control,
     handleSubmit,
     formState: { isDirty, isSubmitting, errors },
   } = useForm<API>({
@@ -56,14 +56,16 @@ const IPFSPeerDetails: React.FC<Props> = ({ peerName, apiPort, apiHost }) => {
           <TextInput
             error={errors.apiPort?.message}
             label="API Server Port"
-            {...register('apiPort')}
+            control={control}
+            name="apiPort"
           />
         </div>
         <div className="mt-4">
           <TextInput
             error={errors.apiHost?.message}
             label="API Server Host"
-            {...register('apiHost')}
+            control={control}
+            name="apiHost"
           />
         </div>
       </div>
