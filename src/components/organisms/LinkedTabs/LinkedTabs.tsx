@@ -21,7 +21,7 @@ const Tabs: React.FC<Props> = ({ tabs }) => {
             aria-current={pathname === href ? 'page' : undefined}
           >
             <span>{name}</span>
-            <span className="inline-block ml-3 border border-red-300 bg-red-300 text-white w-5 text-center rounded-full text-xs">
+            <span className="inline-block ml-3 border border-gray-400 bg-gray-400 text-white w-5 text-center rounded-full text-xs">
               {count}
             </span>
           </a>

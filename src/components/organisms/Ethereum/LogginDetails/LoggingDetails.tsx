@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 
 import Button from '@components/atoms/Button/Button';
@@ -11,6 +11,7 @@ import { ServerError } from '@interfaces/ServerError';
 import Select from '@components/molecules/Select/Select';
 import { loggingOptions } from '@data/ethereum/node/loggingOptions';
 import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
+import { useWebsocket } from '@hooks/useWebsocket';
 
 interface Props extends LoggingInterface {
   client: EthereumNodeClient;
@@ -24,8 +25,15 @@ const LoggingDetails: React.FC<Props> = ({
   client,
   ...rest
 }) => {
+  const logsEndRef = useRef<HTMLDivElement>(null);
+  const { logs } = useWebsocket(`/ethereum/nodes/${name}/logs`);
   const { mutate } = useNode(name);
   const [submitSuccess, setSubmitSuccess] = useState('');
+
+  useEffect(() => {
+    logsEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [logs]);
+
   const {
     handleSubmit,
     control,
@@ -35,19 +43,6 @@ const LoggingDetails: React.FC<Props> = ({
   } = useForm<LoggingInterface>({
     defaultValues: rest,
   });
-
-  useEffect(() => {
-    const websocket = new WebSocket(
-      'ws://localhost:5000/api/v1/ethereum/nodes/my-node-1/logs'
-    );
-    websocket.onopen = () => {
-      console.log('connected');
-    };
-
-    websocket.onmessage = (event) => {
-      console.log(event.data);
-    };
-  }, []);
 
   const onSubmit: SubmitHandler<LoggingInterface> = async (values) => {
     setSubmitSuccess('');
@@ -87,6 +82,13 @@ const LoggingDetails: React.FC<Props> = ({
             )}
           />
         </div>
+
+        <ul className="mt-5 border border-gray-700 h-96 bg-gray-700 rounded overflow-y-auto text-white text-xs p-3">
+          {logs.split('\n').map((log, i) => (
+            <li key={i}>{log}</li>
+          ))}
+          <div className="float-left clear-both" ref={logsEndRef} />
+        </ul>
       </div>
 
       <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
