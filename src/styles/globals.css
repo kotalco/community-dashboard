@@ -17,3 +17,13 @@
 .btn-icn {
   @apply bg-white rounded-md inline-flex text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500;
 }
+
+.overscroll-container {
+  overflow-y: scroll;
+  overscroll-behavior-y: contain;
+  scroll-snap-type: y proximity;
+}
+
+.overscroll-container > ul > li:last-child {
+  scroll-snap-align: end;
+}

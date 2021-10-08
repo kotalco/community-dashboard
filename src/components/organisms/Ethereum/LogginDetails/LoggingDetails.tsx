@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { useRef, useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 
 import Button from '@components/atoms/Button/Button';
@@ -25,14 +25,9 @@ const LoggingDetails: React.FC<Props> = ({
   client,
   ...rest
 }) => {
-  const logsEndRef = useRef<HTMLDivElement>(null);
   const { logs } = useWebsocket(`/ethereum/nodes/${name}/logs`);
   const { mutate } = useNode(name);
   const [submitSuccess, setSubmitSuccess] = useState('');
-
-  useEffect(() => {
-    logsEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [logs]);
 
   const {
     handleSubmit,
@@ -83,12 +78,13 @@ const LoggingDetails: React.FC<Props> = ({
           />
         </div>
 
-        <ul className="mt-5 border border-gray-700 h-96 bg-gray-700 rounded overflow-y-auto text-white text-xs p-3">
-          {logs.split('\n').map((log, i) => (
-            <li key={i}>{log}</li>
-          ))}
-          <div className="float-left clear-both" ref={logsEndRef} />
-        </ul>
+        <div className="mt-5 border border-black h-96 bg-black rounded overflow-y-auto text-white text-xs p-3 overscroll-container">
+          <ul>
+            {logs.split('\n').map((log, i) => (
+              <li key={i}>{log}</li>
+            ))}
+          </ul>
+        </div>
       </div>
 
       <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
