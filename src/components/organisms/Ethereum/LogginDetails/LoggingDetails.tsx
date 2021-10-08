@@ -11,7 +11,11 @@ import { ServerError } from '@interfaces/ServerError';
 import Select from '@components/molecules/Select/Select';
 import { loggingOptions } from '@data/ethereum/node/loggingOptions';
 import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
-import { useLogs } from '@hooks/useLogs';
+import {
+  CLOSE_CONNECTION_MSG,
+  OPEN_CONNECTION_MSG,
+  useLogs,
+} from '@hooks/useLogs';
 
 interface Props extends LoggingInterface {
   client: EthereumNodeClient;
@@ -78,10 +82,21 @@ const LoggingDetails: React.FC<Props> = ({
           />
         </div>
 
-        <div className="mt-5 border border-black h-96 bg-black rounded overflow-y-auto text-white text-xs p-3 overscroll-container">
+        <div className="mt-5 border border-black h-96 bg-black overflow-y-auto text-white text-xs px-3 overscroll-container">
           <ul>
             {logs.map((log, i) => (
-              <li key={i}>{log}</li>
+              <li
+                className={`${
+                  log === OPEN_CONNECTION_MSG
+                    ? 'text-green-500'
+                    : log === CLOSE_CONNECTION_MSG
+                    ? 'text-red-900'
+                    : ''
+                }`}
+                key={i}
+              >
+                {log}
+              </li>
             ))}
           </ul>
         </div>

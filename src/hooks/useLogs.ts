@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react';
 
+export const OPEN_CONNECTION_MSG = 'Connection Established.';
+export const CLOSE_CONNECTION_MSG = 'Disconnected. Connection Closed.';
+
 export const useLogs = (pathname: string) => {
   const [logs, setLogs] = useState<string[]>([]);
 
@@ -12,9 +15,9 @@ export const useLogs = (pathname: string) => {
     websocket.onopen = () => {
       setLogs((logs) => {
         if (logs.length > MAX_LENGTH) {
-          return [...logs.splice(1), 'Connection Established'];
+          return [...logs.splice(1), OPEN_CONNECTION_MSG];
         }
-        return [...logs, 'Connection Established'];
+        return [...logs, OPEN_CONNECTION_MSG];
       });
     };
 
@@ -30,9 +33,9 @@ export const useLogs = (pathname: string) => {
     websocket.onclose = () => {
       setLogs((logs) => {
         if (logs.length > MAX_LENGTH) {
-          return [...logs.splice(1), 'Disconnected. Connection Closed'];
+          return [...logs.splice(1), CLOSE_CONNECTION_MSG];
         }
-        return [...logs, 'Disconnected. Connection Closed'];
+        return [...logs, CLOSE_CONNECTION_MSG];
       });
     };
 
