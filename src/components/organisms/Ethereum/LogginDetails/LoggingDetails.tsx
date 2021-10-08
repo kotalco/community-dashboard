@@ -11,7 +11,7 @@ import { ServerError } from '@interfaces/ServerError';
 import Select from '@components/molecules/Select/Select';
 import { loggingOptions } from '@data/ethereum/node/loggingOptions';
 import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
-import { useLogs } from '@hooks/useWebsocket';
+import { useLogs } from '@hooks/useLogs';
 
 interface Props extends LoggingInterface {
   client: EthereumNodeClient;
