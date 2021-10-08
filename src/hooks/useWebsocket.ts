@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-export const useWebsocket = (pathname: string) => {
-  const [logs, setLogs] = useState('');
+export const useLogs = (pathname: string) => {
+  const [logs, setLogs] = useState<string[]>([]);
 
   const NEXT_PUBLIC_WS_BASE_URL = process.env.NEXT_PUBLIC_WS_BASE_URL as string;
 
@@ -9,10 +9,15 @@ export const useWebsocket = (pathname: string) => {
     const websocket = new WebSocket(`${NEXT_PUBLIC_WS_BASE_URL}${pathname}`);
 
     websocket.onopen = () => {
-      setLogs(() => 'Connection Established \n');
+      setLogs((logs) => [...logs, 'Connection Established']);
     };
+
     websocket.onmessage = (event: MessageEvent<string>) => {
-      setLogs((logs) => `${logs}${event.data}`);
+      setLogs((logs) => [...logs, event.data]);
+    };
+
+    websocket.onclose = () => {
+      setLogs((logs) => [...logs, 'Disconnected. Connection Closed']);
     };
 
     return () => {

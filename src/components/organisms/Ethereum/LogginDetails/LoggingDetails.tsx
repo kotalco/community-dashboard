@@ -11,7 +11,7 @@ import { ServerError } from '@interfaces/ServerError';
 import Select from '@components/molecules/Select/Select';
 import { loggingOptions } from '@data/ethereum/node/loggingOptions';
 import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
-import { useWebsocket } from '@hooks/useWebsocket';
+import { useLogs } from '@hooks/useWebsocket';
 
 interface Props extends LoggingInterface {
   client: EthereumNodeClient;
@@ -25,7 +25,7 @@ const LoggingDetails: React.FC<Props> = ({
   client,
   ...rest
 }) => {
-  const { logs } = useWebsocket(`/ethereum/nodes/${name}/logs`);
+  const { logs } = useLogs(`/ethereum/nodes/${name}/logs`);
   const { mutate } = useNode(name);
   const [submitSuccess, setSubmitSuccess] = useState('');
 
@@ -80,7 +80,7 @@ const LoggingDetails: React.FC<Props> = ({
 
         <div className="mt-5 border border-black h-96 bg-black rounded overflow-y-auto text-white text-xs p-3 overscroll-container">
           <ul>
-            {logs.split('\n').map((log, i) => (
+            {logs.map((log, i) => (
               <li key={i}>{log}</li>
             ))}
           </ul>
