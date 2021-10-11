@@ -90,7 +90,7 @@ const LoggingDetails: React.FC<Props> = ({
                   log === OPEN_CONNECTION_MSG
                     ? 'text-green-500'
                     : log === CLOSE_CONNECTION_MSG
-                    ? 'text-red-900'
+                    ? 'text-red-500'
                     : ''
                 }`}
                 key={i}

@@ -1,18 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export const OPEN_CONNECTION_MSG = 'Connection Established.';
 export const CLOSE_CONNECTION_MSG = 'Disconnected. Connection Closed.';
 
+const NEXT_PUBLIC_WS_BASE_URL = process.env.NEXT_PUBLIC_WS_BASE_URL as string;
+const MAX_LENGTH = 200;
+const TIME_INTERVAL = 10000;
+
 export const useLogs = (pathname: string) => {
   const [logs, setLogs] = useState<string[]>([]);
 
-  const NEXT_PUBLIC_WS_BASE_URL = process.env.NEXT_PUBLIC_WS_BASE_URL as string;
-  const MAX_LENGTH = 200;
+  const createWebsocket = useCallback(() => {
+    const ws = new WebSocket(`${NEXT_PUBLIC_WS_BASE_URL}${pathname}`);
 
-  useEffect(() => {
-    const websocket = new WebSocket(`${NEXT_PUBLIC_WS_BASE_URL}${pathname}`);
-
-    websocket.onopen = () => {
+    ws.onopen = () => {
       setLogs((logs) => {
         if (logs.length > MAX_LENGTH) {
           return [...logs.splice(1), OPEN_CONNECTION_MSG];
@@ -21,7 +22,7 @@ export const useLogs = (pathname: string) => {
       });
     };
 
-    websocket.onmessage = (event: MessageEvent<string>) => {
+    ws.onmessage = (event: MessageEvent<string>) => {
       setLogs((logs) => {
         if (logs.length > MAX_LENGTH) {
           return [...logs.splice(1), event.data];
@@ -30,19 +31,41 @@ export const useLogs = (pathname: string) => {
       });
     };
 
-    websocket.onclose = () => {
+    return { ws };
+  }, [pathname]);
+
+  useEffect(() => {
+    const { ws } = createWebsocket();
+    let timeoutId: NodeJS.Timeout;
+
+    ws.onclose = () => {
       setLogs((logs) => {
         if (logs.length > MAX_LENGTH) {
-          return [...logs.splice(1), CLOSE_CONNECTION_MSG];
+          return [
+            ...logs.splice(1),
+            CLOSE_CONNECTION_MSG,
+            `Will retry to connect in ${TIME_INTERVAL / 1000} seconds`,
+          ];
         }
-        return [...logs, CLOSE_CONNECTION_MSG];
+        return [
+          ...logs,
+          CLOSE_CONNECTION_MSG,
+          `Will retry to connect in ${TIME_INTERVAL / 1000} seconds`,
+        ];
       });
+
+      timeoutId = setTimeout(() => {
+        createWebsocket();
+      }, TIME_INTERVAL);
     };
 
     return () => {
-      websocket.close();
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      ws.onclose = () => {};
+      ws.close();
+      if (timeoutId) clearTimeout(timeoutId);
     };
-  }, [NEXT_PUBLIC_WS_BASE_URL, pathname]);
+  }, [createWebsocket, pathname]);
 
   return { logs };
 };
