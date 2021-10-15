@@ -9,12 +9,14 @@ const TIME_INTERVAL = 10000;
 
 export const useLogs = (pathname: string) => {
   const [logs, setLogs] = useState<string[]>([]);
+  const [counter, setCounter] = useState(0);
   const timeoutRef = useRef<NodeJS.Timeout>();
+  const counterRef = useRef<NodeJS.Timer>();
   const websocketRef = useRef<WebSocket>();
 
   const connect = useCallback(() => {
-    console.log('run');
     const ws = new WebSocket(`${NEXT_PUBLIC_WS_BASE_URL}${pathname}`);
+
     const check = () => {
       if (
         !websocketRef.current ||
@@ -35,6 +37,9 @@ export const useLogs = (pathname: string) => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
+      if (counterRef.current) {
+        clearInterval(counterRef.current);
+      }
     };
 
     ws.onmessage = (event: MessageEvent<string>) => {
@@ -47,20 +52,12 @@ export const useLogs = (pathname: string) => {
     };
 
     ws.onclose = () => {
-      setLogs((logs) => {
-        if (logs.length > MAX_LENGTH) {
-          return [
-            ...logs.splice(1),
-            CLOSE_CONNECTION_MSG,
-            `Will retry to connect in ${TIME_INTERVAL / 1000} seconds`,
-          ];
-        }
-        return [
-          ...logs,
-          CLOSE_CONNECTION_MSG,
-          `Will retry to connect in ${TIME_INTERVAL / 1000} seconds`,
-        ];
-      });
+      setCounter(TIME_INTERVAL - 1000);
+      setLogs((logs) => [
+        ...logs,
+        CLOSE_CONNECTION_MSG,
+        `Will retry to connect in ${TIME_INTERVAL / 1000} seconds`,
+      ]);
 
       timeoutRef.current = setTimeout(check, TIME_INTERVAL);
     };
@@ -68,17 +65,39 @@ export const useLogs = (pathname: string) => {
 
   useEffect(() => {
     connect();
+
     return () => {
+      // Stop listening to onclose() event then close the socket previuosly created
       if (websocketRef.current) {
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         websocketRef.current.onclose = () => {};
         websocketRef.current.close();
       }
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
+      // Clear timeout function to prevent memory leak
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
     };
   }, [connect]);
 
-  return { logs };
+  useEffect(() => {
+    if (counter > 0) {
+      counterRef.current = setInterval(() => {
+        setLogs((logs) => {
+          return [
+            ...logs.slice(0, -1),
+            `Will retry to connect in ${counter / 1000} ${
+              counter / 1000 === 1 ? 'second' : 'seconds'
+            }`,
+          ];
+        });
+        setCounter((counter) => counter - 1000);
+      }, 1000);
+    }
+
+    return () => {
+      // Clear interval function to prevern memory leak
+      if (counterRef.current) clearInterval(counterRef.current);
+    };
+  }, [counter]);
+
+  return { logs, setLogs };
 };
