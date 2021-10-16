@@ -75,29 +75,32 @@ export const useLogs = (pathname: string) => {
       }
       // Clear timeout function to prevent memory leak
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      // Clear interval function to prevern memory leak
+      if (counterRef.current) clearInterval(counterRef.current);
     };
   }, [connect]);
 
   useEffect(() => {
-    if (counter > 0) {
+    if (counter === TIME_INTERVAL - 1000) {
       counterRef.current = setInterval(() => {
-        setLogs((logs) => {
-          return [
+        setCounter((counter) => {
+          setLogs((logs) => [
             ...logs.slice(0, -1),
             `Will retry to connect in ${counter / 1000} ${
-              counter / 1000 === 1 ? 'second' : 'seconds'
+              counter / 1000 === 1 ? 'second.' : 'seconds.'
             }`,
-          ];
+          ]);
+          return counter - 1000;
         });
-        setCounter((counter) => counter - 1000);
       }, 1000);
     }
-
-    return () => {
-      // Clear interval function to prevern memory leak
-      if (counterRef.current) clearInterval(counterRef.current);
-    };
   }, [counter]);
 
-  return { logs, setLogs };
+  return {
+    logs,
+    setLogs,
+    ws: websocketRef.current,
+    timeoutId: timeoutRef.current,
+    intervalId: counterRef.current,
+  };
 };

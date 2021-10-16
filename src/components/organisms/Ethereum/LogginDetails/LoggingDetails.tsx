@@ -29,7 +29,9 @@ const LoggingDetails: React.FC<Props> = ({
   client,
   ...rest
 }) => {
-  const { logs } = useLogs(`/ethereum/nodes/${name}/logs`);
+  const { logs, setLogs, timeoutId, intervalId, ws } = useLogs(
+    `/ethereum/nodes/${name}/logs`
+  );
   const { mutate } = useNode(name);
   const [submitSuccess, setSubmitSuccess] = useState('');
 
@@ -42,6 +44,12 @@ const LoggingDetails: React.FC<Props> = ({
   } = useForm<LoggingInterface>({
     defaultValues: rest,
   });
+
+  const cancelConnect = () => {
+    setLogs((logs) => [...logs, 'Canceled']);
+    if (timeoutId) clearTimeout(timeoutId);
+    if (intervalId) clearInterval(intervalId);
+  };
 
   const onSubmit: SubmitHandler<LoggingInterface> = async (values) => {
     setSubmitSuccess('');
@@ -95,7 +103,22 @@ const LoggingDetails: React.FC<Props> = ({
                 }`}
                 key={i}
               >
-                {log}
+                {!log.includes('second') ? (
+                  <span>{log}</span>
+                ) : (
+                  <span>
+                    {log}
+                    {` `}
+                    <button
+                      type="button"
+                      disabled={ws?.readyState === WebSocket.OPEN}
+                      onClick={cancelConnect}
+                      className={`underline hover:no-underline text-xs text-red-500 disabled:sr-only`}
+                    >
+                      Cancel
+                    </button>
+                  </span>
+                )}
               </li>
             ))}
           </ul>
