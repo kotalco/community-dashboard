@@ -15,6 +15,7 @@ interface InfiniteReturn<Data, Error>
   > {
   data: Data[] | undefined;
   response: AxiosResponse<Data>[] | undefined;
+  headers: { 'x-total-count': string } | undefined;
 }
 
 export interface InfiniteConfig<Data = unknown, Error = unknown>
@@ -61,6 +62,7 @@ export default function useRequestInfinite<Data = unknown, Error = unknown>(
 
   return {
     data: response && response.map((r) => r.data),
+    headers: response?.[0].headers as { 'x-total-count': string },
     response,
     error,
     isValidating,

@@ -1,30 +1,33 @@
-import useSWR, { KeyLoader } from 'swr';
-import useSWRInfinite, { SWRInfiniteConfiguration } from 'swr/infinite';
-import { AxiosError } from 'axios';
+import { SWRInfiniteConfiguration } from 'swr/infinite';
+import { AxiosResponse } from 'axios';
 
 import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { sortByDate } from '@utils/helpers/sortByDate';
-import { fetchHeader } from '@utils/axios';
+import useRequestInfinite, { GetRequest } from '@hooks/useRequestInfinite';
 
 const PAGE_SIZE = 10;
 
-const key: KeyLoader<{ nodes: EthereumNode[] }> = (pageIndex, prevPageData) => {
+function key(
+  pageIndex: number,
+  prevPageData: AxiosResponse<{
+    nodes: EthereumNode[];
+  }> | null
+): GetRequest {
   // Reached the end
-  if (prevPageData && !prevPageData.nodes.length) return null;
+  if (prevPageData && !prevPageData.data.nodes.length) return null;
   // If first page, we don't have prevPageData
-  if (pageIndex === 0) return '/ethereum/nodes';
-  return `/ethereum/nodes?page=${pageIndex}`;
-};
+  if (pageIndex === 0) return { url: '/ethereum/nodes' };
+  return { url: `/ethereum/nodes?page=${pageIndex}` };
+}
 
 export const useEthereumNodes = (config?: SWRInfiniteConfiguration) => {
-  // useSWRInfinite returns a paginated form of data
-  const { data, error, size, ...rest } = useSWRInfinite<
-    { nodes: EthereumNode[] },
-    AxiosError
-  >(key, config);
+  // useRequestInfinit returns a paginated form of data
+  const { data, headers, error, size, ...rest } = useRequestInfinite<{
+    nodes: EthereumNode[];
+  }>(key, config);
 
   // useSWR to get the x-total-count from headers
-  const { data: headers } = useSWR('/ethereum/nodes', { fetcher: fetchHeader });
+  // const headers = response?.[0].headers as { 'x-total-count': string };
   const totalCount = headers?.['x-total-count'];
 
   // Collect all data in single arrays instead of 2D arrays

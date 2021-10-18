@@ -10,12 +10,6 @@ export async function fetcher<T>(url: string): Promise<T> {
   return response.data;
 }
 
-export async function fetchHeader(url: string) {
-  const response = await instance.head(url);
-
-  return response.headers as { 'x-total-count': string };
-}
-
 export function handleAxiosError<T>(e: AxiosError<T>) {
   return e;
 }
