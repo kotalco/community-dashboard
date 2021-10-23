@@ -2,11 +2,9 @@ import useSWRInfinite, {
   SWRInfiniteConfiguration,
   SWRInfiniteResponse,
 } from 'swr/infinite';
-import { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import { AxiosResponse, AxiosError } from 'axios';
 
 import axios from '@utils/axios';
-
-export type GetRequest = AxiosRequestConfig | null;
 
 interface InfiniteReturn<Data, Error>
   extends Pick<
@@ -30,7 +28,7 @@ export default function useRequestInfinite<Data = unknown, Error = unknown>(
   getRequest: (
     index: number,
     previousPageData: AxiosResponse<Data> | null
-  ) => GetRequest,
+  ) => string | null,
   { fallbackData, ...config }: InfiniteConfig<Data, Error> = {}
 ): InfiniteReturn<Data, Error> {
   const {
@@ -43,9 +41,9 @@ export default function useRequestInfinite<Data = unknown, Error = unknown>(
   } = useSWRInfinite<AxiosResponse<Data>, AxiosError<Error>>(
     (index, previousPageData) => {
       const key = getRequest(index, previousPageData);
-      return key ? JSON.stringify(key) : null;
+      return key ? key : null;
     },
-    (request: string) => axios(JSON.parse(request)),
+    (url: string) => axios.get<Data>(url),
     {
       ...config,
       fallbackData:

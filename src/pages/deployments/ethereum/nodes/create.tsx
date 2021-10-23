@@ -75,6 +75,7 @@ const CreateNode: React.FC = () => {
             id="name"
             type="text"
             label="Node Name"
+            defaultValue=""
             error={errors.name?.message}
           />
 

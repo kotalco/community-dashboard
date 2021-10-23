@@ -10,8 +10,8 @@ export async function fetcher<T>(url: string): Promise<T> {
   return response.data;
 }
 
-export function handleAxiosError<T>(e: AxiosError<T>) {
-  return e;
+export function handleAxiosError<T>(e: AxiosError) {
+  return e as AxiosError<T>;
 }
 
 export default instance;

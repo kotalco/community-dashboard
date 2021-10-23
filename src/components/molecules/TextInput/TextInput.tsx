@@ -1,10 +1,13 @@
 import React, { InputHTMLAttributes, MouseEvent, useState } from 'react';
 import {
   Control,
-  FieldPathWithValue,
   FieldValues,
   useController,
   RegisterOptions,
+  FieldPath,
+  UnpackNestedValue,
+  PathValue,
+  Path,
 } from 'react-hook-form';
 import {
   ExclamationCircleIcon,
@@ -16,12 +19,13 @@ import InputLabel from '@components/atoms/InputLabel/InputLabel';
 import IconButton from '@components/atoms/IconButton/IconButton';
 
 interface Props<T> extends InputHTMLAttributes<HTMLInputElement> {
-  name: FieldPathWithValue<T, string | number>;
+  name: FieldPath<T>;
   control: Control<T>;
   rules?: Exclude<
     RegisterOptions,
     'valueAsNumber' | 'valueAsDate' | 'setValueAs'
   >;
+  defaultValue?: UnpackNestedValue<PathValue<T, Path<T>>>;
   helperText?: string;
   label?: string;
   error?: string;
@@ -34,14 +38,15 @@ function TextInput<T extends FieldValues>({
   error,
   helperText,
   rules,
+  defaultValue,
   ...props
 }: Props<T>) {
   const [inputType, setInputType] = useState(props.type);
-  const { field } = useController<T, string | number>({
+  const { field } = useController<T>({
     name,
     control,
     rules,
-    defaultValue: '',
+    defaultValue,
   });
 
   const togglePassword = (e: MouseEvent<HTMLButtonElement>) => {

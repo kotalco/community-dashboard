@@ -52,7 +52,7 @@ const Select: React.FC<Props> = ({
   return (
     <Listbox value={selected} onChange={handleChange}>
       {({ open }) => (
-        <>
+        <div className="max-w-xs mb-4">
           <Listbox.Label className="block text-sm font-medium text-gray-700">
             {label}
           </Listbox.Label>
@@ -145,7 +145,7 @@ const Select: React.FC<Props> = ({
               {error}
             </p>
           )}
-        </>
+        </div>
       )}
     </Listbox>
   );

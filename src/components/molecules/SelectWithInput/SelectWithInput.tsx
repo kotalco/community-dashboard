@@ -46,7 +46,7 @@ const SelectWithInput: React.FC<Props> = ({
   };
 
   return (
-    <>
+    <div className="max-w-xs mb-4">
       <Listbox value={selected} onChange={handleChange}>
         {({ open }) => (
           <>
@@ -160,7 +160,7 @@ const SelectWithInput: React.FC<Props> = ({
           {error}
         </p>
       )}
-    </>
+    </div>
   );
 };
 

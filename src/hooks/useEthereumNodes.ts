@@ -3,7 +3,7 @@ import { AxiosResponse } from 'axios';
 
 import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { sortByDate } from '@utils/helpers/sortByDate';
-import useRequestInfinite, { GetRequest } from '@hooks/useRequestInfinite';
+import useRequestInfinite from '@hooks/useRequestInfinite';
 
 const PAGE_SIZE = 10;
 
@@ -12,12 +12,12 @@ function key(
   prevPageData: AxiosResponse<{
     nodes: EthereumNode[];
   }> | null
-): GetRequest {
+) {
   // Reached the end
   if (prevPageData && !prevPageData.data.nodes.length) return null;
   // If first page, we don't have prevPageData
-  if (pageIndex === 0) return { url: '/ethereum/nodes' };
-  return { url: `/ethereum/nodes?page=${pageIndex}` };
+  if (pageIndex === 0) return '/ethereum/nodes';
+  return `/ethereum/nodes?page=${pageIndex}`;
 }
 
 export const useEthereumNodes = (config?: SWRInfiniteConfiguration) => {

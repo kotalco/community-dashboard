@@ -91,6 +91,7 @@ const NetworkingDetails: React.FC<Props> = ({
         {/* P2P Port */}
         <div className="mt-5 max-w-xs">
           <TextInput
+            type="text"
             label="P2P Port"
             control={control}
             name="p2pPort"

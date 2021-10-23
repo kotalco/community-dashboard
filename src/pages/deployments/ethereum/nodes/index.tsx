@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+// import { useEffect } from 'react';
 import { GlobeAltIcon } from '@heroicons/react/solid';
 import { ChipIcon } from '@heroicons/react/outline';
 // import useSWR from 'swr';
@@ -11,9 +11,9 @@ import ListItem from '@components/molecules/ListItem/ListItem';
 import EthereumIcon from '@components/Icons/EthereumIcon/EthereumIcon';
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import EmptyState from '@components/molecules/EmptyState/EmptyState';
-import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
+// import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
-import { useNotification } from '@components/contexts/NotificationContext';
+// import { useNotification } from '@components/contexts/NotificationContext';
 import { clientOptions } from '@data/ethereum/node/clientOptions';
 import { networkOptions } from '@data/ethereum/node/networkOptions';
 import { getLabel } from '@utils/helpers/getLabel';
