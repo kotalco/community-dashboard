@@ -63,7 +63,7 @@ function TextInput<T extends FieldValues>({
       {label && <InputLabel htmlFor={props.id}>{label}</InputLabel>}
       <fieldset disabled={props.disabled} className="relative max-w-xs">
         <input
-          type={props.type}
+          type={props.type || 'text'}
           id={props.id}
           className={`shadow-sm focus:ring-indigo-500 block w-full sm:text-sm disabled:bg-gray-100 disabled:text-gray-500 rounded-md ${
             error ? 'border-red-300' : 'border-gray-300'
