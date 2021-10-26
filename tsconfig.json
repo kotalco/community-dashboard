@@ -24,7 +24,8 @@
       "@store/*": ["src/store/*"],
       "@hooks/*": ["src/hooks/*"],
       "@schemas/*": ["src/schemas/*"]
-    }
+    },
+    "incremental": true
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"],
   "exclude": ["node_modules"]
