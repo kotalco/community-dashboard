@@ -32,10 +32,6 @@ const CreateNode: React.FC = () => {
     formState: { errors, isSubmitted, isValid, isSubmitting },
   } = useForm<CreateEthereumNode>({ resolver: joiResolver(schema) });
 
-  /**
-   * Submit create ethereum node form
-   * @param nodeData the data required to create new node
-   */
   const onSubmit: SubmitHandler<CreateEthereumNode> = async (values) => {
     try {
       const node = await createEthereumNode(values);
