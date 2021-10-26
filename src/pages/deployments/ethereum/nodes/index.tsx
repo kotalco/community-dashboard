@@ -45,6 +45,7 @@ function EthereumNodes() {
   // useEffect(() => {
   //   return () => removeNotification();
   // }, [removeNotification]);
+
   if (isInitialLoading) {
     return <LoadingIndicator />;
   }

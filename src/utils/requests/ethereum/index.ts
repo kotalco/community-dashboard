@@ -1,4 +1,4 @@
-import axios, { fetcher } from '../../axios';
+import axios from 'axios';
 import {
   CreateEthereumNode,
   EthereumNode,
@@ -6,20 +6,21 @@ import {
 import useSWR, { SWRConfiguration } from 'swr';
 import { UnpackNestedValue } from 'react-hook-form';
 
-/**
- * Create a new node
- * @param body ethereum node data
- * @returns the newly created node
- */
-export const createEthereumNode = async (
-  body: CreateEthereumNode
-): Promise<EthereumNode> => {
-  const { data } = await axios.post<{ node: EthereumNode }>(
-    `/ethereum/nodes`,
-    body
-  );
+import api, { fetcher, handleAxiosError } from '../../axios';
 
-  return data.node;
+export const createEthereumNode = async (body: CreateEthereumNode) => {
+  try {
+    const { data } = await api.post<{ node: EthereumNode }>(
+      `/ethereum/nodes`,
+      body
+    );
+
+    return data.node;
+  } catch (e) {
+    if (axios.isAxiosError(e)) {
+      return handleAxiosError(e);
+    }
+  }
 };
 
 /**
@@ -49,7 +50,7 @@ export const updateEthereumNode = async (
   nodeName: string,
   nodeData: Partial<UnpackNestedValue<EthereumNode>>
 ): Promise<EthereumNode> => {
-  const { data } = await axios.put<{ node: EthereumNode }>(
+  const { data } = await api.put<{ node: EthereumNode }>(
     `/ethereum/nodes/${nodeName}`,
     nodeData
   );
@@ -61,5 +62,5 @@ export const updateEthereumNode = async (
  * @param name Ethereum node name
  */
 export const deleteNode = async (name: string): Promise<void> => {
-  await axios.delete(`/ethereum/nodes/${name}`);
+  await api.delete(`/ethereum/nodes/${name}`);
 };

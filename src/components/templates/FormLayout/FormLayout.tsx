@@ -6,6 +6,7 @@ interface Props {
   isSubmitted: boolean;
   isValid: boolean;
   isSubmitting: boolean;
+  error?: string;
 }
 
 const CreateNode: React.FC<Props> = ({
@@ -13,6 +14,7 @@ const CreateNode: React.FC<Props> = ({
   isSubmitted,
   isSubmitting,
   isValid,
+  error,
 }) => {
   return (
     <div className="bg-white shadow rounded-lg mt-4">
@@ -27,6 +29,12 @@ const CreateNode: React.FC<Props> = ({
         >
           Create
         </Button>
+
+        {error && (
+          <p aria-label="alert" className="text-sm text-red-600">
+            {error}
+          </p>
+        )}
       </div>
     </div>
   );

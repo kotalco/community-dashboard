@@ -1,4 +1,4 @@
-import axios from 'axios';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
@@ -8,58 +8,52 @@ import FormLayout from '@components/templates/FormLayout/FormLayout';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Select from '@components/molecules/Select/Select';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
-import { useNotification } from '@components/contexts/NotificationContext';
+import Heading from '@components/templates/Heading/Heading';
+// import { useNotification } from '@components/contexts/NotificationContext';
 import { clientOptions } from '@data/ethereum/node/clientOptions';
 import { networkOptions } from '@data/ethereum/node/networkOptions';
 import { createEthereumNode } from '@utils/requests/ethereum';
 import { schema } from '@schemas/ethereumNode/createNode';
 import { CreateEthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
-import { handleAxiosError } from '@utils/axios';
-import { ServerError } from '@interfaces/ServerError';
 import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 
-const CreateNode: React.FC = () => {
+function CreateNode() {
+  const [serverError, setServerError] = useState('');
   const router = useRouter();
-  const { createNotification } = useNotification();
+  // const { createNotification } = useNotification();
   const { data: privateKeys } = useSecretsByType(
     KubernetesSecretTypes.ethereumPrivatekey
   );
   const {
     handleSubmit,
-    setError,
     control,
     formState: { errors, isSubmitted, isValid, isSubmitting },
   } = useForm<CreateEthereumNode>({ resolver: joiResolver(schema) });
 
   const onSubmit: SubmitHandler<CreateEthereumNode> = async (values) => {
-    try {
-      const node = await createEthereumNode(values);
-      createNotification({
-        title: 'Node has been created',
-        protocol: `node`,
-        name: node.name,
-        action:
-          'created successfully, and will be up and running in few seconds.',
-      });
-
-      router.push('/deployments/ethereum/nodes');
-    } catch (e) {
-      if (axios.isAxiosError(e)) {
-        const error = handleAxiosError<ServerError>(e);
-        setError('name', {
-          type: 'server',
-          message: error.response?.data.error,
-        });
-      }
+    setServerError('');
+    const res = await createEthereumNode(values);
+    if (typeof res === 'string') {
+      return setServerError(res);
     }
+    router.push('/deployments/ethereum/nodes');
+
+    // createNotification({
+    //   title: 'Node has been created',
+    //   protocol: `node`,
+    //   name: node.name,
+    //   action:
+    //     'created successfully, and will be up and running in few seconds.',
+    // });
   };
 
   return (
     <Layout>
-      <h1 className="text-2xl font-semibold">Create New Node</h1>
+      <Heading title="Create New Node" />
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormLayout
+          error={serverError}
           isSubmitted={isSubmitted}
           isSubmitting={isSubmitting}
           isValid={isValid}
@@ -128,6 +122,6 @@ const CreateNode: React.FC = () => {
       </form>
     </Layout>
   );
-};
+}
 
 export default CreateNode;

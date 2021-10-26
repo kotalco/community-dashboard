@@ -1,17 +1,19 @@
 import axios, { AxiosError } from 'axios';
 
-const instance = axios.create({
+const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
 });
 
 export async function fetcher<T>(url: string): Promise<T> {
-  const response = await instance.get<T>(url);
+  const response = await api.get<T>(url);
 
   return response.data;
 }
 
-export function handleAxiosError<T>(e: AxiosError) {
-  return e as AxiosError<T>;
+export function handleAxiosError<T extends { error: string }>(
+  e: AxiosError<T>
+) {
+  return e.response?.data.error;
 }
 
-export default instance;
+export default api;
