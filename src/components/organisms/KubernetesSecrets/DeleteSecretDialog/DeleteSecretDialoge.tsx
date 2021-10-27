@@ -35,10 +35,10 @@ const DeleteSecretDialoge: React.FC<Props> = ({
       void mutate('/core/secrets');
       setOpen(false);
     } catch (e) {
-      if (axios.isAxiosError(e)) {
-        const error = handleAxiosError<ServerError>(e);
-        setError(error.response?.data.error);
-      }
+      // if (axios.isAxiosError(e)) {
+      //   const error = handleAxiosError<ServerError>(e);
+      //   setError(error.response?.data.error);
+      // }
     }
     setIsSubmitting(false);
   };

@@ -45,10 +45,10 @@ const DeleteDeployment: React.FC<Props> = ({ name }) => {
         protocol: 'peer',
       });
     } catch (e) {
-      if (axios.isAxiosError(e)) {
-        const error = handleAxiosError<ServerError>(e);
-        setError(error.response?.data.error);
-      }
+      // if (axios.isAxiosError(e)) {
+      //   const error = handleAxiosError<ServerError>(e);
+      //   setError(error.response?.data.error);
+      // }
     }
   };
 

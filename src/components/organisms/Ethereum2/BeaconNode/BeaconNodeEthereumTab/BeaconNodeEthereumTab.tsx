@@ -47,13 +47,13 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
       reset(values);
       setSubmitSuccess('Beacon node has been updated');
     } catch (e) {
-      if (axios.isAxiosError(e)) {
-        const error = handleAxiosError<ServerError>(e);
-        setError('eth1Endpoints', {
-          type: 'server',
-          message: error.response?.data.error,
-        });
-      }
+      // if (axios.isAxiosError(e)) {
+      //   const error = handleAxiosError<ServerError>(e);
+      //   setError('eth1Endpoints', {
+      //     type: 'server',
+      //     message: error.response?.data.error,
+      //   });
+      // }
     }
   };
 

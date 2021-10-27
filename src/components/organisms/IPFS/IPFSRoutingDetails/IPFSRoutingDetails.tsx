@@ -43,10 +43,10 @@ const IPFSPeerDetails: React.FC<Props> = ({ routing, peerName }) => {
       reset(values);
       setSubmitSuccess('Peer has been updated');
     } catch (e) {
-      if (axios.isAxiosError(e)) {
-        const error = handleAxiosError<ServerError>(e);
-        setSubmitError(error.response?.data.error);
-      }
+      // if (axios.isAxiosError(e)) {
+      //   const error = handleAxiosError<ServerError>(e);
+      //   setSubmitError(error.response?.data.error);
+      // }
     }
   };
 

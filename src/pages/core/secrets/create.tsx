@@ -43,13 +43,13 @@ const CreateSecret: React.FC = () => {
       await createSecret(values);
       void router.push('/core/secrets');
     } catch (e) {
-      if (axios.isAxiosError(e)) {
-        const error = handleAxiosError<ServerError>(e);
-        setError('name', {
-          type: 'server',
-          message: error.response?.data.error,
-        });
-      }
+      // if (axios.isAxiosError(e)) {
+      //   const error = handleAxiosError<ServerError>(e);
+      //   setError('name', {
+      //     type: 'server',
+      //     message: error.response?.data.error,
+      //   });
+      // }
     }
   };
 

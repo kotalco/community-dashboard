@@ -59,13 +59,13 @@ const CreateClusterPeerPage: React.FC = () => {
       });
       void router.push('/deployments/ipfs/clusterpeers');
     } catch (e) {
-      if (axios.isAxiosError(e)) {
-        const error = handleAxiosError<ServerError>(e);
-        setError('name', {
-          type: 'server',
-          message: error.response?.data.error,
-        });
-      }
+      // if (axios.isAxiosError(e)) {
+      //   const error = handleAxiosError<ServerError>(e);
+      //   setError('name', {
+      //     type: 'server',
+      //     message: error.response?.data.error,
+      //   });
+      // }
     }
   };
 

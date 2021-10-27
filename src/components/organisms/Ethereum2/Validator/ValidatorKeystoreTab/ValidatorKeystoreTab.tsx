@@ -46,7 +46,7 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
     control,
     formState: { isDirty, isSubmitting, errors },
   } = useForm<UpdateKeystores>({
-    resolver: joiResolver(updateKeystoresSchema),
+    // resolver: joiResolver(updateKeystoresSchema),
     defaultValues: {
       keystores: selectedKeystores,
       walletPasswordSecretName,
@@ -67,12 +67,12 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
       reset(values);
       setSubmitSuccess('Validator has been updated');
     } catch (e) {
-      if (axios.isAxiosError(e)) {
-        const error = handleAxiosError<ServerError>(e);
-        setSubmitError(
-          error.response?.data.error || 'Something wrong happened'
-        );
-      }
+      // if (axios.isAxiosError(e)) {
+      //   const error = handleAxiosError<ServerError>(e);
+      // setSubmitError(
+      //   error.response?.data.error || 'Something wrong happened'
+      // );
+      // }
     }
   };
 

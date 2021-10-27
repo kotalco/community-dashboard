@@ -44,7 +44,7 @@ const NetworkingDetails: React.FC<Props> = ({
     formState: { isDirty, isSubmitting, errors },
   } = useForm<Networking>({
     defaultValues: rest,
-    resolver: joiResolver(updateNetworkingSchema),
+    // resolver: joiResolver(updateNetworkingSchema),
   });
 
   const onSubmit: SubmitHandler<Networking> = async (values) => {
@@ -55,13 +55,13 @@ const NetworkingDetails: React.FC<Props> = ({
       reset(values);
       setSubmitSuccess('Networking data has been updated');
     } catch (e) {
-      if (axios.isAxiosError(e)) {
-        const error = handleAxiosError<ServerError>(e);
-        setError('bootnodes', {
-          type: 'server',
-          message: error.response?.data.error,
-        });
-      }
+      // if (axios.isAxiosError(e)) {
+      //   const error = handleAxiosError<ServerError>(e);
+      //   setError('bootnodes', {
+      //     type: 'server',
+      //     message: error.response?.data.error,
+      //   });
+      // }
     }
   };
 

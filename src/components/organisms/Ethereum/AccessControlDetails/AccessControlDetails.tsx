@@ -28,7 +28,7 @@ const AccessControlDetails: React.FC<Props> = ({ name, children, ...rest }) => {
     formState: { isDirty, isSubmitting, errors, isValid },
   } = useForm<AccessControl>({
     defaultValues: rest,
-    resolver: joiResolver(updateAccessControlSchema),
+    // resolver: joiResolver(updateAccessControlSchema),
   });
 
   const onSubmit: SubmitHandler<AccessControl> = async (values) => {
@@ -39,13 +39,13 @@ const AccessControlDetails: React.FC<Props> = ({ name, children, ...rest }) => {
       reset(values);
       setSubmitSuccess('Access control data has been updated');
     } catch (e) {
-      if (axios.isAxiosError(e)) {
-        const error = handleAxiosError<ServerError>(e);
-        setError('corsDomains', {
-          type: 'server',
-          message: error.response?.data.error,
-        });
-      }
+      // if (axios.isAxiosError(e)) {
+      //   const error = handleAxiosError<ServerError>(e);
+      //   setError('corsDomains', {
+      //     type: 'server',
+      //     message: error.response?.data.error,
+      //   });
+      // }
     }
   };
 

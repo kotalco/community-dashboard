@@ -1,4 +1,5 @@
 import Joi from 'joi';
+
 import { CreateEthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 
 export const schema = Joi.object<CreateEthereumNode>({
@@ -21,4 +22,3 @@ export const schema = Joi.object<CreateEthereumNode>({
   }),
   nodePrivateKeySecretName: Joi.string().default(''),
 });
-export default schema;

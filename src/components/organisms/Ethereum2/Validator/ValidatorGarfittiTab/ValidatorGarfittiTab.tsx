@@ -38,10 +38,10 @@ const ValidatorGarfittiTab: React.FC<Props> = ({ name, graffiti }) => {
       reset(values);
       setSubmitSuccess('Validator has been updated');
     } catch (e) {
-      if (axios.isAxiosError(e)) {
-        const error = handleAxiosError<ServerError>(e);
-        setSubmitError(error.response?.data.error);
-      }
+      // if (axios.isAxiosError(e)) {
+      //   const error = handleAxiosError<ServerError>(e);
+      //   setSubmitError(error.response?.data.error);
+      // }
     }
   };
 

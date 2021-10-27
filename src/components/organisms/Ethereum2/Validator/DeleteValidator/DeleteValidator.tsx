@@ -46,10 +46,10 @@ const DeleteValidator: React.FC<Props> = ({ validatorName }) => {
       });
       void router.push('/deployments/ethereum2/validators');
     } catch (e) {
-      if (axios.isAxiosError(e)) {
-        const error = handleAxiosError<ServerError>(e);
-        setError(error.response?.data.error);
-      }
+      // if (axios.isAxiosError(e)) {
+      //   const error = handleAxiosError<ServerError>(e);
+      //   setError(error.response?.data.error);
+      // }
     }
   };
 

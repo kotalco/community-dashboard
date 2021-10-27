@@ -46,10 +46,10 @@ const DeleteBeaconNode: React.FC<Props> = ({ nodeName }) => {
       });
       void router.push('/deployments/ethereum2/beaconnodes');
     } catch (e) {
-      if (axios.isAxiosError(e)) {
-        const error = handleAxiosError<ServerError>(e);
-        setError(error.response?.data.error);
-      }
+      // if (axios.isAxiosError(e)) {
+      //   const error = handleAxiosError<ServerError>(e);
+      //   setError(error.response?.data.error);
+      // }
     }
   };
 

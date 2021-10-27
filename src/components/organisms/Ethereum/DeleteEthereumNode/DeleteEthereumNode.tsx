@@ -46,10 +46,10 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
       });
       void router.push('/deployments/ethereum/nodes');
     } catch (e) {
-      if (axios.isAxiosError(e)) {
-        const error = handleAxiosError<ServerError>(e);
-        setError(error.response?.data.error);
-      }
+      // if (axios.isAxiosError(e)) {
+      //   const error = handleAxiosError<ServerError>(e);
+      //   setError(error.response?.data.error);
+      // }
     }
   };
 

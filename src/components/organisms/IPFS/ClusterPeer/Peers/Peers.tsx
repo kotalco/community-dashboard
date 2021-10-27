@@ -49,12 +49,12 @@ const Peers: React.FC<Props> = ({
       reset(values);
       setSubmitSuccess('Cluster peer has been updated');
     } catch (e) {
-      if (axios.isAxiosError(e)) {
-        const error = handleAxiosError<ServerError>(e);
-        setSubmitError(
-          error.response?.data.error || 'Something wrong happened'
-        );
-      }
+      // if (axios.isAxiosError(e)) {
+      //   const error = handleAxiosError<ServerError>(e);
+      //   setSubmitError(
+      //     error.response?.data.error || 'Something wrong happened'
+      //   );
+      // }
     }
   };
 

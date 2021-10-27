@@ -34,6 +34,7 @@ function CreateNode() {
   const onSubmit: SubmitHandler<CreateEthereumNode> = async (values) => {
     setServerError('');
     const res = await createEthereumNode(values);
+    // If res is a string this means it is an error
     if (typeof res === 'string') {
       return setServerError(res);
     }

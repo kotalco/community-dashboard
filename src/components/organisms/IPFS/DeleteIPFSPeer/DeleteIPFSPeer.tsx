@@ -45,10 +45,10 @@ const DangerousZoneContent: React.FC<Props> = ({ peerName }) => {
         protocol: 'peer',
       });
     } catch (e) {
-      if (axios.isAxiosError(e)) {
-        const error = handleAxiosError<ServerError>(e);
-        setError(error.response?.data.error);
-      }
+      // if (axios.isAxiosError(e)) {
+      //   const error = handleAxiosError<ServerError>(e);
+      //   setError(error.response?.data.error);
+      // }
     }
   };
 
