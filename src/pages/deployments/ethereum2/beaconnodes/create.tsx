@@ -15,7 +15,7 @@ import { networkOptions } from '@data/ethereum2/networkOptions';
 import { createBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
 import schema from '@schemas/ethereum2/beaconNode/createBeaconNode';
 import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
-import { CreateEthereum2BeaconNode } from '@interfaces/ethereum2/Ethereum2BeaconNode';
+import { CreateBeaconNode } from '@interfaces/ethereum2/BeaconNode';
 import { BeaconNodeNetwork } from '@enums/Ethereum2/BeaconNodes/BeaconNodeNetwork';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
@@ -29,13 +29,13 @@ const CreateBeaconNode: React.FC = () => {
     handleSubmit,
     setError,
     formState: { errors, isSubmitted, isValid, isSubmitting },
-  } = useForm<CreateEthereum2BeaconNode>();
+  } = useForm<CreateBeaconNode>();
   const [network, client] = watch(['network', 'client']);
   /**
    * Submit create ethereum node form
    * @param BeaconNodeData the data required to create new node
    */
-  const onSubmit: SubmitHandler<CreateEthereum2BeaconNode> = async (values) => {
+  const onSubmit: SubmitHandler<CreateBeaconNode> = async (values) => {
     try {
       const beaconNode = await createBeaconNode(values);
 

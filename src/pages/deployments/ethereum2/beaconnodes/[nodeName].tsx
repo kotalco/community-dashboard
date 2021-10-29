@@ -17,17 +17,14 @@ import Resources from '@components/organisms/Resources/Resources';
 import { tabTitles } from '@data/ethereum2/beaconNode/tabTitles';
 import { clientOptions } from '@data/ethereum2/clientOptions';
 import { networkOptions } from '@data/ethereum2/networkOptions';
-import {
-  Ethereum2BeaconNode,
-  UpdateEthereum2BeaconNode,
-} from '@interfaces/ethereum2/Ethereum2BeaconNode';
+import { BeaconNode, UpdateBeaconNode } from '@interfaces/ethereum2/BeaconNode';
 import { fetcher } from '@utils/axios';
 import React from 'react';
 import Heading from '@components/templates/Heading/Heading';
 import { getLabel } from '@utils/helpers/getLabel';
 
 interface Props {
-  beaconnode?: Ethereum2BeaconNode;
+  beaconnode?: BeaconNode;
 }
 
 const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconnode }) => {
@@ -36,10 +33,7 @@ const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconnode }) => {
     fallbackData: { beaconnode },
   });
 
-  const updateResources = async (
-    name: string,
-    values: UpdateEthereum2BeaconNode
-  ) => {
+  const updateResources = async (name: string, values: UpdateBeaconNode) => {
     const beaconnode = await updateBeaconNode(name, values);
     void mutate({ beaconnode });
   };
@@ -107,7 +101,7 @@ const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconnode }) => {
 export const getStaticProps: GetStaticProps = async (context) => {
   const nodeName = context.params?.nodeName as string;
   try {
-    const { beaconnode } = await fetcher<{ beaconnode: Ethereum2BeaconNode }>(
+    const { beaconnode } = await fetcher<{ beaconnode: BeaconNode }>(
       `/ethereum2/beaconnodes/${nodeName}`
     );
     return { props: { beaconnode }, revalidate: 10 };

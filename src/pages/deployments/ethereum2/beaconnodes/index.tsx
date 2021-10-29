@@ -1,38 +1,68 @@
-import { useEffect } from 'react';
-import { InferGetStaticPropsType } from 'next';
+// import React, { useEffect } from 'react';
 import { GlobeAltIcon } from '@heroicons/react/solid';
 import { ChipIcon } from '@heroicons/react/outline';
 
 import Layout from '@components/templates/Layout/Layout';
 import List from '@components/organisms/List/List';
 import ListItem from '@components/molecules/ListItem/ListItem';
-import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
+// import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import ButtonGroup from '@components/molecules/ButtonGroup/ButtonGroup';
 import Heading from '@components/templates/Heading/Heading';
 import EThereumIcon from '@components/Icons/EthereumIcon/EthereumIcon';
 import EmptyState from '@components/molecules/EmptyState/EmptyState';
-import { useNotification } from '@components/contexts/NotificationContext';
-import { useBeaconnodes } from '@utils/requests/ethereum2/beaconNodes';
-import { Ethereum2BeaconNode } from '@interfaces/ethereum2/Ethereum2BeaconNode';
-import { resourcesTab, createButtons } from '@data/ethereum2/links';
-import { fetcher } from '@utils/axios';
+import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
+import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
+// import { useNotification } from '@components/contexts/NotificationContext';
+import { useBeaconNodes } from '@hooks/useBeaconNodes';
+import { createButtons } from '@data/ethereum2/links';
 import { getLabel } from '@utils/helpers/getLabel';
 import { networkOptions } from '@data/ethereum2/networkOptions';
 import { clientOptions } from '@data/ethereum2/clientOptions';
 
-function BeaconnodesPage({
-  beaconnodes,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
-  const { notificationData, removeNotification } = useNotification();
-  const { data } = useBeaconnodes({
-    fallbackData: { beaconnodes },
-    revalidateOnMount: true,
-  });
+function Beaconnodes() {
+  const {
+    baeconnodes,
+    isEmpty,
+    isInitialLoading,
+    size,
+    setSize,
+    isReachedEnd,
+    isLoading,
+    totalCount,
+  } = useBeaconNodes();
 
-  useEffect(() => {
-    return () => removeNotification();
-  }, [removeNotification]);
+  const tabs = [
+    {
+      name: 'Beacon Nodes',
+      href: '/deployments/ethereum2/beaconnodes',
+      totalCount,
+    },
+    {
+      name: 'Validators',
+      href: '/deployments/ethereum2/validators',
+    },
+  ];
+
+  if (isInitialLoading) {
+    return <LoadingIndicator />;
+  }
+
+  if (isEmpty) {
+    return (
+      <Layout>
+        <Heading title="Ethereum 2.0 Deployments" />
+        <EmptyState
+          title="There is no beacon nodes created"
+          description="Get started by creating a new beacon node."
+          linkUrl="/deployments/ethereum2/beaconnodes/create"
+          linkName="New Beacon Node"
+        >
+          <EThereumIcon className="mx-auto w-12 h-12 text-gray-400" />
+        </EmptyState>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
@@ -41,35 +71,30 @@ function BeaconnodesPage({
       </Heading>
 
       <div className="py-4">
-        <LinkedTabs tabs={resourcesTab} />
-        {data?.length ? (
-          <List>
-            {data.map(({ name, client, network }) => (
-              <ListItem
-                key={name}
-                link={`/deployments/ethereum2/beaconnodes/${name}`}
-                title={name}
-              >
-                <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                <p>{getLabel(network, networkOptions)}</p>
-                <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
-                <p>{getLabel(client, clientOptions)}</p>
-              </ListItem>
-            ))}
-          </List>
-        ) : (
-          <EmptyState
-            title="There is no beacon nodes created"
-            description="Get started by creating a new beacon node."
-            linkUrl="/deployments/ethereum2/beaconnodes/create"
-            linkName="New Beacon Node"
-          >
-            <EThereumIcon className="mx-auto w-12 h-12 text-gray-400" />
-          </EmptyState>
+        <LinkedTabs tabs={tabs} />
+        <List>
+          {baeconnodes.map(({ name, client, network }) => (
+            <ListItem
+              key={name}
+              link={`/deployments/ethereum2/beaconnodes/${name}`}
+              title={name}
+            >
+              <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
+              <p>{getLabel(network, networkOptions)}</p>
+              <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
+              <p>{getLabel(client, clientOptions)}</p>
+            </ListItem>
+          ))}
+        </List>
+        {!isReachedEnd && (
+          <LoadMoreButton
+            onChange={() => setSize(size + 1)}
+            isLoading={isLoading}
+          />
         )}
       </div>
 
-      <NotificationPanel
+      {/* <NotificationPanel
         show={!!notificationData}
         title={notificationData?.title}
         close={removeNotification}
@@ -81,16 +106,9 @@ function BeaconnodesPage({
           {!!notificationData &&
             `${notificationData.protocol} has been ${notificationData.action}`}
         </p>
-      </NotificationPanel>
+      </NotificationPanel> */}
     </Layout>
   );
 }
 
-export const getStaticProps = async () => {
-  const { beaconnodes } = await fetcher<{ beaconnodes: Ethereum2BeaconNode[] }>(
-    '/ethereum2/beaconnodes'
-  );
-  return { props: { beaconnodes }, revalidate: 10 };
-};
-
-export default BeaconnodesPage;
+export default Beaconnodes;

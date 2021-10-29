@@ -7,7 +7,7 @@ import {
   updateBeaconNode,
   useBeaconnode,
 } from '@utils/requests/ethereum2/beaconNodes';
-import { UpdateEth1Endpoints } from '@interfaces/ethereum2/Ethereum2BeaconNode';
+import { UpdateEth1Endpoints } from '@interfaces/ethereum2/BeaconNode';
 import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
 import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
 import schema from '@schemas/ethereum2/beaconNode/createBeaconNode';

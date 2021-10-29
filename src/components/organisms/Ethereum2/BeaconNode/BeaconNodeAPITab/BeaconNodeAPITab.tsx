@@ -9,7 +9,7 @@ import {
   useBeaconnode,
 } from '@utils/requests/ethereum2/beaconNodes';
 import { updateAPISchema } from '@schemas/ethereum2/beaconNode/updateBeaconNode';
-import { UpdateAPI } from '@interfaces/ethereum2/Ethereum2BeaconNode';
+import { UpdateAPI } from '@interfaces/ethereum2/BeaconNode';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Separator from '@components/atoms/Separator/Separator';
 import Toggle from '@components/molecules/Toggle/Toggle';
