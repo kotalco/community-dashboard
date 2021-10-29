@@ -4,6 +4,7 @@ import { ClusterConsensusAlgorithm } from '@enums/IPFS/ClusterPeers/ClusterConse
 import { Resources } from '@interfaces/Resources';
 
 export interface ClusterPeer {
+  createdAt: string;
   name: string;
   consensus: ClusterConsensusAlgorithm;
   clusterSecretName: string;
