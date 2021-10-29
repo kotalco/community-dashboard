@@ -1,7 +1,8 @@
 import { ValidatorsClients } from '@enums/Ethereum2/Validators/ValidatorsClients';
 import { NestedValue } from 'react-hook-form';
 
-export interface Ethereum2Validator {
+export interface Validator {
+  createdAt: string;
   name: string;
   network: string;
   client: ValidatorsClients;
@@ -16,7 +17,7 @@ export interface Ethereum2Validator {
   storage: string;
 }
 
-export interface CreateEthereum2Validator {
+export interface CreateValidator {
   name: string;
   network: string;
   client: ValidatorsClients;
@@ -25,7 +26,7 @@ export interface CreateEthereum2Validator {
   beaconEndpoints: NestedValue<string[]>;
 }
 
-export interface UpdateEthereum2Validator {
+export interface UpdateValidator {
   graffiti?: string;
   keystores?: { secretName: string }[];
   walletPasswordSecretName?: string;

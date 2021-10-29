@@ -19,6 +19,7 @@ import { createButtons } from '@data/ethereum2/links';
 import { getLabel } from '@utils/helpers/getLabel';
 import { networkOptions } from '@data/ethereum2/networkOptions';
 import { clientOptions } from '@data/ethereum2/clientOptions';
+import { useValidators } from '@hooks/useValidators';
 
 function Beaconnodes() {
   const {
@@ -29,18 +30,20 @@ function Beaconnodes() {
     setSize,
     isReachedEnd,
     isLoading,
-    totalCount,
+    totalCount: beaconnodesCount,
   } = useBeaconNodes();
+  const { totalCount: validatorsCount } = useValidators();
 
   const tabs = [
     {
       name: 'Beacon Nodes',
       href: '/deployments/ethereum2/beaconnodes',
-      totalCount,
+      count: beaconnodesCount,
     },
     {
       name: 'Validators',
       href: '/deployments/ethereum2/validators',
+      count: validatorsCount,
     },
   ];
 

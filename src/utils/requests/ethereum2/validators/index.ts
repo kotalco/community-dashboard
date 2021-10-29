@@ -1,23 +1,11 @@
 import axios from '../../../axios';
 
 import {
-  CreateEthereum2Validator,
-  Ethereum2Validator,
-  UpdateEthereum2Validator,
-} from '@interfaces/ethereum2/Ethereum2Validator';
+  CreateValidator,
+  Validator,
+  UpdateValidator,
+} from '@interfaces/ethereum2/Validator';
 import { UnpackNestedValue } from 'react-hook-form';
-
-/**
- * Send a get request to find all ethereum 2.0 validators
- * @returns All Ethereum 2.0 validators
- */
-export const getAllValidators = async (): Promise<Ethereum2Validator[]> => {
-  const { data } = await axios.get<{ validators: Ethereum2Validator[] }>(
-    `/ethereum2/validators`
-  );
-
-  return data.validators;
-};
 
 /**
  * Send a post request to create a new validator using ethereum 2.0 protocol
@@ -25,8 +13,8 @@ export const getAllValidators = async (): Promise<Ethereum2Validator[]> => {
  * @returns The newly created validator
  */
 export const createValidator = async (
-  values: UnpackNestedValue<CreateEthereum2Validator>
-): Promise<Ethereum2Validator> => {
+  values: UnpackNestedValue<CreateValidator>
+): Promise<Validator> => {
   const { keystores, ...rest } = values;
   const keystoresObject = keystores.map((key) => ({ secretName: key }));
 
@@ -35,7 +23,7 @@ export const createValidator = async (
     ...rest,
   };
 
-  const { data } = await axios.post<{ validator: Ethereum2Validator }>(
+  const { data } = await axios.post<{ validator: Validator }>(
     '/ethereum2/validators',
     body
   );
@@ -50,8 +38,8 @@ export const createValidator = async (
  */
 export const getValidator = async (
   validatorName: string
-): Promise<Ethereum2Validator> => {
-  const { data } = await axios.get<{ validator: Ethereum2Validator }>(
+): Promise<Validator> => {
+  const { data } = await axios.get<{ validator: Validator }>(
     `/ethereum2/validators/${validatorName}`
   );
 
@@ -74,9 +62,9 @@ export const deleteValidator = async (validatorName: string): Promise<void> => {
  */
 export const updateValidator = async (
   validatorName: string,
-  validatorData: UpdateEthereum2Validator
-): Promise<Ethereum2Validator> => {
-  const { data } = await axios.put<{ validator: Ethereum2Validator }>(
+  validatorData: UpdateValidator
+): Promise<Validator> => {
+  const { data } = await axios.put<{ validator: Validator }>(
     `/ethereum2/validators/${validatorName}`,
     validatorData
   );

@@ -17,17 +17,14 @@ import ValidatorBeaconNodeTab from '@components/organisms/Ethereum2/Validator/Va
 import Resources from '@components/organisms/Resources/Resources';
 import DeleteValidator from '@components/organisms/Ethereum2/Validator/DeleteValidator/DeleteValidator';
 import { tabTitles } from '@data/ethereum2/validator/tabTitles';
-import {
-  Ethereum2Validator,
-  UpdateEthereum2Validator,
-} from '@interfaces/ethereum2/Ethereum2Validator';
+import { Validator, UpdateValidator } from '@interfaces/ethereum2/Validator';
 import { getLabel } from '@utils/helpers/getLabel';
 import { networkOptions } from '@data/ethereum2/networkOptions';
 import { clientOptions } from '@data/ethereum2/clientOptions';
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
 
 interface Props {
-  validator: Ethereum2Validator;
+  validator: Validator;
 }
 
 const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
@@ -43,10 +40,7 @@ const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
     }
   );
 
-  const updateResources = async (
-    name: string,
-    values: UpdateEthereum2Validator
-  ) => {
+  const updateResources = async (name: string, values: UpdateValidator) => {
     const validator = await updateValidator(name, values);
     void mutate(validator);
   };

@@ -10,7 +10,7 @@ import { mutate } from 'swr';
 import axios from 'axios';
 
 import Button from '@components/atoms/Button/Button';
-import { UpdateBeaconEndpoints } from '@interfaces/ethereum2/Ethereum2Validator';
+import { UpdateBeaconEndpoints } from '@interfaces/ethereum2/Validator';
 import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
 import { updateValidator } from '@utils/requests/ethereum2/validators';
 import { ValidatorsClients } from '@enums/Ethereum2/Validators/ValidatorsClients';

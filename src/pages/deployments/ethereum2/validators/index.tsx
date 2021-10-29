@@ -1,76 +1,69 @@
-import { useEffect } from 'react';
-import { GetStaticProps } from 'next';
+// import { useEffect } from 'react';
 import { GlobeAltIcon } from '@heroicons/react/solid';
 import { ChipIcon } from '@heroicons/react/outline';
-import useSWR from 'swr';
 
 import EthereumIcon from '@components/Icons/EthereumIcon/EthereumIcon';
 import Layout from '@components/templates/Layout/Layout';
 import List from '@components/organisms/List/List';
 import ListItem from '@components/molecules/ListItem/ListItem';
-import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
+// import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import ButtonGroup from '@components/molecules/ButtonGroup/ButtonGroup';
 import EmptyState from '@components/molecules/EmptyState/EmptyState';
-import { useNotification } from '@components/contexts/NotificationContext';
-import { getAllValidators } from '@utils/requests/ethereum2/validators';
-import { Ethereum2Validator } from '@interfaces/ethereum2/Ethereum2Validator';
-import { resourcesTab, createButtons } from '@data/ethereum2/links';
-import { AxiosError } from 'axios';
+// import { useNotification } from '@components/contexts/NotificationContext';
+import { createButtons } from '@data/ethereum2/links';
 import { getLabel } from '@utils/helpers/getLabel';
 import { networkOptions } from '@data/ethereum2/networkOptions';
 import { clientOptions } from '@data/ethereum2/clientOptions';
+import { useValidators } from '@hooks/useValidators';
+import { useBeaconNodes } from '@hooks/useBeaconNodes';
+import React from 'react';
+import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
+import Heading from '@components/templates/Heading/Heading';
+import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
 
-interface Props {
-  validators: Ethereum2Validator[];
-}
+function Validators() {
+  // const { notificationData, removeNotification } = useNotification();
 
-const Ethereum2Validators: React.FC<Props> = ({ validators }) => {
-  const { notificationData, removeNotification } = useNotification();
+  const {
+    validators,
+    isEmpty,
+    isInitialLoading,
+    size,
+    setSize,
+    isReachedEnd,
+    isLoading,
+    totalCount: validatorsCount,
+  } = useValidators();
+  const { totalCount: beaconnodesCount } = useBeaconNodes();
 
-  const { data, error } = useSWR<Ethereum2Validator[], AxiosError>(
-    '/ethereum2/validators',
-    getAllValidators,
+  const tabs = [
     {
-      fallbackData: validators,
-      revalidateOnMount: true,
-    }
-  );
+      name: 'Beacon Nodes',
+      href: '/deployments/ethereum2/beaconnodes',
+      count: beaconnodesCount,
+    },
+    {
+      name: 'Validators',
+      href: '/deployments/ethereum2/validators',
+      count: validatorsCount,
+    },
+  ];
 
-  useEffect(() => {
-    return () => removeNotification();
-  }, [removeNotification]);
+  // useEffect(() => {
+  //   return () => removeNotification();
+  // }, [removeNotification]);
 
-  if (error) return <p>failed to load validators</p>;
+  if (isInitialLoading) {
+    return <LoadingIndicator />;
+  }
 
-  return (
-    <Layout>
-      <div className="flex">
-        <h1 className="text-2xl font-semibold text-gray-900 flex-grow">
-          Ethereum 2.0 Deployments
-        </h1>
-
-        <ButtonGroup label="Create New" buttons={createButtons} />
-      </div>
-
-      <div className="py-4">
-        <LinkedTabs tabs={resourcesTab} />
-        {data && data.length > 0 ? (
-          <List>
-            {data.map(({ name, client, network }) => (
-              <ListItem
-                key={name}
-                link={`/deployments/ethereum2/validators/${name}`}
-                title={name}
-              >
-                <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                <p>{getLabel(network, networkOptions)}</p>
-                <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
-                <p>{getLabel(client, clientOptions)}</p>
-              </ListItem>
-            ))}
-          </List>
-        ) : (
+  if (isEmpty) {
+    return (
+      <Layout>
+        <Heading title="Ethereum 2.0 Deployments" />
+        <div className="py-4">
+          <LinkedTabs tabs={tabs} />
           <EmptyState
             title="There is no validators created"
             description="Get started by creating a new validator."
@@ -79,10 +72,42 @@ const Ethereum2Validators: React.FC<Props> = ({ validators }) => {
           >
             <EthereumIcon className="mx-auto w-12 h-12 text-gray-400" />
           </EmptyState>
+        </div>
+      </Layout>
+    );
+  }
+
+  return (
+    <Layout>
+      <Heading title="Ethereum 2.0 Deployments">
+        <ButtonGroup label="Create New" buttons={createButtons} />
+      </Heading>
+
+      <div className="py-4">
+        <LinkedTabs tabs={tabs} />
+        <List>
+          {validators.map(({ name, client, network }) => (
+            <ListItem
+              key={name}
+              link={`/deployments/ethereum2/validators/${name}`}
+              title={name}
+            >
+              <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
+              <p>{getLabel(network, networkOptions)}</p>
+              <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
+              <p>{getLabel(client, clientOptions)}</p>
+            </ListItem>
+          ))}
+        </List>
+        {!isReachedEnd && (
+          <LoadMoreButton
+            onChange={() => setSize(size + 1)}
+            isLoading={isLoading}
+          />
         )}
       </div>
 
-      <NotificationPanel
+      {/* <NotificationPanel
         show={!!notificationData}
         title={notificationData?.title}
         close={removeNotification}
@@ -94,14 +119,9 @@ const Ethereum2Validators: React.FC<Props> = ({ validators }) => {
           {!!notificationData &&
             `${notificationData?.protocol} has been ${notificationData?.action}`}
         </p>
-      </NotificationPanel>
+      </NotificationPanel> */}
     </Layout>
   );
-};
+}
 
-export const getStaticProps: GetStaticProps = async () => {
-  const validators = await getAllValidators();
-  return { props: { validators }, revalidate: 10 };
-};
-
-export default Ethereum2Validators;
+export default Validators;

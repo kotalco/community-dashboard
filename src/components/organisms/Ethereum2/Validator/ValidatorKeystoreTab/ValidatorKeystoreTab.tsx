@@ -6,7 +6,7 @@ import axios from 'axios';
 
 import Button from '@components/atoms/Button/Button';
 import { updateValidator } from '@utils/requests/ethereum2/validators';
-import { UpdateKeystores } from '@interfaces/ethereum2/Ethereum2Validator';
+import { UpdateKeystores } from '@interfaces/ethereum2/Validator';
 import Multiselect from '@components/molecules/Multiselect/Multiselect';
 import Select from '@components/molecules/Select/Select';
 import { ValidatorsClients } from '@enums/Ethereum2/Validators/ValidatorsClients';

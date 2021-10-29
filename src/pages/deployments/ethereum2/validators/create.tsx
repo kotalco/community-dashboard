@@ -11,7 +11,7 @@ import { useNotification } from '@components/contexts/NotificationContext';
 import { clientOptions } from '@data/ethereum2/clientOptions';
 import { networkOptions } from '@data/ethereum2/networkOptions';
 import { schema } from '@schemas/ethereum2/validator/createValidatorSchema';
-import { CreateEthereum2Validator } from '@interfaces/ethereum2/Ethereum2Validator';
+import { CreateValidator } from '@interfaces/ethereum2/Validator';
 import { createValidator } from '@utils/requests/ethereum2/validators';
 import { ValidatorsClients } from '@enums/Ethereum2/Validators/ValidatorsClients';
 import { useSecretsByType } from '@utils/requests/secrets';
@@ -36,7 +36,7 @@ const CreateValidator: React.FC = () => {
     handleSubmit,
     setError,
     formState: { errors, isSubmitted, isValid, isSubmitting },
-  } = useForm<CreateEthereum2Validator>();
+  } = useForm<CreateValidator>();
 
   const client = watch('client');
 
@@ -44,7 +44,7 @@ const CreateValidator: React.FC = () => {
    * Submit create validator form
    * @param ValidatorData the data required to create new node
    */
-  const onSubmit: SubmitHandler<CreateEthereum2Validator> = async (values) => {
+  const onSubmit: SubmitHandler<CreateValidator> = async (values) => {
     try {
       const validator = await createValidator(values);
 

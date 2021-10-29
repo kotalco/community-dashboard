@@ -1,5 +1,4 @@
 import axios, { fetcher } from '../../../axios';
-import { AxiosError } from 'axios';
 import useSWR, { SWRConfiguration } from 'swr';
 
 import {

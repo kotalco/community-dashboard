@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import Button from '@components/atoms/Button/Button';
 import { updateValidator } from '@utils/requests/ethereum2/validators';
-import { UpdateGrafitti } from '@interfaces/ethereum2/Ethereum2Validator';
+import { UpdateGrafitti } from '@interfaces/ethereum2/Validator';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';

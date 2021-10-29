@@ -54,14 +54,17 @@ function EthereumNodes() {
     return (
       <Layout>
         <Heading title="Ethereum Deployments" />
-        <EmptyState
-          title="There is no nodes created"
-          description="Get started by creating a new node."
-          linkUrl="/deployments/ethereum/nodes/create"
-          linkName="New Node"
-        >
-          <EthereumIcon className="mx-auto w-12 h-12 text-gray-400" />
-        </EmptyState>
+        <div className="py-6">
+          <LinkedTabs tabs={tabs} />
+          <EmptyState
+            title="There is no nodes created"
+            description="Get started by creating a new node."
+            linkUrl="/deployments/ethereum/nodes/create"
+            linkName="New Node"
+          >
+            <EthereumIcon className="mx-auto w-12 h-12 text-gray-400" />
+          </EmptyState>
+        </div>
       </Layout>
     );
   }

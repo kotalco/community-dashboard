@@ -7,7 +7,6 @@ interface Props {
 
 const Tabs: React.FC<Props> = ({ tabs }) => {
   const { pathname } = useRouter();
-
   return (
     <nav className="flex" aria-label="Tabs">
       {tabs.map(({ name, href, count }) => (
