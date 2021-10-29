@@ -12,7 +12,7 @@ import Select from '@components/molecules/Select/Select';
 import Heading from '@components/templates/Heading/Heading';
 import { createIPFSClusterPeer } from '@utils/requests/ipfs/clusterPeers';
 import schema from '@schemas/ipfs/clusterPeers';
-import { CreateIPFSClusterPeer } from '@interfaces/ipfs/IPFSClusterPeer';
+import { CreateClusterPeer } from '@interfaces/ipfs/ClusterPeer';
 import { useNotification } from '@components/contexts/NotificationContext';
 import { consensusOptions } from '@data/ipfs/clusterPeers/consensusOptions';
 import { useSecretsByType } from '@utils/requests/secrets';
@@ -43,11 +43,11 @@ const CreateClusterPeerPage: React.FC = () => {
     control,
     watch,
     formState: { errors, isSubmitted, isValid, isSubmitting },
-  } = useForm<CreateIPFSClusterPeer>();
+  } = useForm<CreateClusterPeer>();
 
   const consensusValue = watch('consensus');
 
-  const onSubmit: SubmitHandler<CreateIPFSClusterPeer> = async (values) => {
+  const onSubmit: SubmitHandler<CreateClusterPeer> = async (values) => {
     try {
       const peer = await createIPFSClusterPeer(values);
       createNotification({

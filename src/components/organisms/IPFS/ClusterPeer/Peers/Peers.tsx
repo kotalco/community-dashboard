@@ -7,7 +7,7 @@ import { CubeIcon } from '@heroicons/react/outline';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
 import Button from '@components/atoms/Button/Button';
-import { UpdatePeers } from '@interfaces/ipfs/IPFSClusterPeer';
+import { UpdatePeers } from '@interfaces/ipfs/ClusterPeer';
 import {
   updateClusterPeer,
   useClusterPeer,

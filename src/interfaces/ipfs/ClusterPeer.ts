@@ -3,7 +3,7 @@ import { NestedValue } from 'react-hook-form';
 import { ClusterConsensusAlgorithm } from '@enums/IPFS/ClusterPeers/ClusterConsensusAlgorithm';
 import { Resources } from '@interfaces/Resources';
 
-export interface IPFSClusterPeer {
+export interface ClusterPeer {
   name: string;
   consensus: ClusterConsensusAlgorithm;
   clusterSecretName: string;
@@ -19,7 +19,7 @@ export interface IPFSClusterPeer {
   storage: string;
 }
 
-export interface CreateIPFSClusterPeer {
+export interface CreateClusterPeer {
   name: string;
   peerEndpoint: string;
   consensus: ClusterConsensusAlgorithm;
@@ -35,6 +35,6 @@ export interface UpdatePeers {
   bootstrapPeers: NestedValue<string[]>;
 }
 
-export interface UpdateIPFSClusterPeer
+export interface UpdateClusterPeer
   extends Partial<UpdatePeers>,
     Partial<Resources> {}

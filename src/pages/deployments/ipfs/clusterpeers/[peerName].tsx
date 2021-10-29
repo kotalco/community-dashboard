@@ -3,10 +3,7 @@ import { useRouter } from 'next/router';
 import { Tab } from '@headlessui/react';
 
 import { fetcher } from '@utils/axios';
-import {
-  IPFSClusterPeer,
-  UpdateIPFSClusterPeer,
-} from '@interfaces/ipfs/IPFSClusterPeer';
+import { ClusterPeer, UpdateClusterPeer } from '@interfaces/ipfs/ClusterPeer';
 import {
   useClusterPeer,
   updateClusterPeer,
@@ -25,7 +22,7 @@ import { getLabel } from '@utils/helpers/getLabel';
 import { consensusOptions } from '@data/ipfs/clusterPeers/consensusOptions';
 
 interface Props {
-  initialClusterpeer?: IPFSClusterPeer;
+  initialClusterpeer?: ClusterPeer;
 }
 
 const ClusterPeerDetailsPage: React.FC<Props> = ({ initialClusterpeer }) => {
@@ -37,10 +34,7 @@ const ClusterPeerDetailsPage: React.FC<Props> = ({ initialClusterpeer }) => {
     }
   );
 
-  const updateResources = async (
-    name: string,
-    values: UpdateIPFSClusterPeer
-  ) => {
+  const updateResources = async (name: string, values: UpdateClusterPeer) => {
     const clusterPeer = await updateClusterPeer(name, values);
     void mutate({ clusterpeer: clusterPeer });
   };
@@ -102,7 +96,7 @@ const ClusterPeerDetailsPage: React.FC<Props> = ({ initialClusterpeer }) => {
 export const getStaticProps: GetStaticProps = async (context) => {
   const peerName = context.params?.peerName as string;
   try {
-    const { clusterpeer } = await fetcher<{ clusterpeer: IPFSClusterPeer }>(
+    const { clusterpeer } = await fetcher<{ clusterpeer: ClusterPeer }>(
       `/ipfs/clusterpeers/${peerName}`
     );
 

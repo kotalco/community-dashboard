@@ -3,10 +3,10 @@ import { AxiosError } from 'axios';
 
 import axios, { fetcher } from '@utils/axios';
 import {
-  CreateIPFSClusterPeer,
-  IPFSClusterPeer,
-  UpdateIPFSClusterPeer,
-} from '@interfaces/ipfs/IPFSClusterPeer';
+  CreateClusterPeer,
+  ClusterPeer,
+  UpdateClusterPeer,
+} from '@interfaces/ipfs/ClusterPeer';
 import { UnpackNestedValue } from 'react-hook-form';
 
 /**
@@ -15,7 +15,7 @@ import { UnpackNestedValue } from 'react-hook-form';
  * @returns object with all cluster peers or undefined if error then isError is true
  */
 export const useClusterPeers = (config?: SWRConfiguration) => {
-  const swr = useSWR<{ clusterpeers: IPFSClusterPeer[] }, AxiosError>(
+  const swr = useSWR<{ clusterpeers: ClusterPeer[] }, AxiosError>(
     '/ipfs/clusterpeers',
     fetcher,
     config
@@ -32,7 +32,7 @@ export const useClusterPeers = (config?: SWRConfiguration) => {
  * @returns Object with cluster peer details and swr return
  */
 export const useClusterPeer = (name?: string, config?: SWRConfiguration) => {
-  const swr = useSWR<{ clusterpeer: IPFSClusterPeer }, AxiosError>(
+  const swr = useSWR<{ clusterpeer: ClusterPeer }, AxiosError>(
     !name ? null : `/ipfs/clusterpeers/${name}`,
     fetcher,
     config
@@ -47,9 +47,9 @@ export const useClusterPeer = (name?: string, config?: SWRConfiguration) => {
  * @returns the IPFS Cluster Peer created by the server
  */
 export const createIPFSClusterPeer = async (
-  body: UnpackNestedValue<CreateIPFSClusterPeer>
-): Promise<IPFSClusterPeer> => {
-  const { data } = await axios.post<{ clusterpeer: IPFSClusterPeer }>(
+  body: UnpackNestedValue<CreateClusterPeer>
+): Promise<ClusterPeer> => {
+  const { data } = await axios.post<{ clusterpeer: ClusterPeer }>(
     `/ipfs/clusterpeers`,
     body
   );
@@ -58,9 +58,9 @@ export const createIPFSClusterPeer = async (
 
 export const updateClusterPeer = async (
   name: string,
-  body: UnpackNestedValue<UpdateIPFSClusterPeer>
-): Promise<IPFSClusterPeer> => {
-  const { data } = await axios.put<{ clusterpeer: IPFSClusterPeer }>(
+  body: UnpackNestedValue<UpdateClusterPeer>
+): Promise<ClusterPeer> => {
+  const { data } = await axios.put<{ clusterpeer: ClusterPeer }>(
     `/ipfs/clusterpeers/${name}`,
     body
   );
