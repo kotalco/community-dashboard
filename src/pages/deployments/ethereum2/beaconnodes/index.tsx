@@ -55,14 +55,17 @@ function Beaconnodes() {
     return (
       <Layout>
         <Heading title="Ethereum 2.0 Deployments" />
-        <EmptyState
-          title="There is no beacon nodes created"
-          description="Get started by creating a new beacon node."
-          linkUrl="/deployments/ethereum2/beaconnodes/create"
-          linkName="New Beacon Node"
-        >
-          <EThereumIcon className="mx-auto w-12 h-12 text-gray-400" />
-        </EmptyState>
+        <div className="py-4">
+          <LinkedTabs tabs={tabs} />
+          <EmptyState
+            title="There is no beacon nodes created"
+            description="Get started by creating a new beacon node."
+            linkUrl="/deployments/ethereum2/beaconnodes/create"
+            linkName="New Beacon Node"
+          >
+            <EThereumIcon className="mx-auto w-12 h-12 text-gray-400" />
+          </EmptyState>
+        </div>
       </Layout>
     );
   }

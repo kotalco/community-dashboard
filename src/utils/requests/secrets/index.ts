@@ -9,23 +9,6 @@ import { AxiosError } from 'axios';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { arrangeSecrets } from '@utils/helpers/secrets';
 
-/**
- * hook to send a request to get all secrets
- * @param type secret types [password, keystore, privatekey, generic]
- * @param initialData the secrets already exist
- * @returns object with the requested secrets or error if exist
- */
-export const useSecrets = (config?: SWRConfiguration) => {
-  const swr = useSWR<{ secrets: KubernetesSecret[] }, AxiosError>(
-    '/core/secrets',
-    fetcher,
-    config
-  );
-  const data = swr.data?.secrets;
-
-  return { ...swr, data };
-};
-
 export const useSecretsByType = (
   type: KubernetesSecretTypes,
   config?: SWRConfiguration
@@ -49,7 +32,7 @@ export const useSecretsByType = (
 export const createSecret = async (
   secret: CreateKubernetesSecret
 ): Promise<KubernetesSecret> => {
-  const { data } = await axios.post<{ secret: CreateKubernetesSecret }>(
+  const { data } = await axios.post<{ secret: KubernetesSecret }>(
     '/core/secrets',
     secret
   );

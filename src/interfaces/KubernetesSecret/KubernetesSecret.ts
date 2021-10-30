@@ -1,6 +1,7 @@
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 
 export interface KubernetesSecret {
+  createdAt: string;
   name: string;
   type: KubernetesSecretTypes;
 }
