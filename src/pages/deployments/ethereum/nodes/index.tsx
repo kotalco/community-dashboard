@@ -1,7 +1,5 @@
-// import { useEffect } from 'react';
 import { GlobeAltIcon } from '@heroicons/react/solid';
 import { ChipIcon } from '@heroicons/react/outline';
-// import useSWR from 'swr';
 
 import Heading from '@components/templates/Heading/Heading';
 import Button from '@components/atoms/Button/Button';
@@ -11,9 +9,9 @@ import ListItem from '@components/molecules/ListItem/ListItem';
 import EthereumIcon from '@components/Icons/EthereumIcon/EthereumIcon';
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import EmptyState from '@components/molecules/EmptyState/EmptyState';
-// import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
+import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
-// import { useNotification } from '@components/contexts/NotificationContext';
+import { useNotification } from '@hooks/useNotification';
 import { clientOptions } from '@data/ethereum/node/clientOptions';
 import { networkOptions } from '@data/ethereum/node/networkOptions';
 import { getLabel } from '@utils/helpers/getLabel';
@@ -21,6 +19,7 @@ import { useEthereumNodes } from '@hooks/useEthereumNodes';
 import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
 
 function EthereumNodes() {
+  const { name, onClose } = useNotification('node');
   const {
     nodes,
     isEmpty,
@@ -39,12 +38,6 @@ function EthereumNodes() {
       count: totalCount,
     },
   ];
-
-  // const { notificationData, removeNotification } = useNotification();
-
-  // useEffect(() => {
-  //   return () => removeNotification();
-  // }, [removeNotification]);
 
   if (isInitialLoading) {
     return <LoadingIndicator />;
@@ -104,19 +97,19 @@ function EthereumNodes() {
         )}
       </div>
 
-      {/* <NotificationPanel
-        show={!!notificationData}
-        title={notificationData?.title}
-        close={removeNotification}
+      <NotificationPanel
+        show={!!name}
+        title="Node has been created"
+        close={onClose}
       >
         <p className="mt-1 text-sm text-gray-500">
           <span className="text-indigo-900 bg-indigo-100 p-1 m-1 ml-0 rounded-md">
-            {notificationData?.name}
-          </span>{' '}
-          {!!notificationData &&
-            `${notificationData.protocol} has been ${notificationData.action}`}
+            {name}
+          </span>
+          Node has been created successfully, and will be up and running in few
+          seconds.
         </p>
-      </NotificationPanel> */}
+      </NotificationPanel>
     </Layout>
   );
 }

@@ -9,7 +9,6 @@ import TextInput from '@components/molecules/TextInput/TextInput';
 import Select from '@components/molecules/Select/Select';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 import Heading from '@components/templates/Heading/Heading';
-// import { useNotification } from '@components/contexts/NotificationContext';
 import { clientOptions } from '@data/ethereum/node/clientOptions';
 import { networkOptions } from '@data/ethereum/node/networkOptions';
 import { createEthereumNode } from '@utils/requests/ethereum';
@@ -38,15 +37,10 @@ function CreateNode() {
     if (typeof res === 'string') {
       return setServerError(res);
     }
+    if (res && typeof res !== 'string') {
+      localStorage.setItem('node', res.name);
+    }
     router.push('/deployments/ethereum/nodes');
-
-    // createNotification({
-    //   title: 'Node has been created',
-    //   protocol: `node`,
-    //   name: node.name,
-    //   action:
-    //     'created successfully, and will be up and running in few seconds.',
-    // });
   };
 
   return (
