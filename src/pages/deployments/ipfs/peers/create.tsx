@@ -11,20 +11,13 @@ import { schema } from '@schemas/ipfs/peers/createIPFSPeer';
 import { CreatePeer } from '@interfaces/ipfs/Peer';
 import { IPFSConfigurationProfile } from '@enums/IPFS/Peers/IPFSConfigurationProfile';
 import { initProfilesOptions } from '@data/ipfs/peers/initProfilesOptions';
-import { useNotification } from '@components/contexts/NotificationContext';
-import axios from 'axios';
-import { handleAxiosError } from '@utils/axios';
-import { ServerError } from '@interfaces/ServerError';
 
 const CreateIPFSPeerPage: React.FC = () => {
-  const { createNotification } = useNotification();
-
   const router = useRouter();
   const {
     register,
     control,
     handleSubmit,
-    setError,
     formState: { errors, isSubmitted, isValid, isSubmitting },
   } = useForm<CreatePeer>({
     resolver: joiResolver(schema),
@@ -33,20 +26,10 @@ const CreateIPFSPeerPage: React.FC = () => {
     },
   });
 
-  /**
-   * Submit create IPFS Peer from
-   * @param values the data required to create new peer
-   */
   const onSubmit: SubmitHandler<CreatePeer> = async (values) => {
     try {
       const peer = await createIPFSPeer(values);
-      createNotification({
-        title: 'IPFS Peer has been created',
-        protocol: 'peer',
-        name: peer.name,
-        action:
-          'created successfully, and will be up and running in few seconds.',
-      });
+      localStorage.setItem('peer', peer.name);
       void router.push('/deployments/ipfs/peers');
     } catch (e) {
       // if (axios.isAxiosError(e)) {
