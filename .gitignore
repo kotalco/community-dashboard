@@ -38,3 +38,4 @@ yarn-error.log*
 
 # other
 todo.txt
+tsconfig.tsbuildinfo
