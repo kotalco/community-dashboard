@@ -1,4 +1,3 @@
-// import { useEffect } from 'react';
 import { GlobeAltIcon } from '@heroicons/react/solid';
 import { ChipIcon } from '@heroicons/react/outline';
 
@@ -9,21 +8,20 @@ import ListItem from '@components/molecules/ListItem/ListItem';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import Heading from '@components/templates/Heading/Heading';
 import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
-// import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
+import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import ButtonGroup from '@components/molecules/ButtonGroup/ButtonGroup';
 import EmptyState from '@components/molecules/EmptyState/EmptyState';
-// import { useNotification } from '@components/contexts/NotificationContext';
 import { createButtons } from '@data/ethereum2/links';
 import { getLabel } from '@utils/helpers/getLabel';
 import { networkOptions } from '@data/ethereum2/networkOptions';
 import { clientOptions } from '@data/ethereum2/clientOptions';
 import { useValidators } from '@hooks/useValidators';
 import { useBeaconNodes } from '@hooks/useBeaconNodes';
+import { useNotification } from '@hooks/useNotification';
 
 function Validators() {
-  // const { notificationData, removeNotification } = useNotification();
-
+  const { name, onClose } = useNotification('validator');
   const {
     validators,
     isEmpty,
@@ -48,10 +46,6 @@ function Validators() {
       count: validatorsCount,
     },
   ];
-
-  // useEffect(() => {
-  //   return () => removeNotification();
-  // }, [removeNotification]);
 
   if (isInitialLoading) {
     return <LoadingIndicator />;
@@ -106,19 +100,19 @@ function Validators() {
         )}
       </div>
 
-      {/* <NotificationPanel
-        show={!!notificationData}
-        title={notificationData?.title}
-        close={removeNotification}
+      <NotificationPanel
+        show={!!name}
+        title="Validator has been created"
+        close={onClose}
       >
         <p className="mt-1 text-sm text-gray-500">
           <span className="text-indigo-900 bg-indigo-100 p-1 m-1 ml-0 rounded-md">
-            {notificationData?.name}
-          </span>{' '}
-          {!!notificationData &&
-            `${notificationData?.protocol} has been ${notificationData?.action}`}
+            {name}
+          </span>
+          Validator has been created successfully, and will be up and running in
+          few seconds.
         </p>
-      </NotificationPanel> */}
+      </NotificationPanel>
     </Layout>
   );
 }

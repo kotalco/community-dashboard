@@ -7,7 +7,7 @@ import TextInput from '@components/molecules/TextInput/TextInput';
 import Select from '@components/molecules/Select/Select';
 import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
 import Multiselect from '@components/molecules/Multiselect/Multiselect';
-import { useNotification } from '@components/contexts/NotificationContext';
+import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 import { clientOptions } from '@data/ethereum2/clientOptions';
 import { networkOptions } from '@data/ethereum2/networkOptions';
 import { schema } from '@schemas/ethereum2/validator/createValidatorSchema';
@@ -15,10 +15,6 @@ import { CreateValidator } from '@interfaces/ethereum2/Validator';
 import { createValidator } from '@utils/requests/ethereum2/validators';
 import { ValidatorsClients } from '@enums/Ethereum2/Validators/ValidatorsClients';
 import { useSecretsByType } from '@utils/requests/secrets';
-import axios from 'axios';
-import { handleAxiosError } from '@utils/axios';
-import { ServerError } from '@interfaces/ServerError';
-import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 
 const CreateValidator: React.FC = () => {
@@ -29,33 +25,21 @@ const CreateValidator: React.FC = () => {
   const { data: walletPasswordOptions } = useSecretsByType(
     KubernetesSecretTypes.password
   );
-  const { createNotification } = useNotification();
+
   const {
     watch,
     control,
     handleSubmit,
-    setError,
     formState: { errors, isSubmitted, isValid, isSubmitting },
   } = useForm<CreateValidator>();
 
   const client = watch('client');
 
-  /**
-   * Submit create validator form
-   * @param ValidatorData the data required to create new node
-   */
   const onSubmit: SubmitHandler<CreateValidator> = async (values) => {
     try {
       const validator = await createValidator(values);
-
-      createNotification({
-        title: 'Validator has been created',
-        protocol: `validator`,
-        name: validator.name,
-        action:
-          'created successfully, and will be up and running in few seconds.',
-      });
-      void router.push('/deployments/ethereum2/validators');
+      localStorage.setItem('validator', validator.name);
+      router.push('/deployments/ethereum2/validators');
     } catch (e) {
       // if (axios.isAxiosError(e)) {
       //   const error = handleAxiosError<ServerError>(e);
