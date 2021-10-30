@@ -1,11 +1,10 @@
-// import React, { useEffect } from 'react';
 import { GlobeAltIcon } from '@heroicons/react/solid';
 import { ChipIcon, CubeIcon } from '@heroicons/react/outline';
 
 import Layout from '@components/templates/Layout/Layout';
 import List from '@components/organisms/List/List';
 import ListItem from '@components/molecules/ListItem/ListItem';
-// import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
+import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
 import Heading from '@components/templates/Heading/Heading';
@@ -15,10 +14,10 @@ import EmptyState from '@components/molecules/EmptyState/EmptyState';
 import { createButtons } from '@data/ipfs/links';
 import { useClusterPeers } from '@hooks/useClusterPeers';
 import { usePeers } from '@hooks/usePeers';
-// import { useNotification } from '@components/contexts/NotificationContext';
+import { useNotification } from '@hooks/useNotification';
 
 function ClusterPeers() {
-  // const { notificationData, removeNotification } = useNotification();
+  const { name, onClose } = useNotification('clusterpeer');
   const {
     clusterpeers,
     isEmpty,
@@ -43,12 +42,6 @@ function ClusterPeers() {
       count: clusterpeersCount,
     },
   ];
-
-  // useEffect(() => {
-  //   return () => {
-  //     removeNotification();
-  //   };
-  // }, [removeNotification]);
 
   if (isInitialLoading) {
     return <LoadingIndicator />;
@@ -104,19 +97,19 @@ function ClusterPeers() {
         )}
       </div>
 
-      {/* <NotificationPanel
-        show={!!notificationData}
-        title={notificationData?.title}
-        close={removeNotification}
+      <NotificationPanel
+        show={!!name}
+        title="Cluster peer has been created"
+        close={onClose}
       >
         <p className="mt-1 text-sm text-gray-500">
           <span className="text-indigo-900 bg-indigo-100 p-1 m-1 ml-0 rounded-md">
-            {notificationData?.name}
-          </span>{' '}
-          {!!notificationData &&
-            `${notificationData?.protocol} has been ${notificationData?.action}`}
+            {name}
+          </span>
+          Cluster Peer has been created successfully, and will be up and running
+          in few seconds.
         </p>
-      </NotificationPanel> */}
+      </NotificationPanel>
     </Layout>
   );
 }

@@ -13,17 +13,12 @@ import Heading from '@components/templates/Heading/Heading';
 import { createIPFSClusterPeer } from '@utils/requests/ipfs/clusterPeers';
 import schema from '@schemas/ipfs/clusterPeers';
 import { CreateClusterPeer } from '@interfaces/ipfs/ClusterPeer';
-import { useNotification } from '@components/contexts/NotificationContext';
 import { consensusOptions } from '@data/ipfs/clusterPeers/consensusOptions';
 import { useSecretsByType } from '@utils/requests/secrets';
 import { ClusterConsensusAlgorithm } from '@enums/IPFS/ClusterPeers/ClusterConsensusAlgorithm';
-import axios from 'axios';
-import { handleAxiosError } from '@utils/axios';
-import { ServerError } from '@interfaces/ServerError';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 
 const CreateClusterPeerPage: React.FC = () => {
-  const { createNotification } = useNotification();
   const [isPredefined, setIsPredefined] = useState(false);
   const { data: privateKeyNames } = useSecretsByType(
     KubernetesSecretTypes.ipfsClusterPeerPrivatekey
@@ -39,7 +34,6 @@ const CreateClusterPeerPage: React.FC = () => {
   const router = useRouter();
   const {
     handleSubmit,
-    setError,
     control,
     watch,
     formState: { errors, isSubmitted, isValid, isSubmitting },
@@ -49,15 +43,9 @@ const CreateClusterPeerPage: React.FC = () => {
 
   const onSubmit: SubmitHandler<CreateClusterPeer> = async (values) => {
     try {
-      const peer = await createIPFSClusterPeer(values);
-      createNotification({
-        title: 'IPFS Cluster Peer has been created',
-        protocol: 'cluster peer',
-        name: peer.name,
-        action:
-          'created successfully, and will be up and running in few seconds.',
-      });
-      void router.push('/deployments/ipfs/clusterpeers');
+      const clusterpeer = await createIPFSClusterPeer(values);
+      localStorage.setItem('clusterpeer', clusterpeer.name);
+      router.push('/deployments/ipfs/clusterpeers');
     } catch (e) {
       // if (axios.isAxiosError(e)) {
       //   const error = handleAxiosError<ServerError>(e);
