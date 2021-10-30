@@ -1,7 +1,6 @@
 import { SWRInfiniteConfiguration } from 'swr/infinite';
 import { AxiosResponse } from 'axios';
 
-import { BeaconNode } from '@interfaces/ethereum2/BeaconNode';
 import { sortByDate } from '@utils/helpers/sortByDate';
 import useRequestInfinite from '@hooks/useRequestInfinite';
 import { ClusterPeer } from '@interfaces/ipfs/ClusterPeer';
@@ -21,7 +20,7 @@ function key(
   return `/ipfs/clusterpeers?page=${pageIndex}`;
 }
 
-export const useBeaconNodes = (config?: SWRInfiniteConfiguration) => {
+export const useClusterPeers = (config?: SWRInfiniteConfiguration) => {
   // useRequestInfinit returns a paginated form of data
   const { data, headers, error, size, ...rest } = useRequestInfinite<{
     clusterpeers: ClusterPeer[];

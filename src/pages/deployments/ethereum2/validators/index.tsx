@@ -6,6 +6,9 @@ import EthereumIcon from '@components/Icons/EthereumIcon/EthereumIcon';
 import Layout from '@components/templates/Layout/Layout';
 import List from '@components/organisms/List/List';
 import ListItem from '@components/molecules/ListItem/ListItem';
+import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
+import Heading from '@components/templates/Heading/Heading';
+import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
 // import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import ButtonGroup from '@components/molecules/ButtonGroup/ButtonGroup';
@@ -17,10 +20,6 @@ import { networkOptions } from '@data/ethereum2/networkOptions';
 import { clientOptions } from '@data/ethereum2/clientOptions';
 import { useValidators } from '@hooks/useValidators';
 import { useBeaconNodes } from '@hooks/useBeaconNodes';
-import React from 'react';
-import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
-import Heading from '@components/templates/Heading/Heading';
-import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
 
 function Validators() {
   // const { notificationData, removeNotification } = useNotification();

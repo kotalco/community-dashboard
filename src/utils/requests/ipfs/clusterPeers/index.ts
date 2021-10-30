@@ -10,22 +10,6 @@ import {
 import { UnpackNestedValue } from 'react-hook-form';
 
 /**
- * Hook that get all cluster peers from the server
- * @param config swr configration if present
- * @returns object with all cluster peers or undefined if error then isError is true
- */
-export const useClusterPeers = (config?: SWRConfiguration) => {
-  const swr = useSWR<{ clusterpeers: ClusterPeer[] }, AxiosError>(
-    '/ipfs/clusterpeers',
-    fetcher,
-    config
-  );
-  const data = swr.data?.clusterpeers;
-
-  return { ...swr, data };
-};
-
-/**
  * Hook that get the cluster peer details using its name
  * @param name Peername
  * @param config swr configration if present
