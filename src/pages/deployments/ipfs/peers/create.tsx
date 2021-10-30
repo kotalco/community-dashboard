@@ -8,7 +8,7 @@ import TextInput from '@components/molecules/TextInput/TextInput';
 import Checkbox from '@components/molecules/CheckBox/CheckBox';
 import { createIPFSPeer } from '@utils/requests/ipfs/peers';
 import { schema } from '@schemas/ipfs/peers/createIPFSPeer';
-import { CreateIPFSPeer } from '@interfaces/ipfs/IPFSPeer';
+import { CreatePeer } from '@interfaces/ipfs/Peer';
 import { IPFSConfigurationProfile } from '@enums/IPFS/Peers/IPFSConfigurationProfile';
 import { initProfilesOptions } from '@data/ipfs/peers/initProfilesOptions';
 import { useNotification } from '@components/contexts/NotificationContext';
@@ -26,7 +26,7 @@ const CreateIPFSPeerPage: React.FC = () => {
     handleSubmit,
     setError,
     formState: { errors, isSubmitted, isValid, isSubmitting },
-  } = useForm<CreateIPFSPeer>({
+  } = useForm<CreatePeer>({
     resolver: joiResolver(schema),
     defaultValues: {
       initProfiles: [IPFSConfigurationProfile.defaultDatastore],
@@ -37,7 +37,7 @@ const CreateIPFSPeerPage: React.FC = () => {
    * Submit create IPFS Peer from
    * @param values the data required to create new peer
    */
-  const onSubmit: SubmitHandler<CreateIPFSPeer> = async (values) => {
+  const onSubmit: SubmitHandler<CreatePeer> = async (values) => {
     try {
       const peer = await createIPFSPeer(values);
       createNotification({

@@ -9,7 +9,7 @@ import Checkbox from '@components/molecules/CheckBox/CheckBox';
 import { initProfilesOptions } from '@data/ipfs/peers/initProfilesOptions';
 import { updateConfigProfilesSchema } from '@schemas/ipfs/peers/updateIPFSPeer';
 import { updateIPFSPeer } from '@utils/requests/ipfs/peers';
-import { ConfigrationProfiles } from '@interfaces/ipfs/IPFSPeer';
+import { ConfigrationProfiles } from '@interfaces/ipfs/Peer';
 import { IPFSConfigurationProfile } from '@enums/IPFS/Peers/IPFSConfigurationProfile';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';

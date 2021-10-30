@@ -6,7 +6,7 @@ import axios from 'axios';
 
 import Button from '@components/atoms/Button/Button';
 import TextInput from '@components/molecules/TextInput/TextInput';
-import { Gateway } from '@interfaces/ipfs/IPFSPeer';
+import { Gateway } from '@interfaces/ipfs/Peer';
 import { updateGatewaySchema } from '@schemas/ipfs/peers/updateIPFSPeer';
 import { updateIPFSPeer } from '@utils/requests/ipfs/peers';
 import { handleAxiosError } from '@utils/axios';

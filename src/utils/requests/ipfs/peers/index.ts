@@ -2,42 +2,21 @@ import useSWR from 'swr';
 import axios, { fetcher } from '../../../axios';
 import { AxiosError } from 'axios';
 
-import { CreateIPFSPeer, IPFSPeer } from '@interfaces/ipfs/IPFSPeer';
-
-/**
- * Hook that get all peers from the server
- * @param initialPeers if present
- * @returns object with all peers or undefined if error then isError is true
- */
-export const usePeers = (initialPeers?: {
-  peers: IPFSPeer[];
-}): { peers?: IPFSPeer[]; isError: boolean } => {
-  const { data, error } = useSWR<{ peers: IPFSPeer[] }, AxiosError>(
-    '/ipfs/peers',
-    fetcher,
-    { fallbackData: initialPeers, revalidateOnMount: true }
-  );
-
-  return { peers: data?.peers, isError: !!error };
-};
+import { CreatePeer, Peer } from '@interfaces/ipfs/Peer';
 
 /**
  * Send POST request to the server to create new IPFS Peer
  * @param body data required to create new IPFS Peer
  * @returns the IPFS Peer created by the server
  */
-export const createIPFSPeer = async (
-  body: CreateIPFSPeer
-): Promise<IPFSPeer> => {
-  const { data } = await axios.post<{ peer: IPFSPeer }>(`/ipfs/peers`, body);
+export const createIPFSPeer = async (body: CreatePeer): Promise<Peer> => {
+  const { data } = await axios.post<{ peer: Peer }>(`/ipfs/peers`, body);
 
   return data.peer;
 };
 
-export const getIPFSPeer = async (peerName: string): Promise<IPFSPeer> => {
-  const { data } = await axios.get<{ peer: IPFSPeer }>(
-    `/ipfs/peers/${peerName}`
-  );
+export const getIPFSPeer = async (peerName: string): Promise<Peer> => {
+  const { data } = await axios.get<{ peer: Peer }>(`/ipfs/peers/${peerName}`);
 
   return data.peer;
 };
@@ -50,9 +29,9 @@ export const getIPFSPeer = async (peerName: string): Promise<IPFSPeer> => {
  */
 export const updateIPFSPeer = async (
   peerName: string,
-  values: Partial<IPFSPeer>
-): Promise<IPFSPeer> => {
-  const { data } = await axios.put<{ peer: IPFSPeer }>(
+  values: Partial<Peer>
+): Promise<Peer> => {
+  const { data } = await axios.put<{ peer: Peer }>(
     `ipfs/peers/${peerName}`,
     values
   );

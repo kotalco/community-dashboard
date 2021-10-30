@@ -14,6 +14,7 @@ import ButtonGroup from '@components/molecules/ButtonGroup/ButtonGroup';
 import EmptyState from '@components/molecules/EmptyState/EmptyState';
 import { createButtons } from '@data/ipfs/links';
 import { useClusterPeers } from '@hooks/useClusterPeers';
+import { usePeers } from '@hooks/usePeers';
 // import { useNotification } from '@components/contexts/NotificationContext';
 
 function ClusterPeers() {
@@ -28,11 +29,13 @@ function ClusterPeers() {
     isLoading,
     totalCount: clusterpeersCount,
   } = useClusterPeers();
+  const { totalCount: peersCount } = usePeers();
 
   const tabs = [
     {
       name: 'Peers',
       href: '/deployments/ipfs/peers',
+      count: peersCount,
     },
     {
       name: 'Cluster Peers',

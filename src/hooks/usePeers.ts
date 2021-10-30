@@ -2,7 +2,7 @@ import { SWRInfiniteConfiguration } from 'swr/infinite';
 import { AxiosResponse } from 'axios';
 
 import { sortByDate } from '@utils/helpers/sortByDate';
-import { ClusterPeer } from '@interfaces/ipfs/ClusterPeer';
+import { Peer } from '@interfaces/ipfs/Peer';
 import useRequestInfinite from '@hooks/useRequestInfinite';
 
 const PAGE_SIZE = 10;
@@ -10,20 +10,20 @@ const PAGE_SIZE = 10;
 function key(
   pageIndex: number,
   prevPageData: AxiosResponse<{
-    clusterpeers: ClusterPeer[];
+    peers: Peer[];
   }> | null
 ) {
   // Reached the end
-  if (prevPageData && !prevPageData.data.clusterpeers.length) return null;
+  if (prevPageData && !prevPageData.data.peers.length) return null;
   // If first page, we don't have prevPageData
-  if (pageIndex === 0) return '/ipfs/clusterpeers';
-  return `/ipfs/clusterpeers?page=${pageIndex}`;
+  if (pageIndex === 0) return '/ipfs/peers';
+  return `/ipfs/peers?page=${pageIndex}`;
 }
 
-export const useClusterPeers = (config?: SWRInfiniteConfiguration) => {
+export const usePeers = (config?: SWRInfiniteConfiguration) => {
   // useRequestInfinit returns a paginated form of data
   const { data, headers, error, size, ...rest } = useRequestInfinite<{
-    clusterpeers: ClusterPeer[];
+    peers: Peer[];
   }>(key, config);
 
   // useSWR to get the x-total-count from headers
@@ -31,9 +31,9 @@ export const useClusterPeers = (config?: SWRInfiniteConfiguration) => {
   const totalCount = headers?.['x-total-count'];
 
   // Collect all data in single arrays instead of 2D arrays
-  const initial: ClusterPeer[] = [];
-  const clusterpeers = sortByDate(
-    data?.reduce((prev, current) => prev.concat(current.clusterpeers), initial)
+  const initial: Peer[] = [];
+  const peers = sortByDate(
+    data?.reduce((prev, current) => prev.concat(current.peers), initial)
   );
 
   // Detect initial loading state
@@ -43,13 +43,13 @@ export const useClusterPeers = (config?: SWRInfiniteConfiguration) => {
     isInitialLoading ||
     (size > 0 && data && typeof data[size - 1] === 'undefined');
   // Detect empty state
-  const isEmpty = data?.[0]?.clusterpeers.length === 0;
+  const isEmpty = data?.[0]?.peers.length === 0;
   // Detect if at end page
   const isReachedEnd =
-    isEmpty || (data && data[data.length - 1]?.clusterpeers.length < PAGE_SIZE);
+    isEmpty || (data && data[data.length - 1]?.peers.length < PAGE_SIZE);
 
   return {
-    clusterpeers,
+    peers,
     totalCount,
     isLoading,
     isInitialLoading,

@@ -12,7 +12,7 @@ import IPFSApiDetails from '@components/organisms/IPFS/IPFSApiDetails/IPFSApiDet
 import IPFSGatewayDetails from '@components/organisms/IPFS/IPFSGatewayDetails/IPFSGatewayDetails';
 import IPFSRoutingDetails from '@components/organisms/IPFS/IPFSRoutingDetails/IPFSRoutingDetails';
 import { getIPFSPeer, updateIPFSPeer } from '@utils/requests/ipfs/peers';
-import { IPFSPeer } from '@interfaces/ipfs/IPFSPeer';
+import { Peer } from '@interfaces/ipfs/Peer';
 import { tabsTitles } from '@data/ipfs/peers/tabsTitles';
 import Heading from '@components/templates/Heading/Heading';
 import { Tab } from '@headlessui/react';
@@ -20,7 +20,7 @@ import ResourcesTab from '@components/organisms/Resources/Resources';
 import { Resources } from '@interfaces/Resources';
 
 interface Props {
-  ipfsPeer: IPFSPeer;
+  ipfsPeer: Peer;
 }
 
 const IPFSPeerDetailsPage: React.FC<Props> = ({ ipfsPeer }) => {

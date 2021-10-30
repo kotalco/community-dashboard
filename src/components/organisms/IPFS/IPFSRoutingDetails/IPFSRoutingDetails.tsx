@@ -5,7 +5,7 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import axios from 'axios';
 
 import Button from '@components/atoms/Button/Button';
-import { Routing } from '@interfaces/ipfs/IPFSPeer';
+import { Routing } from '@interfaces/ipfs/Peer';
 import Select from '@components/molecules/Select/Select';
 import { routingOptions } from '@data/ipfs/peers/routingOptions';
 import { updateRoutingSchema } from '@schemas/ipfs/peers/updateIPFSPeer';

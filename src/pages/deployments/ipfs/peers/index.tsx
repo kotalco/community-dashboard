@@ -1,60 +1,65 @@
-import { useEffect } from 'react';
-import { GetStaticProps } from 'next';
+// import { useEffect } from 'react';
 import { GlobeAltIcon } from '@heroicons/react/solid';
 import { ChipIcon, CubeIcon } from '@heroicons/react/outline';
 
 import Layout from '@components/templates/Layout/Layout';
 import List from '@components/organisms/List/List';
 import ListItem from '@components/molecules/ListItem/ListItem';
-import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
+// import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
 import Heading from '@components/templates/Heading/Heading';
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import ButtonGroup from '@components/molecules/ButtonGroup/ButtonGroup';
+import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
+import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
 import EmptyState from '@components/molecules/EmptyState/EmptyState';
-import { createButtons, resourcesTab } from '@data/ipfs/links';
-import { usePeers } from '@utils/requests/ipfs/peers';
-import { IPFSPeer } from '@interfaces/ipfs/IPFSPeer';
-import { useNotification } from '@components/contexts/NotificationContext';
-import { fetcher } from '@utils/axios';
+import { createButtons } from '@data/ipfs/links';
+import { usePeers } from '@hooks/usePeers';
+import { useClusterPeers } from '@hooks/useClusterPeers';
+// import { useNotification } from '@components/contexts/NotificationContext';
 
-interface Props {
-  initialPeers: { peers: IPFSPeer[] };
-}
+function Peers() {
+  // const { notificationData, removeNotification } = useNotification();
+  const {
+    peers,
+    isEmpty,
+    isInitialLoading,
+    size,
+    setSize,
+    isReachedEnd,
+    isLoading,
+    totalCount: peersCount,
+  } = usePeers();
+  const { totalCount: clusterpeersCount } = useClusterPeers();
 
-export const IPFSPeers: React.FC<Props> = ({ initialPeers }) => {
-  const { notificationData, removeNotification } = useNotification();
-  const { peers } = usePeers(initialPeers);
+  const tabs = [
+    {
+      name: 'Peers',
+      href: '/deployments/ipfs/peers',
+      count: peersCount,
+    },
+    {
+      name: 'Cluster Peers',
+      href: '/deployments/ipfs/clusterpeers',
+      count: clusterpeersCount,
+    },
+  ];
 
-  useEffect(() => {
-    return () => {
-      removeNotification();
-    };
-  }, [removeNotification]);
+  // useEffect(() => {
+  //   return () => {
+  //     removeNotification();
+  //   };
+  // }, [removeNotification]);
 
-  return (
-    <Layout>
-      <Heading title="IPFS Deployments">
-        <ButtonGroup label="Create New" buttons={createButtons} />
-      </Heading>
+  if (isInitialLoading) {
+    return <LoadingIndicator />;
+  }
 
-      <div className="py-4">
-        <LinkedTabs tabs={resourcesTab} />
-        {peers && peers.length ? (
-          <List>
-            {peers.map(({ name }) => (
-              <ListItem
-                key={name}
-                link={`/deployments/ipfs/peers/${name}`}
-                title={name}
-              >
-                <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-                <p>public-swarm</p>
-                <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
-                <p>go-ipfs</p>
-              </ListItem>
-            ))}
-          </List>
-        ) : (
+  if (isEmpty) {
+    return (
+      <Layout>
+        <Heading title="IPFS Deployments" />
+        <div className="py-4">
+          <LinkedTabs tabs={tabs} />
           <EmptyState
             title="There is no peers created"
             description="Get started by creating a new peer."
@@ -63,10 +68,43 @@ export const IPFSPeers: React.FC<Props> = ({ initialPeers }) => {
           >
             <CubeIcon className="mx-auto w-12 h-12 text-gray-400" />
           </EmptyState>
+        </div>
+      </Layout>
+    );
+  }
+
+  return (
+    <Layout>
+      <Heading title="IPFS Deployments">
+        <ButtonGroup label="Create New" buttons={createButtons} />
+      </Heading>
+
+      <div className="py-4">
+        <LinkedTabs tabs={tabs} />
+        <List>
+          {peers.map(({ name }) => (
+            <ListItem
+              key={name}
+              link={`/deployments/ipfs/peers/${name}`}
+              title={name}
+            >
+              <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
+              <p>public-swarm</p>
+              <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
+              <p>go-ipfs</p>
+            </ListItem>
+          ))}
+        </List>
+
+        {!isReachedEnd && (
+          <LoadMoreButton
+            onChange={() => setSize(size + 1)}
+            isLoading={isLoading}
+          />
         )}
       </div>
 
-      <NotificationPanel
+      {/* <NotificationPanel
         show={!!notificationData}
         title={notificationData?.title}
         close={removeNotification}
@@ -78,14 +116,9 @@ export const IPFSPeers: React.FC<Props> = ({ initialPeers }) => {
           {!!notificationData &&
             `${notificationData.protocol} has been ${notificationData.action}`}
         </p>
-      </NotificationPanel>
+      </NotificationPanel> */}
     </Layout>
   );
-};
+}
 
-export const getStaticProps: GetStaticProps = async () => {
-  const peers = await fetcher<{ peers: IPFSPeer[] }>('/ipfs/peers');
-  return { props: { initialPeers: peers }, revalidate: 10 };
-};
-
-export default IPFSPeers;
+export default Peers;
