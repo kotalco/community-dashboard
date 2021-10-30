@@ -1,6 +1,5 @@
 import { SubmitHandler, useForm, Controller } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import axios from 'axios';
 
 import Layout from '@components/templates/Layout/Layout';
 import FormLayout from '@components/templates/FormLayout/FormLayout';
@@ -9,7 +8,6 @@ import Select from '@components/molecules/Select/Select';
 import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
 import Heading from '@components/templates/Heading/Heading';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
-import { useNotification } from '@components/contexts/NotificationContext';
 import { clientOptions } from '@data/ethereum2/clientOptions';
 import { networkOptions } from '@data/ethereum2/networkOptions';
 import { createBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
@@ -17,36 +15,22 @@ import schema from '@schemas/ethereum2/beaconNode/createBeaconNode';
 import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
 import { CreateBeaconNode } from '@interfaces/ethereum2/BeaconNode';
 import { BeaconNodeNetwork } from '@enums/Ethereum2/BeaconNodes/BeaconNodeNetwork';
-import { handleAxiosError } from '@utils/axios';
-import { ServerError } from '@interfaces/ServerError';
 
 const CreateBeaconNode: React.FC = () => {
   const router = useRouter();
-  const { createNotification } = useNotification();
   const {
     watch,
     control,
     handleSubmit,
-    setError,
     formState: { errors, isSubmitted, isValid, isSubmitting },
   } = useForm<CreateBeaconNode>();
   const [network, client] = watch(['network', 'client']);
-  /**
-   * Submit create ethereum node form
-   * @param BeaconNodeData the data required to create new node
-   */
+
   const onSubmit: SubmitHandler<CreateBeaconNode> = async (values) => {
     try {
       const beaconNode = await createBeaconNode(values);
-
-      createNotification({
-        title: 'Beacon node has been created',
-        protocol: `Beacon node`,
-        name: beaconNode.name,
-        action:
-          'created successfully, and will be up and running in few seconds.',
-      });
-      void router.push('/deployments/ethereum2/beaconnodes');
+      localStorage.setItem('beaconnode', beaconNode.name);
+      router.push('/deployments/ethereum2/beaconnodes');
     } catch (e) {
       // if (axios.isAxiosError(e)) {
       //   const error = handleAxiosError<ServerError>(e);

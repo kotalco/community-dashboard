@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-export const useNotification = (deployName: 'node') => {
+export const useNotification = (deployName: 'node' | 'beaconnode') => {
   const [name, setName] = useState<string | null>(null);
 
   useEffect(() => {
