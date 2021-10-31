@@ -1,5 +1,5 @@
 import { SWRInfiniteConfiguration } from 'swr/infinite';
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 
 import { sortByDate } from '@utils/helpers/sortByDate';
 import { KubernetesSecret } from '@interfaces/KubernetesSecret/KubernetesSecret';
@@ -22,9 +22,12 @@ function key(
 
 export const useSecrets = (config?: SWRInfiniteConfiguration) => {
   // useRequestInfinit returns a paginated form of data
-  const { data, headers, error, size, ...rest } = useRequestInfinite<{
-    secrets: KubernetesSecret[];
-  }>(key, config);
+  const { data, headers, error, size, ...rest } = useRequestInfinite<
+    {
+      secrets: KubernetesSecret[];
+    },
+    AxiosError
+  >(key, config);
   console.log(headers);
   // useSWR to get the x-total-count from headers
   // const headers = response?.[0].headers as { 'x-total-count': string };
@@ -56,6 +59,7 @@ export const useSecrets = (config?: SWRInfiniteConfiguration) => {
     isEmpty,
     isReachedEnd,
     size,
+    error,
     ...rest,
   };
 };

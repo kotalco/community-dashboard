@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Error from 'next/error';
 import { TrashIcon, KeyIcon } from '@heroicons/react/outline';
 
 import IconButton from '@components/atoms/IconButton/IconButton';
@@ -23,6 +24,7 @@ function KubernetesSecrets() {
     setSize,
     isReachedEnd,
     isLoading,
+    error,
   } = useSecrets();
 
   const [openDelete, setOpenDelete] = useState(false);
@@ -36,6 +38,8 @@ function KubernetesSecrets() {
   if (isInitialLoading) {
     return <LoadingIndicator />;
   }
+
+  if (error) return <Error statusCode={500} />;
 
   if (isEmpty) {
     return (

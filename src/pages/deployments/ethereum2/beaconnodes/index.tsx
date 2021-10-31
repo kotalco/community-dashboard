@@ -1,3 +1,4 @@
+import Error from 'next/error';
 import { GlobeAltIcon } from '@heroicons/react/solid';
 import { ChipIcon } from '@heroicons/react/outline';
 
@@ -24,6 +25,7 @@ function Beaconnodes() {
   const { name, onClose } = useNotification('beaconnode');
   const {
     baeconnodes,
+    error,
     isEmpty,
     isInitialLoading,
     size,
@@ -49,6 +51,10 @@ function Beaconnodes() {
 
   if (isInitialLoading) {
     return <LoadingIndicator />;
+  }
+
+  if (error) {
+    return <Error statusCode={500} />;
   }
 
   if (isEmpty) {

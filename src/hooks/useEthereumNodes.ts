@@ -1,5 +1,5 @@
 import { SWRInfiniteConfiguration } from 'swr/infinite';
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 
 import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { sortByDate } from '@utils/helpers/sortByDate';
@@ -22,9 +22,12 @@ function key(
 
 export const useEthereumNodes = (config?: SWRInfiniteConfiguration) => {
   // useRequestInfinit returns a paginated form of data
-  const { data, headers, error, size, ...rest } = useRequestInfinite<{
-    nodes: EthereumNode[];
-  }>(key, config);
+  const { data, headers, error, size, ...rest } = useRequestInfinite<
+    {
+      nodes: EthereumNode[];
+    },
+    AxiosError
+  >(key, config);
 
   // useSWR to get the x-total-count from headers
   // const headers = response?.[0].headers as { 'x-total-count': string };
@@ -56,6 +59,7 @@ export const useEthereumNodes = (config?: SWRInfiniteConfiguration) => {
     isEmpty,
     isReachedEnd,
     size,
+    error,
     ...rest,
   };
 };

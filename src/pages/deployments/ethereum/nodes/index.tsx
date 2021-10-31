@@ -1,3 +1,4 @@
+import Error from 'next/error';
 import { GlobeAltIcon } from '@heroicons/react/solid';
 import { ChipIcon } from '@heroicons/react/outline';
 
@@ -11,12 +12,12 @@ import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import EmptyState from '@components/molecules/EmptyState/EmptyState';
 import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
+import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
 import { useNotification } from '@hooks/useNotification';
 import { clientOptions } from '@data/ethereum/node/clientOptions';
 import { networkOptions } from '@data/ethereum/node/networkOptions';
 import { getLabel } from '@utils/helpers/getLabel';
 import { useEthereumNodes } from '@hooks/useEthereumNodes';
-import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
 
 function EthereumNodes() {
   const { name, onClose } = useNotification('node');
@@ -29,6 +30,7 @@ function EthereumNodes() {
     isReachedEnd,
     isLoading,
     totalCount,
+    error,
   } = useEthereumNodes();
 
   const tabs = [
@@ -41,6 +43,10 @@ function EthereumNodes() {
 
   if (isInitialLoading) {
     return <LoadingIndicator />;
+  }
+
+  if (error) {
+    return <Error statusCode={500} />;
   }
 
   if (isEmpty) {

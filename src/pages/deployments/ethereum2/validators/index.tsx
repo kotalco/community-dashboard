@@ -1,3 +1,4 @@
+import Error from 'next/error';
 import { GlobeAltIcon } from '@heroicons/react/solid';
 import { ChipIcon } from '@heroicons/react/outline';
 
@@ -30,6 +31,7 @@ function Validators() {
     setSize,
     isReachedEnd,
     isLoading,
+    error,
     totalCount: validatorsCount,
   } = useValidators();
   const { totalCount: beaconnodesCount } = useBeaconNodes();
@@ -50,6 +52,8 @@ function Validators() {
   if (isInitialLoading) {
     return <LoadingIndicator />;
   }
+
+  if (error) return <Error statusCode={500} />;
 
   if (isEmpty) {
     return (

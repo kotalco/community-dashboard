@@ -1,5 +1,5 @@
 import { SWRInfiniteConfiguration } from 'swr/infinite';
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 
 import { BeaconNode } from '@interfaces/ethereum2/BeaconNode';
 import { sortByDate } from '@utils/helpers/sortByDate';
@@ -22,9 +22,12 @@ function key(
 
 export const useBeaconNodes = (config?: SWRInfiniteConfiguration) => {
   // useRequestInfinit returns a paginated form of data
-  const { data, headers, error, size, ...rest } = useRequestInfinite<{
-    beaconnodes: BeaconNode[];
-  }>(key, config);
+  const { data, headers, error, size, ...rest } = useRequestInfinite<
+    {
+      beaconnodes: BeaconNode[];
+    },
+    AxiosError
+  >(key, config);
 
   // useSWR to get the x-total-count from headers
   // const headers = response?.[0].headers as { 'x-total-count': string };
@@ -56,6 +59,7 @@ export const useBeaconNodes = (config?: SWRInfiniteConfiguration) => {
     isEmpty,
     isReachedEnd,
     size,
+    error,
     ...rest,
   };
 };

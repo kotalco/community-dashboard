@@ -1,5 +1,5 @@
 import { SWRInfiniteConfiguration } from 'swr/infinite';
-import { AxiosResponse } from 'axios';
+import { AxiosError, AxiosResponse } from 'axios';
 
 import { sortByDate } from '@utils/helpers/sortByDate';
 import { Peer } from '@interfaces/ipfs/Peer';
@@ -9,9 +9,12 @@ const PAGE_SIZE = 10;
 
 function key(
   pageIndex: number,
-  prevPageData: AxiosResponse<{
-    peers: Peer[];
-  }> | null
+  prevPageData: AxiosResponse<
+    {
+      peers: Peer[];
+    },
+    AxiosError
+  > | null
 ) {
   // Reached the end
   if (prevPageData && !prevPageData.data.peers.length) return null;
@@ -56,6 +59,7 @@ export const usePeers = (config?: SWRInfiniteConfiguration) => {
     isEmpty,
     isReachedEnd,
     size,
+    error,
     ...rest,
   };
 };

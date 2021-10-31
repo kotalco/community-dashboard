@@ -1,3 +1,4 @@
+import Error from 'next/error';
 import { GlobeAltIcon } from '@heroicons/react/solid';
 import { ChipIcon, CubeIcon } from '@heroicons/react/outline';
 
@@ -26,6 +27,7 @@ function Peers() {
     setSize,
     isReachedEnd,
     isLoading,
+    error,
     totalCount: peersCount,
   } = usePeers();
   const { totalCount: clusterpeersCount } = useClusterPeers();
@@ -46,6 +48,8 @@ function Peers() {
   if (isInitialLoading) {
     return <LoadingIndicator />;
   }
+
+  if (error) return <Error statusCode={500} />;
 
   if (isEmpty) {
     return (
