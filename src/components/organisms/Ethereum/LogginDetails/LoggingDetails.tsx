@@ -103,9 +103,7 @@ const LoggingDetails: React.FC<Props> = ({
                 }`}
                 key={i}
               >
-                {!log.includes('second') ? (
-                  <span>{log}</span>
-                ) : (
+                {log.includes('second') && i === logs.length - 1 ? (
                   <span>
                     {log}
                     {` `}
@@ -118,6 +116,8 @@ const LoggingDetails: React.FC<Props> = ({
                       Cancel
                     </button>
                   </span>
+                ) : (
+                  <span>{log}</span>
                 )}
               </li>
             ))}
