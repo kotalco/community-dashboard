@@ -3,6 +3,7 @@ export const tabTitles = [
   'Graffiti',
   'Keystore',
   'Beacon Node',
+  'Logging',
   'Resources',
   'Danger Zone',
 ];

@@ -22,6 +22,7 @@ import { getLabel } from '@utils/helpers/getLabel';
 import { networkOptions } from '@data/ethereum2/networkOptions';
 import { clientOptions } from '@data/ethereum2/clientOptions';
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
+import Logging from '@components/organisms/Logging/Logging';
 
 interface Props {
   validator: Validator;
@@ -79,6 +80,9 @@ const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
               beaconEndpoints={data.beaconEndpoints}
               client={data.client}
             />
+          </Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
+            <Logging wsUrl={`/ethereum2/validators/${data.name}/logs`} />
           </Tab.Panel>
           <Tab.Panel className="focus:outline-none">
             <Resources
