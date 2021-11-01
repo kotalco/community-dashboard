@@ -20,6 +20,7 @@ import Resources from '@components/organisms/Resources/Resources';
 import DeleteDeployment from '@components/organisms/DeleteDeployment/DeleteDeployment';
 import { getLabel } from '@utils/helpers/getLabel';
 import { consensusOptions } from '@data/ipfs/clusterPeers/consensusOptions';
+import Logging from '@components/organisms/Logging/Logging';
 
 interface Props {
   initialClusterpeer?: ClusterPeer;
@@ -72,6 +73,9 @@ const ClusterPeerDetailsPage: React.FC<Props> = ({ initialClusterpeer }) => {
           </Tab.Panel>
           <Tab.Panel className="focus:outline-none">
             <Security clusterSecretName={clusterpeer.clusterSecretName} />
+          </Tab.Panel>
+          <Tab.Panel className="focus:outline-none">
+            <Logging wsUrl={`/ipfs/clusterpeers/${clusterpeer.name}/logs`} />{' '}
           </Tab.Panel>
           <Tab.Panel className="focus:outline-none">
             <Resources
