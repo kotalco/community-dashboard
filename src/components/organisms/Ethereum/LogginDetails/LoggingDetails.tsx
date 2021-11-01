@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 
 import Button from '@components/atoms/Button/Button';
+import Logging from '@components/organisms/Logging/Logging';
 import { updateEthereumNode } from '@utils/requests/ethereum';
 import { LoggingInterface } from '@interfaces/Ethereum/ِEthereumNode';
 import { useNode } from '@utils/requests/ethereum';
@@ -11,11 +12,6 @@ import { ServerError } from '@interfaces/ServerError';
 import Select from '@components/molecules/Select/Select';
 import { loggingOptions } from '@data/ethereum/node/loggingOptions';
 import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
-import {
-  CLOSE_CONNECTION_MSG,
-  OPEN_CONNECTION_MSG,
-  useLogs,
-} from '@hooks/useLogs';
 
 interface Props extends LoggingInterface {
   client: EthereumNodeClient;
@@ -29,9 +25,6 @@ const LoggingDetails: React.FC<Props> = ({
   client,
   ...rest
 }) => {
-  const { logs, setLogs, timeoutId, intervalId, ws } = useLogs(
-    `/ethereum/nodes/${name}/logs`
-  );
   const { mutate } = useNode(name);
   const [submitSuccess, setSubmitSuccess] = useState('');
 
@@ -44,12 +37,6 @@ const LoggingDetails: React.FC<Props> = ({
   } = useForm<LoggingInterface>({
     defaultValues: rest,
   });
-
-  const cancelConnect = () => {
-    setLogs((logs) => [...logs, 'Canceled']);
-    if (timeoutId) clearTimeout(timeoutId);
-    if (intervalId) clearInterval(intervalId);
-  };
 
   const onSubmit: SubmitHandler<LoggingInterface> = async (values) => {
     setSubmitSuccess('');
@@ -89,40 +76,7 @@ const LoggingDetails: React.FC<Props> = ({
             )}
           />
         </div>
-
-        <div className="mt-5 border border-black h-96 bg-black overflow-y-auto text-white text-xs px-3 overscroll-container">
-          <ul>
-            {logs.map((log, i) => (
-              <li
-                className={`${
-                  log === OPEN_CONNECTION_MSG
-                    ? 'text-green-500'
-                    : log === CLOSE_CONNECTION_MSG
-                    ? 'text-red-500'
-                    : ''
-                }`}
-                key={i}
-              >
-                {log.includes('second') && i === logs.length - 1 ? (
-                  <span>
-                    {log}
-                    {` `}
-                    <button
-                      type="button"
-                      disabled={ws?.readyState === WebSocket.OPEN}
-                      onClick={cancelConnect}
-                      className={`underline hover:no-underline text-xs text-red-500 disabled:sr-only`}
-                    >
-                      Cancel
-                    </button>
-                  </span>
-                ) : (
-                  <span>{log}</span>
-                )}
-              </li>
-            ))}
-          </ul>
-        </div>
+        <Logging wsUrl={`/ethereum/nodes/${name}/logs`} />
       </div>
 
       <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
