@@ -22,6 +22,7 @@ import { fetcher } from '@utils/axios';
 import React from 'react';
 import Heading from '@components/templates/Heading/Heading';
 import { getLabel } from '@utils/helpers/getLabel';
+import Logging from '@components/organisms/Logging/Logging';
 
 interface Props {
   beaconnode?: BeaconNode;
@@ -78,6 +79,11 @@ const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconnode }) => {
               client={data.client}
             />
           </Tab.Panel>
+
+          <Tab.Panel className="focus:outline-none">
+            <Logging wsUrl={`/ethereum2/beaconnodes/${data.name}/logs`} />
+          </Tab.Panel>
+
           <Tab.Panel className="focus:outline-none">
             <Resources
               name={data.name}

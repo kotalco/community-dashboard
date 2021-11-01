@@ -58,7 +58,7 @@ const LoggingDetails: React.FC<Props> = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="px-4 py-5 sm:p-6">
+      <div className="px-4 pt-5 sm:px-6">
         {/* Logging */}
 
         <div className="max-w-xs">
@@ -76,8 +76,8 @@ const LoggingDetails: React.FC<Props> = ({
             )}
           />
         </div>
-        <Logging wsUrl={`/ethereum/nodes/${name}/logs`} />
       </div>
+      <Logging wsUrl={`/ethereum/nodes/${name}/logs`} />
 
       <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
         <Button

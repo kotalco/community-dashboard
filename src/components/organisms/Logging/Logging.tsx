@@ -18,38 +18,40 @@ function Logging({ wsUrl }: Props) {
   };
 
   return (
-    <div className="mt-5 border border-black h-96 bg-black overflow-y-auto text-white text-xs px-3 overscroll-container">
-      <ul>
-        {logs.map((log, i) => (
-          <li
-            className={`${
-              log === OPEN_CONNECTION_MSG
-                ? 'text-green-500'
-                : log === CLOSE_CONNECTION_MSG
-                ? 'text-red-500'
-                : ''
-            }`}
-            key={i}
-          >
-            {log.includes('second') && i === logs.length - 1 ? (
-              <span>
-                {log}
-                {` `}
-                <button
-                  type="button"
-                  disabled={ws?.readyState === WebSocket.OPEN}
-                  onClick={cancelConnect}
-                  className={`underline hover:no-underline text-xs text-red-500 disabled:sr-only`}
-                >
-                  Cancel
-                </button>
-              </span>
-            ) : (
-              <span>{log}</span>
-            )}
-          </li>
-        ))}
-      </ul>
+    <div className="p-3 sm:p-6">
+      <div className="border border-black h-96 bg-black overflow-y-auto text-white text-xs px-3 overscroll-container">
+        <ul>
+          {logs.map((log, i) => (
+            <li
+              className={`${
+                log === OPEN_CONNECTION_MSG
+                  ? 'text-green-500'
+                  : log === CLOSE_CONNECTION_MSG
+                  ? 'text-red-500'
+                  : ''
+              }`}
+              key={i}
+            >
+              {log.includes('second') && i === logs.length - 1 ? (
+                <span>
+                  {log}
+                  {` `}
+                  <button
+                    type="button"
+                    disabled={ws?.readyState === WebSocket.OPEN}
+                    onClick={cancelConnect}
+                    className={`underline hover:no-underline text-xs text-red-500 disabled:sr-only`}
+                  >
+                    Cancel
+                  </button>
+                </span>
+              ) : (
+                <span>{log}</span>
+              )}
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
