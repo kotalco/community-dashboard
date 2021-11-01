@@ -11,6 +11,7 @@ import IPFSConfigrationProfiles from '@components/organisms/IPFS/IPFSConfigratio
 import IPFSApiDetails from '@components/organisms/IPFS/IPFSApiDetails/IPFSApiDetails';
 import IPFSGatewayDetails from '@components/organisms/IPFS/IPFSGatewayDetails/IPFSGatewayDetails';
 import IPFSRoutingDetails from '@components/organisms/IPFS/IPFSRoutingDetails/IPFSRoutingDetails';
+import Logging from '@components/organisms/Logging/Logging';
 import { getIPFSPeer, updateIPFSPeer } from '@utils/requests/ipfs/peers';
 import { Peer } from '@interfaces/ipfs/Peer';
 import { tabsTitles } from '@data/ipfs/peers/tabsTitles';
@@ -83,6 +84,10 @@ const IPFSPeerDetailsPage: React.FC<Props> = ({ ipfsPeer }) => {
 
           <Tab.Panel className="focus:outline-none">
             <IPFSRoutingDetails peerName={peer.name} routing={peer.routing} />
+          </Tab.Panel>
+
+          <Tab.Panel className="focus:outline-none">
+            <Logging wsUrl={`/ipfs/peers/${peer.name}/logs`} />
           </Tab.Panel>
           <Tab.Panel className="focus:outline-none">
             <ResourcesTab
