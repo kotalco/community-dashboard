@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { joiResolver } from '@hookform/resolvers/joi';
 
 import Layout from '@components/templates/Layout/Layout';
 import FormLayout from '@components/templates/FormLayout/FormLayout';
@@ -12,7 +11,7 @@ import Heading from '@components/templates/Heading/Heading';
 import { clientOptions } from '@data/ethereum/node/clientOptions';
 import { networkOptions } from '@data/ethereum/node/networkOptions';
 import { createEthereumNode } from '@utils/requests/ethereum';
-import { schema } from '@schemas/ethereumNode/createNode';
+import { resolver } from '@schemas/ethereumNode/createNode';
 import { CreateEthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
@@ -20,7 +19,6 @@ import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretT
 function CreateNode() {
   const [serverError, setServerError] = useState('');
   const router = useRouter();
-  // const { createNotification } = useNotification();
   const { data: privateKeys } = useSecretsByType(
     KubernetesSecretTypes.ethereumPrivatekey
   );
@@ -28,7 +26,7 @@ function CreateNode() {
     handleSubmit,
     control,
     formState: { errors, isSubmitted, isValid, isSubmitting },
-  } = useForm<CreateEthereumNode>({ resolver: joiResolver(schema) });
+  } = useForm<CreateEthereumNode>({ resolver });
 
   const onSubmit: SubmitHandler<CreateEthereumNode> = async (values) => {
     setServerError('');
@@ -68,6 +66,7 @@ function CreateNode() {
           <Controller
             name="client"
             control={control}
+            defaultValue=""
             render={({ field }) => (
               <Select
                 placeholder="Choose a client..."
@@ -83,6 +82,7 @@ function CreateNode() {
           <Controller
             name="network"
             control={control}
+            defaultValue=""
             render={({ field }) => (
               <SelectWithInput
                 placeholder="Choose a network..."
@@ -100,6 +100,7 @@ function CreateNode() {
           <Controller
             name="nodePrivateKeySecretName"
             control={control}
+            defaultValue=""
             render={({ field }) => (
               <Select
                 placeholder="Choose a private key..."
