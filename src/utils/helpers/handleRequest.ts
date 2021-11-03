@@ -1,5 +1,6 @@
-import { handleAxiosError } from '@utils/axios';
 import axios from 'axios';
+
+import { handleAxiosError } from '@utils/axios';
 
 export const handleRequest = async <T, K = never>(
   callback: (args?: K) => Promise<T>

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import Layout from '@components/templates/Layout/Layout';
 import FormLayout from '@components/templates/FormLayout/FormLayout';
@@ -11,7 +12,7 @@ import Heading from '@components/templates/Heading/Heading';
 import { clientOptions } from '@data/ethereum/node/clientOptions';
 import { networkOptions } from '@data/ethereum/node/networkOptions';
 import { createEthereumNode } from '@utils/requests/ethereum';
-import { resolver } from '@schemas/ethereumNode/createNode';
+import { schema } from '@schemas/ethereumNode/createNode';
 import {
   CreateEthereumNode,
   EthereumNode,
@@ -30,7 +31,7 @@ function CreateNode() {
     handleSubmit,
     control,
     formState: { errors, isSubmitted, isValid, isSubmitting },
-  } = useForm<CreateEthereumNode>({ resolver });
+  } = useForm<CreateEthereumNode>({ resolver: yupResolver(schema) });
 
   const onSubmit: SubmitHandler<CreateEthereumNode> = async (values) => {
     setServerError('');
