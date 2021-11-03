@@ -12,9 +12,13 @@ import { clientOptions } from '@data/ethereum/node/clientOptions';
 import { networkOptions } from '@data/ethereum/node/networkOptions';
 import { createEthereumNode } from '@utils/requests/ethereum';
 import { resolver } from '@schemas/ethereumNode/createNode';
-import { CreateEthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
+import {
+  CreateEthereumNode,
+  EthereumNode,
+} from '@interfaces/Ethereum/ِEthereumNode';
 import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
+import { handleRequest } from '@utils/helpers/handleRequest';
 
 function CreateNode() {
   const [serverError, setServerError] = useState('');
@@ -30,15 +34,19 @@ function CreateNode() {
 
   const onSubmit: SubmitHandler<CreateEthereumNode> = async (values) => {
     setServerError('');
-    const res = await createEthereumNode(values);
-    // If res is a string this means it is an error
-    if (typeof res === 'string') {
-      return setServerError(res);
+    const { error, response } = await handleRequest<EthereumNode>(
+      createEthereumNode.bind(undefined, values)
+    );
+
+    if (error) {
+      setServerError(error);
+      return;
     }
-    if (res && typeof res !== 'string') {
-      localStorage.setItem('node', res.name);
+
+    if (response) {
+      localStorage.setItem('node', response.name);
+      router.push('/deployments/ethereum/nodes');
     }
-    router.push('/deployments/ethereum/nodes');
   };
 
   return (

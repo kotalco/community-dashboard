@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {
   CreateEthereumNode,
   EthereumNode,
@@ -6,21 +5,11 @@ import {
 import useSWR, { SWRConfiguration } from 'swr';
 import { UnpackNestedValue } from 'react-hook-form';
 
-import api, { fetcher, handleAxiosError } from '../../axios';
+import api, { fetcher } from '../../axios';
 
 export const createEthereumNode = async (body: CreateEthereumNode) => {
-  try {
-    const { data } = await api.post<{ node: EthereumNode }>(
-      `/ethereum/nodes`,
-      body
-    );
-
-    return data.node;
-  } catch (e) {
-    if (axios.isAxiosError(e)) {
-      return handleAxiosError(e);
-    }
-  }
+  const res = await api.post<{ node: EthereumNode }>(`/ethereum/nodes`, body);
+  return res.data.node;
 };
 
 /**
