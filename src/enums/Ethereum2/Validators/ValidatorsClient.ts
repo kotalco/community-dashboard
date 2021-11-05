@@ -1,4 +1,4 @@
-export enum ValidatorsClients {
+export enum ValidatorsClient {
   teku = 'teku',
   prysm = 'prysm',
   lighthouse = 'lighthouse',

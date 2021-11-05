@@ -13,7 +13,7 @@ import Button from '@components/atoms/Button/Button';
 import { UpdateBeaconEndpoints } from '@interfaces/ethereum2/Validator';
 import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
 import { updateValidator } from '@utils/requests/ethereum2/validators';
-import { ValidatorsClients } from '@enums/Ethereum2/Validators/ValidatorsClients';
+import { ValidatorsClient } from '@enums/Ethereum2/Validators/ValidatorsClient';
 import { updateBeaconEndpointsSchema } from '@schemas/ethereum2/validator/updateValidatorSchema';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
@@ -21,7 +21,7 @@ import { ServerError } from '@interfaces/ServerError';
 interface Props {
   name: string;
   beaconEndpoints: string[];
-  client: ValidatorsClients;
+  client: ValidatorsClient;
 }
 
 const ValidatorBeaconNodeTab: React.FC<Props> = ({
@@ -69,11 +69,11 @@ const ValidatorBeaconNodeTab: React.FC<Props> = ({
           control={control}
           render={({ field }) => (
             <TextareaWithInput
-              multiple={client === ValidatorsClients.lighthouse}
+              multiple={client === ValidatorsClient.lighthouse}
               error={beaconEndpointsError?.message}
               label="Ethereum 2.0 Beacon Node Endpoints"
               helperText={
-                client === ValidatorsClients.lighthouse
+                client === ValidatorsClient.lighthouse
                   ? 'One endpoint per each line'
                   : ''
               }

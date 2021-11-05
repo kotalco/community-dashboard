@@ -1,9 +1,9 @@
 import { SelectOption } from '@interfaces/SelectOption';
-import { ValidatorsClients } from '@enums/Ethereum2/Validators/ValidatorsClients';
+import { ValidatorsClient } from '@enums/Ethereum2/Validators/ValidatorsClient';
 
 export const clientOptions: SelectOption[] = [
-  { label: 'ConsenSys Teku', value: ValidatorsClients.teku },
-  { label: 'Prysmatic Labs Prysm', value: ValidatorsClients.prysm },
-  { label: 'Sigma prime Lighthouse', value: ValidatorsClients.lighthouse },
-  { label: 'Status.im Nimbus', value: ValidatorsClients.nimbus },
+  { label: 'ConsenSys Teku', value: ValidatorsClient.teku },
+  { label: 'Prysmatic Labs Prysm', value: ValidatorsClient.prysm },
+  { label: 'Sigma prime Lighthouse', value: ValidatorsClient.lighthouse },
+  { label: 'Status.im Nimbus', value: ValidatorsClient.nimbus },
 ];

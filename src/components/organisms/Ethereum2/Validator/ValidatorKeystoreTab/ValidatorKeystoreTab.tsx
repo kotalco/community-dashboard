@@ -9,7 +9,7 @@ import { updateValidator } from '@utils/requests/ethereum2/validators';
 import { UpdateKeystores } from '@interfaces/ethereum2/Validator';
 import Multiselect from '@components/molecules/Multiselect/Multiselect';
 import Select from '@components/molecules/Select/Select';
-import { ValidatorsClients } from '@enums/Ethereum2/Validators/ValidatorsClients';
+import { ValidatorsClient } from '@enums/Ethereum2/Validators/ValidatorsClient';
 import { updateKeystoresSchema } from '@schemas/ethereum2/validator/updateValidatorSchema';
 import { useSecretsByType } from '@utils/requests/secrets';
 import { handleAxiosError } from '@utils/axios';
@@ -20,7 +20,7 @@ interface Props {
   name: string;
   keystores: { secretName: string }[];
   walletPasswordSecretName: string;
-  client: ValidatorsClients;
+  client: ValidatorsClient;
 }
 
 const ValidatorKeystoreTab: React.FC<Props> = ({

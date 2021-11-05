@@ -14,7 +14,7 @@ import { networkOptions } from '@data/ethereum2/networkOptions';
 import { schema } from '@schemas/ethereum2/validator/createValidatorSchema';
 import { CreateValidator, Validator } from '@interfaces/ethereum2/Validator';
 import { createValidator } from '@utils/requests/ethereum2/validators';
-import { ValidatorsClients } from '@enums/Ethereum2/Validators/ValidatorsClients';
+import { ValidatorsClient } from '@enums/Ethereum2/Validators/ValidatorsClient';
 import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import Heading from '@components/templates/Heading/Heading';
@@ -130,7 +130,7 @@ const CreateValidator: React.FC = () => {
           />
 
           {/* Prysm Client Wallet Password */}
-          {client === ValidatorsClients.prysm && (
+          {client === ValidatorsClient.prysm && (
             <Controller
               name="walletPasswordSecretName"
               control={control}
@@ -157,10 +157,10 @@ const CreateValidator: React.FC = () => {
             rules={schema.beaconEndpoints}
             render={({ field }) => (
               <TextareaWithInput
-                multiple={client === ValidatorsClients.lighthouse}
+                multiple={client === ValidatorsClient.lighthouse}
                 label="Beacon Node Endpoints"
                 helperText={
-                  client === ValidatorsClients.lighthouse
+                  client === ValidatorsClient.lighthouse
                     ? 'One endpoint per each line'
                     : ''
                 }

@@ -7,11 +7,6 @@ import {
   UpdateBeaconNode,
 } from '@interfaces/ethereum2/BeaconNode';
 
-/**
- * Send a post request to create a new beacon node using ethereum 2.0 protocol
- * @param body The required data to create a new beacon node
- * @returns The newly created beacon node
- */
 export const createBeaconNode = async (
   values: CreateBeaconNode
 ): Promise<BeaconNode> => {
