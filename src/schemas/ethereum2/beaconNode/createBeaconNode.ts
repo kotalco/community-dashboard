@@ -27,7 +27,8 @@ export const schema: SchemaOf<CreateBeaconNode> = object({
     then: array()
       .of(string().required('At least 1 endpoint is required'))
       .min(1, 'At least 1 endpoint is required')
-      .ensure(),
+      .ensure()
+      .compact(),
     otherwise: array().strip(),
   }),
 });
