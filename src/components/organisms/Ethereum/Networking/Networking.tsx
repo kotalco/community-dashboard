@@ -11,7 +11,7 @@ import { updateEthereumNode } from '@utils/requests/ethereum';
 import { Networking } from '@interfaces/Ethereum/ِEthereumNode';
 import { useNode } from '@utils/requests/ethereum';
 import { syncModeOptions } from '@data/ethereum/node/syncModeOptions';
-import { updateNetworkingSchema } from '@schemas/ethereumNode/updateNodeSchema';
+import { updateNetworkingSchema } from '@schemas/ethereum/updateNodeSchema';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
 import { useSecretsByType } from '@utils/requests/secrets';

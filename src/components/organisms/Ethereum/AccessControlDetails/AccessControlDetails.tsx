@@ -8,7 +8,7 @@ import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaW
 import { updateEthereumNode } from '@utils/requests/ethereum';
 import { AccessControl } from '@interfaces/Ethereum/ِEthereumNode';
 import { useNode } from '@utils/requests/ethereum';
-import { updateAccessControlSchema } from '@schemas/ethereumNode/updateNodeSchema';
+import { updateAccessControlSchema } from '@schemas/ethereum/updateNodeSchema';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
 

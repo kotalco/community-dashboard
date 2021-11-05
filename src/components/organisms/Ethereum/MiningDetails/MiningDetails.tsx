@@ -11,7 +11,7 @@ import Dialog from '@components/molecules/Dialog/Dialog';
 import { updateEthereumNode } from '@utils/requests/ethereum';
 import { Mining, API } from '@interfaces/Ethereum/ِEthereumNode';
 import { useNode } from '@utils/requests/ethereum';
-import { updateMiningSchema } from '@schemas/ethereumNode/updateNodeSchema';
+import { updateMiningSchema } from '@schemas/ethereum/updateNodeSchema';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
 import { useSecretsByType } from '@utils/requests/secrets';

@@ -1,6 +1,13 @@
 import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
 import { NestedValue } from 'react-hook-form';
 
+export interface CreateBeaconNode {
+  name: string;
+  client: BeaconNodeClient;
+  network: string;
+  eth1Endpoints: string[];
+}
+
 export interface BeaconNode {
   createdAt: string;
   name: string;
@@ -21,13 +28,6 @@ export interface BeaconNode {
   memory: string;
   memoryLimit: string;
   storage: string;
-}
-
-export interface CreateBeaconNode {
-  name: string;
-  client: BeaconNodeClient;
-  network: string;
-  eth1Endpoints: NestedValue<string[]>;
 }
 
 export interface UpdateBeaconNode {

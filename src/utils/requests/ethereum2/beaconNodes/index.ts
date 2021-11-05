@@ -6,7 +6,6 @@ import {
   BeaconNode,
   UpdateBeaconNode,
 } from '@interfaces/ethereum2/BeaconNode';
-import { UnpackNestedValue } from 'react-hook-form';
 
 /**
  * Send a post request to create a new beacon node using ethereum 2.0 protocol
@@ -14,7 +13,7 @@ import { UnpackNestedValue } from 'react-hook-form';
  * @returns The newly created beacon node
  */
 export const createBeaconNode = async (
-  values: UnpackNestedValue<CreateBeaconNode>
+  values: CreateBeaconNode
 ): Promise<BeaconNode> => {
   const { data } = await axios.post<{ beaconnode: BeaconNode }>(
     '/ethereum2/beaconnodes',

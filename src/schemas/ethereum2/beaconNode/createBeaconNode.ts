@@ -1,39 +1,33 @@
-import { RegisterOptions } from 'react-hook-form';
-import { noSpacePattern } from '@schemas/helpers';
+import { mixed, object, SchemaOf, string, array } from 'yup';
 
-type Schema = {
-  name: RegisterOptions;
-  client: RegisterOptions;
-  network: RegisterOptions;
-  eth1Endpoints: RegisterOptions;
-};
+import { CreateBeaconNode } from '@interfaces/ethereum2/BeaconNode';
+import { nameRegex } from '@utils/helpers/regex';
+import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
 
-const schema: Partial<Schema> = {
-  name: {
-    required: 'Please provide a name for your node',
-    setValueAs: (value: string) => value.trim(),
-    pattern: {
-      value: noSpacePattern,
-      message: "Node name shouldn't contain whitespaces",
-    },
-  },
-  client: {
-    required: 'Please choose your client',
-    validate: (value: string) =>
-      value === 'teku' ||
-      value === 'prysm' ||
-      value === 'nimbus' ||
-      value === 'lighthouse' ||
-      'Please choose one of the clients available',
-  },
-  network: {
-    required: 'Please choose your network',
-  },
-  eth1Endpoints: {
-    validate: (value: string[] | undefined) =>
-      (value && value.length > 0 && !!value[0]) ||
-      'You need to enter at least 1 Ethereum endpoint when client is Prysm and network is not Mainnet',
-  },
-};
-
-export default schema;
+export const schema: SchemaOf<CreateBeaconNode> = object({
+  name: string()
+    .required('Name is required')
+    .trim()
+    .matches(nameRegex, 'Spaces not allowed'),
+  client: mixed<BeaconNodeClient>()
+    .required('Client is required')
+    .oneOf(
+      [
+        BeaconNodeClient.lighthouse,
+        BeaconNodeClient.nimbus,
+        BeaconNodeClient.prysm,
+        BeaconNodeClient.teku,
+      ],
+      '${value} is not valid value'
+    ),
+  network: string().required('Network is required').trim(),
+  eth1Endpoints: array().when(['client', 'network'], {
+    is: (client: BeaconNodeClient, network: string) =>
+      client === BeaconNodeClient.prysm && network !== 'mainnet',
+    then: array()
+      .of(string().required('At least 1 endpoint is required'))
+      .min(1, 'At least 1 endpoint is required')
+      .ensure(),
+    otherwise: array().strip(),
+  }),
+});

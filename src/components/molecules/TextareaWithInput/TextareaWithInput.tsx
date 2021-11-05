@@ -1,4 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, {
+  useState,
+  // useRef, useEffect,
+  ReactNode,
+} from 'react';
 import { InformationCircleIcon } from '@heroicons/react/solid';
 
 interface Props {
@@ -8,7 +12,7 @@ interface Props {
   multiple?: boolean;
   tooltip?: string;
   helperText?: string;
-  error?: string;
+  error?: ReactNode;
   onChange: (value: string[]) => void;
 }
 
@@ -23,17 +27,17 @@ const TextareaWithInput: React.FC<Props> = ({
   tooltip,
 }) => {
   const [text, setText] = useState(value?.join('\n') || '');
-  const isMounted = useRef(false);
+  // const isMounted = useRef(false);
 
-  useEffect(() => {
-    if (isMounted.current) {
-      onChange([]);
-      setText('');
-    } else {
-      isMounted.current = true;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [multiple]);
+  // useEffect(() => {
+  //   if (isMounted.current) {
+  //     onChange([]);
+  //     setText('');
+  //   } else {
+  //     isMounted.current = true;
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [multiple]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>

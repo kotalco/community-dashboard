@@ -6,7 +6,7 @@ export interface CreateValidator {
   network: string;
   client: ValidatorsClients;
   keystores: NestedValue<string[]>;
-  walletPasswordSecretName?: string;
+  walletPasswordSecretName: string;
   beaconEndpoints: NestedValue<string[]>;
 }
 

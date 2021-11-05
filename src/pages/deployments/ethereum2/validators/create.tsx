@@ -77,7 +77,6 @@ const CreateValidator: React.FC = () => {
           />
 
           {/* Client */}
-          {/* <div className="mt-4 max-w-xs"> */}
           <Controller
             name="client"
             rules={schema.client}
@@ -92,10 +91,8 @@ const CreateValidator: React.FC = () => {
               />
             )}
           />
-          {/* </div> */}
 
           {/* Network */}
-          {/* <div className="mt-4 max-w-xs"> */}
           <Controller
             name="network"
             control={control}
@@ -112,10 +109,8 @@ const CreateValidator: React.FC = () => {
               />
             )}
           />
-          {/* </div> */}
 
           {/* Key Stores */}
-          {/* <div className="mt-4 max-w-xs"> */}
           <Controller
             name="keystores"
             control={control}
@@ -133,11 +128,9 @@ const CreateValidator: React.FC = () => {
               />
             )}
           />
-          {/* </div> */}
 
           {/* Prysm Client Wallet Password */}
           {client === ValidatorsClients.prysm && (
-            // <div className="mt-4 max-w-xs">
             <Controller
               name="walletPasswordSecretName"
               control={control}
@@ -155,11 +148,9 @@ const CreateValidator: React.FC = () => {
                 />
               )}
             />
-            // </div>
           )}
 
           {/* Beacon Node Endpoints */}
-          {/* <div className="mt-5"> */}
           <Controller
             name="beaconEndpoints"
             control={control}
@@ -180,7 +171,6 @@ const CreateValidator: React.FC = () => {
               />
             )}
           />
-          {/* </div> */}
         </FormLayout>
       </form>
     </Layout>

@@ -12,7 +12,7 @@ import Heading from '@components/templates/Heading/Heading';
 import { clientOptions } from '@data/ethereum/node/clientOptions';
 import { networkOptions } from '@data/ethereum/node/networkOptions';
 import { createEthereumNode } from '@utils/requests/ethereum';
-import { schema } from '@schemas/ethereumNode/createNode';
+import { schema } from '@schemas/ethereum/createNode';
 import {
   CreateEthereumNode,
   EthereumNode,

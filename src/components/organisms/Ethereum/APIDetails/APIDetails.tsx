@@ -13,7 +13,7 @@ import { updateEthereumNode } from '@utils/requests/ethereum';
 import { API } from '@interfaces/Ethereum/ِEthereumNode';
 import { useNode } from '@utils/requests/ethereum';
 import { apiOptions } from '@data/ethereum/node/apiOptions';
-import { updateAPISchema } from '@schemas/ethereumNode/updateNodeSchema';
+import { updateAPISchema } from '@schemas/ethereum/updateNodeSchema';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
 import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
