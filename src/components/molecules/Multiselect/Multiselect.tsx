@@ -1,4 +1,4 @@
-import { useState, Fragment } from 'react';
+import { useState, Fragment, ReactNode } from 'react';
 import Link from 'next/link';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
@@ -6,7 +6,7 @@ import { SelectOption } from '@interfaces/SelectOption';
 
 interface Props {
   options: SelectOption[];
-  error?: string;
+  error?: ReactNode;
   label: string;
   value?: string[];
   placeholder: string;

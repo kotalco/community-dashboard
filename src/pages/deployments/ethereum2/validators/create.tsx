@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { SubmitHandler, useForm, Controller } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import Layout from '@components/templates/Layout/Layout';
 import FormLayout from '@components/templates/FormLayout/FormLayout';
@@ -11,7 +13,7 @@ import Multiselect from '@components/molecules/Multiselect/Multiselect';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 import { clientOptions } from '@data/ethereum2/clientOptions';
 import { networkOptions } from '@data/ethereum2/networkOptions';
-import { schema } from '@schemas/ethereum2/validator/createValidatorSchema';
+import { schema } from '@schemas/ethereum2/validator/createValidator';
 import { CreateValidator, Validator } from '@interfaces/ethereum2/Validator';
 import { createValidator } from '@utils/requests/ethereum2/validators';
 import { ValidatorsClient } from '@enums/Ethereum2/Validators/ValidatorsClient';
@@ -35,7 +37,7 @@ const CreateValidator: React.FC = () => {
     control,
     handleSubmit,
     formState: { errors, isSubmitted, isValid, isSubmitting },
-  } = useForm<CreateValidator>();
+  } = useForm<CreateValidator>({ resolver: yupResolver(schema) });
 
   const client = watch('client');
 
@@ -70,7 +72,6 @@ const CreateValidator: React.FC = () => {
           <TextInput
             control={control}
             name="name"
-            rules={schema.name}
             label="Validator Name"
             error={errors.name?.message}
             defaultValue=""
@@ -79,7 +80,6 @@ const CreateValidator: React.FC = () => {
           {/* Client */}
           <Controller
             name="client"
-            rules={schema.client}
             control={control}
             render={({ field }) => (
               <Select
@@ -96,7 +96,6 @@ const CreateValidator: React.FC = () => {
           <Controller
             name="network"
             control={control}
-            rules={schema.network}
             render={({ field }) => (
               <SelectWithInput
                 options={networkOptions}
@@ -114,13 +113,16 @@ const CreateValidator: React.FC = () => {
           <Controller
             name="keystores"
             control={control}
-            rules={schema.keystore}
             render={({ field }) => (
               <Multiselect
                 label="Ethereum 2.0 Keystores"
                 placeholder="Choose your keystores..."
                 options={keystoreOptions}
-                error={errors.keystores?.message}
+                error={
+                  errors.keystores && (
+                    <ErrorMessage errors={errors} name="keystores" />
+                  )
+                }
                 onChange={field.onChange}
                 value={field.value}
                 href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereum2Keystore}`}
@@ -135,7 +137,6 @@ const CreateValidator: React.FC = () => {
               name="walletPasswordSecretName"
               control={control}
               shouldUnregister={true}
-              rules={schema.walletPassword}
               render={({ field }) => (
                 <Select
                   placeholder="Choose your wallet password..."
@@ -154,7 +155,6 @@ const CreateValidator: React.FC = () => {
           <Controller
             name="beaconEndpoints"
             control={control}
-            rules={schema.beaconEndpoints}
             render={({ field }) => (
               <TextareaWithInput
                 multiple={client === ValidatorsClient.lighthouse}
@@ -164,7 +164,7 @@ const CreateValidator: React.FC = () => {
                     ? 'One endpoint per each line'
                     : ''
                 }
-                error={errors.beaconEndpoints?.message}
+                error={<ErrorMessage errors={errors} name="beaconEndpoints" />}
                 value={field.value}
                 name={field.name}
                 onChange={field.onChange}

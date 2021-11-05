@@ -5,7 +5,7 @@ export interface CreateBeaconNode {
   name: string;
   client: BeaconNodeClient;
   network: string;
-  eth1Endpoints: string[];
+  eth1Endpoints?: string[];
 }
 
 export interface BeaconNode {

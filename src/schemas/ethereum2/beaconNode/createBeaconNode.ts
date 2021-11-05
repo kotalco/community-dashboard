@@ -25,7 +25,7 @@ export const schema: SchemaOf<CreateBeaconNode> = object({
     is: (client: BeaconNodeClient, network: string) =>
       client === BeaconNodeClient.prysm && network !== 'mainnet',
     then: array()
-      .of(string().required('At least 1 endpoint is required'))
+      .of(string())
       .min(1, 'At least 1 endpoint is required')
       .ensure()
       .compact(),

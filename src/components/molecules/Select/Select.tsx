@@ -43,11 +43,12 @@ const Select: React.FC<Props> = ({
     onChange(option.value);
   };
 
-  useEffect(() => {
-    const newValue =
-      allOptions.find((option) => option.value === value) || allOptions[0];
-    setSelected(newValue);
-  }, [allOptions, value]);
+  // useEffect(() => {
+  //   const newValue =
+  //     allOptions.find((option) => option.value === value) || allOptions[0];
+  //   console.log(newValue);
+  //   setSelected(newValue);
+  // }, [allOptions, value]);
 
   return (
     <Listbox value={selected} onChange={handleChange}>

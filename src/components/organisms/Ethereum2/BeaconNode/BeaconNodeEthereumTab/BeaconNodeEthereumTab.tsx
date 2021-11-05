@@ -10,7 +10,6 @@ import {
 import { UpdateEth1Endpoints } from '@interfaces/ethereum2/BeaconNode';
 import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
 import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
-import schema from '@schemas/ethereum2/beaconNode/createBeaconNode';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
 
@@ -63,11 +62,11 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
         <Controller
           name="eth1Endpoints"
           control={control}
-          rules={
-            client === BeaconNodeClient.prysm && network !== 'mainnet'
-              ? schema.eth1Endpoints
-              : undefined
-          }
+          // rules={
+          //   client === BeaconNodeClient.prysm && network !== 'mainnet'
+          //     ? schema.eth1Endpoints
+          //     : undefined
+          // }
           render={({ field }) => (
             <TextareaWithInput
               multiple={
