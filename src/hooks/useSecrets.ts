@@ -28,7 +28,7 @@ export const useSecrets = (config?: SWRInfiniteConfiguration) => {
     },
     AxiosError
   >(key, config);
-  console.log(headers);
+
   // useSWR to get the x-total-count from headers
   // const headers = response?.[0].headers as { 'x-total-count': string };
   const totalCount = headers?.['x-total-count'];
