@@ -59,17 +59,15 @@ function Validators() {
     return (
       <Layout>
         <Heading title="Ethereum 2.0 Deployments" />
-        <div className="py-4">
-          <LinkedTabs tabs={tabs} />
-          <EmptyState
-            title="There is no validators created"
-            description="Get started by creating a new validator."
-            linkUrl="/deployments/ethereum2/validators/create"
-            linkName="New Validator"
-          >
-            <EthereumIcon className="mx-auto w-12 h-12 text-gray-400" />
-          </EmptyState>
-        </div>
+        <LinkedTabs tabs={tabs} />
+        <EmptyState
+          title="There is no validators created"
+          description="Get started by creating a new validator."
+          linkUrl="/deployments/ethereum2/validators/create"
+          linkName="New Validator"
+        >
+          <EthereumIcon className="mx-auto w-12 h-12 text-gray-400" />
+        </EmptyState>
       </Layout>
     );
   }
@@ -80,29 +78,27 @@ function Validators() {
         <ButtonGroup label="Create New" buttons={createButtons} />
       </Heading>
 
-      <div className="py-4">
-        <LinkedTabs tabs={tabs} />
-        <List>
-          {validators.map(({ name, client, network }) => (
-            <ListItem
-              key={name}
-              link={`/deployments/ethereum2/validators/${name}`}
-              title={name}
-            >
-              <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-              <p>{getLabel(network, networkOptions)}</p>
-              <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
-              <p>{getLabel(client, clientOptions)}</p>
-            </ListItem>
-          ))}
-        </List>
-        {!isReachedEnd && (
-          <LoadMoreButton
-            onChange={() => setSize(size + 1)}
-            isLoading={isLoading}
-          />
-        )}
-      </div>
+      <LinkedTabs tabs={tabs} />
+      <List>
+        {validators.map(({ name, client, network }) => (
+          <ListItem
+            key={name}
+            link={`/deployments/ethereum2/validators/${name}`}
+            title={name}
+          >
+            <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
+            <p>{getLabel(network, networkOptions)}</p>
+            <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
+            <p>{getLabel(client, clientOptions)}</p>
+          </ListItem>
+        ))}
+      </List>
+      {!isReachedEnd && (
+        <LoadMoreButton
+          onChange={() => setSize(size + 1)}
+          isLoading={isLoading}
+        />
+      )}
 
       <NotificationPanel
         show={!!name}

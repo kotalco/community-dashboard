@@ -55,17 +55,15 @@ function ClusterPeers() {
     return (
       <Layout>
         <Heading title="IPFS Deployments" />
-        <div className="py-4">
-          <LinkedTabs tabs={tabs} />
-          <EmptyState
-            title="There is no cluster peers created"
-            description="Get started by creating a new cluster peer."
-            linkUrl="/deployments/ipfs/clusterpeers/create"
-            linkName="New Cluster Peer"
-          >
-            <CubeIcon className="mx-auto w-12 h-12 text-gray-400" />
-          </EmptyState>
-        </div>
+        <LinkedTabs tabs={tabs} />
+        <EmptyState
+          title="There is no cluster peers created"
+          description="Get started by creating a new cluster peer."
+          linkUrl="/deployments/ipfs/clusterpeers/create"
+          linkName="New Cluster Peer"
+        >
+          <CubeIcon className="mx-auto w-12 h-12 text-gray-400" />
+        </EmptyState>
       </Layout>
     );
   }
@@ -76,30 +74,28 @@ function ClusterPeers() {
         <ButtonGroup label="Create New" buttons={createButtons} />
       </Heading>
 
-      <div className="py-4">
-        <LinkedTabs tabs={tabs} />
-        <List>
-          {clusterpeers.map(({ name }) => (
-            <ListItem
-              key={name}
-              link={`/deployments/ipfs/clusterpeers/${name}`}
-              title={name}
-            >
-              <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-              <p>public-swarm</p>
-              <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
-              <p>ipfs-cluster-service</p>
-            </ListItem>
-          ))}
-        </List>
+      <LinkedTabs tabs={tabs} />
+      <List>
+        {clusterpeers.map(({ name }) => (
+          <ListItem
+            key={name}
+            link={`/deployments/ipfs/clusterpeers/${name}`}
+            title={name}
+          >
+            <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
+            <p>public-swarm</p>
+            <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
+            <p>ipfs-cluster-service</p>
+          </ListItem>
+        ))}
+      </List>
 
-        {!isReachedEnd && (
-          <LoadMoreButton
-            onChange={() => setSize(size + 1)}
-            isLoading={isLoading}
-          />
-        )}
-      </div>
+      {!isReachedEnd && (
+        <LoadMoreButton
+          onChange={() => setSize(size + 1)}
+          isLoading={isLoading}
+        />
+      )}
 
       <NotificationPanel
         show={!!name}

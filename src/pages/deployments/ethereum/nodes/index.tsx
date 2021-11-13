@@ -53,17 +53,15 @@ function EthereumNodes() {
     return (
       <Layout>
         <Heading title="Ethereum Deployments" />
-        <div className="py-6">
-          <LinkedTabs tabs={tabs} />
-          <EmptyState
-            title="There is no nodes created"
-            description="Get started by creating a new node."
-            linkUrl="/deployments/ethereum/nodes/create"
-            linkName="New Node"
-          >
-            <EthereumIcon className="mx-auto w-12 h-12 text-gray-400" />
-          </EmptyState>
-        </div>
+        <LinkedTabs tabs={tabs} />
+        <EmptyState
+          title="There is no nodes created"
+          description="Get started by creating a new node."
+          linkUrl="/deployments/ethereum/nodes/create"
+          linkName="New Node"
+        >
+          <EthereumIcon className="mx-auto w-12 h-12 text-gray-400" />
+        </EmptyState>
       </Layout>
     );
   }
@@ -79,29 +77,27 @@ function EthereumNodes() {
         </Button>
       </Heading>
 
-      <div className="py-4">
-        <LinkedTabs tabs={tabs} />
-        <List>
-          {nodes.map(({ name, client, network }) => (
-            <ListItem
-              key={name}
-              link={`/deployments/ethereum/nodes/${name}`}
-              title={name}
-            >
-              <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-              <p>{getLabel(network, networkOptions)}</p>
-              <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
-              <p>{getLabel(client, clientOptions)}</p>
-            </ListItem>
-          ))}
-        </List>
-        {!isReachedEnd && (
-          <LoadMoreButton
-            onChange={() => setSize(size + 1)}
-            isLoading={isLoading}
-          />
-        )}
-      </div>
+      <LinkedTabs tabs={tabs} />
+      <List>
+        {nodes.map(({ name, client, network }) => (
+          <ListItem
+            key={name}
+            link={`/deployments/ethereum/nodes/${name}`}
+            title={name}
+          >
+            <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
+            <p>{getLabel(network, networkOptions)}</p>
+            <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
+            <p>{getLabel(client, clientOptions)}</p>
+          </ListItem>
+        ))}
+      </List>
+      {!isReachedEnd && (
+        <LoadMoreButton
+          onChange={() => setSize(size + 1)}
+          isLoading={isLoading}
+        />
+      )}
 
       <NotificationPanel
         show={!!name}

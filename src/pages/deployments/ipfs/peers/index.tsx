@@ -55,17 +55,15 @@ function Peers() {
     return (
       <Layout>
         <Heading title="IPFS Deployments" />
-        <div className="py-4">
-          <LinkedTabs tabs={tabs} />
-          <EmptyState
-            title="There is no peers created"
-            description="Get started by creating a new peer."
-            linkUrl="/deployments/ipfs/peers/create"
-            linkName="New Peer"
-          >
-            <CubeIcon className="mx-auto w-12 h-12 text-gray-400" />
-          </EmptyState>
-        </div>
+        <LinkedTabs tabs={tabs} />
+        <EmptyState
+          title="There is no peers created"
+          description="Get started by creating a new peer."
+          linkUrl="/deployments/ipfs/peers/create"
+          linkName="New Peer"
+        >
+          <CubeIcon className="mx-auto w-12 h-12 text-gray-400" />
+        </EmptyState>
       </Layout>
     );
   }
@@ -76,30 +74,28 @@ function Peers() {
         <ButtonGroup label="Create New" buttons={createButtons} />
       </Heading>
 
-      <div className="py-4">
-        <LinkedTabs tabs={tabs} />
-        <List>
-          {peers.map(({ name }) => (
-            <ListItem
-              key={name}
-              link={`/deployments/ipfs/peers/${name}`}
-              title={name}
-            >
-              <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-              <p>public-swarm</p>
-              <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
-              <p>go-ipfs</p>
-            </ListItem>
-          ))}
-        </List>
+      <LinkedTabs tabs={tabs} />
+      <List>
+        {peers.map(({ name }) => (
+          <ListItem
+            key={name}
+            link={`/deployments/ipfs/peers/${name}`}
+            title={name}
+          >
+            <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
+            <p>public-swarm</p>
+            <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
+            <p>go-ipfs</p>
+          </ListItem>
+        ))}
+      </List>
 
-        {!isReachedEnd && (
-          <LoadMoreButton
-            onChange={() => setSize(size + 1)}
-            isLoading={isLoading}
-          />
-        )}
-      </div>
+      {!isReachedEnd && (
+        <LoadMoreButton
+          onChange={() => setSize(size + 1)}
+          isLoading={isLoading}
+        />
+      )}
 
       <NotificationPanel
         show={!!name}
