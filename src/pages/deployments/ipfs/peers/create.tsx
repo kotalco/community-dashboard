@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { FieldError, SubmitHandler, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { joiResolver } from '@hookform/resolvers/joi';
@@ -8,11 +9,13 @@ import TextInput from '@components/molecules/TextInput/TextInput';
 import Checkbox from '@components/molecules/CheckBox/CheckBox';
 import { createIPFSPeer } from '@utils/requests/ipfs/peers';
 import { schema } from '@schemas/ipfs/peers/createIPFSPeer';
-import { CreatePeer } from '@interfaces/ipfs/Peer';
+import { CreatePeer, Peer } from '@interfaces/ipfs/Peer';
 import { IPFSConfigurationProfile } from '@enums/IPFS/Peers/IPFSConfigurationProfile';
 import { initProfilesOptions } from '@data/ipfs/peers/initProfilesOptions';
+import { handleRequest } from '@utils/helpers/handleRequest';
 
 const CreateIPFSPeerPage: React.FC = () => {
+  const [serverError, setServerError] = useState('');
   const router = useRouter();
   const {
     register,
@@ -27,18 +30,19 @@ const CreateIPFSPeerPage: React.FC = () => {
   });
 
   const onSubmit: SubmitHandler<CreatePeer> = async (values) => {
-    try {
-      const peer = await createIPFSPeer(values);
-      localStorage.setItem('peer', peer.name);
-      void router.push('/deployments/ipfs/peers');
-    } catch (e) {
-      // if (axios.isAxiosError(e)) {
-      //   const error = handleAxiosError<ServerError>(e);
-      //   setError('name', {
-      //     type: 'server',
-      //     message: error.response?.data.error,
-      //   });
-      // }
+    setServerError('');
+    const { error, response } = await handleRequest<Peer>(
+      createIPFSPeer.bind(undefined, values)
+    );
+
+    if (error) {
+      setServerError(error);
+      return;
+    }
+
+    if (response) {
+      localStorage.setItem('peer', response.name);
+      router.push('/deployments/ipfs/peers');
     }
   };
 
@@ -49,6 +53,7 @@ const CreateIPFSPeerPage: React.FC = () => {
       <h1 className="text-2xl font-semibold">Create New Peer</h1>
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormLayout
+          error={serverError}
           isSubmitted={isSubmitted}
           isSubmitting={isSubmitting}
           isValid={isValid}
@@ -59,6 +64,7 @@ const CreateIPFSPeerPage: React.FC = () => {
               control={control}
               name="name"
               label="Peer Name"
+              defaultValue=""
               error={errors.name?.message}
             />
 

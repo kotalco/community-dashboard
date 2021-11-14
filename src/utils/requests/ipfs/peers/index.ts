@@ -1,15 +1,8 @@
-import useSWR from 'swr';
-import axios, { fetcher } from '../../../axios';
-import { AxiosError } from 'axios';
+import axios from '../../../axios';
 
 import { CreatePeer, Peer } from '@interfaces/ipfs/Peer';
 
-/**
- * Send POST request to the server to create new IPFS Peer
- * @param body data required to create new IPFS Peer
- * @returns the IPFS Peer created by the server
- */
-export const createIPFSPeer = async (body: CreatePeer): Promise<Peer> => {
+export const createIPFSPeer = async (body: CreatePeer) => {
   const { data } = await axios.post<{ peer: Peer }>(`/ipfs/peers`, body);
 
   return data.peer;
