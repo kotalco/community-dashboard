@@ -5,27 +5,11 @@ import {
   Validator,
   UpdateValidator,
 } from '@interfaces/ethereum2/Validator';
-import { UnpackNestedValue } from 'react-hook-form';
 
-/**
- * Send a post request to create a new validator using ethereum 2.0 protocol
- * @param body The required data to create a new validator
- * @returns The newly created validator
- */
-export const createValidator = async (
-  values: UnpackNestedValue<CreateValidator>
-): Promise<Validator> => {
-  const { keystores, ...rest } = values;
-  const keystoresObject = keystores.map((key) => ({ secretName: key }));
-
-  const body = {
-    keystores: keystoresObject,
-    ...rest,
-  };
-
+export const createValidator = async (values: CreateValidator) => {
   const { data } = await axios.post<{ validator: Validator }>(
     '/ethereum2/validators',
-    body
+    values
   );
 
   return data.validator;

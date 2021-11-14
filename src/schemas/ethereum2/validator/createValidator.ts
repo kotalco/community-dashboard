@@ -22,7 +22,15 @@ export const schema: SchemaOf<CreateValidator> = object({
     ),
   network: string().required('Network is required').trim(),
   keystores: array()
-    .of(string().required())
+    .of(
+      mixed()
+        .required()
+        .transform(function (value: string) {
+          return this.isType(value) && value !== null
+            ? { secretName: value }
+            : value;
+        })
+    )
     .ensure()
     .compact()
     .min(1, '1 keystore at least is required'),
