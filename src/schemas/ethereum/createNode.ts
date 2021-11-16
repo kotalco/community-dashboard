@@ -11,7 +11,7 @@ export const schema: SchemaOf<CreateEthereumNode> = object({
     .matches(nameRegex, 'Spaces not allowed'),
   client: mixed<EthereumNodeClient>()
     .required('Client is required')
-    .oneOf<EthereumNodeClient>(
+    .oneOf(
       [
         EthereumNodeClient.geth,
         EthereumNodeClient.besu,
