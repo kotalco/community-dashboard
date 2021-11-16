@@ -30,8 +30,7 @@ export const usePeers = (config?: SWRInfiniteConfiguration) => {
   }>(key, config);
 
   // useSWR to get the x-total-count from headers
-  // const headers = response?.[0].headers as { 'x-total-count': string };
-  const totalCount = headers?.['x-total-count'];
+  const totalCount = headers && parseInt(headers['x-total-count']);
 
   // Collect all data in single arrays instead of 2D arrays
   const initial: Peer[] = [];
