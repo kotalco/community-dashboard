@@ -19,7 +19,7 @@ function Logging({ wsUrl }: Props) {
 
   return (
     <div className="p-3 sm:p-6">
-      <div className="border border-black h-96 bg-black overflow-y-auto text-white text-xs px-3 overscroll-container">
+      <div className="border border-black h-96 bg-black overflow-y-auto text-white text-sm px-3 overscroll-container">
         <ul>
           {logs.map((log, i) => (
             <li
