@@ -34,6 +34,7 @@ export const navigation: Navigation[] = [
         protocol: 'ethereum2',
       },
       { name: 'IPFS', href: '/deployments/ipfs/peers', protocol: 'ipfs' },
+      { name: 'Chainlink', href: '/deployments/chainlink', protocol: 'chain' },
     ],
   },
   { type: 'link', name: 'Secrets', icon: KeyIcon, href: '/core/secrets' },
