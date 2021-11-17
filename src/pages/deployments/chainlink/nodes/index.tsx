@@ -7,70 +7,67 @@ import Button from '@components/atoms/Button/Button';
 import Layout from '@components/templates/Layout/Layout';
 import List from '@components/organisms/List/List';
 import ListItem from '@components/molecules/ListItem/ListItem';
-import EthereumIcon from '@components/Icons/EthereumIcon/EthereumIcon';
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import EmptyState from '@components/molecules/EmptyState/EmptyState';
 import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
+import ChailinkIcon from '@components/Icons/ChainlinkIcon/ChailinkIcon';
 import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
 import { useNotification } from '@hooks/useNotification';
-import { clientOptions } from '@data/ethereum/node/clientOptions';
-import { networkOptions } from '@data/ethereum/node/networkOptions';
-import { getLabel } from '@utils/helpers/getLabel';
-import { useEthereumNodes } from '@hooks/useEthereumNodes';
+import { useChainlinkNodes } from '@hooks/useChainlinkNodes';
 
 function ChainlinkNode() {
   const { name, onClose } = useNotification('chainlink');
-  //   const {
-  //     nodes,
-  //     isEmpty,
-  //     isInitialLoading,
-  //     size,
-  //     setSize,
-  //     isReachedEnd,
-  //     isLoading,
-  //     totalCount,
-  //     error,
-  //   } = useEthereumNodes();
+  const {
+    nodes,
+    isEmpty,
+    isInitialLoading,
+    size,
+    setSize,
+    isReachedEnd,
+    isLoading,
+    totalCount,
+    error,
+  } = useChainlinkNodes();
 
-  //   const tabs = [
-  //     {
-  //       name: 'Nodes',
-  //       href: '/deployments/ethereum/nodes',
-  //       count: totalCount,
-  //     },
-  //   ];
+  const tabs = [
+    {
+      name: 'Nodes',
+      href: '/deployments/chainlink/nodes',
+      count: totalCount,
+    },
+  ];
 
-  //   if (isInitialLoading) {
-  //     return <LoadingIndicator />;
-  //   }
+  if (isInitialLoading) {
+    return <LoadingIndicator />;
+  }
 
-  //   if (error) {
-  //     return <Error statusCode={500} />;
-  //   }
+  if (error) {
+    return <Error statusCode={500} />;
+  }
 
-  //   if (isEmpty) {
-  //     return (
-  //       <Layout>
-  //         <Heading title="Ethereum Deployments" />
-  //         <LinkedTabs tabs={tabs} />
-  //         <EmptyState
-  //           title="There is no nodes created"
-  //           description="Get started by creating a new node."
-  //           linkUrl="/deployments/ethereum/nodes/create"
-  //           linkName="New Node"
-  //         >
-  //           <EthereumIcon className="mx-auto w-12 h-12 text-gray-400" />
-  //         </EmptyState>
-  //       </Layout>
-  //     );
-  //   }
+  if (isEmpty) {
+    return (
+      <Layout>
+        <Heading title="Chainlink Deployments" />
+        <LinkedTabs tabs={tabs} />
+        <EmptyState
+          title="There is no nodes created"
+          description="Get started by creating a new node."
+          linkUrl="/deployments/chainlink/nodes/create"
+          linkName="New Node"
+        >
+          <ChailinkIcon className="mx-auto w-12 h-12 text-gray-400" />
+        </EmptyState>
+      </Layout>
+    );
+  }
 
   return (
     <Layout>
-      {/* <Heading title="Ethereum Deployments">
+      <Heading title="Chainlink Deployments">
         <Button
-          href="/deployments/ethereum/nodes/create"
+          href="/deployments/chainlink/nodes/create"
           className="btn btn-primary"
         >
           Create New Node
@@ -79,16 +76,16 @@ function ChainlinkNode() {
 
       <LinkedTabs tabs={tabs} />
       <List>
-        {nodes.map(({ name, client, network }) => (
+        {nodes.map(({ name, ethereumChainId }) => (
           <ListItem
             key={name}
-            link={`/deployments/ethereum/nodes/${name}`}
+            link={`/deployments/chainlink/nodes/${name}`}
             title={name}
           >
             <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-            <p>{getLabel(network, networkOptions)}</p>
+            <p>{ethereumChainId}</p>
             <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
-            <p>{getLabel(client, clientOptions)}</p>
+            <p>Chainlink</p>
           </ListItem>
         ))}
       </List>
@@ -111,7 +108,7 @@ function ChainlinkNode() {
           Node has been created successfully, and will be up and running in few
           seconds.
         </p>
-      </NotificationPanel> */}
+      </NotificationPanel>
     </Layout>
   );
 }
