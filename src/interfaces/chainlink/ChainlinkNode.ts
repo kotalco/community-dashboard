@@ -1,7 +1,6 @@
 import { Resources } from '@interfaces/Resources';
 
-export interface ChainlinkNode extends Resources {
-  createdAt: string;
+export interface CreateChainlinkNode {
   name: string;
   ethereumChainId: string;
   ethereumWsEndpoint: string;
@@ -9,6 +8,10 @@ export interface ChainlinkNode extends Resources {
   databaseURL: string;
   keystorePasswordSecretName: string;
   apiCredentials: { email: string; passwordSecretName: string };
+}
+
+export interface ChainlinkNode extends CreateChainlinkNode, Resources {
+  createdAt: string;
   corsDomains: string[];
   certSecretName: string;
   tlsPort: number;
