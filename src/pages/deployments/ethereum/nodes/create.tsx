@@ -6,8 +6,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Layout from '@components/templates/Layout/Layout';
 import FormLayout from '@components/templates/FormLayout/FormLayout';
 import TextInput from '@components/molecules/TextInput/TextInput';
-import Select from '@components/molecules/Select/Select';
+// import Select from '@components/molecules/Select/Select';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
+import Select from '@components/molecules/SelectNew/SelectNew';
 import Heading from '@components/templates/Heading/Heading';
 import { clientOptions } from '@data/ethereum/node/clientOptions';
 import { networkOptions } from '@data/ethereum/node/networkOptions';
@@ -73,13 +74,12 @@ function CreateNode() {
 
           {/* Client */}
           <Controller
-            name="client"
             control={control}
-            defaultValue=""
+            name="client"
             render={({ field }) => (
               <Select
-                placeholder="Choose a client..."
                 label="Client"
+                placeholder="Choose a client..."
                 error={errors.client?.message}
                 options={clientOptions}
                 onChange={field.onChange}
@@ -109,7 +109,6 @@ function CreateNode() {
           <Controller
             name="nodePrivateKeySecretName"
             control={control}
-            defaultValue=""
             render={({ field }) => (
               <Select
                 placeholder="Choose a private key..."
@@ -117,7 +116,6 @@ function CreateNode() {
                 error={errors.nodePrivateKeySecretName?.message}
                 options={privateKeys}
                 onChange={field.onChange}
-                value={field.value}
                 href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}
                 hrefTitle="Create new private key..."
               />

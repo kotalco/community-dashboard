@@ -23,7 +23,7 @@ interface Props<T> {
   hrefTitle?: string;
 }
 
-function Select<T extends { id: string }>({
+function Select<T extends { id: string } | string>({
   error,
   onChange,
   label,
@@ -87,7 +87,11 @@ function Select<T extends { id: string }>({
               >
                 {options.map((option) => (
                   <Listbox.Option
-                    key={option.value.id}
+                    key={
+                      typeof option.value === 'string'
+                        ? option.value
+                        : option.value.id
+                    }
                     value={option}
                     className={({ active }) =>
                       `${
