@@ -6,7 +6,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Layout from '@components/templates/Layout/Layout';
 import FormLayout from '@components/templates/FormLayout/FormLayout';
 import TextInput from '@components/molecules/TextInput/TextInput';
-// import Select from '@components/molecules/Select/Select';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 import Select from '@components/molecules/SelectNew/SelectNew';
 import Heading from '@components/templates/Heading/Heading';
@@ -82,6 +81,8 @@ function CreateNode() {
                 placeholder="Choose a client..."
                 error={errors.client?.message}
                 options={clientOptions}
+                labelProp="label"
+                valueProp="value"
                 onChange={field.onChange}
               />
             )}
@@ -115,6 +116,8 @@ function CreateNode() {
                 label="Node private key (optional)"
                 error={errors.nodePrivateKeySecretName?.message}
                 options={privateKeys}
+                labelProp="label"
+                valueProp="value"
                 onChange={field.onChange}
                 href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}
                 hrefTitle="Create new private key..."
