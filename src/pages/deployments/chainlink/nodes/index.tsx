@@ -34,7 +34,7 @@ function ChainlinkNode() {
 
   const tabs = [
     {
-      name: 'Chainlink Nodes',
+      name: 'Nodes',
       href: '/deployments/chainlink/nodes',
       count: totalCount,
     },
