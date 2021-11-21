@@ -2,7 +2,7 @@ import { Resources } from '@interfaces/Resources';
 
 export interface CreateChainlinkNode {
   name: string;
-  ethereumChainId: string;
+  ethereumChainId: number;
   ethereumWsEndpoint: string;
   linkContractAddress: string;
   databaseURL: string;

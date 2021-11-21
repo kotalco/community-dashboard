@@ -10,6 +10,8 @@ const ChainlinkIcon: React.FC<Props> = ({ className }) => {
       height="64"
       viewBox="0 0 64 64"
       fill="none"
+      strokeWidth="1px"
+      stroke="#000"
       className={className}
     >
       <path d="M56 20v24L32 56 8 44V20L32 8l24 12z" />

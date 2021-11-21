@@ -15,6 +15,8 @@ import ChailinkIcon from '@components/Icons/ChainlinkIcon/ChailinkIcon';
 import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
 import { useNotification } from '@hooks/useNotification';
 import { useChainlinkNodes } from '@hooks/useChainlinkNodes';
+import { getLabel } from '@utils/helpers/getLabel';
+import { EVM_CHAINS } from '@data/chainlink/evmChain';
 
 function ChainlinkNode() {
   const { name, onClose } = useNotification('chainlink');
@@ -32,7 +34,7 @@ function ChainlinkNode() {
 
   const tabs = [
     {
-      name: 'Nodes',
+      name: 'Chainlink Nodes',
       href: '/deployments/chainlink/nodes',
       count: totalCount,
     },
@@ -55,7 +57,7 @@ function ChainlinkNode() {
           title="There is no nodes created"
           description="Get started by creating a new node."
           linkUrl="/deployments/chainlink/nodes/create"
-          linkName="New Node"
+          linkName="New Chainlink Node"
         >
           <ChailinkIcon className="mx-auto w-12 h-12 text-gray-400" />
         </EmptyState>
@@ -70,20 +72,25 @@ function ChainlinkNode() {
           href="/deployments/chainlink/nodes/create"
           className="btn btn-primary"
         >
-          Create New Node
+          Create New Chainlink Node
         </Button>
       </Heading>
 
       <LinkedTabs tabs={tabs} />
       <List>
-        {nodes.map(({ name, ethereumChainId }) => (
+        {nodes.map(({ name, ethereumChainId, linkContractAddress }) => (
           <ListItem
             key={name}
             link={`/deployments/chainlink/nodes/${name}`}
             title={name}
           >
             <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-            <p>{ethereumChainId}</p>
+            <p>
+              {getLabel(
+                `${ethereumChainId}:${linkContractAddress}`,
+                EVM_CHAINS
+              )}
+            </p>
             <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
             <p>Chainlink</p>
           </ListItem>

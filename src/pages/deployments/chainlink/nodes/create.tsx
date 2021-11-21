@@ -9,12 +9,16 @@ import TextInput from '@components/molecules/TextInput/TextInput';
 import Select from '@components/molecules/SelectNew/SelectNew';
 import Heading from '@components/templates/Heading/Heading';
 import { schema } from '@schemas/ethereum/createNode';
-import { CreateChainlinkNode } from '@interfaces/chainlink/ChainlinkNode';
+import {
+  ChainlinkNode,
+  CreateChainlinkNode,
+} from '@interfaces/chainlink/ChainlinkNode';
 import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { EVM_CHAINS } from '@data/chainlink/evmChain';
 import { useEthereumNodes } from '@hooks/useEthereumNodes';
+import { createChainlinkNode } from '@utils/requests/chainlink';
 
 function CreateChainlink() {
   const [serverError, setServerError] = useState('');
@@ -40,28 +44,27 @@ function CreateChainlink() {
   const handleEVMChange = (value: string | undefined) => {
     if (value) {
       const [id, address] = value.split(':');
-      setValue('ethereumChainId', id);
+      setValue('ethereumChainId', parseInt(id, 10));
       setValue('linkContractAddress', address);
     }
   };
 
   // eslint-disable-next-line @typescript-eslint/require-await
   const onSubmit: SubmitHandler<CreateChainlinkNode> = async (values) => {
-    console.log(values);
-    // setServerError('');
-    // const { error, response } = await handleRequest<EthereumNode>(
-    //   createEthereumNode.bind(undefined, values)
-    // );
+    setServerError('');
+    const { error, response } = await handleRequest<ChainlinkNode>(
+      createChainlinkNode.bind(undefined, values)
+    );
 
-    // if (error) {
-    //   setServerError(error);
-    //   return;
-    // }
+    if (error) {
+      setServerError(error);
+      return;
+    }
 
-    // if (response) {
-    //   localStorage.setItem('node', response.name);
-    //   router.push('/deployments/ethereum/nodes');
-    // }
+    if (response) {
+      localStorage.setItem('node', response.name);
+      router.push('/deployments/chainlink/nodes');
+    }
   };
 
   return (
