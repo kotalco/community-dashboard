@@ -39,9 +39,16 @@ const CreateSecret: React.FC = () => {
   const type = watch('type');
 
   const onSubmit: SubmitHandler<CreateKubernetesSecret> = async (values) => {
+    if (values.data['tls/crt'] && values.data['tls/key']) {
+      values.data['tls.crt'] = values.data['tls/crt'];
+      values.data['tls.key'] = values.data['tls/key'];
+      delete values.data['tls/crt'];
+      delete values.data['tls/key'];
+    }
+
     try {
       await createSecret(values);
-      void router.push('/core/secrets');
+      router.push('/core/secrets');
     } catch (e) {
       // if (axios.isAxiosError(e)) {
       //   const error = handleAxiosError<ServerError>(e);
@@ -68,6 +75,7 @@ const CreateSecret: React.FC = () => {
             control={control}
             name="name"
             rules={nameValidations}
+            defaultValue=""
           />
 
           <div className="mt-4 max-w-xs">
@@ -97,6 +105,7 @@ const CreateSecret: React.FC = () => {
                 error={errors.data?.password?.message}
                 control={control}
                 name="data.password"
+                defaultValue=""
                 rules={passwordValidations}
               />
             </div>
@@ -140,6 +149,21 @@ const CreateSecret: React.FC = () => {
                 )}
               />
             </div>
+          )}
+
+          {type === KubernetesSecretTypes.tlsCertificate && (
+            <>
+              <Textarea
+                label="TLS Key"
+                {...register('data.tls/key')}
+                error={errors.data?.['tls/key']?.message}
+              ></Textarea>
+              <Textarea
+                label="TLS Certificate"
+                {...register('data.tls/crt', keyValidations)}
+                error={errors.data?.['tls/crt']?.message}
+              ></Textarea>
+            </>
           )}
         </FormLayout>
       </form>

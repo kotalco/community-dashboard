@@ -9,5 +9,14 @@ export interface KubernetesSecret {
 export interface CreateKubernetesSecret {
   name: string;
   type: KubernetesSecretTypes;
-  data: { password: string; key: string; keystore: string; secret: string };
+  data: {
+    password: string;
+    key: string;
+    keystore: string;
+    secret: string;
+    'tls/key'?: string;
+    'tls/crt'?: string;
+    'tls.key': string;
+    'tls.crt': string;
+  };
 }

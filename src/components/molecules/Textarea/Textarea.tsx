@@ -14,9 +14,9 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, Props>(function Textarea(
   ref
 ) {
   return (
-    <div>
+    <div className="mb-4 max-w-xs">
       {label && <InputLabel htmlFor={name}>{label}</InputLabel>}
-      <div className="mt-1 max-w-xs">
+      <div>
         <textarea
           ref={ref}
           name={name}
@@ -24,7 +24,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, Props>(function Textarea(
           rows={5}
           onChange={onChange}
           onBlur={onBlur}
-          className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+          className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md resize-none"
         ></textarea>
         {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
       </div>

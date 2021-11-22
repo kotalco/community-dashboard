@@ -20,4 +20,5 @@ export const secretTypesOptions: SelectOption[] = [
     label: 'IPFS Cluster Key',
     value: KubernetesSecretTypes.ipfsClusterPeerPrivatekey,
   },
+  { label: 'TLS Certificate', value: KubernetesSecretTypes.tlsCertificate },
 ];

@@ -3,44 +3,45 @@ import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 
 import Select from '@components/molecules/SelectNew/SelectNew';
 import Button from '@components/atoms/Button/Button';
-import { ChainlinkNode, Ethereum } from '@interfaces/chainlink/ChainlinkNode';
+import { ChainlinkNode, TLS } from '@interfaces/chainlink/ChainlinkNode';
 import { KeyedMutator } from 'swr';
 import { updateChainlinkNode } from '@utils/requests/chainlink';
 import { handleRequest } from '@utils/helpers/handleRequest';
-import { useEthereumNodes } from '@hooks/useEthereumNodes';
+import { useSecretsByType } from '@utils/requests/secrets';
+import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
+import Toggle from '@components/molecules/Toggle/Toggle';
+import TextInput from '@components/molecules/TextInput/TextInput';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { schema } from '@schemas/chainlink/tls';
 
-interface Props extends Ethereum {
+interface Props extends TLS {
   name: string;
   setNode: KeyedMutator<{
     node: ChainlinkNode;
   }>;
 }
 
-function EthereumDetails({
-  ethereumHttpEndpoints,
-  ethereumWsEndpoint,
+function TLSDetails({
+  certSecretName,
+  tlsPort,
+  secureCookies,
   name,
   setNode,
 }: Props) {
   const [submitSuccess, setSubmitSuccess] = useState('');
   const [serverError, setServerError] = useState('');
-  const { nodes, isLoading } = useEthereumNodes();
-  const activeNodes = nodes
-    .filter(({ ws }) => ws)
-    .map(({ name, wsPort, rpcPort }) => ({
-      label: name,
-      wsValue: `ws://${name}:${wsPort}`,
-      httpValue: `http://${name}:${rpcPort}`,
-    }));
+  const { data: tlsCertificates, isLoading } = useSecretsByType(
+    KubernetesSecretTypes.tlsCertificate
+  );
 
   const {
     handleSubmit,
     control,
     reset,
     formState: { isDirty, isSubmitting, errors },
-  } = useForm<Ethereum>();
+  } = useForm<TLS>({ resolver: yupResolver(schema) });
 
-  const onSubmit: SubmitHandler<Ethereum> = async (values) => {
+  const onSubmit: SubmitHandler<TLS> = async (values) => {
     setServerError('');
     const { error, response } = await handleRequest<ChainlinkNode>(
       updateChainlinkNode.bind(undefined, values, name)
@@ -54,55 +55,57 @@ function EthereumDetails({
     if (response) {
       setNode();
       reset(values);
-      setSubmitSuccess('Ethereum data has been updated');
+      setSubmitSuccess('TLS certificate data has been updated');
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
-        {/* Ethereum Websocket Endpint */}
+        {/* Certificate */}
         {!isLoading && (
           <Controller
             control={control}
-            name="ethereumWsEndpoint"
-            defaultValue={ethereumWsEndpoint}
+            name="certSecretName"
+            defaultValue={certSecretName}
             render={({ field }) => (
               <Select
-                options={activeNodes}
+                options={tlsCertificates}
                 labelProp="label"
-                valueProp="wsValue"
+                valueProp="value"
                 value={field.value}
                 onChange={field.onChange}
-                label="Ethereum Websocket Endpint"
-                error={errors.ethereumWsEndpoint?.message}
-                other
-                otherLabel="External Manged Node"
+                label="Certificate"
+                error={errors.certSecretName?.message}
+                placeholder="Select a certificate..."
+                href={`/core/secrets/create?type=${KubernetesSecretTypes.tlsCertificate}`}
+                hrefTitle="Add a certificate..."
               />
             )}
           />
         )}
 
-        {/* Ethereum HTTP Endpoints */}
-        {!isLoading && (
-          <Controller
-            control={control}
-            name="ethereumHttpEndpoints"
-            defaultValue={ethereumHttpEndpoints}
-            render={({ field }) => (
-              <Select
-                options={activeNodes}
-                labelProp="label"
-                valueProp="httpValue"
-                value={field.value}
-                onChange={field.onChange}
-                label="Ethereum HTTP Endpints"
-                placeholder="Select nodes..."
-                multiple
-              />
-            )}
-          />
-        )}
+        {/* Secure Cookies */}
+        <Controller
+          control={control}
+          name="secureCookies"
+          defaultValue={secureCookies}
+          render={({ field }) => (
+            <Toggle
+              label="Secure Cookies"
+              checked={field.value}
+              onChange={field.onChange}
+            />
+          )}
+        />
+
+        {/* TLS Port */}
+        <TextInput
+          control={control}
+          defaultValue={tlsPort}
+          name="tlsPort"
+          label="TLS Port"
+        />
       </div>
 
       <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
@@ -125,4 +128,4 @@ function EthereumDetails({
   );
 }
 
-export default EthereumDetails;
+export default TLSDetails;

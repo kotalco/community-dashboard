@@ -13,15 +13,15 @@ export const useSecretsByType = (
   type: KubernetesSecretTypes,
   config?: SWRConfiguration
 ) => {
-  const swr = useSWR<{ secrets: KubernetesSecret[] }, AxiosError>(
-    `/core/secrets?type=${type}`,
-    fetcher,
-    config
-  );
-  const secrets = swr.data?.secrets;
-  const data = arrangeSecrets(secrets || []);
+  const { data, error, ...rest } = useSWR<
+    { secrets: KubernetesSecret[] },
+    AxiosError
+  >(`/core/secrets?type=${type}`, fetcher, config);
 
-  return { ...swr, data };
+  const secrets = data?.secrets;
+  const arranged = arrangeSecrets(secrets || []);
+
+  return { data: arranged, error, isLoading: !error && !data, ...rest };
 };
 
 /**

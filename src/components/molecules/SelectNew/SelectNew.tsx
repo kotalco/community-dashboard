@@ -59,6 +59,7 @@ function Select<T extends { [key: string]: string }>({
   const handleChange = (option: T) => {
     if (!multiple) {
       setSelected(option);
+
       if (option[valueProp] === 'other') {
         return onChange(undefined);
       }
@@ -98,7 +99,9 @@ function Select<T extends { [key: string]: string }>({
                 className={`bg-white relative w-full border shadow-sm pl-3 pr-10 py-2 text-left cursor-default focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm ${
                   error ? 'border-red-300' : 'border-gray-300 '
                 } ${
-                  selected?.value === 'other' ? 'rounded-t-md' : 'rounded-md'
+                  selected?.[valueProp] === 'other'
+                    ? 'rounded-t-md'
+                    : 'rounded-md'
                 }`}
               >
                 <span
@@ -107,7 +110,7 @@ function Select<T extends { [key: string]: string }>({
                   }`}
                 >
                   {!multiple
-                    ? selected?.[labelProp]
+                    ? selected?.[labelProp] || placeholder
                     : multiValues.map((value) => value[labelProp]).join(', ') ||
                       placeholder}
                 </span>

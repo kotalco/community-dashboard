@@ -29,6 +29,7 @@ import { EVM_CHAINS } from '@data/chainlink/evmChain';
 import DatabaseDetails from '@components/organisms/Chainlink/DatabaseDetails/DatabaseDetails';
 import EthereumDetails from '@components/organisms/Chainlink/EthereumDetails/EthereumDetails';
 import WalletDetails from '@components/organisms/Chainlink/WalletDetails/WalletDetails';
+import TLSDetails from '@components/organisms/Chainlink/TLSDetails/TLSDetails';
 
 function ChainlinkNode() {
   const { query } = useRouter();
@@ -93,6 +94,17 @@ function ChainlinkNode() {
               name={node.name}
               setNode={mutate}
               keystorePasswordSecretName={node.keystorePasswordSecretName}
+            />
+          </Tab.Panel>
+
+          {/* TLS */}
+          <Tab.Panel className="focus:outline-none">
+            <TLSDetails
+              name={node.name}
+              setNode={mutate}
+              certSecretName={node.certSecretName}
+              secureCookies={node.secureCookies}
+              tlsPort={node.tlsPort}
             />
           </Tab.Panel>
 

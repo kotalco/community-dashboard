@@ -17,7 +17,7 @@ const Toggle: React.FC<Props> = ({
 }) => {
   return (
     <>
-      <Switch.Group as="div" className="flex items-center">
+      <Switch.Group as="div" className="flex items-center mb-4">
         <Switch
           checked={checked}
           onChange={onChange}

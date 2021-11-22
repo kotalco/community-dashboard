@@ -20,7 +20,9 @@ interface Props extends Wallet {
 function WalletDetails({ keystorePasswordSecretName, name, setNode }: Props) {
   const [submitSuccess, setSubmitSuccess] = useState('');
   const [serverError, setServerError] = useState('');
-  const { data: passwords } = useSecretsByType(KubernetesSecretTypes.password);
+  const { data: passwords, isLoading } = useSecretsByType(
+    KubernetesSecretTypes.password
+  );
 
   const {
     handleSubmit,
@@ -51,7 +53,7 @@ function WalletDetails({ keystorePasswordSecretName, name, setNode }: Props) {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
         {/* Keystore Password */}
-        {passwords.length && (
+        {!isLoading && (
           <Controller
             control={control}
             name="keystorePasswordSecretName"

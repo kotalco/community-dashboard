@@ -13,6 +13,12 @@ export interface Wallet {
   keystorePasswordSecretName: string;
 }
 
+export interface TLS {
+  certSecretName: string;
+  tlsPort: number;
+  secureCookies: boolean;
+}
+
 export interface CreateChainlinkNode
   extends Database,
     Pick<Ethereum, 'ethereumWsEndpoint'>,
@@ -23,16 +29,14 @@ export interface CreateChainlinkNode
   apiCredentials: { email: string; passwordSecretName: string };
 }
 
-export type UpdateChainlinkNode = Partial<Database & Ethereum & Wallet>;
+export type UpdateChainlinkNode = Partial<Database & Ethereum & Wallet & TLS>;
 
 export interface ChainlinkNode
   extends CreateChainlinkNode,
     Pick<Ethereum, 'ethereumHttpEndpoints'>,
+    TLS,
     Resources {
   createdAt: string;
   corsDomains: string[];
-  certSecretName: string;
-  tlsPort: number;
-  secureCookies: boolean;
   logging: 'debug' | 'info' | 'warn' | 'error' | 'panic';
 }
