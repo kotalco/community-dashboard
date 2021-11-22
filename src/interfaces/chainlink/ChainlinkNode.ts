@@ -9,21 +9,25 @@ export interface Ethereum {
   ethereumHttpEndpoints: string[];
 }
 
+export interface Wallet {
+  keystorePasswordSecretName: string;
+}
+
 export interface CreateChainlinkNode
   extends Database,
-    Pick<Ethereum, 'ethereumWsEndpoint'> {
+    Pick<Ethereum, 'ethereumWsEndpoint'>,
+    Wallet {
   name: string;
   ethereumChainId: number;
   linkContractAddress: string;
-  keystorePasswordSecretName: string;
   apiCredentials: { email: string; passwordSecretName: string };
 }
 
-export type UpdateChainlinkNode = Partial<Database & Ethereum>;
+export type UpdateChainlinkNode = Partial<Database & Ethereum & Wallet>;
 
 export interface ChainlinkNode
   extends CreateChainlinkNode,
-    Ethereum,
+    Pick<Ethereum, 'ethereumHttpEndpoints'>,
     Resources {
   createdAt: string;
   corsDomains: string[];

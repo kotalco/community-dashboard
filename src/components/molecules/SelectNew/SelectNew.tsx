@@ -25,7 +25,7 @@ type Props<T> = {
       other?: never;
       otherLabel?: never;
       multiple?: true;
-      value?: string[];
+      value?: string[] | string;
     }
 ) &
   ({ href: string; hrefTitle: string } | { href?: never; hrefTitle?: never });

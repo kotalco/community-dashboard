@@ -28,6 +28,7 @@ import { titles } from '@data/chainlink/tabTitles';
 import { EVM_CHAINS } from '@data/chainlink/evmChain';
 import DatabaseDetails from '@components/organisms/Chainlink/DatabaseDetails/DatabaseDetails';
 import EthereumDetails from '@components/organisms/Chainlink/EthereumDetails/EthereumDetails';
+import WalletDetails from '@components/organisms/Chainlink/WalletDetails/WalletDetails';
 
 function ChainlinkNode() {
   const { query } = useRouter();
@@ -76,13 +77,22 @@ function ChainlinkNode() {
             />
           </Tab.Panel>
 
-          {/* API */}
+          {/* Ethereum */}
           <Tab.Panel className="focus:outline-none">
             <EthereumDetails
               name={node.name}
               setNode={mutate}
               ethereumWsEndpoint={node.ethereumWsEndpoint}
               ethereumHttpEndpoints={node.ethereumHttpEndpoints}
+            />
+          </Tab.Panel>
+
+          {/* Wallet */}
+          <Tab.Panel className="focus:outline-none">
+            <WalletDetails
+              name={node.name}
+              setNode={mutate}
+              keystorePasswordSecretName={node.keystorePasswordSecretName}
             />
           </Tab.Panel>
 
@@ -96,20 +106,6 @@ function ChainlinkNode() {
               />
             </Tab.Panel>
           )} */}
-
-          {/* Mining */}
-          {/* <Tab.Panel className="focus:outline-none">
-            <MiningDetails
-              rpc={node.rpc}
-              ws={node.ws}
-              graphql={node.graphql}
-              client={node.client}
-              miner={node.miner}
-              coinbase={node.coinbase}
-              import={node.import}
-              name={node.name}
-            />
-          </Tab.Panel> */}
 
           {/* Logging */}
           {/* <Tab.Panel className="focus:outline-none">
