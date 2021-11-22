@@ -113,6 +113,7 @@ function CreateChainlink() {
                 onChange={field.onChange}
                 error={errors.ethereumWsEndpoint?.message}
                 other
+                otherLabel="Externally Managed Node"
               />
             )}
           />

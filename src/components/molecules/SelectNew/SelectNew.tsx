@@ -14,9 +14,12 @@ type Props<T> = {
   error?: string;
   label: string;
   placeholder: string;
-  other?: boolean;
   helperText?: string;
-} & ({ href: string; hrefTitle: string } | { href?: never; hrefTitle?: never });
+} & (
+  | { href: string; hrefTitle: string }
+  | { href?: never; hrefTitle?: never }
+) &
+  ({ other: true; otherLabel: string } | { other?: never; otherLabel?: never });
 
 function Select<T extends { [key: string]: string }>({
   error,
@@ -28,6 +31,7 @@ function Select<T extends { [key: string]: string }>({
   hrefTitle,
   defaultValue,
   other,
+  otherLabel,
   helperText,
   labelProp,
   valueProp,
@@ -101,7 +105,7 @@ function Select<T extends { [key: string]: string }>({
                   ))}
                   {other && (
                     <ListboxOption
-                      option={{ [labelProp]: 'Other', [valueProp]: 'other' }}
+                      option={{ label: otherLabel, [valueProp]: 'other' }}
                       label="label"
                     />
                   )}
