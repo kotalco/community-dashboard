@@ -1,5 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
+import { Tab } from '@headlessui/react';
 
 import { updateEthereumNode, useNode } from '@utils/requests/ethereum';
 import Heading from '@components/templates/Heading/Heading';
@@ -19,57 +20,63 @@ import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { tabTitles } from '@data/ethereum/node/tabTitles';
 import { clientOptions } from '@data/ethereum/node/clientOptions';
 import { networkOptions } from '@data/ethereum/node/networkOptions';
-import { Tab } from '@headlessui/react';
 import { fetcher } from '@utils/axios';
 import { getLabel } from '@utils/helpers/getLabel';
 import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
+import { useChainlinkNode } from '@hooks/useChainlinkNode';
+import { titles } from '@data/chainlink/tabTitles';
+import { EVM_CHAINS } from '@data/chainlink/evmChain';
+import DatabaseDetails from '@components/organisms/Chainlink/DatabaseDetails/DatabaseDetails';
 
 function ChainlinkNode() {
-  // const { isFallback } = useRouter();
+  const { query } = useRouter();
+  const nodeName = query.nodeName as string | undefined;
 
-  // const { data: node, mutate } = useNode(initialNode?.name, {
-  //   fallbackData: { node: initialNode },
-  // });
+  const { node, mutate } = useChainlinkNode(nodeName);
 
   // const updateResources = async (name: string, values: Resources) => {
   //   const node = await updateEthereumNode(name, values);
   //   void mutate({ node });
   // };
 
-  // if (!node || isFallback) return <LoadingIndicator />;
+  if (!node) return <LoadingIndicator />;
 
-  // const dataList = [
-  //   { label: 'Protocol', value: 'Ethereum' },
-  //   { label: 'Chain', value: getLabel(node.network, networkOptions) },
-  //   { label: 'Client', value: getLabel(node.client, clientOptions) },
-  // ];
+  const dataList = [
+    { label: 'Protocol', value: 'Chainlink' },
+    {
+      label: 'EVM Chain',
+      value: getLabel(
+        `${node.ethereumChainId}:${node.linkContractAddress}`,
+        EVM_CHAINS
+      ),
+    },
+    { label: 'Chain ID', value: node.ethereumChainId },
+    { label: 'Link Contact Address', value: node.linkContractAddress },
+    { label: 'Client', value: 'Chainlink' },
+  ];
 
   return (
     <Layout>
-      {/* <Heading title={node.name} /> */}
+      <Heading title={node.name} />
 
-      <div className="bg-white shadow rounded-lg divided-y divided-gray-200 mt-4">
-        {/* <Tabs tabs={tabTitles(node.client)}> */}
-        {/* Protocol */}
-        {/* <Tab.Panel className="focus:outline-none">
+      <div className="bg-white shadow rounded-lg divided-y divided-gray-200">
+        <Tabs tabs={titles}>
+          {/* Protocol */}
+          <Tab.Panel className="focus:outline-none">
             <ProtocolDetails dataList={dataList} />
-          </Tab.Panel> */}
+          </Tab.Panel>
 
-        {/* Networking */}
-        {/* <Tab.Panel className="focus:outline-none">
-            <NetworkingDetails
-              client={node.client}
+          {/* Networking */}
+          <Tab.Panel className="focus:outline-none">
+            <DatabaseDetails
+              databaseURL={node.databaseURL}
               name={node.name}
-              p2pPort={node.p2pPort}
-              syncMode={node.syncMode}
-              bootnodes={node.bootnodes}
-              staticNodes={node.staticNodes}
-              nodePrivateKeySecretName={node.nodePrivateKeySecretName}
+              setNode={mutate}
             />
-          </Tab.Panel> */}
+          </Tab.Panel>
 
-        {/* API */}
-        {/* <Tab.Panel className="focus:outline-none">
+          {/* API */}
+          {/* <Tab.Panel className="focus:outline-none">
             <APIDetails
               miner={node.miner}
               client={node.client}
@@ -85,8 +92,8 @@ function ChainlinkNode() {
             />
           </Tab.Panel> */}
 
-        {/* Access Control */}
-        {/* {node.client !== EthereumNodeClient.nethermind && (
+          {/* Access Control */}
+          {/* {node.client !== EthereumNodeClient.nethermind && (
             <Tab.Panel className="focus:outline-none">
               <AccessControlDetails
                 hosts={node.hosts}
@@ -96,8 +103,8 @@ function ChainlinkNode() {
             </Tab.Panel>
           )} */}
 
-        {/* Mining */}
-        {/* <Tab.Panel className="focus:outline-none">
+          {/* Mining */}
+          {/* <Tab.Panel className="focus:outline-none">
             <MiningDetails
               rpc={node.rpc}
               ws={node.ws}
@@ -110,8 +117,8 @@ function ChainlinkNode() {
             />
           </Tab.Panel> */}
 
-        {/* Logging */}
-        {/* <Tab.Panel className="focus:outline-none">
+          {/* Logging */}
+          {/* <Tab.Panel className="focus:outline-none">
             <LoggingDetails
               client={node.client}
               logging={node.logging}
@@ -119,8 +126,8 @@ function ChainlinkNode() {
             />
           </Tab.Panel> */}
 
-        {/* Resources */}
-        {/* <Tab.Panel className="focus:outline-none">
+          {/* Resources */}
+          {/* <Tab.Panel className="focus:outline-none">
             <ResourcesDetails
               cpu={node.cpu}
               cpuLimit={node.cpuLimit}
@@ -132,11 +139,11 @@ function ChainlinkNode() {
             />
           </Tab.Panel> */}
 
-        {/* Danger Zone */}
-        {/* <Tab.Panel className="focus:outline-none">
+          {/* Danger Zone */}
+          {/* <Tab.Panel className="focus:outline-none">
             <DeleteEthereumNode nodeName={node.name} />
           </Tab.Panel> */}
-        {/* </Tabs> */}
+        </Tabs>
       </div>
     </Layout>
   );
