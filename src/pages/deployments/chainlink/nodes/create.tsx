@@ -41,8 +41,8 @@ function CreateChainlink() {
   } = useForm<CreateChainlinkNode>();
   //   { resolver: yupResolver(schema) }
 
-  const handleEVMChange = (value: string | undefined) => {
-    if (value) {
+  const handleEVMChange = (value: string | string[] | undefined) => {
+    if (value && typeof value === 'string') {
       const [id, address] = value.split(':');
       setValue('ethereumChainId', parseInt(id, 10));
       setValue('linkContractAddress', address);

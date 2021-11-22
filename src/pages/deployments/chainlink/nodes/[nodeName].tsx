@@ -27,6 +27,7 @@ import { useChainlinkNode } from '@hooks/useChainlinkNode';
 import { titles } from '@data/chainlink/tabTitles';
 import { EVM_CHAINS } from '@data/chainlink/evmChain';
 import DatabaseDetails from '@components/organisms/Chainlink/DatabaseDetails/DatabaseDetails';
+import EthereumDetails from '@components/organisms/Chainlink/EthereumDetails/EthereumDetails';
 
 function ChainlinkNode() {
   const { query } = useRouter();
@@ -76,21 +77,14 @@ function ChainlinkNode() {
           </Tab.Panel>
 
           {/* API */}
-          {/* <Tab.Panel className="focus:outline-none">
-            <APIDetails
-              miner={node.miner}
-              client={node.client}
-              rpc={node.rpc}
-              rpcPort={node.rpcPort}
-              rpcAPI={node.rpcAPI}
-              ws={node.ws}
-              wsPort={node.wsPort}
-              wsAPI={node.wsAPI}
-              graphql={node.graphql}
-              graphqlPort={node.graphqlPort}
+          <Tab.Panel className="focus:outline-none">
+            <EthereumDetails
               name={node.name}
+              setNode={mutate}
+              ethereumWsEndpoint={node.ethereumWsEndpoint}
+              ethereumHttpEndpoints={node.ethereumHttpEndpoints}
             />
-          </Tab.Panel> */}
+          </Tab.Panel>
 
           {/* Access Control */}
           {/* {node.client !== EthereumNodeClient.nethermind && (

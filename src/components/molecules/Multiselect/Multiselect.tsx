@@ -93,7 +93,7 @@ const Multiselect: React.FC<Props> = ({
                       className={({ active }) =>
                         `${
                           active ? 'text-white bg-indigo-600' : 'text-gray-900'
-                        } cursor-default select-none relative py-2 pl-3 pr-9`
+                        } cursor-default select-none relative py-2 pl-3 pr-9 text-sm`
                       }
                     >
                       {({ active }) => (

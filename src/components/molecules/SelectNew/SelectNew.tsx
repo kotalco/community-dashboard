@@ -9,17 +9,26 @@ type Props<T> = {
   options: T[];
   labelProp: keyof T;
   valueProp: keyof T;
-  defaultValue?: T;
-  onChange: (value: string | undefined) => void;
+  onChange: (value: string | string[] | undefined) => void;
   error?: string;
   label: string;
-  placeholder: string;
+  placeholder?: string;
   helperText?: string;
 } & (
-  | { href: string; hrefTitle: string }
-  | { href?: never; hrefTitle?: never }
+  | {
+      other: true;
+      otherLabel: string;
+      multiple?: never;
+      value?: string;
+    }
+  | {
+      other?: never;
+      otherLabel?: never;
+      multiple?: true;
+      value?: string[];
+    }
 ) &
-  ({ other: true; otherLabel: string } | { other?: never; otherLabel?: never });
+  ({ href: string; hrefTitle: string } | { href?: never; hrefTitle?: never });
 
 function Select<T extends { [key: string]: string }>({
   error,
@@ -29,26 +38,56 @@ function Select<T extends { [key: string]: string }>({
   placeholder,
   href,
   hrefTitle,
-  defaultValue,
+  value,
   other,
+  multiple,
   otherLabel,
   helperText,
   labelProp,
   valueProp,
 }: Props<T>) {
-  const [selected, setSelected] = useState(defaultValue);
+  const [selected, setSelected] = useState(
+    value && typeof value === 'string'
+      ? options.find((option) => value === option[valueProp]) ||
+          ({ [labelProp]: otherLabel, [valueProp]: 'other' } as T)
+      : undefined
+  );
+  const [multiValues, setMultiValues] = useState<T[]>(
+    options.filter((option) => value?.includes(option[valueProp]))
+  );
 
   const handleChange = (option: T) => {
-    setSelected(option);
-    if (option[valueProp] === 'other') {
-      return onChange(undefined);
+    if (!multiple) {
+      setSelected(option);
+      if (option[valueProp] === 'other') {
+        return onChange(undefined);
+      }
+      onChange(option[valueProp]);
+    } else {
+      if (
+        !multiValues.find((value) => value[valueProp] === option[valueProp])
+      ) {
+        setMultiValues([...multiValues, option]);
+        onChange([
+          ...multiValues.map((value) => value[valueProp]),
+          option[valueProp],
+        ]);
+      } else {
+        setMultiValues(
+          multiValues.filter((value) => value[valueProp] !== option[valueProp])
+        );
+        onChange(
+          multiValues
+            .filter((value) => value[valueProp] !== option[valueProp])
+            .map((value) => value[valueProp])
+        );
+      }
     }
-    onChange(option[valueProp]);
   };
 
   return (
     <div className="max-w-xs mb-4">
-      <Listbox value={selected} onChange={handleChange}>
+      <Listbox value={!multiple ? selected : -10} onChange={handleChange}>
         {({ open }) => (
           <div className="w-full">
             <Listbox.Label className="block text-sm font-medium text-gray-700">
@@ -64,10 +103,13 @@ function Select<T extends { [key: string]: string }>({
               >
                 <span
                   className={`block truncate ${
-                    !selected ? 'text-gray-500' : ''
+                    !selected && !multiValues.length ? 'text-gray-500' : ''
                   }`}
                 >
-                  {selected?.[labelProp] || placeholder}
+                  {!multiple
+                    ? selected?.[labelProp]
+                    : multiValues.map((value) => value[labelProp]).join(', ') ||
+                      placeholder}
                 </span>
                 <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                   <SelectorIcon
@@ -105,8 +147,10 @@ function Select<T extends { [key: string]: string }>({
                   ))}
                   {other && (
                     <ListboxOption
-                      option={{ label: otherLabel, [valueProp]: 'other' }}
-                      label="label"
+                      option={
+                        { [labelProp]: otherLabel, [valueProp]: 'other' } as T
+                      }
+                      label={labelProp}
                     />
                   )}
                   {href && hrefTitle && (
@@ -126,6 +170,7 @@ function Select<T extends { [key: string]: string }>({
         <div>
           <input
             type="text"
+            defaultValue={value}
             onChange={(e) => onChange(e.target.value)}
             className={`focus:ring-indigo-500 focus:border-indigo-500 relative block w-full rounded-none rounded-b-md bg-transparent focus:z-10 sm:text-sm border-t-0 ${
               error ? 'border-red-300' : 'border-gray-300'
