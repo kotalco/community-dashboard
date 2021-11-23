@@ -10,7 +10,7 @@ import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndi
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
 import DeleteEthereumNode from '@components/organisms/Ethereum/DeleteEthereumNode/DeleteEthereumNode';
 import NetworkingDetails from '@components/organisms/Ethereum/Networking/Networking';
-import APIDetails from '@components/organisms/Ethereum/APIDetails/APIDetails';
+import APIDetails from '@components/organisms/Chainlink/APIDetails/APIDetails';
 import AccessControlDetails from '@components/organisms/Ethereum/AccessControlDetails/AccessControlDetails';
 import MiningDetails from '@components/organisms/Ethereum/MiningDetails/MiningDetails';
 import ResourcesDetails from '@components/organisms/Resources/Resources';
@@ -105,6 +105,15 @@ function ChainlinkNode() {
               certSecretName={node.certSecretName}
               secureCookies={node.secureCookies}
               tlsPort={node.tlsPort}
+            />
+          </Tab.Panel>
+
+          {/* API Credentials */}
+          <Tab.Panel className="focus:outline-none">
+            <APIDetails
+              name={node.name}
+              setNode={mutate}
+              apiCredentials={node.apiCredentials}
             />
           </Tab.Panel>
 

@@ -19,17 +19,23 @@ export interface TLS {
   secureCookies: boolean;
 }
 
-export interface CreateChainlinkNode
-  extends Database,
-    Pick<Ethereum, 'ethereumWsEndpoint'>,
-    Wallet {
-  name: string;
-  ethereumChainId: number;
-  linkContractAddress: string;
+export interface API {
   apiCredentials: { email: string; passwordSecretName: string };
 }
 
-export type UpdateChainlinkNode = Partial<Database & Ethereum & Wallet & TLS>;
+export interface CreateChainlinkNode
+  extends Database,
+    Pick<Ethereum, 'ethereumWsEndpoint'>,
+    Wallet,
+    API {
+  name: string;
+  ethereumChainId: number;
+  linkContractAddress: string;
+}
+
+export type UpdateChainlinkNode = Partial<
+  Database & Ethereum & Wallet & TLS & API
+>;
 
 export interface ChainlinkNode
   extends CreateChainlinkNode,
