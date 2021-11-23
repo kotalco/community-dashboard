@@ -20,3 +20,7 @@ export const updateChainlinkNode = async (
   );
   return res.data.node;
 };
+
+export const deleteChainlinkNode = async (name: string) => {
+  await api.delete(`/chainlink/nodes/${name}`);
+};

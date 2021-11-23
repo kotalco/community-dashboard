@@ -6,7 +6,7 @@ import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
-import DeleteEthereumNode from '@components/organisms/Ethereum/DeleteEthereumNode/DeleteEthereumNode';
+import DeleteChainlinkNode from '@components/organisms/Chainlink/DeleteChainlinkNode/DeleteChainlinkNode';
 import APIDetails from '@components/organisms/Chainlink/APIDetails/APIDetails';
 import AccessControlDetails from '@components/organisms/Chainlink/AccessControlDetails/AccessControlDetails';
 import ResourcesDetails from '@components/organisms/Resources/Resources';
@@ -140,9 +140,9 @@ function ChainlinkNode() {
           </Tab.Panel>
 
           {/* Danger Zone */}
-          {/* <Tab.Panel className="focus:outline-none">
-            <DeleteEthereumNode nodeName={node.name} />
-          </Tab.Panel> */}
+          <Tab.Panel className="focus:outline-none">
+            <DeleteChainlinkNode nodeName={node.name} />
+          </Tab.Panel>
         </Tabs>
       </div>
     </Layout>
