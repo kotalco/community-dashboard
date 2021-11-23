@@ -1,28 +1,18 @@
-import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import { Tab } from '@headlessui/react';
 
-import { updateEthereumNode, useNode } from '@utils/requests/ethereum';
 import Heading from '@components/templates/Heading/Heading';
 import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
 import DeleteEthereumNode from '@components/organisms/Ethereum/DeleteEthereumNode/DeleteEthereumNode';
-import NetworkingDetails from '@components/organisms/Ethereum/Networking/Networking';
 import APIDetails from '@components/organisms/Chainlink/APIDetails/APIDetails';
 import AccessControlDetails from '@components/organisms/Chainlink/AccessControlDetails/AccessControlDetails';
-import MiningDetails from '@components/organisms/Ethereum/MiningDetails/MiningDetails';
 import ResourcesDetails from '@components/organisms/Resources/Resources';
 import LoggingDetails from '@components/organisms/Chainlink/LoggingDetails/LoggingDetails';
 import { Resources } from '@interfaces/Resources';
-import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
-import { tabTitles } from '@data/ethereum/node/tabTitles';
-import { clientOptions } from '@data/ethereum/node/clientOptions';
-import { networkOptions } from '@data/ethereum/node/networkOptions';
-import { fetcher } from '@utils/axios';
 import { getLabel } from '@utils/helpers/getLabel';
-import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
 import { useChainlinkNode } from '@hooks/useChainlinkNode';
 import { titles } from '@data/chainlink/tabTitles';
 import { EVM_CHAINS } from '@data/chainlink/evmChain';
@@ -30,6 +20,7 @@ import DatabaseDetails from '@components/organisms/Chainlink/DatabaseDetails/Dat
 import EthereumDetails from '@components/organisms/Chainlink/EthereumDetails/EthereumDetails';
 import WalletDetails from '@components/organisms/Chainlink/WalletDetails/WalletDetails';
 import TLSDetails from '@components/organisms/Chainlink/TLSDetails/TLSDetails';
+import { updateChainlinkNode } from '@utils/requests/chainlink';
 
 function ChainlinkNode() {
   const { query } = useRouter();
@@ -37,10 +28,10 @@ function ChainlinkNode() {
 
   const { node, mutate } = useChainlinkNode(nodeName);
 
-  // const updateResources = async (name: string, values: Resources) => {
-  //   const node = await updateEthereumNode(name, values);
-  //   void mutate({ node });
-  // };
+  const updateResources = async (name: string, values: Resources) => {
+    await updateChainlinkNode(values, name);
+    mutate();
+  };
 
   if (!node) return <LoadingIndicator />;
 
@@ -136,7 +127,7 @@ function ChainlinkNode() {
           </Tab.Panel>
 
           {/* Resources */}
-          {/* <Tab.Panel className="focus:outline-none">
+          <Tab.Panel className="focus:outline-none">
             <ResourcesDetails
               cpu={node.cpu}
               cpuLimit={node.cpuLimit}
@@ -146,7 +137,7 @@ function ChainlinkNode() {
               name={node.name}
               updateResources={updateResources}
             />
-          </Tab.Panel> */}
+          </Tab.Panel>
 
           {/* Danger Zone */}
           {/* <Tab.Panel className="focus:outline-none">

@@ -43,7 +43,7 @@ export interface CreateChainlinkNode
 }
 
 export type UpdateChainlinkNode = Partial<
-  Database & Ethereum & Wallet & TLS & API & AccessControl & Logging
+  Database & Ethereum & Wallet & TLS & API & AccessControl & Logging & Resources
 >;
 
 export interface ChainlinkNode
