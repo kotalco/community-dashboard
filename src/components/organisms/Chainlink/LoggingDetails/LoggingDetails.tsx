@@ -2,23 +2,22 @@ import { useState } from 'react';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 
 import Button from '@components/atoms/Button/Button';
-import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
-import {
-  AccessControl,
-  ChainlinkNode,
-} from '@interfaces/chainlink/ChainlinkNode';
+import Select from '@components/molecules/SelectNew/SelectNew';
+import Logs from '@components/organisms/Logging/Logging';
+import { ChainlinkNode, Logging } from '@interfaces/chainlink/ChainlinkNode';
 import { KeyedMutator } from 'swr';
 import { updateChainlinkNode } from '@utils/requests/chainlink';
 import { handleRequest } from '@utils/helpers/handleRequest';
+import { loggingOptions } from '@data/chainlink/loggingOptions';
 
-interface Props extends AccessControl {
+interface Props extends Logging {
   name: string;
   setNode: KeyedMutator<{
     node: ChainlinkNode;
   }>;
 }
 
-function AccessControlDetails({ corsDomains, name, setNode }: Props) {
+function LoggingDetails({ logging, name, setNode }: Props) {
   const [submitSuccess, setSubmitSuccess] = useState('');
   const [serverError, setServerError] = useState('');
 
@@ -27,9 +26,9 @@ function AccessControlDetails({ corsDomains, name, setNode }: Props) {
     control,
     reset,
     formState: { isDirty, isSubmitting },
-  } = useForm<AccessControl>();
+  } = useForm<Logging>();
 
-  const onSubmit: SubmitHandler<AccessControl> = async (values) => {
+  const onSubmit: SubmitHandler<Logging> = async (values) => {
     setServerError('');
     const { error, response } = await handleRequest<ChainlinkNode>(
       updateChainlinkNode.bind(undefined, values, name)
@@ -43,30 +42,31 @@ function AccessControlDetails({ corsDomains, name, setNode }: Props) {
     if (response) {
       setNode();
       reset(values);
-      setSubmitSuccess('CORS domains has been updated');
+      setSubmitSuccess('Logging data has been updated');
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="px-4 py-5 sm:p-6">
-        {/* CORS Domains */}
+      <div className="px-4 pt-5 sm:px-6">
         <Controller
           control={control}
-          name="corsDomains"
-          defaultValue={corsDomains}
+          name="logging"
+          defaultValue={logging}
           render={({ field }) => (
-            <TextareaWithInput
-              multiple
-              helperText="One domain per line"
-              name={field.name}
+            <Select
+              label="Verbosity Levels"
+              options={loggingOptions}
+              labelProp="label"
+              valueProp="value"
+              placeholder="Choose a logging level..."
               value={field.value}
               onChange={field.onChange}
-              label="CORS Domains"
             />
           )}
         />
       </div>
+      <Logs wsUrl={`/chainlink/nodes/${name}/logs`} />
 
       <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
         <Button
@@ -88,4 +88,4 @@ function AccessControlDetails({ corsDomains, name, setNode }: Props) {
   );
 }
 
-export default AccessControlDetails;
+export default LoggingDetails;

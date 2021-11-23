@@ -1,4 +1,5 @@
 import { Resources } from '@interfaces/Resources';
+import { Logging as LoggingEnum } from '@enums/Chainlink/Logging';
 
 export interface Database {
   databaseURL: string;
@@ -27,6 +28,10 @@ export interface AccessControl {
   corsDomains: string[];
 }
 
+export interface Logging {
+  logging: LoggingEnum;
+}
+
 export interface CreateChainlinkNode
   extends Database,
     Pick<Ethereum, 'ethereumWsEndpoint'>,
@@ -38,7 +43,7 @@ export interface CreateChainlinkNode
 }
 
 export type UpdateChainlinkNode = Partial<
-  Database & Ethereum & Wallet & TLS & API & AccessControl
+  Database & Ethereum & Wallet & TLS & API & AccessControl & Logging
 >;
 
 export interface ChainlinkNode
@@ -46,7 +51,7 @@ export interface ChainlinkNode
     Pick<Ethereum, 'ethereumHttpEndpoints'>,
     TLS,
     AccessControl,
+    Logging,
     Resources {
   createdAt: string;
-  logging: 'debug' | 'info' | 'warn' | 'error' | 'panic';
 }

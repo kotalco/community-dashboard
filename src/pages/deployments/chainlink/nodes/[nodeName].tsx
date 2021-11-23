@@ -14,7 +14,7 @@ import APIDetails from '@components/organisms/Chainlink/APIDetails/APIDetails';
 import AccessControlDetails from '@components/organisms/Chainlink/AccessControlDetails/AccessControlDetails';
 import MiningDetails from '@components/organisms/Ethereum/MiningDetails/MiningDetails';
 import ResourcesDetails from '@components/organisms/Resources/Resources';
-import LoggingDetails from '@components/organisms/Ethereum/LogginDetails/LoggingDetails';
+import LoggingDetails from '@components/organisms/Chainlink/LoggingDetails/LoggingDetails';
 import { Resources } from '@interfaces/Resources';
 import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { tabTitles } from '@data/ethereum/node/tabTitles';
@@ -127,13 +127,13 @@ function ChainlinkNode() {
           </Tab.Panel>
 
           {/* Logging */}
-          {/* <Tab.Panel className="focus:outline-none">
+          <Tab.Panel className="focus:outline-none">
             <LoggingDetails
-              client={node.client}
               logging={node.logging}
               name={node.name}
+              setNode={mutate}
             />
-          </Tab.Panel> */}
+          </Tab.Panel>
 
           {/* Resources */}
           {/* <Tab.Panel className="focus:outline-none">

@@ -60,7 +60,6 @@ const LoggingDetails: React.FC<Props> = ({
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 pt-5 sm:px-6">
         {/* Logging */}
-
         <div className="max-w-xs">
           <Controller
             control={control}

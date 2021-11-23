@@ -89,6 +89,7 @@ const IPFSPeerDetailsPage: React.FC<Props> = ({ ipfsPeer }) => {
           <Tab.Panel className="focus:outline-none">
             <Logging wsUrl={`/ipfs/peers/${peer.name}/logs`} />
           </Tab.Panel>
+
           <Tab.Panel className="focus:outline-none">
             <ResourcesTab
               name={peer.name}
