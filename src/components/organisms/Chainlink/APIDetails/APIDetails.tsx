@@ -53,6 +53,11 @@ function APIDetails({ apiCredentials, name, setNode }: Props) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
+        <h2 className="font-bold text-xl">API Credentials</h2>
+        <p className="text-gray-500 mb-5 text-sm">
+          For securing access to chainlink dashboard
+        </p>
+
         {/* Email */}
         <TextInput
           control={control}

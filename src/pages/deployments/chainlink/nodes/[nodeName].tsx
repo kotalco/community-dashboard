@@ -118,15 +118,13 @@ function ChainlinkNode() {
           </Tab.Panel>
 
           {/* Access Control */}
-          {
-            <Tab.Panel className="focus:outline-none">
-              <AccessControlDetails
-                corsDomains={node.corsDomains}
-                setNode={mutate}
-                name={node.name}
-              />
-            </Tab.Panel>
-          }
+          <Tab.Panel className="focus:outline-none">
+            <AccessControlDetails
+              corsDomains={node.corsDomains}
+              setNode={mutate}
+              name={node.name}
+            />
+          </Tab.Panel>
 
           {/* Logging */}
           {/* <Tab.Panel className="focus:outline-none">
