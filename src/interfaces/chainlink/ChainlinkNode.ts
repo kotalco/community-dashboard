@@ -23,6 +23,10 @@ export interface API {
   apiCredentials: { email: string; passwordSecretName: string };
 }
 
+export interface AccessControl {
+  corsDomains: string[];
+}
+
 export interface CreateChainlinkNode
   extends Database,
     Pick<Ethereum, 'ethereumWsEndpoint'>,
@@ -34,15 +38,15 @@ export interface CreateChainlinkNode
 }
 
 export type UpdateChainlinkNode = Partial<
-  Database & Ethereum & Wallet & TLS & API
+  Database & Ethereum & Wallet & TLS & API & AccessControl
 >;
 
 export interface ChainlinkNode
   extends CreateChainlinkNode,
     Pick<Ethereum, 'ethereumHttpEndpoints'>,
     TLS,
+    AccessControl,
     Resources {
   createdAt: string;
-  corsDomains: string[];
   logging: 'debug' | 'info' | 'warn' | 'error' | 'panic';
 }

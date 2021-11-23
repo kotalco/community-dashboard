@@ -11,7 +11,7 @@ import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetai
 import DeleteEthereumNode from '@components/organisms/Ethereum/DeleteEthereumNode/DeleteEthereumNode';
 import NetworkingDetails from '@components/organisms/Ethereum/Networking/Networking';
 import APIDetails from '@components/organisms/Chainlink/APIDetails/APIDetails';
-import AccessControlDetails from '@components/organisms/Ethereum/AccessControlDetails/AccessControlDetails';
+import AccessControlDetails from '@components/organisms/Chainlink/AccessControlDetails/AccessControlDetails';
 import MiningDetails from '@components/organisms/Ethereum/MiningDetails/MiningDetails';
 import ResourcesDetails from '@components/organisms/Resources/Resources';
 import LoggingDetails from '@components/organisms/Ethereum/LogginDetails/LoggingDetails';
@@ -118,15 +118,15 @@ function ChainlinkNode() {
           </Tab.Panel>
 
           {/* Access Control */}
-          {/* {node.client !== EthereumNodeClient.nethermind && (
+          {
             <Tab.Panel className="focus:outline-none">
               <AccessControlDetails
-                hosts={node.hosts}
                 corsDomains={node.corsDomains}
+                setNode={mutate}
                 name={node.name}
               />
             </Tab.Panel>
-          )} */}
+          }
 
           {/* Logging */}
           {/* <Tab.Panel className="focus:outline-none">
