@@ -26,6 +26,7 @@ const CreateBeaconNode: React.FC = () => {
   const {
     watch,
     control,
+    register,
     handleSubmit,
     formState: { errors, isSubmitted, isValid, isSubmitting },
   } = useForm<CreateBeaconNode>({ resolver: yupResolver(schema) });
@@ -60,11 +61,9 @@ const CreateBeaconNode: React.FC = () => {
         >
           {/* Beacon Node Name */}
           <TextInput
-            control={control}
-            name="name"
             label="Node Name"
             error={errors.name?.message}
-            defaultValue=""
+            {...register('name')}
           />
 
           {/* Client */}

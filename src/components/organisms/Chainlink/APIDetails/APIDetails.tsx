@@ -27,6 +27,7 @@ function APIDetails({ apiCredentials, name, setNode }: Props) {
 
   const {
     handleSubmit,
+    register,
     control,
     reset,
     formState: { isDirty, isSubmitting, errors },
@@ -60,10 +61,9 @@ function APIDetails({ apiCredentials, name, setNode }: Props) {
 
         {/* Email */}
         <TextInput
-          control={control}
-          name="apiCredentials.email"
           label="Email"
           defaultValue={apiCredentials.email}
+          {...register('apiCredentials.email')}
         />
 
         {/* Password */}

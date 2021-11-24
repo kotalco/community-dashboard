@@ -34,6 +34,7 @@ const Peers: React.FC<Props> = ({
   const {
     handleSubmit,
     control,
+    register,
     reset,
     formState: { isDirty, isSubmitting },
   } = useForm<UpdatePeers>({
@@ -61,7 +62,7 @@ const Peers: React.FC<Props> = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
-        <TextInput label="IPFS Peer" control={control} name="peerEndpoint" />
+        <TextInput label="IPFS Peer" {...register('peerEndpoint')} />
         <div className="mt-4 max-w-xs">
           <Controller
             name="bootstrapPeers"

@@ -25,7 +25,7 @@ const DeleteDeployment: React.FC<Props> = ({ name }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const router = useRouter();
   const {
-    control,
+    register,
     watch,
     handleSubmit,
     formState: { isSubmitting },
@@ -37,7 +37,7 @@ const DeleteDeployment: React.FC<Props> = ({ name }) => {
     setError('');
     try {
       await deleteClusterPeer(name);
-      void router.push('/deployments/ipfs/clusterpeers');
+      router.push('/deployments/ipfs/clusterpeers');
       createNotification({
         title: 'IPFS peer has been deleted',
         name,
@@ -106,7 +106,7 @@ const DeleteDeployment: React.FC<Props> = ({ name }) => {
             Please type the cluster peer name (
             <span className="font-bold">{name}</span>) to confirm
           </p>
-          <TextInput control={control} name="name" />
+          <TextInput {...register('name')} />
         </div>
         {error && (
           <p className="text-sm text-red-600 font-medium mt-2">{error}</p>

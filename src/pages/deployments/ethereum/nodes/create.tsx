@@ -29,6 +29,7 @@ function CreateNode() {
   );
   const {
     handleSubmit,
+    register,
     control,
     formState: { errors, isSubmitted, isValid, isSubmitting },
   } = useForm<CreateEthereumNode>({ resolver: yupResolver(schema) });
@@ -62,13 +63,11 @@ function CreateNode() {
         >
           {/* Node Name */}
           <TextInput
-            control={control}
-            name="name"
             id="name"
             type="text"
             label="Node Name"
-            defaultValue=""
             error={errors.name?.message}
+            {...register('name')}
           />
 
           {/* Client */}

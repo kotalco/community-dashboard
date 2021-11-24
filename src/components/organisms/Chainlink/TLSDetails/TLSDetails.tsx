@@ -36,6 +36,7 @@ function TLSDetails({
 
   const {
     handleSubmit,
+    register,
     control,
     reset,
     formState: { isDirty, isSubmitting, errors },
@@ -101,10 +102,9 @@ function TLSDetails({
 
         {/* TLS Port */}
         <TextInput
-          control={control}
           defaultValue={tlsPort}
-          name="tlsPort"
           label="TLS Port"
+          {...register('tlsPort')}
         />
       </div>
 

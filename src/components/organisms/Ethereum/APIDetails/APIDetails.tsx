@@ -121,8 +121,7 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
                   disabled={!rpc}
                   label="JSON-RPC Server Port"
                   error={errors.rpcPort?.message}
-                  control={control}
-                  name="rpcPort"
+                  {...register('rpcPort')}
                 />
               </div>
 
@@ -175,8 +174,7 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
                   disabled={!ws}
                   label="Web Socket Server Port"
                   error={errors.wsPort?.message}
-                  control={control}
-                  name="wsPort"
+                  {...register('wsPort')}
                 />
               </div>
 
@@ -230,8 +228,7 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
                       disabled={!graphql}
                       label="GraphQl Server Port"
                       error={errors.graphqlPort?.message}
-                      control={control}
-                      name="graphqlPort"
+                      {...register('graphqlPort')}
                     />
                   </div>
                 )}

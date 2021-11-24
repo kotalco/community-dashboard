@@ -26,7 +26,7 @@ const DeleteValidator: React.FC<Props> = ({ validatorName }) => {
 
   const router = useRouter();
   const {
-    control,
+    register,
     watch,
     handleSubmit,
     formState: { isSubmitting },
@@ -108,7 +108,7 @@ const DeleteValidator: React.FC<Props> = ({ validatorName }) => {
             Please type the validator name (
             <span className="font-bold">{validatorName}</span>) to confirm
           </p>
-          <TextInput control={control} name="name" />
+          <TextInput {...register('name')} />
         </div>
       </DeleteModal>
     </>

@@ -35,6 +35,7 @@ function CreateChainlink() {
 
   const {
     handleSubmit,
+    register,
     control,
     setValue,
     formState: { errors, isSubmitted, isValid, isSubmitting },
@@ -79,13 +80,11 @@ function CreateChainlink() {
         >
           {/* Node Name */}
           <TextInput
-            control={control}
-            name="name"
             id="name"
             type="text"
             label="Node Name"
-            defaultValue=""
             error={errors.name?.message}
+            {...register('name')}
           />
 
           {/* EVM Chain */}
@@ -120,14 +119,12 @@ function CreateChainlink() {
 
           {/* Database Connection URL */}
           <TextInput
-            control={control}
-            name="databaseURL"
             id="databaseUrl"
             type="text"
             label="Database Connection URL"
-            defaultValue=""
             error={errors.databaseURL?.message}
             placeholder="postgres://"
+            {...register('databaseURL')}
           />
 
           {/* Keystore Password */}
@@ -157,13 +154,11 @@ function CreateChainlink() {
 
           {/* Email */}
           <TextInput
-            control={control}
-            name="apiCredentials.email"
             id="email"
             type="text"
             label="Email"
-            defaultValue=""
             error={errors.apiCredentials?.email?.message}
+            {...register('apiCredentials.email')}
           />
 
           {/* Password */}

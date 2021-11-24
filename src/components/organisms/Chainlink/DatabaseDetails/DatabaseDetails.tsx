@@ -20,7 +20,7 @@ function DatabaseDetails({ databaseURL, name, setNode }: Props) {
   const [serverError, setServerError] = useState('');
   const {
     handleSubmit,
-    control,
+    register,
     reset,
     formState: { isDirty, isSubmitting, errors },
   } = useForm<Database>();
@@ -48,11 +48,10 @@ function DatabaseDetails({ databaseURL, name, setNode }: Props) {
       <div className="px-4 py-5 sm:p-6">
         {/* Database Connection URL */}
         <TextInput
-          control={control}
           label="Database Connection URL"
-          name="databaseURL"
           defaultValue={databaseURL}
           error={errors.databaseURL?.message}
+          {...register('databaseURL')}
         />
       </div>
 

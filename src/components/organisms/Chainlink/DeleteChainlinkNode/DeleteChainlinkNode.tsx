@@ -26,7 +26,7 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
 
   const router = useRouter();
   const {
-    control,
+    register,
     watch,
     handleSubmit,
     formState: { isSubmitting },
@@ -107,7 +107,7 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
             Please type the node name (
             <span className="font-bold">{nodeName}</span>) to confirm
           </p>
-          <TextInput control={control} name="name" defaultValue="" />
+          <TextInput {...register('name')} />
         </div>
         {error && (
           <p className="text-sm text-red-600 font-medium mt-2">{error}</p>

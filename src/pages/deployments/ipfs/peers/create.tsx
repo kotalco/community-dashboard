@@ -20,7 +20,6 @@ const CreateIPFSPeerPage: React.FC = () => {
   const router = useRouter();
   const {
     register,
-    control,
     handleSubmit,
     formState: { errors, isSubmitted, isValid, isSubmitting },
   } = useForm<CreatePeer>({
@@ -61,11 +60,9 @@ const CreateIPFSPeerPage: React.FC = () => {
         >
           {/* Peer Name */}
           <TextInput
-            control={control}
-            name="name"
             label="Peer Name"
-            defaultValue=""
             error={errors.name?.message}
+            {...register('name')}
           />
 
           {/* <!-- configuration profiles --> */}

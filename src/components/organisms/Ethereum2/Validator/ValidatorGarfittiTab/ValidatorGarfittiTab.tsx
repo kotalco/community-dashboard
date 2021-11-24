@@ -21,7 +21,7 @@ const ValidatorGarfittiTab: React.FC<Props> = ({ name, graffiti }) => {
 
   const {
     reset,
-    control,
+    register,
     handleSubmit,
     formState: { isDirty, isSubmitting },
   } = useForm<UpdateGrafitti>({
@@ -48,7 +48,7 @@ const ValidatorGarfittiTab: React.FC<Props> = ({ name, graffiti }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
-        <TextInput label="Graffiti" control={control} name="graffiti" />
+        <TextInput label="Graffiti" {...register('graffiti')} />
       </div>
 
       <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">

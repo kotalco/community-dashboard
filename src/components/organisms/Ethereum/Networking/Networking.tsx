@@ -40,6 +40,7 @@ const NetworkingDetails: React.FC<Props> = ({
     handleSubmit,
     control,
     reset,
+    register,
     setError,
     formState: { isDirty, isSubmitting, errors },
   } = useForm<Networking>({
@@ -93,9 +94,8 @@ const NetworkingDetails: React.FC<Props> = ({
           <TextInput
             type="text"
             label="P2P Port"
-            control={control}
-            name="p2pPort"
             error={errors.p2pPort?.message}
+            {...register('p2pPort')}
           />
         </div>
 

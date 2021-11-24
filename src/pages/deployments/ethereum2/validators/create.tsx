@@ -34,6 +34,7 @@ const CreateValidator: React.FC = () => {
 
   const {
     watch,
+    register,
     control,
     handleSubmit,
     formState: { errors, isSubmitted, isValid, isSubmitting },
@@ -70,11 +71,9 @@ const CreateValidator: React.FC = () => {
         >
           {/* Beacon Node Name */}
           <TextInput
-            control={control}
-            name="name"
             label="Validator Name"
             error={errors.name?.message}
-            defaultValue=""
+            {...register('name')}
           />
 
           {/* Client */}

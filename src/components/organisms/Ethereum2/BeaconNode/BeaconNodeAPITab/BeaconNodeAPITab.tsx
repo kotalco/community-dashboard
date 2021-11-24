@@ -63,6 +63,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
 
   const {
     reset,
+    register,
     handleSubmit,
     control,
     formState: { isDirty, isSubmitting, errors },
@@ -118,8 +119,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
                 disabled={!restState}
                 label="REST API Server Port"
                 error={errors.restPort?.message}
-                control={control}
-                name="restPort"
+                {...register('restPort')}
               />
             </div>
             <div className="mt-4">
@@ -127,8 +127,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
                 disabled={!restState}
                 label="REST API Server Host"
                 error={errors.restHost?.message}
-                control={control}
-                name="restHost"
+                {...register('restHost')}
               />
             </div>
           </>
@@ -165,8 +164,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
                 disabled={!rpcState}
                 label="JSON-RPC Server Port"
                 error={errors.rpcPort?.message}
-                control={control}
-                name="rpcPort"
+                {...register('rpcPort')}
               />
             </div>
             <div className="mt-4">
@@ -174,8 +172,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
                 disabled={!rpcState}
                 label="JSON-RPC Server Host"
                 error={errors.rpcHost?.message}
-                control={control}
-                name="rpcHost"
+                {...register('rpcHost')}
               />
             </div>
           </>
@@ -205,8 +202,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
                 disabled={!grpcState}
                 label="GRPC Gateway Server Port"
                 error={errors.grpcPort?.message}
-                control={control}
-                name="grpcPort"
+                {...register('grpcPort')}
               />
             </div>
             <div className="mt-4">
@@ -214,8 +210,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
                 disabled={!grpcState}
                 label="GRPC Gateway Server Host"
                 error={errors.grpcHost?.message}
-                control={control}
-                name="grpcHost"
+                {...register('grpcHost')}
               />
             </div>
           </>
