@@ -37,4 +37,4 @@ yarn-error.log*
 .eslintcache
 
 # other
-todo.txt
+.tsbuildinfo
