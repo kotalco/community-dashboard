@@ -1,7 +1,6 @@
-import React, { InputHTMLAttributes, MouseEvent, useState } from 'react';
+import React, { MouseEvent, useState } from 'react';
 import {
   Control,
-  FieldValues,
   useController,
   RegisterOptions,
   FieldPath,
@@ -18,7 +17,7 @@ import {
 import InputLabel from '@components/atoms/InputLabel/InputLabel';
 import IconButton from '@components/atoms/IconButton/IconButton';
 
-interface Props<T> extends InputHTMLAttributes<HTMLInputElement> {
+interface Props<T> {
   name: FieldPath<T>;
   control: Control<T>;
   rules?: Exclude<
@@ -29,19 +28,26 @@ interface Props<T> extends InputHTMLAttributes<HTMLInputElement> {
   helperText?: string;
   label?: string;
   error?: string;
+  type?: string;
+  id?: string;
+  disabled?: boolean;
+  placeholder?: string;
 }
 
-function TextInput<T extends FieldValues>({
+function TextInput<T>({
   name,
   control,
   label,
   error,
   helperText,
   rules,
+  type = 'text',
   defaultValue,
-  ...props
+  id,
+  placeholder,
+  disabled,
 }: Props<T>) {
-  const [inputType, setInputType] = useState(props.type);
+  const [inputType, setInputType] = useState(type);
   const { field } = useController<T>({
     name,
     control,
@@ -60,18 +66,18 @@ function TextInput<T extends FieldValues>({
 
   return (
     <div className="mb-4">
-      {label && <InputLabel htmlFor={props.id}>{label}</InputLabel>}
-      <fieldset disabled={props.disabled} className="relative max-w-xs">
+      {label && <InputLabel htmlFor={id}>{label}</InputLabel>}
+      <fieldset disabled={disabled} className="relative max-w-xs">
         <input
-          type={props.type || 'text'}
-          id={props.id}
+          type={inputType}
+          id={id}
           className={`shadow-sm focus:ring-indigo-500 block w-full sm:text-sm disabled:bg-gray-100 disabled:text-gray-500 rounded-md ${
             error ? 'border-red-300' : 'border-gray-300'
           }`}
-          {...props}
+          placeholder={placeholder}
           {...field}
         />
-        {error && props.type !== 'password' && (
+        {error && type !== 'password' && (
           <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
             <ExclamationCircleIcon
               className="h-5 w-5 text-red-500"
@@ -79,7 +85,7 @@ function TextInput<T extends FieldValues>({
             />
           </div>
         )}
-        {props.type === 'password' && (
+        {type === 'password' && (
           <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
             <IconButton onClick={togglePassword}>
               {inputType === 'password' ? (
