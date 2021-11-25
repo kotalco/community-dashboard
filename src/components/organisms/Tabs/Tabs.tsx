@@ -1,3 +1,4 @@
+import React from 'react';
 import { Tab } from '@headlessui/react';
 
 interface Props {
@@ -5,6 +6,7 @@ interface Props {
 }
 
 const Tabs: React.FC<Props> = ({ tabs, children }) => {
+  const tabPanelArray = React.Children.toArray(children);
   return (
     <Tab.Group>
       <Tab.List className="flex p-2 sm:px-4 sm:py-5 border-b border-gray-200 overflow-x-auto">
@@ -38,7 +40,11 @@ const Tabs: React.FC<Props> = ({ tabs, children }) => {
           )
         )}
       </Tab.List>
-      <Tab.Panels>{children}</Tab.Panels>
+      <Tab.Panels>
+        {React.Children.map(tabPanelArray, (child) => (
+          <Tab.Panel className="focus:outline-none">{child}</Tab.Panel>
+        ))}
+      </Tab.Panels>
     </Tab.Group>
   );
 };

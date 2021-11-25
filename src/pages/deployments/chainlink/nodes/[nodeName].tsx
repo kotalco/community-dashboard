@@ -1,5 +1,4 @@
 import { useRouter } from 'next/router';
-import { Tab } from '@headlessui/react';
 
 import Heading from '@components/templates/Heading/Heading';
 import Tabs from '@components/organisms/Tabs/Tabs';
@@ -11,16 +10,16 @@ import APIDetails from '@components/organisms/Chainlink/APIDetails/APIDetails';
 import AccessControlDetails from '@components/organisms/Chainlink/AccessControlDetails/AccessControlDetails';
 import ResourcesDetails from '@components/organisms/Resources/Resources';
 import LoggingDetails from '@components/organisms/Chainlink/LoggingDetails/LoggingDetails';
-import { Resources } from '@interfaces/Resources';
-import { getLabel } from '@utils/helpers/getLabel';
-import { useChainlinkNode } from '@hooks/useChainlinkNode';
-import { titles } from '@data/chainlink/tabTitles';
-import { EVM_CHAINS } from '@data/chainlink/evmChain';
 import DatabaseDetails from '@components/organisms/Chainlink/DatabaseDetails/DatabaseDetails';
 import EthereumDetails from '@components/organisms/Chainlink/EthereumDetails/EthereumDetails';
 import WalletDetails from '@components/organisms/Chainlink/WalletDetails/WalletDetails';
 import TLSDetails from '@components/organisms/Chainlink/TLSDetails/TLSDetails';
 import { updateChainlinkNode } from '@utils/requests/chainlink';
+import { Resources } from '@interfaces/Resources';
+import { getLabel } from '@utils/helpers/getLabel';
+import { useChainlinkNode } from '@hooks/useChainlinkNode';
+import { titles } from '@data/chainlink/tabTitles';
+import { EVM_CHAINS } from '@data/chainlink/evmChain';
 
 function ChainlinkNode() {
   const { query } = useRouter();
@@ -56,93 +55,73 @@ function ChainlinkNode() {
       <div className="bg-white shadow rounded-lg divided-y divided-gray-200">
         <Tabs tabs={titles}>
           {/* Protocol */}
-          <Tab.Panel className="focus:outline-none">
-            <ProtocolDetails dataList={dataList} />
-          </Tab.Panel>
+          <ProtocolDetails dataList={dataList} />
 
           {/* Networking */}
-          <Tab.Panel className="focus:outline-none">
-            <DatabaseDetails
-              databaseURL={node.databaseURL}
-              name={node.name}
-              setNode={mutate}
-            />
-          </Tab.Panel>
+          <DatabaseDetails
+            databaseURL={node.databaseURL}
+            name={node.name}
+            setNode={mutate}
+          />
 
           {/* Ethereum */}
-          <Tab.Panel className="focus:outline-none">
-            <EthereumDetails
-              name={node.name}
-              setNode={mutate}
-              ethereumWsEndpoint={node.ethereumWsEndpoint}
-              ethereumHttpEndpoints={node.ethereumHttpEndpoints}
-            />
-          </Tab.Panel>
+          <EthereumDetails
+            name={node.name}
+            setNode={mutate}
+            ethereumWsEndpoint={node.ethereumWsEndpoint}
+            ethereumHttpEndpoints={node.ethereumHttpEndpoints}
+          />
 
           {/* Wallet */}
-          <Tab.Panel className="focus:outline-none">
-            <WalletDetails
-              name={node.name}
-              setNode={mutate}
-              keystorePasswordSecretName={node.keystorePasswordSecretName}
-            />
-          </Tab.Panel>
+          <WalletDetails
+            name={node.name}
+            setNode={mutate}
+            keystorePasswordSecretName={node.keystorePasswordSecretName}
+          />
 
           {/* TLS */}
-          <Tab.Panel className="focus:outline-none">
-            <TLSDetails
-              name={node.name}
-              setNode={mutate}
-              certSecretName={node.certSecretName}
-              secureCookies={node.secureCookies}
-              tlsPort={node.tlsPort}
-            />
-          </Tab.Panel>
+          <TLSDetails
+            name={node.name}
+            setNode={mutate}
+            certSecretName={node.certSecretName}
+            secureCookies={node.secureCookies}
+            tlsPort={node.tlsPort}
+          />
 
           {/* API Credentials */}
-          <Tab.Panel className="focus:outline-none">
-            <APIDetails
-              name={node.name}
-              setNode={mutate}
-              apiCredentials={node.apiCredentials}
-            />
-          </Tab.Panel>
+          <APIDetails
+            name={node.name}
+            setNode={mutate}
+            apiCredentials={node.apiCredentials}
+          />
 
           {/* Access Control */}
-          <Tab.Panel className="focus:outline-none">
-            <AccessControlDetails
-              corsDomains={node.corsDomains}
-              setNode={mutate}
-              name={node.name}
-            />
-          </Tab.Panel>
+          <AccessControlDetails
+            corsDomains={node.corsDomains}
+            setNode={mutate}
+            name={node.name}
+          />
 
           {/* Logging */}
-          <Tab.Panel className="focus:outline-none">
-            <LoggingDetails
-              logging={node.logging}
-              name={node.name}
-              setNode={mutate}
-            />
-          </Tab.Panel>
+          <LoggingDetails
+            logging={node.logging}
+            name={node.name}
+            setNode={mutate}
+          />
 
           {/* Resources */}
-          <Tab.Panel className="focus:outline-none">
-            <ResourcesDetails
-              cpu={node.cpu}
-              cpuLimit={node.cpuLimit}
-              memory={node.memory}
-              memoryLimit={node.memoryLimit}
-              storage={node.storage}
-              name={node.name}
-              updateResources={updateResources}
-            />
-          </Tab.Panel>
+          <ResourcesDetails
+            cpu={node.cpu}
+            cpuLimit={node.cpuLimit}
+            memory={node.memory}
+            memoryLimit={node.memoryLimit}
+            storage={node.storage}
+            name={node.name}
+            updateResources={updateResources}
+          />
 
           {/* Danger Zone */}
-          <Tab.Panel className="focus:outline-none">
-            <DeleteChainlinkNode nodeName={node.name} />
-          </Tab.Panel>
+          <DeleteChainlinkNode nodeName={node.name} />
         </Tabs>
       </div>
     </Layout>

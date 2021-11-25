@@ -1,7 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import useSWR from 'swr';
-import { Tab } from '@headlessui/react';
 
 import {
   getValidator,
@@ -60,44 +59,36 @@ const ValidatorDetailsPage: React.FC<Props> = ({ validator }) => {
 
       <div className="bg-white shadow rounded-lg divided-y divided-gray-200 mt-4">
         <Tabs tabs={tabTitles}>
-          <Tab.Panel className="focus:outline-none">
-            <ProtocolDetails dataList={dataList} />
-          </Tab.Panel>
-          <Tab.Panel className="focus:outline-none">
-            <ValidatorGraffitiTab name={data.name} graffiti={data.graffiti} />
-          </Tab.Panel>
-          <Tab.Panel className="focus:outline-none">
-            <ValidatorKeystoreTab
-              name={data.name}
-              keystores={data.keystores}
-              walletPasswordSecretName={data.walletPasswordSecretName}
-              client={data.client}
-            />
-          </Tab.Panel>
-          <Tab.Panel className="focus:outline-none">
-            <ValidatorBeaconNodeTab
-              name={data.name}
-              beaconEndpoints={data.beaconEndpoints}
-              client={data.client}
-            />
-          </Tab.Panel>
-          <Tab.Panel className="focus:outline-none">
-            <Logging wsUrl={`/ethereum2/validators/${data.name}/logs`} />
-          </Tab.Panel>
-          <Tab.Panel className="focus:outline-none">
-            <Resources
-              name={data.name}
-              cpu={data.cpu}
-              cpuLimit={data.cpuLimit}
-              memory={data.memory}
-              memoryLimit={data.memoryLimit}
-              storage={data.storage}
-              updateResources={updateResources}
-            />
-          </Tab.Panel>
-          <Tab.Panel className="focus:outline-none">
-            <DeleteValidator validatorName={data.name} />
-          </Tab.Panel>
+          <ProtocolDetails dataList={dataList} />
+
+          <ValidatorGraffitiTab name={data.name} graffiti={data.graffiti} />
+
+          <ValidatorKeystoreTab
+            name={data.name}
+            keystores={data.keystores}
+            walletPasswordSecretName={data.walletPasswordSecretName}
+            client={data.client}
+          />
+
+          <ValidatorBeaconNodeTab
+            name={data.name}
+            beaconEndpoints={data.beaconEndpoints}
+            client={data.client}
+          />
+
+          <Logging wsUrl={`/ethereum2/validators/${data.name}/logs`} />
+
+          <Resources
+            name={data.name}
+            cpu={data.cpu}
+            cpuLimit={data.cpuLimit}
+            memory={data.memory}
+            memoryLimit={data.memoryLimit}
+            storage={data.storage}
+            updateResources={updateResources}
+          />
+
+          <DeleteValidator validatorName={data.name} />
         </Tabs>
       </div>
     </Layout>

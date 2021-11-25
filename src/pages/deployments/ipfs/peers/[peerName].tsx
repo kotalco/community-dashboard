@@ -16,7 +16,6 @@ import { getIPFSPeer, updateIPFSPeer } from '@utils/requests/ipfs/peers';
 import { Peer } from '@interfaces/ipfs/Peer';
 import { tabsTitles } from '@data/ipfs/peers/tabsTitles';
 import Heading from '@components/templates/Heading/Heading';
-import { Tab } from '@headlessui/react';
 import ResourcesTab from '@components/organisms/Resources/Resources';
 import { Resources } from '@interfaces/Resources';
 
@@ -56,54 +55,40 @@ const IPFSPeerDetailsPage: React.FC<Props> = ({ ipfsPeer }) => {
 
       <div className="bg-white shadow rounded-lg divided-y divided-gray-200 mt-4">
         <Tabs tabs={tabsTitles}>
-          <Tab.Panel className="focus:outline-none">
-            <ProtocolDetails dataList={dataList} />
-          </Tab.Panel>
-          <Tab.Panel className="focus:outline-none">
-            <IPFSConfigrationProfiles
-              peerName={peer.name}
-              profiles={peer.profiles}
-              initProfiles={peer.initProfiles}
-            />
-          </Tab.Panel>
-          <Tab.Panel className="focus:outline-none">
-            <IPFSApiDetails
-              peerName={peer.name}
-              apiPort={peer.apiPort}
-              apiHost={peer.apiHost}
-            />
-          </Tab.Panel>
+          <ProtocolDetails dataList={dataList} />
 
-          <Tab.Panel className="focus:outline-none">
-            <IPFSGatewayDetails
-              peerName={peer.name}
-              gatewayPort={peer.gatewayPort}
-              gatewayHost={peer.gatewayHost}
-            />
-          </Tab.Panel>
+          <IPFSConfigrationProfiles
+            peerName={peer.name}
+            profiles={peer.profiles}
+            initProfiles={peer.initProfiles}
+          />
+          <IPFSApiDetails
+            peerName={peer.name}
+            apiPort={peer.apiPort}
+            apiHost={peer.apiHost}
+          />
 
-          <Tab.Panel className="focus:outline-none">
-            <IPFSRoutingDetails peerName={peer.name} routing={peer.routing} />
-          </Tab.Panel>
+          <IPFSGatewayDetails
+            peerName={peer.name}
+            gatewayPort={peer.gatewayPort}
+            gatewayHost={peer.gatewayHost}
+          />
 
-          <Tab.Panel className="focus:outline-none">
-            <Logging wsUrl={`/ipfs/peers/${peer.name}/logs`} />
-          </Tab.Panel>
+          <IPFSRoutingDetails peerName={peer.name} routing={peer.routing} />
 
-          <Tab.Panel className="focus:outline-none">
-            <ResourcesTab
-              name={peer.name}
-              cpu={peer.cpu}
-              cpuLimit={peer.cpuLimit}
-              storage={peer.storage}
-              memory={peer.memory}
-              memoryLimit={peer.memoryLimit}
-              updateResources={updateResources}
-            />
-          </Tab.Panel>
-          <Tab.Panel className="focus:outline-none">
-            <DeleteIPFSPeer peerName={peer.name} />
-          </Tab.Panel>
+          <Logging wsUrl={`/ipfs/peers/${peer.name}/logs`} />
+
+          <ResourcesTab
+            name={peer.name}
+            cpu={peer.cpu}
+            cpuLimit={peer.cpuLimit}
+            storage={peer.storage}
+            memory={peer.memory}
+            memoryLimit={peer.memoryLimit}
+            updateResources={updateResources}
+          />
+
+          <DeleteIPFSPeer peerName={peer.name} />
         </Tabs>
       </div>
     </Layout>

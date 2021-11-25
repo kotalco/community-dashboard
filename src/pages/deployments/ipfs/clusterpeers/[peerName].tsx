@@ -1,6 +1,5 @@
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { useRouter } from 'next/router';
-import { Tab } from '@headlessui/react';
 
 import { fetcher } from '@utils/axios';
 import { ClusterPeer, UpdateClusterPeer } from '@interfaces/ipfs/ClusterPeer';
@@ -60,37 +59,30 @@ const ClusterPeerDetailsPage: React.FC<Props> = ({ initialClusterpeer }) => {
 
       <div className="bg-white shadow rounded-lg mt-4">
         <Tabs tabs={tabTitles}>
-          <Tab.Panel className="focus:outline-none">
-            <ProtocolDetails dataList={dataList} />
-          </Tab.Panel>
-          <Tab.Panel className="focus:outline-none">
-            <Peers
-              peerEndpoint={clusterpeer.peerEndpoint}
-              trustedPeers={clusterpeer.trustedPeers || []}
-              bootstrapPeers={clusterpeer.bootstrapPeers || []}
-              name={clusterpeer.name}
-            />
-          </Tab.Panel>
-          <Tab.Panel className="focus:outline-none">
-            <Security clusterSecretName={clusterpeer.clusterSecretName} />
-          </Tab.Panel>
-          <Tab.Panel className="focus:outline-none">
-            <Logging wsUrl={`/ipfs/clusterpeers/${clusterpeer.name}/logs`} />{' '}
-          </Tab.Panel>
-          <Tab.Panel className="focus:outline-none">
-            <Resources
-              cpu={clusterpeer.cpu}
-              cpuLimit={clusterpeer.cpuLimit}
-              memory={clusterpeer.memory}
-              memoryLimit={clusterpeer.memoryLimit}
-              storage={clusterpeer.storage}
-              name={clusterpeer.name}
-              updateResources={updateResources}
-            />
-          </Tab.Panel>
-          <Tab.Panel className="focus:outline-none">
-            <DeleteDeployment name={clusterpeer.name} />
-          </Tab.Panel>
+          <ProtocolDetails dataList={dataList} />
+
+          <Peers
+            peerEndpoint={clusterpeer.peerEndpoint}
+            trustedPeers={clusterpeer.trustedPeers || []}
+            bootstrapPeers={clusterpeer.bootstrapPeers || []}
+            name={clusterpeer.name}
+          />
+
+          <Security clusterSecretName={clusterpeer.clusterSecretName} />
+
+          <Logging wsUrl={`/ipfs/clusterpeers/${clusterpeer.name}/logs`} />
+
+          <Resources
+            cpu={clusterpeer.cpu}
+            cpuLimit={clusterpeer.cpuLimit}
+            memory={clusterpeer.memory}
+            memoryLimit={clusterpeer.memoryLimit}
+            storage={clusterpeer.storage}
+            name={clusterpeer.name}
+            updateResources={updateResources}
+          />
+
+          <DeleteDeployment name={clusterpeer.name} />
         </Tabs>
       </div>
     </Layout>

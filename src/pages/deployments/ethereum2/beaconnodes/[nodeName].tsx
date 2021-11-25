@@ -1,5 +1,4 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
-import { Tab } from '@headlessui/react';
 import { useRouter } from 'next/router';
 
 import {
@@ -52,52 +51,48 @@ const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconnode }) => {
 
       <div className="bg-white shadow rounded-lg mt-4">
         <Tabs tabs={tabTitles}>
-          <Tab.Panel className="focus:outline-none">
-            <ProtocolDetails dataList={dataList} />
-          </Tab.Panel>
-          <Tab.Panel className="focus:outline-none">
-            <BeaconNodeEthereumTab
-              name={data.name}
-              client={data.client}
-              eth1Endpoints={data.eth1Endpoints}
-              network={data.network}
-            />
-          </Tab.Panel>
+          {/* Protocol */}
+          <ProtocolDetails dataList={dataList} />
 
-          <Tab.Panel className="focus:outline-none">
-            <BeaconNodeAPITab
-              name={data.name}
-              rest={data.rest}
-              restHost={data.restHost}
-              restPort={data.restPort}
-              rpc={data.rpc}
-              rpcPort={data.rpcPort}
-              rpcHost={data.rpcHost}
-              grpc={data.grpc}
-              grpcHost={data.grpcHost}
-              grpcPort={data.grpcPort}
-              client={data.client}
-            />
-          </Tab.Panel>
+          {/* Ethereum */}
+          <BeaconNodeEthereumTab
+            name={data.name}
+            client={data.client}
+            eth1Endpoints={data.eth1Endpoints}
+            network={data.network}
+          />
 
-          <Tab.Panel className="focus:outline-none">
-            <Logging wsUrl={`/ethereum2/beaconnodes/${data.name}/logs`} />
-          </Tab.Panel>
+          {/* API */}
+          <BeaconNodeAPITab
+            name={data.name}
+            rest={data.rest}
+            restHost={data.restHost}
+            restPort={data.restPort}
+            rpc={data.rpc}
+            rpcPort={data.rpcPort}
+            rpcHost={data.rpcHost}
+            grpc={data.grpc}
+            grpcHost={data.grpcHost}
+            grpcPort={data.grpcPort}
+            client={data.client}
+          />
 
-          <Tab.Panel className="focus:outline-none">
-            <Resources
-              name={data.name}
-              cpu={data.cpu}
-              cpuLimit={data.cpuLimit}
-              memory={data.memory}
-              memoryLimit={data.memoryLimit}
-              storage={data.storage}
-              updateResources={updateResources}
-            />
-          </Tab.Panel>
-          <Tab.Panel className="focus:outline-none">
-            <DeleteBeaconNode nodeName={data.name} />
-          </Tab.Panel>
+          {/* Logging */}
+          <Logging wsUrl={`/ethereum2/beaconnodes/${data.name}/logs`} />
+
+          {/* Resources */}
+          <Resources
+            name={data.name}
+            cpu={data.cpu}
+            cpuLimit={data.cpuLimit}
+            memory={data.memory}
+            memoryLimit={data.memoryLimit}
+            storage={data.storage}
+            updateResources={updateResources}
+          />
+
+          {/* Danger zone */}
+          <DeleteBeaconNode nodeName={data.name} />
         </Tabs>
       </div>
     </Layout>
