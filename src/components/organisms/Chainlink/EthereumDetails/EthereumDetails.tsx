@@ -25,11 +25,17 @@ function EthereumDetails({
   const [submitSuccess, setSubmitSuccess] = useState('');
   const [serverError, setServerError] = useState('');
   const { nodes, isLoading } = useEthereumNodes();
-  const activeNodes = nodes
+  const wsActiveNodes = nodes
     .filter(({ ws }) => ws)
-    .map(({ name, wsPort, rpcPort }) => ({
+    .map(({ name, wsPort }) => ({
       label: name,
       wsValue: `ws://${name}:${wsPort}`,
+    }));
+
+  const rpcActiveNodes = nodes
+    .filter(({ rpc }) => rpc)
+    .map(({ name, rpcPort }) => ({
+      label: name,
       httpValue: `http://${name}:${rpcPort}`,
     }));
 
@@ -69,7 +75,7 @@ function EthereumDetails({
             defaultValue={ethereumWsEndpoint}
             render={({ field }) => (
               <Select
-                options={activeNodes}
+                options={wsActiveNodes}
                 labelProp="label"
                 valueProp="wsValue"
                 value={field.value}
@@ -91,7 +97,7 @@ function EthereumDetails({
             defaultValue={ethereumHttpEndpoints}
             render={({ field }) => (
               <Select
-                options={activeNodes}
+                options={rpcActiveNodes}
                 labelProp="label"
                 valueProp="httpValue"
                 value={field.value}
