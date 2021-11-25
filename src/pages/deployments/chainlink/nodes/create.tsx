@@ -8,7 +8,7 @@ import FormLayout from '@components/templates/FormLayout/FormLayout';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Select from '@components/molecules/SelectNew/SelectNew';
 import Heading from '@components/templates/Heading/Heading';
-import { schema } from '@schemas/ethereum/createNode';
+import { schema } from '@schemas/chainlink/create';
 import {
   ChainlinkNode,
   CreateChainlinkNode,
@@ -39,18 +39,16 @@ function CreateChainlink() {
     control,
     setValue,
     formState: { errors, isSubmitted, isValid, isSubmitting },
-  } = useForm<CreateChainlinkNode>();
-  //   { resolver: yupResolver(schema) }
+  } = useForm<CreateChainlinkNode>({ resolver: yupResolver(schema) });
 
   const handleEVMChange = (value: string | string[] | undefined) => {
     if (value && typeof value === 'string') {
       const [id, address] = value.split(':');
-      setValue('ethereumChainId', parseInt(id, 10));
-      setValue('linkContractAddress', address);
+      setValue('ethereumChainId', parseInt(id, 10), { shouldValidate: true });
+      setValue('linkContractAddress', address, { shouldValidate: true });
     }
   };
 
-  // eslint-disable-next-line @typescript-eslint/require-await
   const onSubmit: SubmitHandler<CreateChainlinkNode> = async (values) => {
     setServerError('');
     const { error, response } = await handleRequest<ChainlinkNode>(
