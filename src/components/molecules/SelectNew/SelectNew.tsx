@@ -100,7 +100,7 @@ function Select<T extends { [key: string]: string }>({
                   error ? 'border-red-300' : 'border-gray-300 '
                 } ${
                   selected?.[valueProp] === 'other'
-                    ? 'rounded-t-md'
+                    ? 'rounded-t-md text-indigo-500'
                     : 'rounded-md'
                 }`}
               >
@@ -154,6 +154,7 @@ function Select<T extends { [key: string]: string }>({
                         { [labelProp]: otherLabel, [valueProp]: 'other' } as T
                       }
                       label={labelProp}
+                      className="text-indigo-500 hover:text-white"
                     />
                   )}
                   {href && hrefTitle && (

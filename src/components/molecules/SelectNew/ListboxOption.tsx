@@ -4,16 +4,19 @@ import { CheckIcon } from '@heroicons/react/solid';
 interface Props<T> {
   option: T;
   label: keyof T;
+  className?: string;
 }
 
-function ListboxOption<T>({ option, label }: Props<T>) {
+function ListboxOption<T>({ option, label, className }: Props<T>) {
   return (
     <Listbox.Option
       value={option}
       className={({ active }) =>
         `${
           active ? 'text-white bg-indigo-600' : 'text-gray-900'
-        } cursor-default select-none relative py-2 pl-3 pr-9`
+        } cursor-default select-none relative py-2 pl-3 pr-9 ${
+          className ? className : ''
+        }`
       }
     >
       {({ selected, active }) => (

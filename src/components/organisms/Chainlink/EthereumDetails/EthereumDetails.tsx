@@ -84,6 +84,7 @@ function EthereumDetails({
                 error={errors.ethereumWsEndpoint?.message}
                 other
                 otherLabel="External Manged Node"
+                helperText="Showing Ethereum nodes with WebSocket enabled"
               />
             )}
           />

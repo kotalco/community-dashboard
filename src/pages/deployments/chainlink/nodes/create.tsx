@@ -113,6 +113,7 @@ function CreateChainlink() {
                 error={errors.ethereumWsEndpoint?.message}
                 other
                 otherLabel="Externally Managed Node"
+                helperText="Showing Ethereum nodes with WebSocket enabled"
               />
             )}
           />
