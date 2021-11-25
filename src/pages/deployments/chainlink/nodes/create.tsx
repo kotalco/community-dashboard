@@ -177,7 +177,7 @@ function CreateChainlink() {
                   onChange={field.onChange}
                   error={errors.apiCredentials?.passwordSecretName?.message}
                   href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
-                  hrefTitle="Create a password..."
+                  hrefTitle="Create New Password..."
                 />
               )}
             />

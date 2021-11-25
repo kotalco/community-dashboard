@@ -80,7 +80,7 @@ function TLSDetails({
                 error={errors.certSecretName?.message}
                 placeholder="Select a certificate..."
                 href={`/core/secrets/create?type=${KubernetesSecretTypes.tlsCertificate}`}
-                hrefTitle="Add a certificate..."
+                hrefTitle="Add New Certificate..."
               />
             )}
           />

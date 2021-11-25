@@ -54,11 +54,6 @@ function APIDetails({ apiCredentials, name, setNode }: Props) {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
-        <h2 className="font-bold text-xl">API Credentials</h2>
-        <p className="text-gray-500 mb-5 text-sm">
-          For securing access to chainlink dashboard
-        </p>
-
         {/* Email */}
         <TextInput
           label="Email"
@@ -81,6 +76,8 @@ function APIDetails({ apiCredentials, name, setNode }: Props) {
                 onChange={field.onChange}
                 label="Password"
                 error={errors.apiCredentials?.passwordSecretName?.message}
+                href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
+                hrefTitle="Create New Password..."
               />
             )}
           />
