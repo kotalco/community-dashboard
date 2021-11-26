@@ -13,7 +13,7 @@ const Layout: React.FC = ({ children }) => {
       <SidebarMobile isOpen={isOpen} setIsOpen={setIsOpen} />
       <SidebarDesktop />
 
-      <div className="flex flex-col w-0 flex-1">
+      <div className="flex flex-col w-0 overflow-y-auto flex-1">
         <Navbar setIsOpen={setIsOpen} />
 
         <main className="flex-1 z-10 focus:outline-none" tabIndex={0}>
