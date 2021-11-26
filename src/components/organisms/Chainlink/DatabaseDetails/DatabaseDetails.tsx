@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 import TextInput from '@components/molecules/TextInput/TextInput';
@@ -7,6 +8,7 @@ import { ChainlinkNode, Database } from '@interfaces/chainlink/ChainlinkNode';
 import { KeyedMutator } from 'swr';
 import { updateChainlinkNode } from '@utils/requests/chainlink';
 import { handleRequest } from '@utils/helpers/handleRequest';
+import { databaseSchema } from '@schemas/chainlink/database';
 
 interface Props extends Database {
   name: string;
@@ -23,7 +25,7 @@ function DatabaseDetails({ databaseURL, name, setNode }: Props) {
     register,
     reset,
     formState: { isDirty, isSubmitting, errors },
-  } = useForm<Database>();
+  } = useForm<Database>({ resolver: yupResolver(databaseSchema) });
 
   const onSubmit: SubmitHandler<Database> = async (values) => {
     setServerError('');

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 
 import Select from '@components/molecules/SelectNew/SelectNew';
@@ -8,6 +9,7 @@ import { KeyedMutator } from 'swr';
 import { updateChainlinkNode } from '@utils/requests/chainlink';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { useEthereumNodes } from '@hooks/useEthereumNodes';
+import { ethereumSchema } from '@schemas/chainlink/ethereum';
 
 interface Props extends Ethereum {
   name: string;
@@ -44,7 +46,7 @@ function EthereumDetails({
     control,
     reset,
     formState: { isDirty, isSubmitting, errors },
-  } = useForm<Ethereum>();
+  } = useForm<Ethereum>({ resolver: yupResolver(ethereumSchema) });
 
   const onSubmit: SubmitHandler<Ethereum> = async (values) => {
     setServerError('');

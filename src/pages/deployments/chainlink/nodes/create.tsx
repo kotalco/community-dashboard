@@ -8,7 +8,7 @@ import FormLayout from '@components/templates/FormLayout/FormLayout';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Select from '@components/molecules/SelectNew/SelectNew';
 import Heading from '@components/templates/Heading/Heading';
-import { schema } from '@schemas/chainlink/create';
+import { createSchema } from '@schemas/chainlink/create';
 import {
   ChainlinkNode,
   CreateChainlinkNode,
@@ -39,7 +39,7 @@ function CreateChainlink() {
     control,
     setValue,
     formState: { errors, isSubmitted, isValid, isSubmitting },
-  } = useForm<CreateChainlinkNode>({ resolver: yupResolver(schema) });
+  } = useForm<CreateChainlinkNode>({ resolver: yupResolver(createSchema) });
 
   const handleEVMChange = (value: string | string[] | undefined) => {
     if (value && typeof value === 'string') {
