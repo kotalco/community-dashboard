@@ -8,12 +8,11 @@ module.exports = {
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
-    fontFamily: {
-      sans: ['nunito', ...defaultTheme.fontFamily.sans],
-      serif: [...defaultTheme.fontFamily.serif],
-      mono: [...defaultTheme.fontFamily.mono],
+    extend: {
+      fontFamily: {
+        nunito: ['nunito', 'sans-serif'],
+      },
     },
-    extend: {},
   },
   variants: {
     extend: {},
