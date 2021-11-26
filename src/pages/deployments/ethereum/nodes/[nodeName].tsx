@@ -22,6 +22,7 @@ import { networkOptions } from '@data/ethereum/node/networkOptions';
 import { fetcher } from '@utils/axios';
 import { getLabel } from '@utils/helpers/getLabel';
 import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
+import { useStatus } from '@hooks/useStatus';
 
 interface Props {
   initialNode?: EthereumNode;
@@ -33,6 +34,8 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
   const { data: node, mutate } = useNode(initialNode?.name, {
     fallbackData: { node: initialNode },
   });
+
+  const { status } = useStatus(node && `/ethereum/nodes/${node.name}/status`);
 
   const updateResources = async (name: string, values: Resources) => {
     const node = await updateEthereumNode(name, values);
@@ -49,7 +52,7 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
 
   return (
     <Layout>
-      <Heading title={node.name} />
+      <Heading title={node.name} status={status} />
 
       <div className="bg-white shadow rounded-lg divided-y divided-gray-200 mt-4">
         <Tabs tabs={tabTitles(node.client)}>
