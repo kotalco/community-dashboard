@@ -10,7 +10,7 @@ const options: SelectOption[] = [
 const changeHandler = jest.fn();
 
 describe('test rendering of componenets', () => {
-  beforeEach(() => {
+  it('renders multiselect component', () => {
     render(
       <Multiselect
         options={options}
@@ -19,9 +19,6 @@ describe('test rendering of componenets', () => {
         onChange={changeHandler}
       />
     );
-  });
-
-  it('renders multiselect component', () => {
     const multiSelect = screen.getByLabelText(/options/i);
     expect(multiSelect).toBeInTheDocument();
   });
@@ -61,7 +58,7 @@ describe('test rendering of componenets', () => {
 });
 
 describe('render listbox with errors and options', () => {
-  beforeEach(() => {
+  it('remove choosed option after clicking on option if already choosed', () => {
     render(
       <Multiselect
         options={options}
@@ -74,9 +71,6 @@ describe('render listbox with errors and options', () => {
         hrefTitle="URL Title"
       />
     );
-  });
-
-  it('remove choosed option after clicking on option if already choosed', () => {
     changeHandler.mockReset();
 
     const multiSelect = screen.getByLabelText(/options/i);

@@ -4,31 +4,44 @@ import IconButton from './IconButton';
 
 describe('icon button', () => {
   const handleClick = jest.fn();
-  beforeEach(() => {
+
+  it('render button', () => {
     render(
       <IconButton onClick={handleClick} className="rounded-md">
         <span>Icon</span>
       </IconButton>
     );
-  });
-
-  it('render button', () => {
     const iconButton = screen.getByRole('button');
     expect(iconButton).toBeInTheDocument();
   });
 
   it('add classes', () => {
+    render(
+      <IconButton onClick={handleClick} className="rounded-md">
+        <span>Icon</span>
+      </IconButton>
+    );
     const iconButton = screen.getByRole('button');
     expect(iconButton).toHaveClass('rounded-md');
   });
 
   it('run callback function on click', () => {
+    render(
+      <IconButton onClick={handleClick} className="rounded-md">
+        <span>Icon</span>
+      </IconButton>
+    );
     const iconButton = screen.getByRole('button');
     user.click(iconButton);
     expect(handleClick).toHaveBeenCalledTimes(1);
   });
 
   it('render react element inside button', () => {
+    render(
+      <IconButton onClick={handleClick} className="rounded-md">
+        <span>Icon</span>
+      </IconButton>
+    );
     const iconButton = screen.getByRole('button');
     expect(iconButton).toContainHTML('<span>Icon</span>');
   });

@@ -4,6 +4,7 @@ import React, {
   ReactNode,
 } from 'react';
 import { InformationCircleIcon } from '@heroicons/react/solid';
+import Tooltip from '@components/atoms/Tooltip/Tooltip';
 
 interface Props {
   name: string;
@@ -57,15 +58,9 @@ const TextareaWithInput: React.FC<Props> = ({
           {label}
         </label>
         {tooltip && (
-          <div className="inline-flex flex-col justify-center items-center relative group ml-1">
+          <Tooltip title={tooltip}>
             <InformationCircleIcon className="h-4 w-4 text-indigo-400" />
-            <div className="absolute bottom-0 group-hover:flex flex-col items-center hidden mb-6">
-              <span className="relative z-10 p-2 text-xs rounded leading-none text-white whitespace-nowrap bg-gray-700 shadow-lg">
-                {tooltip}
-              </span>
-              <div className="w-3 h-3 -mt-2 rotate-45 bg-gray-700" />
-            </div>
-          </div>
+          </Tooltip>
         )}
       </div>
 

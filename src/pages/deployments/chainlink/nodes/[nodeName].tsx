@@ -20,10 +20,14 @@ import { getLabel } from '@utils/helpers/getLabel';
 import { useChainlinkNode } from '@hooks/useChainlinkNode';
 import { titles } from '@data/chainlink/tabTitles';
 import { EVM_CHAINS } from '@data/chainlink/evmChain';
+import { useStatus } from '@hooks/useStatus';
 
 function ChainlinkNode() {
   const { query } = useRouter();
   const nodeName = query.nodeName as string | undefined;
+  const { status } = useStatus(
+    nodeName && `/chainlink/nodes/${nodeName}/status`
+  );
 
   const { node, mutate } = useChainlinkNode(nodeName);
 
@@ -50,7 +54,7 @@ function ChainlinkNode() {
 
   return (
     <Layout>
-      <Heading title={node.name} />
+      <Heading title={node.name} status={status} />
 
       <div className="bg-white shadow rounded-lg divided-y divided-gray-200">
         <Tabs tabs={titles}>

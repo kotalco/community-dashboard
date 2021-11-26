@@ -3,16 +3,13 @@ import user from '@testing-library/user-event';
 import ButtonGroup from './ButtonGroup';
 
 describe('ButtonGroup', () => {
-  beforeEach(() => {
+  it('render button group with label', () => {
     render(
       <ButtonGroup
         label="Menu"
         buttons={[{ name: 'Settings', href: '/settings' }]}
       />
     );
-  });
-
-  it('render button group with label', () => {
     const labelText = screen.getByText(/menu/i);
     expect(labelText).toBeInTheDocument();
   });
