@@ -28,7 +28,6 @@ function ChainlinkNode() {
   const { status } = useStatus(
     nodeName && `/chainlink/nodes/${nodeName}/status`
   );
-
   const { node, mutate } = useChainlinkNode(nodeName);
 
   const updateResources = async (name: string, values: Resources) => {
@@ -54,7 +53,7 @@ function ChainlinkNode() {
 
   return (
     <Layout>
-      <Heading title={node.name} status={status} />
+      <Heading title={node.name} status={status} createdDate={node.createdAt} />
 
       <div className="bg-white shadow rounded-lg divided-y divided-gray-200">
         <Tabs tabs={titles}>

@@ -52,9 +52,9 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
 
   return (
     <Layout>
-      <Heading title={node.name} status={status} />
+      <Heading title={node.name} status={status} createdDate={node.createdAt} />
 
-      <div className="bg-white shadow rounded-lg divided-y divided-gray-200 mt-4">
+      <div className="bg-white shadow rounded-lg divided-y divided-gray-200">
         <Tabs tabs={tabTitles(node.client)}>
           {/* Protocol */}
           <ProtocolDetails dataList={dataList} />
