@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 
 import Select from '@components/molecules/SelectNew/SelectNew';
@@ -9,6 +10,7 @@ import { updateChainlinkNode } from '@utils/requests/chainlink';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
+import { walletSchema } from '@schemas/chainlink/wallet';
 
 interface Props extends Wallet {
   name: string;
@@ -29,7 +31,7 @@ function WalletDetails({ keystorePasswordSecretName, name, setNode }: Props) {
     control,
     reset,
     formState: { isDirty, isSubmitting, errors },
-  } = useForm<Wallet>();
+  } = useForm<Wallet>({ resolver: yupResolver(walletSchema) });
 
   const onSubmit: SubmitHandler<Wallet> = async (values) => {
     setServerError('');
