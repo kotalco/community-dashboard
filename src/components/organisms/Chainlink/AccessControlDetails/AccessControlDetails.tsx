@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 
 import Button from '@components/atoms/Button/Button';
@@ -10,6 +11,7 @@ import {
 import { KeyedMutator } from 'swr';
 import { updateChainlinkNode } from '@utils/requests/chainlink';
 import { handleRequest } from '@utils/helpers/handleRequest';
+import { accessControlSchema } from '@schemas/chainlink/accessControl';
 
 interface Props extends AccessControl {
   name: string;
@@ -27,7 +29,7 @@ function AccessControlDetails({ corsDomains, name, setNode }: Props) {
     control,
     reset,
     formState: { isDirty, isSubmitting },
-  } = useForm<AccessControl>();
+  } = useForm<AccessControl>({ resolver: yupResolver(accessControlSchema) });
 
   const onSubmit: SubmitHandler<AccessControl> = async (values) => {
     setServerError('');
