@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 
 import Select from '@components/molecules/SelectNew/SelectNew';
@@ -10,6 +11,7 @@ import { handleRequest } from '@utils/helpers/handleRequest';
 import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import TextInput from '@components/molecules/TextInput/TextInput';
+import { apiCredentialsSchema } from '@schemas/chainlink/apiCredentials';
 
 interface Props extends API {
   name: string;
@@ -31,7 +33,7 @@ function APIDetails({ apiCredentials, name, setNode }: Props) {
     control,
     reset,
     formState: { isDirty, isSubmitting, errors },
-  } = useForm<API>();
+  } = useForm<API>({ resolver: yupResolver(apiCredentialsSchema) });
 
   const onSubmit: SubmitHandler<API> = async (values) => {
     setServerError('');
