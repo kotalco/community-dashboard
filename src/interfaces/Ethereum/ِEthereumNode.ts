@@ -12,12 +12,12 @@ export interface CreateEthereumNode {
   nodePrivateKeySecretName: string;
 }
 
-export interface Networking {
+export interface Networking
+  extends Pick<CreateEthereumNode, 'nodePrivateKeySecretName'> {
   p2pPort: number;
   syncMode: SyncMode;
-  staticNodes: NestedValue<string[]>;
-  bootnodes: NestedValue<string[]>;
-  nodePrivateKeySecretName: string;
+  staticNodes: string[];
+  bootnodes: string[];
 }
 
 export interface API {
@@ -50,6 +50,10 @@ export interface Mining {
 export interface LoggingInterface {
   logging: Logging;
 }
+
+export type UpdateEthereumNode = Partial<
+  Networking & API & AccessControl & Mining & LoggingInterface & Resources
+>;
 
 export interface EthereumNode
   extends CreateEthereumNode,

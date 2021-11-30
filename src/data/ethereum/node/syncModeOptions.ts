@@ -1,8 +1,7 @@
-import { SelectOption } from '@interfaces/SelectOption';
 import { SyncMode } from '@enums/Ethereum/SyncMode';
 import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
 
-export const syncModeOptions = (client: EthereumNodeClient): SelectOption[] => {
+export const syncModeOptions = (client: EthereumNodeClient) => {
   let options = [
     { label: 'Fast', value: SyncMode.fast },
     { label: 'Full', value: SyncMode.full },

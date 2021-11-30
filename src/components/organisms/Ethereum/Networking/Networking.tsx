@@ -1,36 +1,29 @@
-import axios from 'axios';
+import { KeyedMutator } from 'swr';
 import { useState } from 'react';
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
-import { joiResolver } from '@hookform/resolvers/joi';
 
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Button from '@components/atoms/Button/Button';
-import Select from '@components/molecules/Select/Select';
+import Select from '@components/molecules/SelectNew/SelectNew';
 import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
 import { updateEthereumNode } from '@utils/requests/ethereum';
-import { Networking } from '@interfaces/Ethereum/ِEthereumNode';
-import { useNode } from '@utils/requests/ethereum';
+import { EthereumNode, Networking } from '@interfaces/Ethereum/ِEthereumNode';
 import { syncModeOptions } from '@data/ethereum/node/syncModeOptions';
-import { updateNetworkingSchema } from '@schemas/ethereum/updateNodeSchema';
-import { handleAxiosError } from '@utils/axios';
-import { ServerError } from '@interfaces/ServerError';
 import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
+import { handleRequest } from '@utils/helpers/handleRequest';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { networkingSchema } from '@schemas/ethereum/networking';
 
 interface Props extends Networking {
   name: string;
+  setNode: KeyedMutator<{ node: EthereumNode }>;
   client: EthereumNodeClient;
 }
 
-const NetworkingDetails: React.FC<Props> = ({
-  name,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  children,
-  client,
-  ...rest
-}) => {
-  const { mutate } = useNode(name);
+function NetworkingDetails({ name, client, setNode, ...rest }: Props) {
+  const [serverError, setServerError] = useState('');
   const { data: privateKeys } = useSecretsByType(
     KubernetesSecretTypes.ethereumPrivatekey
   );
@@ -41,28 +34,27 @@ const NetworkingDetails: React.FC<Props> = ({
     control,
     reset,
     register,
-    setError,
     formState: { isDirty, isSubmitting, errors },
   } = useForm<Networking>({
     defaultValues: rest,
-    // resolver: joiResolver(updateNetworkingSchema),
+    resolver: yupResolver(networkingSchema),
   });
 
   const onSubmit: SubmitHandler<Networking> = async (values) => {
-    setSubmitSuccess('');
-    try {
-      const node = await updateEthereumNode(name, values);
-      void mutate({ node });
+    setServerError('');
+    const { error, response } = await handleRequest<EthereumNode>(
+      updateEthereumNode.bind(undefined, values, name)
+    );
+
+    if (error) {
+      setServerError(error);
+      return;
+    }
+
+    if (response) {
+      setNode();
       reset(values);
       setSubmitSuccess('Networking data has been updated');
-    } catch (e) {
-      // if (axios.isAxiosError(e)) {
-      //   const error = handleAxiosError<ServerError>(e);
-      //   setError('bootnodes', {
-      //     type: 'server',
-      //     message: error.response?.data.error,
-      //   });
-      // }
     }
   };
 
@@ -80,6 +72,8 @@ const NetworkingDetails: React.FC<Props> = ({
                 label="Node private key"
                 error={errors.nodePrivateKeySecretName?.message}
                 options={privateKeys}
+                labelProp="label"
+                valueProp="value"
                 onChange={field.onChange}
                 value={field.value}
                 href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}
@@ -108,6 +102,8 @@ const NetworkingDetails: React.FC<Props> = ({
               <Select
                 error={errors.syncMode?.message}
                 options={syncModeOptions(client)}
+                labelProp="label"
+                valueProp="value"
                 placeholder="Choose your sync mode..."
                 onChange={field.onChange}
                 value={field.value}
@@ -130,7 +126,6 @@ const NetworkingDetails: React.FC<Props> = ({
                 label="Static Nodes"
                 value={field.value}
                 onChange={field.onChange}
-                error={errors.staticNodes?.message}
               />
             )}
           />
@@ -149,7 +144,6 @@ const NetworkingDetails: React.FC<Props> = ({
                 label="Bootnodes"
                 value={field.value}
                 onChange={field.onChange}
-                error={errors.bootnodes?.message}
               />
             )}
           />
@@ -166,9 +160,14 @@ const NetworkingDetails: React.FC<Props> = ({
           Save
         </Button>
         {submitSuccess && <p>{submitSuccess}</p>}
+        {serverError && (
+          <p aria-label="alert" className="text-sm text-red-600">
+            {serverError}
+          </p>
+        )}
       </div>
     </form>
   );
-};
+}
 
 export default NetworkingDetails;

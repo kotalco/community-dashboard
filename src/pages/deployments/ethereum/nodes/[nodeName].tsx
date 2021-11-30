@@ -22,7 +22,7 @@ import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
 import { useStatus } from '@hooks/useStatus';
 import { useEthereumNode } from '@hooks/useEthereumNode';
 
-const EthereumNodeDetailsPage: React.FC = () => {
+function EthereumNodeDetailsPage() {
   const { query, push } = useRouter();
   const nodeName = query.nodeName as string | undefined;
 
@@ -30,8 +30,8 @@ const EthereumNodeDetailsPage: React.FC = () => {
   const { status } = useStatus(node && `/ethereum/nodes/${node.name}/status`);
 
   const updateResources = async (name: string, values: Resources) => {
-    const node = await updateEthereumNode(name, values);
-    void mutate({ node });
+    const node = await updateEthereumNode(values, name);
+    mutate({ node });
   };
 
   if (error) push('/404');
@@ -61,6 +61,7 @@ const EthereumNodeDetailsPage: React.FC = () => {
             bootnodes={node.bootnodes}
             staticNodes={node.staticNodes}
             nodePrivateKeySecretName={node.nodePrivateKeySecretName}
+            setNode={mutate}
           />
 
           {/* API */}
@@ -123,6 +124,6 @@ const EthereumNodeDetailsPage: React.FC = () => {
       </div>
     </Layout>
   );
-};
+}
 
 export default EthereumNodeDetailsPage;

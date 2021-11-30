@@ -5,24 +5,11 @@ import {
   API,
   Import,
   Mining,
-  Networking,
 } from '@interfaces/Ethereum/ِEthereumNode';
 import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
 
 const apiValus = apiOptions.map(({ value }) => value);
 const coinbaseRegex = /^0[xX][0-9a-fA-F]{40}$/;
-
-export const updateNetworkingSchema = Joi.object<Networking>({
-  nodePrivateKeySecretName: Joi.string().default(''),
-  p2pPort: Joi.number().port().invalid(0).messages({
-    'number.base': 'Please proivde a valid port number',
-    'number.port': 'Please provide a valid port number',
-    'any.invalid': 'Please provide a valid port number',
-  }),
-  syncMode: Joi.string().valid('full', 'fast', 'light'),
-  staticNodes: Joi.array().default([]),
-  bootnodes: Joi.array().default([]),
-});
 
 export const updateAPISchema = Joi.object<
   API & { client: EthereumNodeClient; miner: boolean }
