@@ -23,18 +23,19 @@ import { EVM_CHAINS } from '@data/chainlink/evmChain';
 import { useStatus } from '@hooks/useStatus';
 
 function ChainlinkNode() {
-  const { query } = useRouter();
+  const { query, push } = useRouter();
   const nodeName = query.nodeName as string | undefined;
   const { status } = useStatus(
     nodeName && `/chainlink/nodes/${nodeName}/status`
   );
-  const { node, mutate } = useChainlinkNode(nodeName);
+  const { node, mutate, error } = useChainlinkNode(nodeName);
 
   const updateResources = async (name: string, values: Resources) => {
     await updateChainlinkNode(values, name);
     mutate();
   };
 
+  if (error) push('/404');
   if (!node) return <LoadingIndicator />;
 
   const dataList = [
