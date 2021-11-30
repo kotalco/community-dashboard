@@ -2,31 +2,13 @@ import {
   CreateEthereumNode,
   EthereumNode,
 } from '@interfaces/Ethereum/ِEthereumNode';
-import useSWR, { SWRConfiguration } from 'swr';
 import { UnpackNestedValue } from 'react-hook-form';
 
-import api, { fetcher } from '../../axios';
+import api from '../../axios';
 
 export const createEthereumNode = async (body: CreateEthereumNode) => {
   const res = await api.post<{ node: EthereumNode }>(`/ethereum/nodes`, body);
   return res.data.node;
-};
-
-/**
- * Find ethereum node by its name
- * @param name ethereum node name
- * @param config SWR Configrations
- * @returns the found node or error 404 in not found
- */
-export const useNode = (nodeName?: string, config?: SWRConfiguration) => {
-  const swr = useSWR<{ node: EthereumNode }>(
-    !nodeName ? null : `/ethereum/nodes/${nodeName}`,
-    fetcher,
-    config
-  );
-  const data = swr.data?.node;
-
-  return { ...swr, data };
 };
 
 /**

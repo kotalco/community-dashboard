@@ -1,7 +1,6 @@
-import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 
-import { updateEthereumNode, useNode } from '@utils/requests/ethereum';
+import { updateEthereumNode } from '@utils/requests/ethereum';
 import Heading from '@components/templates/Heading/Heading';
 import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
@@ -15,26 +14,19 @@ import MiningDetails from '@components/organisms/Ethereum/MiningDetails/MiningDe
 import ResourcesDetails from '@components/organisms/Resources/Resources';
 import LoggingDetails from '@components/organisms/Ethereum/LogginDetails/LoggingDetails';
 import { Resources } from '@interfaces/Resources';
-import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { tabTitles } from '@data/ethereum/node/tabTitles';
 import { clientOptions } from '@data/ethereum/node/clientOptions';
 import { networkOptions } from '@data/ethereum/node/networkOptions';
-import { fetcher } from '@utils/axios';
 import { getLabel } from '@utils/helpers/getLabel';
 import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
 import { useStatus } from '@hooks/useStatus';
+import { useEthereumNode } from '@hooks/useEthereumNode';
 
-interface Props {
-  initialNode?: EthereumNode;
-}
+const EthereumNodeDetailsPage: React.FC = () => {
+  const { query, push } = useRouter();
+  const nodeName = query.nodeName as string | undefined;
 
-const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
-  const { isFallback } = useRouter();
-
-  const { data: node, mutate } = useNode(initialNode?.name, {
-    fallbackData: { node: initialNode },
-  });
-
+  const { node, mutate, error } = useEthereumNode(nodeName);
   const { status } = useStatus(node && `/ethereum/nodes/${node.name}/status`);
 
   const updateResources = async (name: string, values: Resources) => {
@@ -42,7 +34,8 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
     void mutate({ node });
   };
 
-  if (!node || isFallback) return <LoadingIndicator />;
+  if (error) push('/404');
+  if (!node) return <LoadingIndicator />;
 
   const dataList = [
     { label: 'Protocol', value: 'Ethereum' },
@@ -130,25 +123,6 @@ const EthereumNodeDetailsPage: React.FC<Props> = ({ initialNode }) => {
       </div>
     </Layout>
   );
-};
-
-export const getStaticProps: GetStaticProps = async (context) => {
-  const nodeName = context.params?.nodeName as string;
-  try {
-    const { node } = await fetcher<{ node: EthereumNode }>(
-      `/ethereum/nodes/${nodeName}`
-    );
-    return { props: { initialNode: node }, revalidate: 10 };
-  } catch (e) {
-    return { notFound: true };
-  }
-};
-
-export const getStaticPaths: GetStaticPaths = () => {
-  return {
-    paths: [],
-    fallback: true,
-  };
 };
 
 export default EthereumNodeDetailsPage;
