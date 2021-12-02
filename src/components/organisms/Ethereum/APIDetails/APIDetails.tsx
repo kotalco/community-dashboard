@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useState } from 'react';
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
@@ -10,45 +9,39 @@ import Checkbox from '@components/molecules/CheckBox/CheckBox';
 import Separator from '@components/atoms/Separator/Separator';
 import Dialog from '@components/molecules/Dialog/Dialog';
 import { updateEthereumNode } from '@utils/requests/ethereum';
-import { API } from '@interfaces/Ethereum/ِEthereumNode';
-import { useNode } from '@utils/requests/ethereum';
+import { API, EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { apiOptions } from '@data/ethereum/node/apiOptions';
 import { updateAPISchema } from '@schemas/ethereum/updateNodeSchema';
-import { handleAxiosError } from '@utils/axios';
-import { ServerError } from '@interfaces/ServerError';
 import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
+import { KeyedMutator } from 'swr';
+import { handleRequest } from '@utils/helpers/handleRequest';
 
 interface Props extends API {
   name: string;
   client: EthereumNodeClient;
   miner: boolean;
+  setNode: KeyedMutator<{ node: EthereumNode }>;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
-  const { mutate } = useNode(name);
+function APIDetails({ name, setNode, ...rest }: Props) {
   const [open, setOpen] = useState(false);
+  const [submitSuccess, setSubmitSuccess] = useState('');
+  const [serverError, setServerError] = useState('');
   const [selectedApi, setSelectedApi] = useState<'rpc' | 'ws' | 'graphql'>(
     'rpc'
   );
-  const [submitSuccess, setSubmitSuccess] = useState('');
   const {
     handleSubmit,
     control,
     register,
     reset,
-    setError,
     watch,
     setValue,
     formState: { isDirty, isSubmitting, errors },
   } = useForm<API & { miner: boolean }>({
     defaultValues: {
-      ...rest,
-      rpcPort: rest.rpcPort || 8545,
       rpcAPI: rest.rpcAPI || ['eth', 'net', 'web3'],
-      wsPort: rest.wsPort || 8546,
       wsAPI: rest.wsAPI || ['eth', 'net', 'web3'],
-      graphqlPort: rest.graphqlPort || 8547,
     },
     resolver: joiResolver(updateAPISchema),
   });
@@ -76,20 +69,22 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
   };
 
   const onSubmit: SubmitHandler<API> = async (values) => {
+    setServerError('');
     setSubmitSuccess('');
-    try {
-      const node = await updateEthereumNode(name, values);
-      void mutate({ node });
+
+    const { error, response } = await handleRequest<EthereumNode>(
+      updateEthereumNode.bind(undefined, values, name)
+    );
+
+    if (error) {
+      setServerError(error);
+      return;
+    }
+
+    if (response) {
+      setNode();
       reset(values);
       setSubmitSuccess('API data has been updated');
-    } catch (e) {
-      // if (axios.isAxiosError(e)) {
-      //   const error = handleAxiosError<ServerError>(e);
-      //   setError('graphqlPort', {
-      //     type: 'server',
-      //     message: error.response?.data.error,
-      //   });
-      // }
     }
   };
 
@@ -101,6 +96,7 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
           <Controller
             control={control}
             name="rpc"
+            defaultValue={rest.rpc}
             render={({ field }) => (
               <Toggle
                 label="JSON-RPC Server"
@@ -116,36 +112,21 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
           {/* JSON-RPC HTTP Server Port */}
           {rpc && (
             <>
-              <div className="max-w-xs mt-5">
-                <TextInput
-                  disabled={!rpc}
-                  label="JSON-RPC Server Port"
-                  error={errors.rpcPort?.message}
-                  {...register('rpcPort')}
-                />
-              </div>
+              <TextInput
+                disabled={!rpc}
+                label="JSON-RPC Server Port"
+                error={errors.rpcPort?.message}
+                defaultValue={rest.rpcPort || 8545}
+                {...register('rpcPort')}
+              />
 
               {/* JSON-RPC Server APIs */}
-              <div className="mt-5">
-                <p className="block text-sm font-md text-gray-900">
-                  JSON-RPC Server APIs
-                </p>
-                <div className="flex flex-wrap ml-5 mt-1">
-                  {apiOptions.map(({ label, value }) => (
-                    <div key={value} className="w-1/2 sm:w-1/3 md:w-1/4">
-                      <Checkbox
-                        disabled={!rpc}
-                        label={label}
-                        value={value}
-                        {...register('rpcAPI')}
-                      />
-                    </div>
-                  ))}
-                </div>
-                <p role="alert" className="mt-2 text-sm text-red-600">
-                  {errors.rpcAPI?.message}
-                </p>
-              </div>
+              <Checkbox
+                label="JSON-RPC Server APIs"
+                options={apiOptions}
+                error={errors.rpcAPI?.message}
+                {...register('rpcAPI')}
+              />
             </>
           )}
 
@@ -155,6 +136,7 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
           <Controller
             control={control}
             name="ws"
+            defaultValue={rest.ws}
             render={({ field }) => (
               <Toggle
                 label="Web Socket Server"
@@ -174,31 +156,18 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
                   disabled={!ws}
                   label="Web Socket Server Port"
                   error={errors.wsPort?.message}
+                  defaultValue={rest.wsPort || 8546}
                   {...register('wsPort')}
                 />
               </div>
 
               {/* Web Socket Server APIs */}
-              <div className="mt-5">
-                <p className="block text-sm font-md text-gray-900">
-                  Web Socket Server APIs
-                </p>
-                <div className="flex flex-wrap ml-5 mt-1">
-                  {apiOptions.map(({ label, value }) => (
-                    <div key={value} className="w-1/2 sm:w-1/3 md:w-1/4">
-                      <Checkbox
-                        disabled={!ws}
-                        label={label}
-                        value={value}
-                        {...register('wsAPI')}
-                      />
-                    </div>
-                  ))}
-                </div>
-                <p role="alert" className="mt-2 text-sm text-red-600">
-                  {errors.wsAPI?.message}
-                </p>
-              </div>
+              <Checkbox
+                options={apiOptions}
+                label="Web Socket Server APIs"
+                error={errors.wsAPI?.message}
+                {...register('wsAPI')}
+              />
             </>
           )}
           {rest.client !== EthereumNodeClient.parity &&
@@ -210,6 +179,7 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
                 <Controller
                   control={control}
                   name="graphql"
+                  defaultValue={rest.graphql}
                   render={({ field }) => (
                     <Toggle
                       label="GraphQl Server"
@@ -228,6 +198,7 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
                       disabled={!graphql}
                       label="GraphQl Server Port"
                       error={errors.graphqlPort?.message}
+                      defaultValue={rest.graphqlPort || 8547}
                       {...register('graphqlPort')}
                     />
                   </div>
@@ -236,7 +207,7 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
             )}
         </div>
 
-        <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
+        <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
           <Button
             type="submit"
             className="btn btn-primary"
@@ -246,6 +217,11 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
             Save
           </Button>
           {submitSuccess && <p>{submitSuccess}</p>}
+          {serverError && (
+            <p aria-label="alert" className="text-sm text-red-600">
+              {serverError}
+            </p>
+          )}
         </div>
       </form>
 
@@ -269,6 +245,6 @@ const APIDetails: React.FC<Props> = ({ name, children, ...rest }) => {
       </Dialog>
     </>
   );
-};
+}
 
 export default APIDetails;

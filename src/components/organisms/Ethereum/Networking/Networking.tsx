@@ -41,6 +41,7 @@ function NetworkingDetails({ name, client, setNode, ...rest }: Props) {
   });
 
   const onSubmit: SubmitHandler<Networking> = async (values) => {
+    setSubmitSuccess('');
     setServerError('');
     const { error, response } = await handleRequest<EthereumNode>(
       updateEthereumNode.bind(undefined, values, name)

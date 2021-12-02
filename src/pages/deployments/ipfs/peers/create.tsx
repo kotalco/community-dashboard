@@ -66,24 +66,12 @@ const CreateIPFSPeerPage: React.FC = () => {
           />
 
           {/* <!-- configuration profiles --> */}
-          <div className="mt-4">
-            <p className="block text-sm font-medium text-gray-700">
-              Initial Configuration Profiles:
-            </p>
-            <div className="ml-5 max-w-lg space-y-2 mt-1">
-              {initProfilesOptions.map(({ label, value }) => (
-                <Checkbox
-                  key={value}
-                  label={label}
-                  value={value}
-                  {...register('initProfiles')}
-                />
-              ))}
-            </div>
-          </div>
-          <p className="text-red-500 text-sm mt-2">
-            {initProfilesError?.message}
-          </p>
+          <Checkbox
+            options={initProfilesOptions}
+            label="Initial Configuration Profiles:"
+            error={initProfilesError?.message}
+            {...register('initProfiles')}
+          />
         </FormLayout>
       </form>
     </Layout>

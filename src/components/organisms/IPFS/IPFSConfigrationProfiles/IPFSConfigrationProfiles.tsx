@@ -61,31 +61,22 @@ const IPFSPeerDetails: React.FC<Props> = (props) => {
     <>
       <div className="px-4 py-5 sm:p-6">
         <h2 className="mb-1 text-sm">Initial Configration Profiles</h2>
-        <ul className="ml-5 mb-5 text-sm">
+        <ul className="mb-5 ml-5 text-sm">
           {initProfiles.map((profile) => (
-            <li key={profile} className="list-disc text-gray-500">
+            <li key={profile} className="text-gray-500 list-disc">
               {profile}
             </li>
           ))}
         </ul>
-        <dl>
-          <dt className="block text-sm font-medium text-gray-700">
-            Configration Profiles
-          </dt>
-          <dd className="mt-1 ml-3">
-            {remainingProfilesOptions.map(({ label, value }) => (
-              <Checkbox
-                key={value}
-                label={label}
-                value={value}
-                {...register('profiles')}
-              />
-            ))}
-          </dd>
-        </dl>
+
+        <Checkbox
+          options={remainingProfilesOptions}
+          label="Configration Profiles"
+          {...register('profiles')}
+        />
       </div>
 
-      <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
+      <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           className="btn btn-primary"
           disabled={!isDirty || isSubmitting}
@@ -95,7 +86,7 @@ const IPFSPeerDetails: React.FC<Props> = (props) => {
           Save
         </Button>
         {submitError && (
-          <p className="text-center text-red-500 mb-5">{submitError}</p>
+          <p className="mb-5 text-center text-red-500">{submitError}</p>
         )}
         {submitSuccess && <p>{submitSuccess}</p>}
       </div>

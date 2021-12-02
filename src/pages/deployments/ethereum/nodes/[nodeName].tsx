@@ -77,6 +77,7 @@ function EthereumNodeDetailsPage() {
             graphql={node.graphql}
             graphqlPort={node.graphqlPort}
             name={node.name}
+            setNode={mutate}
           />
 
           {/* Access Control */}
