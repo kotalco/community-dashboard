@@ -7,6 +7,7 @@ import Dialog from '@components/molecules/Dialog/Dialog';
 import { deleteSecret as sendDeleteRequest } from '@utils/requests/secrets';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
+import { useSecrets } from '@hooks/useSecrets';
 
 interface Props {
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -21,6 +22,7 @@ const DeleteSecretDialoge: React.FC<Props> = ({
 }) => {
   const [error, setError] = useState<string | undefined>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { mutate } = useSecrets();
 
   const closeDialog = () => {
     setOpen(false);
@@ -32,7 +34,7 @@ const DeleteSecretDialoge: React.FC<Props> = ({
       setError('');
       setIsSubmitting(true);
       await sendDeleteRequest(secretName);
-      void mutate('/core/secrets');
+      mutate();
       setOpen(false);
     } catch (e) {
       // if (axios.isAxiosError(e)) {

@@ -52,7 +52,7 @@ function KubernetesSecrets() {
             linkUrl="/core/secrets/create"
             linkName="Create New Secret"
           >
-            <KeyIcon className="mx-auto w-12 h-12 text-gray-400" />
+            <KeyIcon className="w-12 h-12 mx-auto text-gray-400" />
           </EmptyState>
         </div>
       </Layout>
@@ -71,22 +71,22 @@ function KubernetesSecrets() {
         <List>
           {secrets.map(({ name, type }) => (
             <li key={name}>
-              <div className="group p-4 flex items-center sm:px-6">
-                <div className="min-w-0 flex-1 sm:flex sm:items-center sm:justify-between">
+              <div className="flex items-center p-4 group sm:px-6">
+                <div className="flex-1 min-w-0 sm:flex sm:items-center sm:justify-between">
                   <div>
                     <div className="flex text-sm font-medium text-gray-900 truncate">
                       {name}
                     </div>
-                    <div className="mt-2 flex">
+                    <div className="flex mt-2">
                       <div className="flex items-center text-sm text-gray-500">
                         {getLabel(type, secretTypesOptions)}
                       </div>
                     </div>
                   </div>
                 </div>
-                <div className="ml-5 flex-shrink-0 opacity-0 transition-opacity group-hover:opacity-100">
+                <div className="flex-shrink-0 ml-5 transition-opacity opacity-0 group-hover:opacity-100">
                   <IconButton onClick={() => confirmDelete(name)}>
-                    <TrashIcon className="h-5 w-5 text-red-600" />
+                    <TrashIcon className="w-5 h-5 text-red-600" />
                   </IconButton>
                 </div>
               </div>
