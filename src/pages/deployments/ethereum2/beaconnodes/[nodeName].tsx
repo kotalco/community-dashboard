@@ -1,10 +1,8 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 
-import {
-  updateBeaconNode,
-  useBeaconnode,
-} from '@utils/requests/ethereum2/beaconNodes';
+import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
+import { useBeaconnode } from '@hooks/useBeaconNode';
 import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
@@ -22,102 +20,85 @@ import React from 'react';
 import Heading from '@components/templates/Heading/Heading';
 import { getLabel } from '@utils/helpers/getLabel';
 import Logging from '@components/organisms/Logging/Logging';
+import { useStatus } from '@hooks/useStatus';
 
-interface Props {
-  beaconnode?: BeaconNode;
-}
-
-const Ethereum2NodeDetailsPage: React.FC<Props> = ({ beaconnode }) => {
-  const { isFallback } = useRouter();
-  const { data, mutate } = useBeaconnode(beaconnode?.name, {
-    fallbackData: { beaconnode },
-  });
+function Ethereum2NodeDetailsPage() {
+  const { query, push } = useRouter();
+  const nodeName = query.nodeName as string | undefined;
+  const { beaconnode, mutate, error } = useBeaconnode(nodeName);
+  const { status } = useStatus(
+    beaconnode && `/ethereum2/beaconnodes/${beaconnode.name}/status`
+  );
 
   const updateResources = async (name: string, values: UpdateBeaconNode) => {
     const beaconnode = await updateBeaconNode(name, values);
-    void mutate({ beaconnode });
+    mutate({ beaconnode });
   };
 
-  if (!data || isFallback) return <LoadingIndicator />;
+  if (error) push('/404');
+  if (!beaconnode) return <LoadingIndicator />;
 
   const dataList = [
     { label: 'Protocol', value: 'Ethereum 2.0' },
-    { label: 'Chain', value: getLabel(data.network, networkOptions) },
-    { label: 'Client', value: getLabel(data.client, clientOptions) },
+    { label: 'Chain', value: getLabel(beaconnode.network, networkOptions) },
+    { label: 'Client', value: getLabel(beaconnode.client, clientOptions) },
   ];
   return (
     <Layout>
-      <Heading title={data.name} />
+      <Heading
+        title={beaconnode.name}
+        status={status}
+        createdDate={beaconnode.createdAt}
+      />
 
-      <div className="bg-white shadow rounded-lg mt-4">
+      <div className="mt-4 bg-white rounded-lg shadow">
         <Tabs tabs={tabTitles}>
           {/* Protocol */}
           <ProtocolDetails dataList={dataList} />
 
           {/* Ethereum */}
           <BeaconNodeEthereumTab
-            name={data.name}
-            client={data.client}
-            eth1Endpoints={data.eth1Endpoints}
-            network={data.network}
+            name={beaconnode.name}
+            client={beaconnode.client}
+            eth1Endpoints={beaconnode.eth1Endpoints}
+            network={beaconnode.network}
           />
 
           {/* API */}
           <BeaconNodeAPITab
-            name={data.name}
-            rest={data.rest}
-            restHost={data.restHost}
-            restPort={data.restPort}
-            rpc={data.rpc}
-            rpcPort={data.rpcPort}
-            rpcHost={data.rpcHost}
-            grpc={data.grpc}
-            grpcHost={data.grpcHost}
-            grpcPort={data.grpcPort}
-            client={data.client}
+            name={beaconnode.name}
+            rest={beaconnode.rest}
+            restHost={beaconnode.restHost}
+            restPort={beaconnode.restPort}
+            rpc={beaconnode.rpc}
+            rpcPort={beaconnode.rpcPort}
+            rpcHost={beaconnode.rpcHost}
+            grpc={beaconnode.grpc}
+            grpcHost={beaconnode.grpcHost}
+            grpcPort={beaconnode.grpcPort}
+            client={beaconnode.client}
           />
 
           {/* Logging */}
-          <Logging wsUrl={`/ethereum2/beaconnodes/${data.name}/logs`} />
+          <Logging wsUrl={`/ethereum2/beaconnodes/${beaconnode.name}/logs`} />
 
           {/* Resources */}
           <Resources
-            name={data.name}
-            cpu={data.cpu}
-            cpuLimit={data.cpuLimit}
-            memory={data.memory}
-            memoryLimit={data.memoryLimit}
-            storage={data.storage}
+            name={beaconnode.name}
+            cpu={beaconnode.cpu}
+            cpuLimit={beaconnode.cpuLimit}
+            memory={beaconnode.memory}
+            memoryLimit={beaconnode.memoryLimit}
+            storage={beaconnode.storage}
             updateResources={updateResources}
           />
 
           {/* Danger zone */}
-          <DeleteBeaconNode nodeName={data.name} />
+          <DeleteBeaconNode nodeName={beaconnode.name} />
         </Tabs>
       </div>
     </Layout>
   );
-};
-
-export const getStaticProps: GetStaticProps = async (context) => {
-  const nodeName = context.params?.nodeName as string;
-  try {
-    const { beaconnode } = await fetcher<{ beaconnode: BeaconNode }>(
-      `/ethereum2/beaconnodes/${nodeName}`
-    );
-    return { props: { beaconnode }, revalidate: 10 };
-  } catch (e) {
-    return {
-      notFound: true,
-    };
-  }
-};
-
-export const getStaticPaths: GetStaticPaths = () => {
-  return {
-    paths: [],
-    fallback: true,
-  };
-};
+}
 
 export default Ethereum2NodeDetailsPage;

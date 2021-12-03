@@ -19,23 +19,6 @@ export const createBeaconNode = async (
 };
 
 /**
- * Send a get request to find a beacon node by its name
- * @param nodeName Name of the node we are looking for
- * @param config Any SWR Configration Value
- * @returns All node data if found
- */
-export const useBeaconnode = (nodeName?: string, config?: SWRConfiguration) => {
-  const swr = useSWR<{ beaconnode: BeaconNode }>(
-    !nodeName ? null : `/ethereum2/beaconnodes/${nodeName}`,
-    fetcher,
-    config
-  );
-  const data = swr.data?.beaconnode;
-
-  return { ...swr, data };
-};
-
-/**
  * Send a delete request to delete the beacon node
  * @param nodeName Node name to be deleted
  */

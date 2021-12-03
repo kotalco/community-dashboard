@@ -3,10 +3,8 @@ import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import axios from 'axios';
 
 import Button from '@components/atoms/Button/Button';
-import {
-  updateBeaconNode,
-  useBeaconnode,
-} from '@utils/requests/ethereum2/beaconNodes';
+import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
+import { useBeaconnode } from '@hooks/useBeaconNode';
 import { UpdateEth1Endpoints } from '@interfaces/ethereum2/BeaconNode';
 import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
 import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
@@ -84,7 +82,7 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
         />
       </div>
 
-      <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
+      <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"
