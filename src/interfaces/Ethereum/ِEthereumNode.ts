@@ -2,7 +2,6 @@ import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
 import { Logging } from '@enums/Ethereum/Logging';
 import { EthereumAPI } from '@enums/Ethereum/EthereumAPI';
 import { SyncMode } from '@enums/Ethereum/SyncMode';
-import { NestedValue } from 'react-hook-form';
 import { Resources } from '@interfaces/Resources';
 
 export interface CreateEthereumNode {
@@ -32,8 +31,8 @@ export interface API {
 }
 
 export interface AccessControl {
-  hosts: NestedValue<string[]>;
-  corsDomains: NestedValue<string[]>;
+  hosts: string[];
+  corsDomains: string[];
 }
 
 export type Import = {

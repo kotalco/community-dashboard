@@ -47,7 +47,7 @@ function EthereumNodeDetailsPage() {
     <Layout>
       <Heading title={node.name} status={status} createdDate={node.createdAt} />
 
-      <div className="bg-white shadow rounded-lg divided-y divided-gray-200">
+      <div className="bg-white rounded-lg shadow divided-y divided-gray-200">
         <Tabs tabs={tabTitles(node.client)}>
           {/* Protocol */}
           <ProtocolDetails dataList={dataList} />
@@ -86,6 +86,7 @@ function EthereumNodeDetailsPage() {
               hosts={node.hosts}
               corsDomains={node.corsDomains}
               name={node.name}
+              setNode={mutate}
             />
           )}
 

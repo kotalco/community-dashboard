@@ -1,51 +1,54 @@
-import axios from 'axios';
 import { useState } from 'react';
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
-import { joiResolver } from '@hookform/resolvers/joi';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { ErrorMessage } from '@hookform/error-message';
 
 import Button from '@components/atoms/Button/Button';
 import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
 import { updateEthereumNode } from '@utils/requests/ethereum';
-import { AccessControl } from '@interfaces/Ethereum/ِEthereumNode';
-import { useNode } from '@utils/requests/ethereum';
-import { updateAccessControlSchema } from '@schemas/ethereum/updateNodeSchema';
-import { handleAxiosError } from '@utils/axios';
-import { ServerError } from '@interfaces/ServerError';
+import {
+  AccessControl,
+  EthereumNode,
+} from '@interfaces/Ethereum/ِEthereumNode';
+import { KeyedMutator } from 'swr';
+import { handleRequest } from '@utils/helpers/handleRequest';
+import { schema } from '@schemas/ethereum/accessControl';
 
 interface Props extends AccessControl {
   name: string;
+  setNode: KeyedMutator<{ node: EthereumNode }>;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const AccessControlDetails: React.FC<Props> = ({ name, children, ...rest }) => {
-  const { mutate } = useNode(name);
+function AccessControlDetails({ name, setNode, ...rest }: Props) {
   const [submitSuccess, setSubmitSuccess] = useState('');
+  const [serverError, setServerError] = useState('');
   const {
     handleSubmit,
     control,
     reset,
-    setError,
     formState: { isDirty, isSubmitting, errors, isValid },
   } = useForm<AccessControl>({
     defaultValues: rest,
-    // resolver: joiResolver(updateAccessControlSchema),
+    resolver: yupResolver(schema),
   });
 
   const onSubmit: SubmitHandler<AccessControl> = async (values) => {
     setSubmitSuccess('');
-    try {
-      const node = await updateEthereumNode(name, values);
-      void mutate({ node });
+    setServerError('');
+
+    const { error, response } = await handleRequest<EthereumNode>(
+      updateEthereumNode.bind(undefined, values, name)
+    );
+
+    if (error) {
+      setServerError(error);
+      return;
+    }
+
+    if (response) {
+      setNode();
       reset(values);
       setSubmitSuccess('Access control data has been updated');
-    } catch (e) {
-      // if (axios.isAxiosError(e)) {
-      //   const error = handleAxiosError<ServerError>(e);
-      //   setError('corsDomains', {
-      //     type: 'server',
-      //     message: error.response?.data.error,
-      //   });
-      // }
     }
   };
 
@@ -60,7 +63,9 @@ const AccessControlDetails: React.FC<Props> = ({ name, children, ...rest }) => {
             <TextareaWithInput
               multiple
               helperText="* (asterisk) means trust all hosts"
-              error={errors.hosts?.message}
+              error={
+                errors.hosts && <ErrorMessage name="hosts" errors={errors} />
+              }
               tooltip="Server Enforced"
               name={field.name}
               value={field.value}
@@ -79,7 +84,11 @@ const AccessControlDetails: React.FC<Props> = ({ name, children, ...rest }) => {
               <TextareaWithInput
                 multiple
                 helperText="* (asterisk) means trust all domains"
-                error={errors.corsDomains?.message}
+                error={
+                  errors.corsDomains && (
+                    <ErrorMessage name="corsDomain" errors={errors} />
+                  )
+                }
                 tooltip="Browser Enforced"
                 name={field.name}
                 value={field.value}
@@ -91,7 +100,7 @@ const AccessControlDetails: React.FC<Props> = ({ name, children, ...rest }) => {
         </div>
       </div>
 
-      <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
+      <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"
@@ -101,9 +110,14 @@ const AccessControlDetails: React.FC<Props> = ({ name, children, ...rest }) => {
           Save
         </Button>
         {submitSuccess && <p>{submitSuccess}</p>}
+        {serverError && (
+          <p aria-label="alert" className="text-sm text-red-600">
+            {serverError}
+          </p>
+        )}
       </div>
     </form>
   );
-};
+}
 
 export default AccessControlDetails;
