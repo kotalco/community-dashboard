@@ -100,6 +100,7 @@ function EthereumNodeDetailsPage() {
             coinbase={node.coinbase}
             import={node.import}
             name={node.name}
+            setNode={mutate}
           />
 
           {/* Logging */}
@@ -107,6 +108,7 @@ function EthereumNodeDetailsPage() {
             client={node.client}
             logging={node.logging}
             name={node.name}
+            setNode={mutate}
           />
 
           {/* Resources */}

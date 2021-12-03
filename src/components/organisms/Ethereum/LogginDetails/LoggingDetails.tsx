@@ -1,38 +1,33 @@
-import axios from 'axios';
 import { useState } from 'react';
+import { KeyedMutator } from 'swr';
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 
 import Button from '@components/atoms/Button/Button';
 import Logging from '@components/organisms/Logging/Logging';
 import { updateEthereumNode } from '@utils/requests/ethereum';
-import { LoggingInterface } from '@interfaces/Ethereum/ِEthereumNode';
-import { useNode } from '@utils/requests/ethereum';
-import { handleAxiosError } from '@utils/axios';
-import { ServerError } from '@interfaces/ServerError';
 import Select from '@components/molecules/Select/Select';
+import {
+  EthereumNode,
+  LoggingInterface,
+} from '@interfaces/Ethereum/ِEthereumNode';
 import { loggingOptions } from '@data/ethereum/node/loggingOptions';
 import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
+import { handleRequest } from '@utils/helpers/handleRequest';
 
 interface Props extends LoggingInterface {
   client: EthereumNodeClient;
   name: string;
+  setNode: KeyedMutator<{ node: EthereumNode }>;
 }
 
-const LoggingDetails: React.FC<Props> = ({
-  name,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  children,
-  client,
-  ...rest
-}) => {
-  const { mutate } = useNode(name);
+function LoggingDetails({ name, client, setNode, ...rest }: Props) {
   const [submitSuccess, setSubmitSuccess] = useState('');
+  const [serverError, setServerError] = useState('');
 
   const {
     handleSubmit,
     control,
     reset,
-    setError,
     formState: { isDirty, isSubmitting, isValid },
   } = useForm<LoggingInterface>({
     defaultValues: rest,
@@ -40,19 +35,21 @@ const LoggingDetails: React.FC<Props> = ({
 
   const onSubmit: SubmitHandler<LoggingInterface> = async (values) => {
     setSubmitSuccess('');
-    try {
-      const node = await updateEthereumNode(name, values);
-      void mutate({ node });
+    setServerError('');
+
+    const { error, response } = await handleRequest<EthereumNode>(
+      updateEthereumNode.bind(undefined, values, name)
+    );
+
+    if (error) {
+      setServerError(error);
+      return;
+    }
+
+    if (response) {
+      setNode();
       reset(values);
-      setSubmitSuccess('Logging data has been updated');
-    } catch (e) {
-      // if (axios.isAxiosError(e)) {
-      //   const error = handleAxiosError<ServerError>(e);
-      //   setError('logging', {
-      //     type: 'server',
-      //     message: error.response?.data.error,
-      //   });
-      // }
+      setSubmitSuccess('Mining data data has been updated');
     }
   };
 
@@ -78,7 +75,7 @@ const LoggingDetails: React.FC<Props> = ({
       </div>
       <Logging wsUrl={`/ethereum/nodes/${name}/logs`} />
 
-      <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
+      <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"
@@ -88,9 +85,14 @@ const LoggingDetails: React.FC<Props> = ({
           Save
         </Button>
         {submitSuccess && <p>{submitSuccess}</p>}
+        {serverError && (
+          <p aria-label="alert" className="text-sm text-red-600">
+            {serverError}
+          </p>
+        )}
       </div>
     </form>
   );
-};
+}
 
 export default LoggingDetails;

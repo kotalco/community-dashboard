@@ -1,6 +1,6 @@
-import axios from 'axios';
 import { useState } from 'react';
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
+import { KeyedMutator } from 'swr';
 import { joiResolver } from '@hookform/resolvers/joi';
 
 import Button from '@components/atoms/Button/Button';
@@ -9,14 +9,12 @@ import TextInput from '@components/molecules/TextInput/TextInput';
 import Select from '@components/molecules/Select/Select';
 import Dialog from '@components/molecules/Dialog/Dialog';
 import { updateEthereumNode } from '@utils/requests/ethereum';
-import { Mining, API } from '@interfaces/Ethereum/ِEthereumNode';
-import { useNode } from '@utils/requests/ethereum';
+import { Mining, API, EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { updateMiningSchema } from '@schemas/ethereum/updateNodeSchema';
-import { handleAxiosError } from '@utils/axios';
-import { ServerError } from '@interfaces/ServerError';
 import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
+import { handleRequest } from '@utils/helpers/handleRequest';
 
 interface Props extends Mining {
   rpc: boolean;
@@ -24,16 +22,17 @@ interface Props extends Mining {
   graphql: boolean;
   client: EthereumNodeClient;
   name: string;
+  setNode: KeyedMutator<{ node: EthereumNode }>;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const MiningDetails: React.FC<Props> = ({ name, children, ...rest }) => {
-  const { mutate } = useNode(name);
+function MiningDetails({ name, setNode, ...rest }: Props) {
+  const [serverError, setServerError] = useState('');
+  const [submitSuccess, setSubmitSuccess] = useState('');
+
   const { data: privateKeys } = useSecretsByType(
     KubernetesSecretTypes.ethereumPrivatekey
   );
   const { data: passwords } = useSecretsByType(KubernetesSecretTypes.password);
-  const [submitSuccess, setSubmitSuccess] = useState('');
   const [open, setOpen] = useState(false);
   const {
     handleSubmit,
@@ -41,7 +40,6 @@ const MiningDetails: React.FC<Props> = ({ name, children, ...rest }) => {
     register,
     watch,
     reset,
-    setError,
     setValue,
     formState: { isDirty, isSubmitting, errors },
   } = useForm<Mining & API>({
@@ -75,19 +73,21 @@ const MiningDetails: React.FC<Props> = ({ name, children, ...rest }) => {
 
   const onSubmit: SubmitHandler<Mining> = async (values) => {
     setSubmitSuccess('');
-    try {
-      const node = await updateEthereumNode(name, values);
-      void mutate({ node });
+    setServerError('');
+
+    const { error, response } = await handleRequest<EthereumNode>(
+      updateEthereumNode.bind(undefined, values, name)
+    );
+
+    if (error) {
+      setServerError(error);
+      return;
+    }
+
+    if (response) {
+      setNode();
       reset(values);
-      setSubmitSuccess('Mining data has been updated');
-    } catch (e) {
-      // if (axios.isAxiosError(e)) {
-      //   const error = handleAxiosError<ServerError>(e);
-      //   setError('coinbase', {
-      //     type: 'server',
-      //     message: error.response?.data.error,
-      //   });
-      // }
+      setSubmitSuccess('Mining data data has been updated');
     }
   };
 
@@ -120,7 +120,7 @@ const MiningDetails: React.FC<Props> = ({ name, children, ...rest }) => {
             </div>
 
             {/* Ethereum Private Keys */}
-            <div className="mt-5 max-w-xs">
+            <div className="max-w-xs mt-5">
               <Controller
                 control={control}
                 name="import.privateKeySecretName"
@@ -140,7 +140,7 @@ const MiningDetails: React.FC<Props> = ({ name, children, ...rest }) => {
             </div>
 
             {/* Account Password */}
-            <div className="mt-5 max-w-xs">
+            <div className="max-w-xs mt-5">
               <Controller
                 control={control}
                 name="import.passwordSecretName"
@@ -162,7 +162,7 @@ const MiningDetails: React.FC<Props> = ({ name, children, ...rest }) => {
         )}
       </div>
 
-      <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
+      <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"
@@ -172,6 +172,11 @@ const MiningDetails: React.FC<Props> = ({ name, children, ...rest }) => {
           Save
         </Button>
         {submitSuccess && <p>{submitSuccess}</p>}
+        {serverError && (
+          <p aria-label="alert" className="text-sm text-red-600">
+            {serverError}
+          </p>
+        )}
       </div>
 
       {/* Confirmation Dialog if any APIs activated */}
@@ -195,6 +200,6 @@ const MiningDetails: React.FC<Props> = ({ name, children, ...rest }) => {
       </Dialog>
     </form>
   );
-};
+}
 
 export default MiningDetails;
