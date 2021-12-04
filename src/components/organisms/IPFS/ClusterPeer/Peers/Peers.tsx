@@ -42,11 +42,9 @@ const Peers: React.FC<Props> = ({
   const onSubmit: SubmitHandler<UpdatePeers> = async (values) => {
     setSubmitError('');
     setSubmitSuccess('');
-    console.log('Values: ', values);
     try {
       const clusterpeer = await updateClusterPeer(name, values);
-      console.log(clusterpeer);
-      void mutate({ clusterpeer });
+      mutate({ clusterpeer });
       reset(values);
       setSubmitSuccess('Cluster peer has been updated');
     } catch (e) {
