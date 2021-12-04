@@ -1,4 +1,3 @@
-import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 
 import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
@@ -14,8 +13,7 @@ import Resources from '@components/organisms/Resources/Resources';
 import { tabTitles } from '@data/ethereum2/beaconNode/tabTitles';
 import { clientOptions } from '@data/ethereum2/clientOptions';
 import { networkOptions } from '@data/ethereum2/networkOptions';
-import { BeaconNode, UpdateBeaconNode } from '@interfaces/ethereum2/BeaconNode';
-import { fetcher } from '@utils/axios';
+import { UpdateBeaconNode } from '@interfaces/ethereum2/BeaconNode';
 import React from 'react';
 import Heading from '@components/templates/Heading/Heading';
 import { getLabel } from '@utils/helpers/getLabel';
