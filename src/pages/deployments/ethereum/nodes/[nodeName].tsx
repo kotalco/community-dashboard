@@ -30,8 +30,8 @@ function EthereumNodeDetailsPage() {
   const { status } = useStatus(node && `/ethereum/nodes/${node.name}/status`);
 
   const updateResources = async (name: string, values: Resources) => {
-    const node = await updateEthereumNode(values, name);
-    mutate({ node });
+    await updateEthereumNode(values, name);
+    mutate();
   };
 
   if (error) push('/404');

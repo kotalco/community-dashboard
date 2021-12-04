@@ -8,12 +8,6 @@ export const createIPFSPeer = async (body: CreatePeer) => {
   return data.peer;
 };
 
-export const getIPFSPeer = async (peerName: string): Promise<Peer> => {
-  const { data } = await axios.get<{ peer: Peer }>(`/ipfs/peers/${peerName}`);
-
-  return data.peer;
-};
-
 /**
  * Send Put request to update specific IPFS Peer
  * @param peerName The IPFS Peer that will be updated

@@ -1,6 +1,4 @@
-import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
-import useSWR from 'swr';
 
 import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
@@ -12,35 +10,27 @@ import IPFSApiDetails from '@components/organisms/IPFS/IPFSApiDetails/IPFSApiDet
 import IPFSGatewayDetails from '@components/organisms/IPFS/IPFSGatewayDetails/IPFSGatewayDetails';
 import IPFSRoutingDetails from '@components/organisms/IPFS/IPFSRoutingDetails/IPFSRoutingDetails';
 import Logging from '@components/organisms/Logging/Logging';
-import { getIPFSPeer, updateIPFSPeer } from '@utils/requests/ipfs/peers';
-import { Peer } from '@interfaces/ipfs/Peer';
+import { updateIPFSPeer } from '@utils/requests/ipfs/peers';
 import { tabsTitles } from '@data/ipfs/peers/tabsTitles';
 import Heading from '@components/templates/Heading/Heading';
 import ResourcesTab from '@components/organisms/Resources/Resources';
 import { Resources } from '@interfaces/Resources';
+import { usePeer } from '@hooks/usePeer';
+import { useStatus } from '@hooks/useStatus';
 
-interface Props {
-  ipfsPeer: Peer;
-}
+function IPFSPeerDetailsPage() {
+  const { push, query } = useRouter();
+  const peerName = query.peerName as string | undefined;
 
-const IPFSPeerDetailsPage: React.FC<Props> = ({ ipfsPeer }) => {
-  const { isFallback, query } = useRouter();
-  const { peerName } = query;
+  const { peer, mutate, error } = usePeer(peerName);
+  const { status } = useStatus(peer && `/ipfs/peers/${peer.name}/status`);
 
-  const { data: peer, mutate } = useSWR(
-    typeof peerName === 'string' ? peerName : null,
-    getIPFSPeer,
-    {
-      fallbackData: ipfsPeer,
-      revalidateOnMount: true,
-    }
-  );
-
-  if (!peer || isFallback) return <LoadingIndicator />;
+  if (error) push('/404');
+  if (!peer) return <LoadingIndicator />;
 
   const updateResources = async (name: string, values: Resources) => {
-    const peer = await updateIPFSPeer(name, values);
-    void mutate(peer);
+    await updateIPFSPeer(name, values);
+    mutate();
   };
 
   const dataList = [
@@ -51,9 +41,9 @@ const IPFSPeerDetailsPage: React.FC<Props> = ({ ipfsPeer }) => {
 
   return (
     <Layout>
-      <Heading title={peer.name} />
+      <Heading title={peer.name} status={status} createdDate={peer.createdAt} />
 
-      <div className="bg-white shadow rounded-lg divided-y divided-gray-200 mt-4">
+      <div className="mt-4 bg-white rounded-lg shadow divided-y divided-gray-200">
         <Tabs tabs={tabsTitles}>
           <ProtocolDetails dataList={dataList} />
 
@@ -93,21 +83,6 @@ const IPFSPeerDetailsPage: React.FC<Props> = ({ ipfsPeer }) => {
       </div>
     </Layout>
   );
-};
-
-export const getStaticProps: GetStaticProps = async (context) => {
-  const peerName = context.params?.peerName as string;
-  try {
-    const ipfsPeer = await getIPFSPeer(peerName);
-
-    return { props: { ipfsPeer } };
-  } catch (e) {
-    return { notFound: true };
-  }
-};
-
-export const getStaticPaths: GetStaticPaths = () => {
-  return { paths: [], fallback: true };
-};
+}
 
 export default IPFSPeerDetailsPage;
