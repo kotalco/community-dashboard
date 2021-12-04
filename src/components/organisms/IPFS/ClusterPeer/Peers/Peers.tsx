@@ -8,10 +8,8 @@ import TextInput from '@components/molecules/TextInput/TextInput';
 import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
 import Button from '@components/atoms/Button/Button';
 import { UpdatePeers } from '@interfaces/ipfs/ClusterPeer';
-import {
-  updateClusterPeer,
-  useClusterPeer,
-} from '@utils/requests/ipfs/clusterPeers';
+import { updateClusterPeer } from '@utils/requests/ipfs/clusterPeers';
+import { useClusterPeer } from '@hooks/useClusterPeer';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
 
@@ -44,8 +42,10 @@ const Peers: React.FC<Props> = ({
   const onSubmit: SubmitHandler<UpdatePeers> = async (values) => {
     setSubmitError('');
     setSubmitSuccess('');
+    console.log('Values: ', values);
     try {
       const clusterpeer = await updateClusterPeer(name, values);
+      console.log(clusterpeer);
       void mutate({ clusterpeer });
       reset(values);
       setSubmitSuccess('Cluster peer has been updated');
@@ -63,7 +63,7 @@ const Peers: React.FC<Props> = ({
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
         <TextInput label="IPFS Peer" {...register('peerEndpoint')} />
-        <div className="mt-4 max-w-xs">
+        <div className="max-w-xs mt-4">
           <Controller
             name="bootstrapPeers"
             control={control}
@@ -79,8 +79,8 @@ const Peers: React.FC<Props> = ({
           />
         </div>
         {!!trustedPeers.length && (
-          <div className="mt-4 max-w-xs">
-            <h4 className="block text-sm font-medium text-gray-700 mb-1">
+          <div className="max-w-xs mt-4">
+            <h4 className="block mb-1 text-sm font-medium text-gray-700">
               Trusted Peers
             </h4>
             <ul className="ml-2">
@@ -97,7 +97,7 @@ const Peers: React.FC<Props> = ({
           </div>
         )}
       </div>
-      <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
+      <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"
@@ -107,7 +107,7 @@ const Peers: React.FC<Props> = ({
           Save
         </Button>
         {submitError && (
-          <p className="text-center text-red-500 mb-5">{submitError}</p>
+          <p className="mb-5 text-center text-red-500">{submitError}</p>
         )}
         {submitSuccess && <p>{submitSuccess}</p>}
       </div>

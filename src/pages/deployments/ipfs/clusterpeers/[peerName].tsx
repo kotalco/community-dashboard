@@ -1,12 +1,8 @@
-import { GetStaticProps, GetStaticPaths } from 'next';
 import { useRouter } from 'next/router';
 
-import { fetcher } from '@utils/axios';
-import { ClusterPeer, UpdateClusterPeer } from '@interfaces/ipfs/ClusterPeer';
-import {
-  useClusterPeer,
-  updateClusterPeer,
-} from '@utils/requests/ipfs/clusterPeers';
+import { UpdateClusterPeer } from '@interfaces/ipfs/ClusterPeer';
+import { updateClusterPeer } from '@utils/requests/ipfs/clusterPeers';
+import { useClusterPeer } from '@hooks/useClusterPeer';
 import { tabTitles } from '@data/ipfs/clusterPeers/tabTitles';
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
@@ -20,26 +16,24 @@ import DeleteDeployment from '@components/organisms/DeleteDeployment/DeleteDeplo
 import { getLabel } from '@utils/helpers/getLabel';
 import { consensusOptions } from '@data/ipfs/clusterPeers/consensusOptions';
 import Logging from '@components/organisms/Logging/Logging';
+import { useStatus } from '@hooks/useStatus';
 
-interface Props {
-  initialClusterpeer?: ClusterPeer;
-}
+function ClusterPeerDetailsPage() {
+  const { query, push } = useRouter();
+  const peerName = query.peerName as string | undefined;
 
-const ClusterPeerDetailsPage: React.FC<Props> = ({ initialClusterpeer }) => {
-  const { isFallback } = useRouter();
-  const { data: clusterpeer, mutate } = useClusterPeer(
-    initialClusterpeer?.name,
-    {
-      fallbackData: { clusterpeer: initialClusterpeer },
-    }
+  const { clusterpeer, mutate, error } = useClusterPeer(peerName);
+  const { status } = useStatus(
+    clusterpeer && `/ipfs/clusterpeers/${clusterpeer.name}/status`
   );
 
-  const updateResources = async (name: string, values: UpdateClusterPeer) => {
-    const clusterPeer = await updateClusterPeer(name, values);
-    void mutate({ clusterpeer: clusterPeer });
-  };
+  if (error) push('/404');
+  if (!clusterpeer) return <LoadingIndicator />;
 
-  if (!clusterpeer || isFallback) return <LoadingIndicator />;
+  const updateResources = async (name: string, values: UpdateClusterPeer) => {
+    await updateClusterPeer(name, values);
+    mutate();
+  };
 
   const dataList = [
     { label: 'Protocol', value: 'IPFS' },
@@ -55,9 +49,13 @@ const ClusterPeerDetailsPage: React.FC<Props> = ({ initialClusterpeer }) => {
 
   return (
     <Layout>
-      <Heading title={clusterpeer.name} />
+      <Heading
+        title={clusterpeer.name}
+        status={status}
+        createdDate={clusterpeer.createdAt}
+      />
 
-      <div className="bg-white shadow rounded-lg mt-4">
+      <div className="mt-4 bg-white rounded-lg shadow">
         <Tabs tabs={tabTitles}>
           <ProtocolDetails dataList={dataList} />
 
@@ -87,29 +85,6 @@ const ClusterPeerDetailsPage: React.FC<Props> = ({ initialClusterpeer }) => {
       </div>
     </Layout>
   );
-};
-
-export const getStaticProps: GetStaticProps = async (context) => {
-  const peerName = context.params?.peerName as string;
-  try {
-    const { clusterpeer } = await fetcher<{ clusterpeer: ClusterPeer }>(
-      `/ipfs/clusterpeers/${peerName}`
-    );
-
-    return {
-      props: { initialClusterpeer: clusterpeer },
-      revalidate: 10,
-    };
-  } catch (e) {
-    return { notFound: true };
-  }
-};
-
-export const getStaticPaths: GetStaticPaths = () => {
-  return {
-    paths: [],
-    fallback: true,
-  };
-};
+}
 
 export default ClusterPeerDetailsPage;
