@@ -16,21 +16,6 @@ export const createValidator = async (values: CreateValidator) => {
 };
 
 /**
- * Send a get request to find a validator by its name
- * @param validatorName Name of the validator we are looking for
- * @returns All validator data if found or 404 if not
- */
-export const getValidator = async (
-  validatorName: string
-): Promise<Validator> => {
-  const { data } = await axios.get<{ validator: Validator }>(
-    `/ethereum2/validators/${validatorName}`
-  );
-
-  return data.validator;
-};
-
-/**
  * Send a delete request to delete the validator
  * @param validatorName Vaidator name to be deleted
  */

@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { mutate } from 'swr';
-import axios from 'axios';
 
 import Button from '@components/atoms/Button/Button';
+import TextInput from '@components/molecules/TextInput/TextInput';
 import { updateValidator } from '@utils/requests/ethereum2/validators';
 import { UpdateGrafitti } from '@interfaces/ethereum2/Validator';
-import TextInput from '@components/molecules/TextInput/TextInput';
-import { handleAxiosError } from '@utils/axios';
-import { ServerError } from '@interfaces/ServerError';
+import { useValidator } from '@hooks/useValidator';
+import { handleRequest } from '@utils/helpers/handleRequest';
+import { Validator } from '@interfaces/ethereum2/Validator';
 
 interface Props {
   name: string;
@@ -16,8 +15,9 @@ interface Props {
 }
 
 const ValidatorGarfittiTab: React.FC<Props> = ({ name, graffiti }) => {
-  const [submitError, setSubmitError] = useState<string | undefined>('');
+  const [ServerError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
+  const { mutate } = useValidator(name);
 
   const {
     reset,
@@ -29,19 +29,22 @@ const ValidatorGarfittiTab: React.FC<Props> = ({ name, graffiti }) => {
   });
 
   const onSubmit: SubmitHandler<UpdateGrafitti> = async (values) => {
-    setSubmitError('');
+    setServerError('');
     setSubmitSuccess('');
 
-    try {
-      const validator = await updateValidator(name, values);
-      void mutate(name, validator);
+    const { error, response } = await handleRequest<Validator>(
+      updateValidator.bind(undefined, name, values)
+    );
+
+    if (error) {
+      setServerError(error);
+      return;
+    }
+
+    if (response) {
+      mutate();
       reset(values);
       setSubmitSuccess('Validator has been updated');
-    } catch (e) {
-      // if (axios.isAxiosError(e)) {
-      //   const error = handleAxiosError<ServerError>(e);
-      //   setSubmitError(error.response?.data.error);
-      // }
     }
   };
 
@@ -51,7 +54,7 @@ const ValidatorGarfittiTab: React.FC<Props> = ({ name, graffiti }) => {
         <TextInput label="Graffiti" {...register('graffiti')} />
       </div>
 
-      <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
+      <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"
@@ -60,8 +63,8 @@ const ValidatorGarfittiTab: React.FC<Props> = ({ name, graffiti }) => {
         >
           Save
         </Button>
-        {submitError && (
-          <p className="text-center text-red-500 mb-5">{submitError}</p>
+        {ServerError && (
+          <p className="mb-5 text-center text-red-500">{ServerError}</p>
         )}
         {submitSuccess && <p>{submitSuccess}</p>}
       </div>
