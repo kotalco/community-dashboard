@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { SubmitHandler, useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ErrorMessage } from '@hookform/error-message';
 import { useRouter } from 'next/router';
 
 import Layout from '@components/templates/Layout/Layout';
 import FormLayout from '@components/templates/FormLayout/FormLayout';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Select from '@components/molecules/Select/Select';
-import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
+import MultiSelectWithInput from '@components/molecules/MultiSelectWithInput/MultiSelectWithInput';
 import Heading from '@components/templates/Heading/Heading';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 import { clientOptions } from '@data/ethereum2/clientOptions';
@@ -19,10 +18,19 @@ import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient'
 import { BeaconNode, CreateBeaconNode } from '@interfaces/ethereum2/BeaconNode';
 import { BeaconNodeNetwork } from '@enums/Ethereum2/BeaconNodes/BeaconNodeNetwork';
 import { handleRequest } from '@utils/helpers/handleRequest';
+import { useEthereumNodes } from '@hooks/useEthereumNodes';
 
 const CreateBeaconNode: React.FC = () => {
   const [serverError, setServerError] = useState('');
+  const { nodes } = useEthereumNodes();
   const router = useRouter();
+
+  const activeNodes = nodes
+    .filter(({ rpc }) => rpc)
+    .map(({ rpcPort, name }) => ({
+      label: name,
+      value: `http://${name}:${rpcPort}`,
+    }));
   const {
     watch,
     control,
@@ -106,14 +114,16 @@ const CreateBeaconNode: React.FC = () => {
                 control={control}
                 shouldUnregister
                 render={({ field }) => (
-                  <TextareaWithInput
-                    multiple
+                  <MultiSelectWithInput
+                    options={activeNodes}
+                    otherLabel="Add more externl nodes"
+                    placeholder="Select Ethereum Nodes..."
+                    onChange={field.onChange}
+                    value={field.value}
                     label="Ethereum Node JSON-RPC Endpoints"
                     helperText="One endpoint per each line"
-                    error={<ErrorMessage errors={errors} name={field.name} />}
-                    value={field.value}
-                    name={field.name}
-                    onChange={field.onChange}
+                    errors={errors}
+                    error={errors.eth1Endpoints && field.name}
                   />
                 )}
               />
