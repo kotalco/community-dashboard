@@ -46,6 +46,6 @@ export const schema: SchemaOf<CreateValidator> = object({
     .when('client', {
       is: ValidatorsClient.lighthouse,
       then: array().min(1, 'Beacon node endpoints are required'),
-      otherwise: array().length(1, 'Beacon node endpoints are required'),
+      otherwise: array().length(1, 'Only one beacon node endpoint is allowed'),
     }),
 });

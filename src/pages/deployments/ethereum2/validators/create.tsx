@@ -8,12 +8,12 @@ import Layout from '@components/templates/Layout/Layout';
 import FormLayout from '@components/templates/FormLayout/FormLayout';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Select from '@components/molecules/Select/Select';
-import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
+import MultiSelectWithInput from '@components/molecules/MultiSelectWithInput/MultiSelectWithInput';
 import Multiselect from '@components/molecules/Multiselect/Multiselect';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 import { clientOptions } from '@data/ethereum2/clientOptions';
 import { networkOptions } from '@data/ethereum2/networkOptions';
-import { schema } from '@schemas/ethereum2/validator/createValidator';
+import { schema } from '@schemas/ethereum2/validator/create';
 import { CreateValidator, Validator } from '@interfaces/ethereum2/Validator';
 import { createValidator } from '@utils/requests/ethereum2/validators';
 import { ValidatorsClient } from '@enums/Ethereum2/Validators/ValidatorsClient';
@@ -22,6 +22,7 @@ import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretT
 import Heading from '@components/templates/Heading/Heading';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { useBeaconNodes } from '@hooks/useBeaconNodes';
+import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
 
 const CreateValidator: React.FC = () => {
   const [serverError, setServerError] = useState('');
@@ -34,7 +35,21 @@ const CreateValidator: React.FC = () => {
   );
   const { beaconnodes } = useBeaconNodes();
 
-  // const activeBeaconnodes = bea
+  const activeBeaconnodes = beaconnodes
+    .filter(({ client, rest, rpc }) =>
+      client === BeaconNodeClient.teku || client === BeaconNodeClient.lighthouse
+        ? rest
+        : rpc
+    )
+    .map(({ name, client, rpcPort, restPort }) => ({
+      label: name,
+      value: `http://${name}:${
+        client === BeaconNodeClient.teku ||
+        client === BeaconNodeClient.lighthouse
+          ? restPort
+          : rpcPort
+      }`,
+    }));
 
   const {
     watch,
@@ -159,18 +174,29 @@ const CreateValidator: React.FC = () => {
             name="beaconEndpoints"
             control={control}
             render={({ field }) => (
-              <TextareaWithInput
-                multiple={client === ValidatorsClient.lighthouse}
+              <MultiSelectWithInput
+                single={client !== ValidatorsClient.lighthouse}
+                options={activeBeaconnodes}
                 label="Beacon Node Endpoints"
                 helperText={
                   client === ValidatorsClient.lighthouse
                     ? 'One endpoint per each line'
                     : ''
                 }
-                error={<ErrorMessage errors={errors} name="beaconEndpoints" />}
+                errors={errors}
+                error={errors.beaconEndpoints && field.name}
                 value={field.value}
-                name={field.name}
                 onChange={field.onChange}
+                placeholder={
+                  client === ValidatorsClient.lighthouse
+                    ? 'Select beacon nodes...'
+                    : 'Select a beacon node...'
+                }
+                otherLabel={
+                  client === ValidatorsClient.lighthouse
+                    ? 'Add external beacon nodes'
+                    : 'Use external beacon node'
+                }
               />
             )}
           />
