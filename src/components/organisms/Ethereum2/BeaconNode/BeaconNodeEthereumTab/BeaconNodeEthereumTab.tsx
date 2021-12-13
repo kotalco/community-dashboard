@@ -10,7 +10,11 @@ import { BeaconNode, Eth1Endpoints } from '@interfaces/ethereum2/BeaconNode';
 import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
 import { useEthereumNodes } from '@hooks/useEthereumNodes';
 import { handleRequest } from '@utils/helpers/handleRequest';
-import { schema } from '@schemas/ethereum2/beaconNode/ethereum1Endpoint';
+import {
+  requiredSchema,
+  optionalSchema,
+  onlyOneSchema,
+} from '@schemas/ethereum2/beaconNode/ethereum1Endpoint';
 
 interface Props extends Eth1Endpoints {
   name: string;
@@ -40,11 +44,16 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
     reset,
     handleSubmit,
     control,
-    register,
     formState: { isDirty, isSubmitting, errors },
-  } = useForm<Eth1Endpoints & { client: BeaconNodeClient; network: string }>({
+  } = useForm<Eth1Endpoints>({
     defaultValues: { eth1Endpoints },
-    resolver: yupResolver(schema),
+    resolver: yupResolver(
+      client === BeaconNodeClient.prysm && network !== 'mainnet'
+        ? requiredSchema
+        : client === BeaconNodeClient.nimbus || client === BeaconNodeClient.teku
+        ? onlyOneSchema
+        : optionalSchema
+    ),
   });
 
   const onSubmit: SubmitHandler<Eth1Endpoints> = async (values) => {
@@ -69,8 +78,6 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
-        <input type="hidden" defaultValue={client} {...register('client')} />
-        <input type="hidden" defaultValue={network} {...register('network')} />
         {activeNodes.length && (
           <Controller
             name="eth1Endpoints"
