@@ -4,7 +4,7 @@ import useSWR, { SWRConfiguration } from 'swr';
 import {
   CreateBeaconNode,
   BeaconNode,
-  UpdateBeaconNode,
+  UpdateBeaconnode,
 } from '@interfaces/ethereum2/BeaconNode';
 
 export const createBeaconNode = async (
@@ -28,7 +28,7 @@ export const deleteBeaconNode = async (nodeName: string): Promise<void> => {
 
 export const updateBeaconNode = async (
   nodeName: string,
-  nodeData: UpdateBeaconNode
+  nodeData: UpdateBeaconnode
 ): Promise<BeaconNode> => {
   const { data } = await axios.put<{ beaconnode: BeaconNode }>(
     `/ethereum2/beaconnodes/${nodeName}`,

@@ -7,7 +7,7 @@ import Button from '@components/atoms/Button/Button';
 import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
 import { useBeaconnode } from '@hooks/useBeaconNode';
 import { updateAPISchema } from '@schemas/ethereum2/beaconNode/updateBeaconNode';
-import { UpdateAPI } from '@interfaces/ethereum2/BeaconNode';
+import { API } from '@interfaces/ethereum2/BeaconNode';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Separator from '@components/atoms/Separator/Separator';
 import Toggle from '@components/molecules/Toggle/Toggle';
@@ -65,7 +65,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
     handleSubmit,
     control,
     formState: { isDirty, isSubmitting, errors },
-  } = useForm<UpdateAPI>({
+  } = useForm<API>({
     defaultValues,
     resolver: joiResolver(updateAPISchema),
   });
@@ -75,7 +75,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
     name: ['rest', 'rpc', 'grpc'],
   });
 
-  const onSubmit: SubmitHandler<UpdateAPI> = async (values) => {
+  const onSubmit: SubmitHandler<API> = async (values) => {
     setSubmitError('');
     setSubmitSuccess('');
     try {
