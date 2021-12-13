@@ -15,6 +15,7 @@ type Props = {
   otherLabel: string;
   helperText?: string;
   onChange: (e: string[] | undefined) => void;
+  single?: boolean;
 } & (
   | { href: string; hrefTitle: string }
   | { href?: never; hrefTitle?: never }
@@ -36,10 +37,20 @@ const Multiselect: React.FC<Props> = ({
   hrefTitle,
   otherLabel,
   helperText,
+  single,
 }) => {
-  const [other, setOther] = useState(false);
-  const [textAreaValues, setTextareaValues] = useState<string[]>([]);
-  const [text, setText] = useState(value?.join(', ') || '');
+  const [textAreaValues, setTextareaValues] = useState<string[]>(
+    value?.filter(
+      (option) => !options.map(({ value }) => value).includes(option)
+    ) || []
+  );
+
+  const [other, setOther] = useState(!!textAreaValues.length);
+  const [text, setText] = useState<string>(
+    value
+      ?.filter((option) => options.map(({ value }) => value).includes(option))
+      .join(', ') || ''
+  );
   const isSelected = (option: string) => {
     return !!value?.find((el) => el === option);
   };
@@ -59,7 +70,9 @@ const Multiselect: React.FC<Props> = ({
     onChange([...newText.split(', '), ...textAreaValues]);
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>
+  ) => {
     const newTextareaValues = e.target.value.split('\n');
     setTextareaValues(newTextareaValues);
     const selectValues = text.split(', ');
@@ -168,12 +181,25 @@ const Multiselect: React.FC<Props> = ({
           </>
         )}
       </Listbox>
-      {other && (
+      {other && !single && (
         <div className="max-w-xs">
           <textarea
             rows={5}
+            defaultValue={textAreaValues.join('\n')}
             onChange={handleInputChange}
             className={`focus:ring-indigo-500 focus:border-indigo-500 relative block w-full rounded-none rounded-b-md bg-transparent focus:z-10 sm:text-sm border-t-0 resize-none ${
+              error ? 'border-red-300' : 'border-gray-300'
+            }`}
+          />
+        </div>
+      )}
+      {other && single && (
+        <div className="max-w-xs">
+          <input
+            type="text"
+            defaultValue={textAreaValues.join('\n')}
+            onChange={handleInputChange}
+            className={`focus:ring-indigo-500 focus:border-indigo-500 relative block w-full rounded-none rounded-b-md bg-transparent focus:z-10 sm:text-sm border-t-0 ${
               error ? 'border-red-300' : 'border-gray-300'
             }`}
           />

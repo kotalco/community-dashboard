@@ -13,7 +13,7 @@ import Resources from '@components/organisms/Resources/Resources';
 import { tabTitles } from '@data/ethereum2/beaconNode/tabTitles';
 import { clientOptions } from '@data/ethereum2/clientOptions';
 import { networkOptions } from '@data/ethereum2/networkOptions';
-import { UpdateBeaconNode } from '@interfaces/ethereum2/BeaconNode';
+import { UpdateBeaconnode } from '@interfaces/ethereum2/BeaconNode';
 import React from 'react';
 import Heading from '@components/templates/Heading/Heading';
 import { getLabel } from '@utils/helpers/getLabel';
@@ -28,7 +28,7 @@ function Ethereum2NodeDetailsPage() {
     beaconnode && `/ethereum2/beaconnodes/${beaconnode.name}/status`
   );
 
-  const updateResources = async (name: string, values: UpdateBeaconNode) => {
+  const updateResources = async (name: string, values: UpdateBeaconnode) => {
     const beaconnode = await updateBeaconNode(name, values);
     mutate({ beaconnode });
   };

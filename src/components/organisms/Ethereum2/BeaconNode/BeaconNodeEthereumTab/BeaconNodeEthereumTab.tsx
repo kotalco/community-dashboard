@@ -1,20 +1,20 @@
 import { useState } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
-import axios from 'axios';
 
 import Button from '@components/atoms/Button/Button';
+import MultiSelectWithInput from '@components/molecules/MultiSelectWithInput/MultiSelectWithInput';
 import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
 import { useBeaconnode } from '@hooks/useBeaconNode';
-import { UpdateEth1Endpoints } from '@interfaces/ethereum2/BeaconNode';
-import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
+import { BeaconNode, Eth1Endpoints } from '@interfaces/ethereum2/BeaconNode';
 import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
-import { handleAxiosError } from '@utils/axios';
-import { ServerError } from '@interfaces/ServerError';
+import { useEthereumNodes } from '@hooks/useEthereumNodes';
+import { handleRequest } from '@utils/helpers/handleRequest';
+import { schema } from '@schemas/ethereum2/beaconNode/ethereum1Endpoint';
 
-interface Props {
+interface Props extends Eth1Endpoints {
   name: string;
   client: BeaconNodeClient;
-  eth1Endpoints: string[];
   network: string;
 }
 
@@ -25,61 +25,84 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
   network,
 }) => {
   const { mutate } = useBeaconnode(name);
+  const { nodes } = useEthereumNodes();
   const [submitSuccess, setSubmitSuccess] = useState('');
+  const [serverError, setServerError] = useState('');
+
+  const activeNodes = nodes
+    .filter(({ rpc }) => rpc)
+    .map(({ rpcPort, name }) => ({
+      label: name,
+      value: `http://${name}:${rpcPort}`,
+    }));
+
   const {
     reset,
     handleSubmit,
     control,
-    setError,
+    register,
     formState: { isDirty, isSubmitting, errors },
-  } = useForm<UpdateEth1Endpoints>({
+  } = useForm<Eth1Endpoints & { client: BeaconNodeClient; network: string }>({
     defaultValues: { eth1Endpoints },
+    resolver: yupResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<UpdateEth1Endpoints> = async (values) => {
+  const onSubmit: SubmitHandler<Eth1Endpoints> = async (values) => {
     setSubmitSuccess('');
-    try {
-      const beaconnode = await updateBeaconNode(name, values);
-      void mutate({ beaconnode });
+    setServerError('');
+    const { error, response } = await handleRequest<BeaconNode>(
+      updateBeaconNode.bind(undefined, name, values)
+    );
+
+    if (error) {
+      setServerError(error);
+      return;
+    }
+
+    if (response) {
+      mutate();
       reset(values);
       setSubmitSuccess('Beacon node has been updated');
-    } catch (e) {
-      // if (axios.isAxiosError(e)) {
-      //   const error = handleAxiosError<ServerError>(e);
-      //   setError('eth1Endpoints', {
-      //     type: 'server',
-      //     message: error.response?.data.error,
-      //   });
-      // }
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
-        <Controller
-          name="eth1Endpoints"
-          control={control}
-          // rules={
-          //   client === BeaconNodeClient.prysm && network !== 'mainnet'
-          //     ? schema.eth1Endpoints
-          //     : undefined
-          // }
-          render={({ field }) => (
-            <TextareaWithInput
-              multiple={
-                client !== BeaconNodeClient.nimbus &&
-                client !== BeaconNodeClient.teku
-              }
-              error={errors.eth1Endpoints?.message}
-              label="Ethereum Node JSON-RPC Endpoints"
-              helperText="One endpoint per each line"
-              value={field.value}
-              name={field.name}
-              onChange={field.onChange}
-            />
-          )}
-        />
+        <input type="hidden" defaultValue={client} {...register('client')} />
+        <input type="hidden" defaultValue={network} {...register('network')} />
+        {activeNodes.length && (
+          <Controller
+            name="eth1Endpoints"
+            control={control}
+            render={({ field }) => (
+              <MultiSelectWithInput
+                single={
+                  client === BeaconNodeClient.nimbus ||
+                  client === BeaconNodeClient.teku
+                }
+                options={activeNodes}
+                label="Ethereum Node JSON-RPC Endpoints"
+                placeholder={
+                  client !== BeaconNodeClient.nimbus &&
+                  client !== BeaconNodeClient.teku
+                    ? 'Select nodes...'
+                    : 'Select a node...'
+                }
+                value={field.value}
+                errors={errors}
+                error={errors.eth1Endpoints && field.name}
+                onChange={field.onChange}
+                otherLabel={
+                  client !== BeaconNodeClient.nimbus &&
+                  client !== BeaconNodeClient.teku
+                    ? 'Add external nodes'
+                    : 'Use external node'
+                }
+              />
+            )}
+          />
+        )}
       </div>
 
       <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
@@ -92,6 +115,11 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
           Save
         </Button>
         {submitSuccess && <p>{submitSuccess}</p>}
+        {serverError && (
+          <p aria-label="alert" className="text-sm text-red-600">
+            {serverError}
+          </p>
+        )}
       </div>
     </form>
   );

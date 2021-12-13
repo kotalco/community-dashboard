@@ -1,5 +1,5 @@
 import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
-import { NestedValue } from 'react-hook-form';
+import { Resources } from '@interfaces/Resources';
 
 export interface CreateBeaconNode {
   name: string;
@@ -8,52 +8,11 @@ export interface CreateBeaconNode {
   eth1Endpoints?: string[];
 }
 
-export interface BeaconNode {
-  createdAt: string;
-  name: string;
-  network: string;
-  client: BeaconNodeClient;
+export interface Eth1Endpoints {
   eth1Endpoints: string[];
-  rest?: boolean;
-  restPort?: number;
-  restHost?: string;
-  rpc: boolean;
-  rpcPort: number;
-  rpcHost: string;
-  grpc: boolean;
-  grpcPort: number;
-  grpcHost: string;
-  cpu: string;
-  cpuLimit: string;
-  memory: string;
-  memoryLimit: string;
-  storage: string;
 }
 
-export interface UpdateBeaconNode {
-  client?: BeaconNodeClient;
-  eth1Endpoints?: string[];
-  rest?: boolean;
-  restPort?: number;
-  restHost?: string;
-  rpc?: boolean;
-  rpcPort?: number;
-  rpcHost?: string;
-  grpc?: boolean;
-  grpcPort?: number;
-  grpcHost?: string;
-  cpu?: string;
-  cpuLimit?: string;
-  memory?: string;
-  memoryLimit?: string;
-  storage?: string;
-}
-
-export interface UpdateEth1Endpoints {
-  eth1Endpoints: NestedValue<string[]>;
-}
-
-export interface UpdateAPI {
+export interface API {
   rest: boolean;
   restHost: string;
   restPort: number;
@@ -63,4 +22,10 @@ export interface UpdateAPI {
   grpc: boolean;
   grpcHost: string;
   grpcPort: number;
+}
+
+export type UpdateBeaconnode = Partial<Eth1Endpoints & API & Resources>;
+
+export interface BeaconNode extends Required<CreateBeaconNode>, API, Resources {
+  createdAt: string;
 }

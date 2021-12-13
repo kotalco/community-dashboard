@@ -13,7 +13,7 @@ import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInp
 import { clientOptions } from '@data/ethereum2/clientOptions';
 import { networkOptions } from '@data/ethereum2/networkOptions';
 import { createBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
-import { schema } from '@schemas/ethereum2/beaconNode/createBeaconNode';
+import { schema } from '@schemas/ethereum2/beaconNode/create';
 import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
 import { BeaconNode, CreateBeaconNode } from '@interfaces/ethereum2/BeaconNode';
 import { BeaconNodeNetwork } from '@enums/Ethereum2/BeaconNodes/BeaconNodeNetwork';
@@ -112,7 +112,6 @@ const CreateBeaconNode: React.FC = () => {
               <Controller
                 name="eth1Endpoints"
                 control={control}
-                shouldUnregister
                 render={({ field }) => (
                   <MultiSelectWithInput
                     options={activeNodes}

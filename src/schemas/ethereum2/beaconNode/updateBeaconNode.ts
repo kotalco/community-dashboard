@@ -3,34 +3,6 @@ import Joi from 'joi';
 const ipAddressRegex =
   /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
 
-export const updateClientSchema = Joi.object({
-  client: Joi.string()
-    .required()
-    .valid('teku', 'prysm', 'lighthouse', 'nimbus')
-    .messages({
-      'string.empty': `Please choose your client`,
-      'any.required': `Please choose your client`,
-      'any.only': `Please choose your client`,
-    }),
-});
-
-export const updateEth1EndpointsSchema = Joi.object({
-  client: Joi.string().strip(),
-  network: Joi.string().strip(),
-  eth1Endpoints: Joi.array()
-    .when('client', {
-      is: 'prysm',
-      then: Joi.when('network', {
-        not: 'mainnet',
-        otherwise: Joi.array().items(Joi.string()).min(1),
-      }),
-    })
-    .messages({
-      'array.min':
-        'You need to enter at least 1 Ethereum endpoint when client is Prysm and network is not Mainnet',
-    }),
-});
-
 export const updateAPISchema = Joi.object({
   rest: Joi.boolean().when('client', {
     not: Joi.valid('teku', 'lighthouse'),
