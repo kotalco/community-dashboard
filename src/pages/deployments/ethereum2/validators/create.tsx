@@ -21,6 +21,7 @@ import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import Heading from '@components/templates/Heading/Heading';
 import { handleRequest } from '@utils/helpers/handleRequest';
+import { useBeaconNodes } from '@hooks/useBeaconNodes';
 
 const CreateValidator: React.FC = () => {
   const [serverError, setServerError] = useState('');
@@ -31,6 +32,9 @@ const CreateValidator: React.FC = () => {
   const { data: walletPasswordOptions } = useSecretsByType(
     KubernetesSecretTypes.password
   );
+  const { beaconnodes } = useBeaconNodes();
+
+  // const activeBeaconnodes = bea
 
   const {
     watch,

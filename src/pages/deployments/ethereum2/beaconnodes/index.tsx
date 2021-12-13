@@ -24,7 +24,7 @@ import { useValidators } from '@hooks/useValidators';
 function Beaconnodes() {
   const { name, onClose } = useNotification('beaconnode');
   const {
-    baeconnodes,
+    beaconnodes,
     error,
     isEmpty,
     isInitialLoading,
@@ -68,7 +68,7 @@ function Beaconnodes() {
           linkUrl="/deployments/ethereum2/beaconnodes/create"
           linkName="New Beacon Node"
         >
-          <EThereumIcon className="mx-auto w-12 h-12 text-gray-400" />
+          <EThereumIcon className="w-12 h-12 mx-auto text-gray-400" />
         </EmptyState>
       </Layout>
     );
@@ -82,7 +82,7 @@ function Beaconnodes() {
 
       <LinkedTabs tabs={tabs} />
       <List>
-        {baeconnodes.map(({ name, client, network }) => (
+        {beaconnodes.map(({ name, client, network }) => (
           <ListItem
             key={name}
             link={`/deployments/ethereum2/beaconnodes/${name}`}
@@ -108,7 +108,7 @@ function Beaconnodes() {
         close={onClose}
       >
         <p className="mt-1 text-sm text-gray-500">
-          <span className="text-indigo-900 bg-indigo-100 p-1 m-1 ml-0 rounded-md">
+          <span className="p-1 m-1 ml-0 text-indigo-900 bg-indigo-100 rounded-md">
             {name}
           </span>
           Beacon node has been created successfully, and will be up and running

@@ -34,7 +34,7 @@ export const useBeaconNodes = (config?: SWRInfiniteConfiguration) => {
 
   // Collect all data in single arrays instead of 2D arrays
   const initial: BeaconNode[] = [];
-  const baeconnodes = sortByDate(
+  const beaconnodes = sortByDate(
     data?.reduce((prev, current) => prev.concat(current.beaconnodes), initial)
   );
 
@@ -51,7 +51,7 @@ export const useBeaconNodes = (config?: SWRInfiniteConfiguration) => {
     isEmpty || (data && data[data.length - 1]?.beaconnodes.length < PAGE_SIZE);
 
   return {
-    baeconnodes,
+    beaconnodes,
     totalCount,
     isLoading,
     isInitialLoading,
