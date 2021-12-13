@@ -66,7 +66,6 @@ describe('render listbox with errors and options', () => {
         label="Options"
         onChange={changeHandler}
         value={['optionOne']}
-        error="This is an error"
         href="/"
         hrefTitle="URL Title"
       />
@@ -108,7 +107,6 @@ describe('renders with multiple values', () => {
         label="Options"
         onChange={changeHandler}
         value={['optionOne', 'optionTwo']}
-        error="This is an error"
       />
     );
 

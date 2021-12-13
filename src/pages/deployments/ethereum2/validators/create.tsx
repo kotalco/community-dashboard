@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { SubmitHandler, useForm, Controller } from 'react-hook-form';
-import { ErrorMessage } from '@hookform/error-message';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Layout from '@components/templates/Layout/Layout';
@@ -136,11 +135,8 @@ const CreateValidator: React.FC = () => {
                 label="Ethereum 2.0 Keystores"
                 placeholder="Choose your keystores..."
                 options={keystoreOptions}
-                error={
-                  errors.keystores && (
-                    <ErrorMessage errors={errors} name="keystores" />
-                  )
-                }
+                errors={errors}
+                error={errors.keystores && field.name}
                 onChange={field.onChange}
                 value={field.value}
                 href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereum2Keystore}`}

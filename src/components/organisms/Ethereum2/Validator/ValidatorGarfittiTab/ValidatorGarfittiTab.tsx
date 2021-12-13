@@ -4,18 +4,17 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import Button from '@components/atoms/Button/Button';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import { updateValidator } from '@utils/requests/ethereum2/validators';
-import { UpdateGrafitti } from '@interfaces/ethereum2/Validator';
+import { Grafitti } from '@interfaces/ethereum2/Validator';
 import { useValidator } from '@hooks/useValidator';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { Validator } from '@interfaces/ethereum2/Validator';
 
-interface Props {
+interface Props extends Grafitti {
   name: string;
-  graffiti: string;
 }
 
 const ValidatorGarfittiTab: React.FC<Props> = ({ name, graffiti }) => {
-  const [ServerError, setServerError] = useState('');
+  const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
   const { mutate } = useValidator(name);
 
@@ -24,11 +23,11 @@ const ValidatorGarfittiTab: React.FC<Props> = ({ name, graffiti }) => {
     register,
     handleSubmit,
     formState: { isDirty, isSubmitting },
-  } = useForm<UpdateGrafitti>({
+  } = useForm<Grafitti>({
     defaultValues: { graffiti },
   });
 
-  const onSubmit: SubmitHandler<UpdateGrafitti> = async (values) => {
+  const onSubmit: SubmitHandler<Grafitti> = async (values) => {
     setServerError('');
     setSubmitSuccess('');
 
@@ -63,8 +62,8 @@ const ValidatorGarfittiTab: React.FC<Props> = ({ name, graffiti }) => {
         >
           Save
         </Button>
-        {ServerError && (
-          <p className="mb-5 text-center text-red-500">{ServerError}</p>
+        {serverError && (
+          <p className="mb-5 text-center text-red-500">{serverError}</p>
         )}
         {submitSuccess && <p>{submitSuccess}</p>}
       </div>

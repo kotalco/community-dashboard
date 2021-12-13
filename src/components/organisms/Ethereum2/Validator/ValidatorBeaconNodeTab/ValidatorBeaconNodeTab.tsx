@@ -1,26 +1,23 @@
 import { useState } from 'react';
-import {
-  useForm,
-  Controller,
-  SubmitHandler,
-  FieldError,
-} from 'react-hook-form';
-import { joiResolver } from '@hookform/resolvers/joi';
-import { mutate } from 'swr';
-import axios from 'axios';
+import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 
 import Button from '@components/atoms/Button/Button';
-import { UpdateBeaconEndpoints } from '@interfaces/ethereum2/Validator';
-import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
+import MultiSelectWithInput from '@components/molecules/MultiSelectWithInput/MultiSelectWithInput';
+import { BeaconEndpoints, Validator } from '@interfaces/ethereum2/Validator';
 import { updateValidator } from '@utils/requests/ethereum2/validators';
 import { ValidatorsClient } from '@enums/Ethereum2/Validators/ValidatorsClient';
-import { updateBeaconEndpointsSchema } from '@schemas/ethereum2/validator/updateValidatorSchema';
-import { handleAxiosError } from '@utils/axios';
-import { ServerError } from '@interfaces/ServerError';
+import { useValidator } from '@hooks/useValidator';
+import { handleRequest } from '@utils/helpers/handleRequest';
+import { useBeaconNodes } from '@hooks/useBeaconNodes';
+import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
+import {
+  MultipleSchema,
+  onlyOneSchema,
+} from '@schemas/ethereum2/validator/beaconnodes';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-interface Props {
+interface Props extends BeaconEndpoints {
   name: string;
-  beaconEndpoints: string[];
   client: ValidatorsClient;
 }
 
@@ -29,63 +26,97 @@ const ValidatorBeaconNodeTab: React.FC<Props> = ({
   beaconEndpoints,
   client,
 }) => {
-  const [submitError, setSubmitError] = useState<string | undefined>('');
+  const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
+  const { mutate } = useValidator(name);
+  const { beaconnodes } = useBeaconNodes();
+
+  const activeBeaconnodes = beaconnodes
+    .filter(({ client, rest, rpc }) =>
+      client === BeaconNodeClient.teku || client === BeaconNodeClient.lighthouse
+        ? rest
+        : rpc
+    )
+    .map(({ name, client, rpcPort, restPort }) => ({
+      label: name,
+      value: `http://${name}:${
+        client === BeaconNodeClient.teku ||
+        client === BeaconNodeClient.lighthouse
+          ? restPort
+          : rpcPort
+      }`,
+    }));
 
   const {
     reset,
     handleSubmit,
     control,
     formState: { isDirty, isSubmitting, errors },
-  } = useForm<UpdateBeaconEndpoints>({
+  } = useForm<BeaconEndpoints>({
     defaultValues: { beaconEndpoints },
-    resolver: joiResolver(updateBeaconEndpointsSchema),
+    resolver: yupResolver(
+      client === ValidatorsClient.lighthouse ? MultipleSchema : onlyOneSchema
+    ),
   });
 
-  const beaconEndpointsError = errors.beaconEndpoints as FieldError | undefined;
-
-  const onSubmit: SubmitHandler<UpdateBeaconEndpoints> = async (values) => {
-    setSubmitError('');
+  const onSubmit: SubmitHandler<BeaconEndpoints> = async (values) => {
+    setServerError('');
     setSubmitSuccess('');
 
-    try {
-      const validators = await updateValidator(name, values);
-      void mutate(name, validators);
+    const { error, response } = await handleRequest<Validator>(
+      updateValidator.bind(undefined, name, values)
+    );
+
+    if (error) {
+      setServerError(error);
+      return;
+    }
+
+    if (response) {
+      mutate();
       reset(values);
       setSubmitSuccess('Validator has been updated');
-    } catch (e) {
-      // if (axios.isAxiosError(e)) {
-      //   const error = handleAxiosError<ServerError>(e);
-      //   setSubmitError(error.response?.data.error);
-      // }
     }
   };
 
   return (
     <>
       <div className="px-4 py-5 sm:p-6">
-        <Controller
-          name="beaconEndpoints"
-          control={control}
-          render={({ field }) => (
-            <TextareaWithInput
-              multiple={client === ValidatorsClient.lighthouse}
-              error={beaconEndpointsError?.message}
-              label="Ethereum 2.0 Beacon Node Endpoints"
-              helperText={
-                client === ValidatorsClient.lighthouse
-                  ? 'One endpoint per each line'
-                  : ''
-              }
-              value={field.value}
-              name={field.name}
-              onChange={field.onChange}
-            />
-          )}
-        />
+        {activeBeaconnodes.length && (
+          <Controller
+            name="beaconEndpoints"
+            control={control}
+            render={({ field }) => (
+              <MultiSelectWithInput
+                single={client !== ValidatorsClient.lighthouse}
+                options={activeBeaconnodes}
+                label="Ethereum 2.0 Beacon Node Endpoints"
+                errors={errors}
+                error={errors.beaconEndpoints && field.name}
+                helperText={
+                  client === ValidatorsClient.lighthouse
+                    ? 'One endpoint per each line'
+                    : ''
+                }
+                value={field.value}
+                onChange={field.onChange}
+                placeholder={
+                  client === ValidatorsClient.lighthouse
+                    ? 'Select beacon nodes...'
+                    : 'Select beacon node'
+                }
+                otherLabel={
+                  client === ValidatorsClient.lighthouse
+                    ? 'Add External Beacon Nodes'
+                    : 'Use External Beacon Node'
+                }
+              />
+            )}
+          />
+        )}
       </div>
 
-      <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
+      <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           className="btn btn-primary"
           disabled={!isDirty || isSubmitting}
@@ -94,8 +125,8 @@ const ValidatorBeaconNodeTab: React.FC<Props> = ({
         >
           Save
         </Button>
-        {submitError && (
-          <p className="text-center text-red-500 mb-5">{submitError}</p>
+        {serverError && (
+          <p className="mb-5 text-center text-red-500">{serverError}</p>
         )}
         {submitSuccess && <p>{submitSuccess}</p>}
       </div>

@@ -142,7 +142,7 @@ const ResourcesTab: React.FC<Props> = ({
         </div>
       </div>
 
-      <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
+      <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"
@@ -152,7 +152,7 @@ const ResourcesTab: React.FC<Props> = ({
           Save
         </Button>
         {submitError && (
-          <p className="text-center text-red-500 mb-5">{submitError}</p>
+          <p className="mb-5 text-center text-red-500">{submitError}</p>
         )}
         {submitSuccess && <p>{submitSuccess}</p>}
       </div>

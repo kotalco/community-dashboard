@@ -64,7 +64,6 @@ function ValidatorDetailsPage() {
             name={validator.name}
             keystores={validator.keystores}
             walletPasswordSecretName={validator.walletPasswordSecretName}
-            client={validator.client}
           />
 
           <ValidatorBeaconNodeTab

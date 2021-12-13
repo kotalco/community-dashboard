@@ -1,36 +1,32 @@
 import { useState } from 'react';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
-import { joiResolver } from '@hookform/resolvers/joi';
-import { mutate } from 'swr';
-import axios from 'axios';
 
 import Button from '@components/atoms/Button/Button';
 import { updateValidator } from '@utils/requests/ethereum2/validators';
-import { UpdateKeystores } from '@interfaces/ethereum2/Validator';
+import { Keystores, Validator } from '@interfaces/ethereum2/Validator';
 import Multiselect from '@components/molecules/Multiselect/Multiselect';
 import Select from '@components/molecules/Select/Select';
-import { ValidatorsClient } from '@enums/Ethereum2/Validators/ValidatorsClient';
-import { updateKeystoresSchema } from '@schemas/ethereum2/validator/updateValidatorSchema';
 import { useSecretsByType } from '@utils/requests/secrets';
-import { handleAxiosError } from '@utils/axios';
-import { ServerError } from '@interfaces/ServerError';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
+import { handleRequest } from '@utils/helpers/handleRequest';
+import { useValidator } from '@hooks/useValidator';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { schema } from '@schemas/ethereum2/validator/keystores';
 
 interface Props {
   name: string;
   keystores: { secretName: string }[];
   walletPasswordSecretName: string;
-  client: ValidatorsClient;
 }
 
 const ValidatorKeystoreTab: React.FC<Props> = ({
   name,
   keystores,
   walletPasswordSecretName,
-  client,
 }) => {
-  const [submitError, setSubmitError] = useState('');
+  const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
+  const { mutate } = useValidator(name);
   const { data: allKeystores } = useSecretsByType(
     KubernetesSecretTypes.ethereum2Keystore
   );
@@ -45,34 +41,31 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
     handleSubmit,
     control,
     formState: { isDirty, isSubmitting, errors },
-  } = useForm<UpdateKeystores>({
-    // resolver: joiResolver(updateKeystoresSchema),
+  } = useForm<Keystores>({
+    resolver: yupResolver(schema),
     defaultValues: {
       keystores: selectedKeystores,
       walletPasswordSecretName,
-      client,
     },
   });
 
-  const onSubmit: SubmitHandler<UpdateKeystores> = async (values) => {
-    const { keystores, ...rest } = values;
-    const keystoresObject = keystores.map((key) => ({ secretName: key }));
-    const valuesToUpdate = { ...rest, keystores: keystoresObject };
-
-    setSubmitError('');
+  const onSubmit: SubmitHandler<Keystores> = async (values) => {
+    setServerError('');
     setSubmitSuccess('');
-    try {
-      const validator = await updateValidator(name, valuesToUpdate);
-      void mutate(name, validator);
+
+    const { error, response } = await handleRequest<Validator>(
+      updateValidator.bind(undefined, name, values)
+    );
+
+    if (error) {
+      setServerError(error);
+      return;
+    }
+
+    if (response) {
+      mutate();
       reset(values);
       setSubmitSuccess('Validator has been updated');
-    } catch (e) {
-      // if (axios.isAxiosError(e)) {
-      //   const error = handleAxiosError<ServerError>(e);
-      // setSubmitError(
-      //   error.response?.data.error || 'Something wrong happened'
-      // );
-      // }
     }
   };
 
@@ -89,16 +82,19 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
                 label="Ethereum 2.0 Keystores"
                 placeholder="Choose your keystores..."
                 options={allKeystores}
-                error={errors.keystores?.message}
+                errors={errors}
+                error={errors.keystores && field.name}
                 onChange={field.onChange}
                 value={field.value}
+                href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereum2Keystore}`}
+                hrefTitle="Create New Keystore"
               />
             )}
           />
         </div>
 
-        {walletPasswordSecretName && (
-          <div className="mt-4 max-w-xs">
+        {walletPasswordSecretName && allWalletValues.length && (
+          <div className="max-w-xs mt-4">
             <Controller
               name="walletPasswordSecretName"
               control={control}
@@ -109,6 +105,8 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
                   options={allWalletValues}
                   onChange={field.onChange}
                   value={field.value}
+                  href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
+                  hrefTitle="Create New Password"
                 />
               )}
             />
@@ -116,7 +114,7 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
         )}
       </div>
 
-      <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
+      <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"
@@ -125,8 +123,8 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
         >
           Save
         </Button>
-        {submitError && (
-          <p className="text-center text-red-500 mb-5">{submitError}</p>
+        {serverError && (
+          <p className="mb-5 text-center text-red-500">{serverError}</p>
         )}
         {submitSuccess && <p>{submitSuccess}</p>}
       </div>

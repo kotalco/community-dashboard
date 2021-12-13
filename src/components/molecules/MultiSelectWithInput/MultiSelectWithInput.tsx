@@ -21,7 +21,7 @@ type Props = {
   | { href?: never; hrefTitle?: never }
 ) &
   (
-    | { errors: never; error: never }
+    | { errors?: never; error?: never }
     | { error: string | undefined; errors: FieldErrors }
   );
 

@@ -1,5 +1,5 @@
 import { ValidatorsClient } from '@enums/Ethereum2/Validators/ValidatorsClient';
-import { NestedValue } from 'react-hook-form';
+import { Resources } from '@interfaces/Resources';
 
 export interface CreateValidator {
   name: string;
@@ -10,48 +10,27 @@ export interface CreateValidator {
   beaconEndpoints: string[];
 }
 
-export interface UpdateValidator {
-  graffiti?: string;
-  keystores?: { secretName: string }[];
-  walletPasswordSecretName?: string;
-  beaconEndpoints?: string[];
-  cpu?: string;
-  cpuLimit?: string;
-  memory?: string;
-  memoryLimit?: string;
-  storage?: string;
-}
-
-export interface UpdateGrafitti {
+export interface Grafitti {
   graffiti: string;
 }
 
-export interface UpdateKeystores {
-  keystores: NestedValue<string[]>;
+export interface Keystores {
+  keystores: string[];
   walletPasswordSecretName: string;
-  client: ValidatorsClient;
 }
 
-export interface UpdateBeaconEndpoints {
+export interface BeaconEndpoints {
   beaconEndpoints: string[];
 }
 
-export interface UpdateResources {
-  cpu: string;
-  cpuLimit: string;
-  memory: string;
-  memoryLimit: string;
-  storage: string;
-}
+export type UpdateValidator = Partial<
+  Grafitti & Keystores & BeaconEndpoints & Resources
+>;
 
 export interface Validator
-  extends Required<Omit<CreateValidator, 'keystores'>> {
+  extends Required<Omit<CreateValidator, 'keystores'>>,
+    Grafitti,
+    Resources {
   createdAt: string;
-  graffiti: string;
   keystores: { secretName: string }[];
-  cpu: string;
-  cpuLimit: string;
-  memory: string;
-  memoryLimit: string;
-  storage: string;
 }
