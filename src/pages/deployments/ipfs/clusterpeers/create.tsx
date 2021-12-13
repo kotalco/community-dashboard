@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
 
 import Layout from '@components/templates/Layout/Layout';
@@ -10,22 +11,32 @@ import RadioGroup from '@components/molecules/RadioGroup/RadioGroup';
 import Toggle from '@components/molecules/Toggle/Toggle';
 import Select from '@components/molecules/Select/Select';
 import Heading from '@components/templates/Heading/Heading';
+import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 import { createIPFSClusterPeer } from '@utils/requests/ipfs/clusterPeers';
-import schema from '@schemas/ipfs/clusterPeers';
-import { CreateClusterPeer } from '@interfaces/ipfs/ClusterPeer';
+import { schema } from '@schemas/ipfs/clusterPeers/create';
+import { ClusterPeer, CreateClusterPeer } from '@interfaces/ipfs/ClusterPeer';
 import { consensusOptions } from '@data/ipfs/clusterPeers/consensusOptions';
 import { useSecretsByType } from '@utils/requests/secrets';
 import { ClusterConsensusAlgorithm } from '@enums/IPFS/ClusterPeers/ClusterConsensusAlgorithm';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
+import { handleRequest } from '@utils/helpers/handleRequest';
+import { usePeers } from '@hooks/usePeers';
 
 const CreateClusterPeerPage: React.FC = () => {
+  const [serverError, setServerError] = useState('');
   const [isPredefined, setIsPredefined] = useState(false);
+  const { peers } = usePeers();
   const { data: privateKeyNames } = useSecretsByType(
     KubernetesSecretTypes.ipfsClusterPeerPrivatekey
   );
   const { data: clusterSecretNames } = useSecretsByType(
     KubernetesSecretTypes.ipfsClusterSecret
   );
+
+  const activePeers = peers.map(({ name, apiPort }) => ({
+    label: name,
+    value: `http://${name}:${apiPort}`,
+  }));
 
   const togglePredefined = () => {
     setIsPredefined(!isPredefined);
@@ -38,23 +49,24 @@ const CreateClusterPeerPage: React.FC = () => {
     control,
     watch,
     formState: { errors, isSubmitted, isValid, isSubmitting },
-  } = useForm<CreateClusterPeer>();
+  } = useForm<CreateClusterPeer>({ resolver: yupResolver(schema) });
 
   const consensusValue = watch('consensus');
 
   const onSubmit: SubmitHandler<CreateClusterPeer> = async (values) => {
-    try {
-      const clusterpeer = await createIPFSClusterPeer(values);
-      localStorage.setItem('clusterpeer', clusterpeer.name);
+    setServerError('');
+    const { response, error } = await handleRequest<ClusterPeer>(
+      createIPFSClusterPeer.bind(undefined, values)
+    );
+
+    if (error) {
+      setServerError(error);
+      return;
+    }
+
+    if (response) {
+      localStorage.setItem('clusterpeer', response.name);
       router.push('/deployments/ipfs/clusterpeers');
-    } catch (e) {
-      // if (axios.isAxiosError(e)) {
-      //   const error = handleAxiosError<ServerError>(e);
-      //   setError('name', {
-      //     type: 'server',
-      //     message: error.response?.data.error,
-      //   });
-      // }
     }
   };
 
@@ -63,6 +75,7 @@ const CreateClusterPeerPage: React.FC = () => {
       <Heading title="Create New Cluster Peer" />
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormLayout
+          error={serverError}
           isSubmitted={isSubmitted}
           isSubmitting={isSubmitting}
           isValid={isValid}
@@ -71,23 +84,31 @@ const CreateClusterPeerPage: React.FC = () => {
           <TextInput
             label="Name"
             error={errors.name?.message}
-            {...register('name', schema.name)}
+            {...register('name')}
           />
 
           {/* Peer Endpoint */}
-          <div className="mt-4">
-            <TextInput
-              label="IPFS Peer"
-              error={errors.peerEndpoint?.message}
-              {...register('peerEndpoint', schema.peerEndpoint)}
-            />
-          </div>
+          <Controller
+            control={control}
+            name="peerEndpoint"
+            render={({ field }) => (
+              <SelectWithInput
+                options={activePeers}
+                placeholder="Select peer..."
+                name={field.name}
+                value={field.value}
+                onChange={field.onChange}
+                error={errors.peerEndpoint?.message}
+                label="IPFS Peer"
+                otherLabel="Use External Peer"
+              />
+            )}
+          />
 
           {/* Consensus */}
           <Controller
             name="consensus"
             control={control}
-            rules={schema.consensus}
             render={({ field }) => (
               <RadioGroup
                 options={consensusOptions}
@@ -99,11 +120,10 @@ const CreateClusterPeerPage: React.FC = () => {
           />
 
           {/* Cluster Secret */}
-          <div className="mt-4 max-w-xs">
+          <div className="max-w-xs mt-4">
             <Controller
               name="clusterSecretName"
               control={control}
-              rules={schema.clusterSecretName}
               render={({ field }) => (
                 <Select
                   label="Cluster Secret Name"
@@ -132,15 +152,14 @@ const CreateClusterPeerPage: React.FC = () => {
                   <TextInput
                     label="ID"
                     error={errors.id?.message}
-                    {...register('id', schema.id)}
+                    {...register('id')}
                   />
                 </div>
                 {/* Cluster Peer Private Key */}
-                <div className="mt-4 max-w-xs">
+                <div className="max-w-xs mt-4">
                   <Controller
                     name="privatekeySecretName"
                     control={control}
-                    rules={schema.privatekeySecretName}
                     shouldUnregister
                     render={({ field }) => (
                       <Select
@@ -166,14 +185,14 @@ const CreateClusterPeerPage: React.FC = () => {
                 shouldUnregister={true}
                 name="trustedPeers"
                 control={control}
-                rules={schema.trustedPeers}
                 defaultValue={['*']}
                 render={({ field }) => (
                   <TextareaWithInput
                     multiple
                     label="Trusted Peers"
                     helperText="* (astrisk) means trust all peers"
-                    error={errors.trustedPeers?.message}
+                    errors={errors}
+                    error={errors.trustedPeers && field.name}
                     value={field.value}
                     name={field.name}
                     onChange={field.onChange}
@@ -188,6 +207,7 @@ const CreateClusterPeerPage: React.FC = () => {
             <Controller
               name="bootstrapPeers"
               control={control}
+              defaultValue={[]}
               render={({ field }) => (
                 <TextareaWithInput
                   multiple

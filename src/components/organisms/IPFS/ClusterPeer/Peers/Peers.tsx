@@ -1,23 +1,22 @@
-import axios from 'axios';
 import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { SubmitHandler } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { CubeIcon } from '@heroicons/react/outline';
 
-import TextInput from '@components/molecules/TextInput/TextInput';
 import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
+import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 import Button from '@components/atoms/Button/Button';
-import { UpdatePeers } from '@interfaces/ipfs/ClusterPeer';
+import { ClusterPeer, Peers } from '@interfaces/ipfs/ClusterPeer';
 import { updateClusterPeer } from '@utils/requests/ipfs/clusterPeers';
 import { useClusterPeer } from '@hooks/useClusterPeer';
-import { handleAxiosError } from '@utils/axios';
-import { ServerError } from '@interfaces/ServerError';
+import { handleRequest } from '@utils/helpers/handleRequest';
+import { usePeers } from '@hooks/usePeers';
+import { schema } from '@schemas/ipfs/clusterPeers/peers';
 
-interface Props {
-  peerEndpoint: string;
+interface Props extends Peers {
   name: string;
   trustedPeers: string[];
-  bootstrapPeers: string[];
 }
 
 const Peers: React.FC<Props> = ({
@@ -26,56 +25,85 @@ const Peers: React.FC<Props> = ({
   trustedPeers,
   bootstrapPeers,
 }) => {
-  const [submitError, setSubmitError] = useState('');
+  const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
   const { mutate } = useClusterPeer(name);
+  const { peers } = usePeers();
+
+  const activePeers = peers.map(({ name, apiPort }) => ({
+    label: name,
+    value: `http://${name}:${apiPort}`,
+  }));
+
   const {
     handleSubmit,
     control,
-    register,
     reset,
-    formState: { isDirty, isSubmitting },
-  } = useForm<UpdatePeers>({
+    formState: { isDirty, isSubmitting, errors },
+  } = useForm<Peers>({
+    resolver: yupResolver(schema),
     defaultValues: { peerEndpoint, bootstrapPeers },
   });
 
-  const onSubmit: SubmitHandler<UpdatePeers> = async (values) => {
-    setSubmitError('');
+  const onSubmit: SubmitHandler<Peers> = async (values) => {
+    setServerError('');
     setSubmitSuccess('');
-    try {
-      const clusterpeer = await updateClusterPeer(name, values);
-      mutate({ clusterpeer });
+
+    const { error, response } = await handleRequest<ClusterPeer>(
+      updateClusterPeer.bind(undefined, name, values)
+    );
+
+    if (error) {
+      setServerError(error);
+      return;
+    }
+
+    if (response) {
+      mutate();
       reset(values);
       setSubmitSuccess('Cluster peer has been updated');
-    } catch (e) {
-      // if (axios.isAxiosError(e)) {
-      //   const error = handleAxiosError<ServerError>(e);
-      //   setSubmitError(
-      //     error.response?.data.error || 'Something wrong happened'
-      //   );
-      // }
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
-        <TextInput label="IPFS Peer" {...register('peerEndpoint')} />
-        <div className="max-w-xs mt-4">
+        {/* Peer Endpoint */}
+        {activePeers.length && (
           <Controller
-            name="bootstrapPeers"
             control={control}
+            name="peerEndpoint"
             render={({ field }) => (
-              <TextareaWithInput
-                multiple
-                label="Bootstrap Peers"
-                name={field.name}
+              <SelectWithInput
+                options={activePeers}
+                error={errors.peerEndpoint?.message}
+                label="IPFS Peer"
+                placeholder="Select a peer"
+                otherLabel="Use External Peer"
                 value={field.value}
                 onChange={field.onChange}
+                name={field.name}
               />
             )}
           />
-        </div>
+        )}
+
+        {/* Bootstrap Peers */}
+        <Controller
+          name="bootstrapPeers"
+          control={control}
+          render={({ field }) => (
+            <TextareaWithInput
+              multiple
+              label="Bootstrap Peers"
+              name={field.name}
+              value={field.value}
+              onChange={field.onChange}
+            />
+          )}
+        />
+
+        {/* Trusted Peers */}
         {!!trustedPeers.length && (
           <div className="max-w-xs mt-4">
             <h4 className="block mb-1 text-sm font-medium text-gray-700">
@@ -95,6 +123,7 @@ const Peers: React.FC<Props> = ({
           </div>
         )}
       </div>
+
       <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
@@ -104,8 +133,8 @@ const Peers: React.FC<Props> = ({
         >
           Save
         </Button>
-        {submitError && (
-          <p className="mb-5 text-center text-red-500">{submitError}</p>
+        {serverError && (
+          <p className="mb-5 text-center text-red-500">{serverError}</p>
         )}
         {submitSuccess && <p>{submitSuccess}</p>}
       </div>

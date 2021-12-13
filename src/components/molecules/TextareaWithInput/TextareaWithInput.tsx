@@ -1,21 +1,25 @@
 import React, {
   useState,
   // useRef, useEffect,
-  ReactNode,
 } from 'react';
 import { InformationCircleIcon } from '@heroicons/react/solid';
+import { ErrorMessage } from '@hookform/error-message';
+import { FieldErrors } from 'react-hook-form';
+
 import Tooltip from '@components/atoms/Tooltip/Tooltip';
 
-interface Props {
+type Props = {
   name: string;
   label: string;
   value: string[] | undefined;
   multiple?: boolean;
   tooltip?: string;
   helperText?: string;
-  error?: ReactNode;
   onChange: (value: string[]) => void;
-}
+} & (
+  | { errors?: never; error?: never }
+  | { error: string | undefined; errors: FieldErrors }
+);
 
 const TextareaWithInput: React.FC<Props> = ({
   value,
@@ -26,6 +30,7 @@ const TextareaWithInput: React.FC<Props> = ({
   onChange,
   multiple,
   tooltip,
+  errors,
 }) => {
   const [text, setText] = useState(value?.join('\n') || '');
   // const isMounted = useRef(false);
@@ -59,12 +64,12 @@ const TextareaWithInput: React.FC<Props> = ({
         </label>
         {tooltip && (
           <Tooltip title={tooltip}>
-            <InformationCircleIcon className="h-4 w-4 text-indigo-400" />
+            <InformationCircleIcon className="w-4 h-4 text-indigo-400" />
           </Tooltip>
         )}
       </div>
 
-      <div className="mt-1 max-w-xs">
+      <div className="max-w-xs mt-1">
         {multiple ? (
           <textarea
             onChange={handleChange}
@@ -72,7 +77,7 @@ const TextareaWithInput: React.FC<Props> = ({
             name={name}
             value={text}
             rows={5}
-            className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md resize-none"
+            className="block w-full border-gray-300 rounded-md shadow-sm resize-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           ></textarea>
         ) : (
           <input
@@ -81,12 +86,18 @@ const TextareaWithInput: React.FC<Props> = ({
             name={name}
             value={text}
             type="text"
-            className="shadow-sm rounded-md focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 disabled:bg-gray-100 disabled:text-gray-500"
+            className="block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm disabled:bg-gray-100 disabled:text-gray-500"
           />
         )}
       </div>
       {helperText && <p className="mt-2 text-sm text-gray-500">{helperText}</p>}
-      {error && <p className="text-red-600 text-sm mt-2">{error}</p>}
+      {error && (
+        <ErrorMessage
+          errors={errors}
+          name={error}
+          as={<p className="mt-2 text-sm text-red-600" />}
+        />
+      )}
     </div>
   );
 };

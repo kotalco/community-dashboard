@@ -23,8 +23,8 @@ export const createIPFSClusterPeer = async (
 
 export const updateClusterPeer = async (
   name: string,
-  body: UnpackNestedValue<UpdateClusterPeer>
-): Promise<ClusterPeer> => {
+  body: UpdateClusterPeer
+) => {
   const { data } = await axios.put<{ clusterpeer: ClusterPeer }>(
     `/ipfs/clusterpeers/${name}`,
     body

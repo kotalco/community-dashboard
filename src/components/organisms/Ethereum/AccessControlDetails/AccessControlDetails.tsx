@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { ErrorMessage } from '@hookform/error-message';
 
 import Button from '@components/atoms/Button/Button';
 import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
@@ -63,9 +62,8 @@ function AccessControlDetails({ name, setNode, ...rest }: Props) {
             <TextareaWithInput
               multiple
               helperText="* (asterisk) means trust all hosts"
-              error={
-                errors.hosts && <ErrorMessage name="hosts" errors={errors} />
-              }
+              errors={errors}
+              error={errors.hosts && field.name}
               tooltip="Server Enforced"
               name={field.name}
               value={field.value}
@@ -84,11 +82,8 @@ function AccessControlDetails({ name, setNode, ...rest }: Props) {
               <TextareaWithInput
                 multiple
                 helperText="* (asterisk) means trust all domains"
-                error={
-                  errors.corsDomains && (
-                    <ErrorMessage name="corsDomain" errors={errors} />
-                  )
-                }
+                errors={errors}
+                error={errors.corsDomains && field.name}
                 tooltip="Browser Enforced"
                 name={field.name}
                 value={field.value}
