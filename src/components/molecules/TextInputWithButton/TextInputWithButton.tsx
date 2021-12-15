@@ -24,19 +24,19 @@ const TextInputWithButton: React.FC<Props> = ({
           {label}
         </label>
       )}
-      <div className="mt-1 flex rounded-md shadow-sm w-3/4">
-        <div className="relative flex items-stretch flex-grow focus-within:z-10">
+      <div className="flex w-3/4 mt-1 rounded-md shadow-sm">
+        <div className="relative flex items-stretch grow focus-within:z-10">
           <input
             type="text"
             name={name}
             id={name}
             value={value}
             disabled={disabled}
-            className="focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-none rounded-l-md sm:text-sm border-gray-300"
+            className="block w-full border-gray-300 rounded-none focus:ring-indigo-500 focus:border-indigo-500 rounded-l-md sm:text-sm"
           />
         </div>
-        <button className="-ml-px relative inline-flex items-center space-x-2 px-4 py-2 border border-gray-300 text-sm font-medium rounded-r-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
-          {Icon && <Icon className="h-5 w-5 text-gray-400" />}
+        <button className="relative inline-flex items-center px-4 py-2 -ml-px space-x-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-r-md bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500">
+          {Icon && <Icon className="w-5 h-5 text-gray-400" />}
           <span>Copy</span>
         </button>
       </div>

@@ -61,13 +61,13 @@ const SidebarMobile: React.FC<Props> = ({ isOpen, setIsOpen }) => {
                   </IconButton>
                 </div>
               </Transition.Child>
-              <div className="flex-shrink-0 flex items-center px-4">
+              <div className="shrink-0 flex items-center px-4">
                 <Logo />
               </div>
-              <NavLinks className="mt-5 flex-shrink-0 h-full divide-y divide-white-800 overflow-y-auto" />
+              <NavLinks className="mt-5 shrink-0 h-full divide-y divide-white-800 overflow-y-auto" />
             </div>
           </Transition.Child>
-          <div className="flex-shrink-0 w-14" aria-hidden="true">
+          <div className="shrink-0 w-14" aria-hidden="true">
             {/* Dummy element to force sidebar to shrink to fit close icon */}
           </div>
         </Dialog>

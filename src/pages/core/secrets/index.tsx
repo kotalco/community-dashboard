@@ -84,7 +84,7 @@ function KubernetesSecrets() {
                     </div>
                   </div>
                 </div>
-                <div className="flex-shrink-0 ml-5 transition-opacity opacity-0 group-hover:opacity-100">
+                <div className="shrink-0 ml-5 transition-opacity opacity-0 group-hover:opacity-100">
                   <IconButton onClick={() => confirmDelete(name)}>
                     <TrashIcon className="w-5 h-5 text-red-600" />
                   </IconButton>

@@ -26,7 +26,7 @@ const NodeItem: React.FC<Props> = ({ link, title, children }) => {
                 </div>
               </div>
             </div>
-            <div className="ml-5 flex-shrink-0">
+            <div className="ml-5 shrink-0">
               <ChevronRightIcon className="h-5 w-5 text-gray-400" />
             </div>
           </div>

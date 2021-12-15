@@ -84,14 +84,14 @@ function ChainlinkNode() {
             link={`/deployments/chainlink/nodes/${name}`}
             title={name}
           >
-            <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
+            <GlobeAltIcon className="shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
             <p>
               {getLabel(
                 `${ethereumChainId}:${linkContractAddress}`,
                 EVM_CHAINS
               )}
             </p>
-            <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
+            <ChipIcon className="shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
             <p>Chainlink</p>
           </ListItem>
         ))}

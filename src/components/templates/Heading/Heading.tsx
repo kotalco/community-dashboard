@@ -11,10 +11,10 @@ const Heading: React.FC<Props> = ({ title, children, status, createdDate }) => {
   return (
     <div className="flex justify-between pb-6">
       <div>
-        <h1 className="text-2xl font-nunito font-semibold text-gray-900 flex-grow">
+        <h1 className="text-2xl font-semibold text-gray-900 font-nunito grow">
           {status && (
             <Tooltip title={status.label}>
-              <span className="flex h-3 w-3">
+              <span className="flex w-3 h-3">
                 <span
                   style={{ backgroundColor: status.color }}
                   className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75`}

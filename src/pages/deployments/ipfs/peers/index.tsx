@@ -82,9 +82,9 @@ function Peers() {
             link={`/deployments/ipfs/peers/${name}`}
             title={name}
           >
-            <GlobeAltIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
+            <GlobeAltIcon className="shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
             <p>public-swarm</p>
-            <ChipIcon className="flex-shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
+            <ChipIcon className="shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
             <p>go-ipfs</p>
           </ListItem>
         ))}

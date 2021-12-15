@@ -15,7 +15,7 @@ const Navbar: React.FC<Props> = ({ setIsOpen }) => {
   };
 
   return (
-    <div className="relative z-10 flex-shrink-0 flex h-16 bg-white shadow">
+    <div className="relative z-10 shrink-0 flex h-16 bg-white shadow">
       <IconButton
         className="px-4 border-r border-gray-200 text-gray-500 md:hidden"
         onClick={() => setIsOpen(true)}

@@ -36,7 +36,7 @@ const NotificationPanel: React.FC<Props> = ({
           <div className="max-w-sm w-full bg-white shadow-lg rounded-lg pointer-events-auto ring-1 ring-black ring-opacity-5 overflow-hidden">
             <div className="p-4">
               <div className="flex items-start">
-                <div className="flex-shrink-0">
+                <div className="shrink-0">
                   <CheckCircleIcon
                     className="h-6 w-6 text-green-400"
                     aria-hidden="true"
@@ -46,7 +46,7 @@ const NotificationPanel: React.FC<Props> = ({
                   <p className="text-sm font-medium text-gray-900">{title}</p>
                   {children}
                 </div>
-                <div className="ml-4 flex-shrink-0 flex">
+                <div className="ml-4 shrink-0 flex">
                   <IconButton className="btn-icn" onClick={close}>
                     <XIcon className="h-5 w-5" aria-hidden="true" />
                   </IconButton>
