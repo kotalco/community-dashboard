@@ -27,6 +27,7 @@ import { updatePolkadotNode } from '@utils/requests/polkadot';
 import NetworkingDetails from '@components/organisms/Polkadot/Networking/Networking';
 import Validatordetails from '@components/organisms/Polkadot/Validator/Validator';
 import TelemetryDetails from '@components/organisms/Polkadot/Telemetry/Telemetry';
+import PrometheusDetails from '@components/organisms/Polkadot/Prometheus/Prometheus';
 
 function PolkadotNode() {
   const { query, push } = useRouter();
@@ -75,19 +76,11 @@ function PolkadotNode() {
           <TelemetryDetails {...node} />
 
           {/* Prometheus */}
-          {/* <TLSDetails
-            name={node.name}
-            setNode={mutate}
-            certSecretName={node.certSecretName}
-            secureCookies={node.secureCookies}
-            tlsPort={node.tlsPort}
-          /> */}
+          <PrometheusDetails {...node} />
 
           {/* API */}
           {/* <APIDetails
-            name={node.name}
-            setNode={mutate}
-            apiCredentials={node.apiCredentials}
+            {...node}
           /> */}
 
           {/* Access Control */}

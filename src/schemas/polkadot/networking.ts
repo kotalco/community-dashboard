@@ -18,5 +18,6 @@ export const networkingSchema: SchemaOf<Networking> = object({
   retainedBlocks: number()
     .typeError('Retained Blocks is number')
     .notRequired()
+    .min(1, 'Retained blocks should be more than 0')
     .default(256),
 });

@@ -27,7 +27,7 @@ export interface Telemetry {
 
 export interface Prometheus {
   prometheus: boolean;
-  prometheusPort: number;
+  prometheusPort?: number;
 }
 
 export interface API {

@@ -5,17 +5,22 @@ import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Button from '@components/atoms/Button/Button';
 import Toggle from '@components/molecules/Toggle/Toggle';
-import { PolkadotNode, Telemetry } from '@interfaces/polkadot/PolkadotNode';
+import { PolkadotNode, Prometheus } from '@interfaces/polkadot/PolkadotNode';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { updatePolkadotNode } from '@utils/requests/polkadot';
-import { telemetrySchema } from '@schemas/polkadot/telemetry';
+import { prometheusSchema } from '@schemas/polkadot/prometheus';
 
 interface Props extends PolkadotNode {
   mutate?: KeyedMutator<{ node: PolkadotNode }>;
 }
 
-function TelemetryDetails({ telemetry, telemetryURL, name, mutate }: Props) {
+function PrometheusDetails({
+  prometheus,
+  prometheusPort,
+  name,
+  mutate,
+}: Props) {
   const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
 
@@ -26,13 +31,13 @@ function TelemetryDetails({ telemetry, telemetryURL, name, mutate }: Props) {
     register,
     watch,
     formState: { isDirty, isSubmitting, errors },
-  } = useForm<Telemetry>({
-    resolver: yupResolver(telemetrySchema),
+  } = useForm<Prometheus>({
+    resolver: yupResolver(prometheusSchema),
   });
 
-  const telemetryState = watch('telemetry');
+  const prometheusState = watch('prometheus');
 
-  const onSubmit: SubmitHandler<Telemetry> = async (values) => {
+  const onSubmit: SubmitHandler<Prometheus> = async (values) => {
     setSubmitSuccess('');
     setServerError('');
     const { error, response } = await handleRequest<PolkadotNode>(
@@ -47,35 +52,35 @@ function TelemetryDetails({ telemetry, telemetryURL, name, mutate }: Props) {
     if (response) {
       mutate?.();
       reset(response);
-      setSubmitSuccess('Telemetry data has been updated');
+      setSubmitSuccess('Prometheus data has been updated');
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
-        {/* Telemetry */}
+        {/* Prometheus */}
         <Controller
           control={control}
-          name="telemetry"
-          defaultValue={telemetry}
+          name="prometheus"
+          defaultValue={prometheus}
           render={({ field }) => (
             <Toggle
-              label="Telemetry"
+              label="Prometheus"
               checked={field.value}
               onChange={field.onChange}
-              error={errors.telemetry?.message}
+              error={errors.prometheus?.message}
             />
           )}
         />
 
-        {/* Telemetry Service URL */}
+        {/* Prometheus Port */}
         <TextInput
-          disabled={!telemetryState}
-          label="Telemetry Service URL"
-          error={errors.telemetryURL?.message}
-          defaultValue={telemetryURL}
-          {...register('telemetryURL')}
+          disabled={!prometheusState}
+          label="Prometheus Port"
+          error={errors.prometheusPort?.message}
+          defaultValue={prometheusPort}
+          {...register('prometheusPort')}
         />
       </div>
 
@@ -99,4 +104,4 @@ function TelemetryDetails({ telemetry, telemetryURL, name, mutate }: Props) {
   );
 }
 
-export default TelemetryDetails;
+export default PrometheusDetails;
