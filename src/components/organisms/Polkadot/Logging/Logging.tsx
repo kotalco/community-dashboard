@@ -1,29 +1,31 @@
 import { useState } from 'react';
 import { KeyedMutator } from 'swr';
-import { Controller, useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 
 import Button from '@components/atoms/Button/Button';
-import Toggle from '@components/molecules/Toggle/Toggle';
-import { PolkadotNode, Validator } from '@interfaces/polkadot/PolkadotNode';
+import Select from '@components/molecules/Select/Select';
+import Logs from '@components/organisms/Logging/Logging';
 import { handleRequest } from '@utils/helpers/handleRequest';
+import { PolkadotNode, ILogging } from '@interfaces/polkadot/PolkadotNode';
 import { updatePolkadotNode } from '@utils/requests/polkadot';
+import { LOGGINGS } from '@data/polkadot/logging';
 
 interface Props extends PolkadotNode {
   mutate?: KeyedMutator<{ node: PolkadotNode }>;
 }
 
-function Validatordetails({ validator, name, mutate }: Props) {
-  const [serverError, setServerError] = useState('');
+function LoggingDetails({ logging, name, mutate }: Props) {
   const [submitSuccess, setSubmitSuccess] = useState('');
+  const [serverError, setServerError] = useState('');
 
   const {
     handleSubmit,
     control,
     reset,
-    formState: { isDirty, isSubmitting, errors },
-  } = useForm<Validator>();
+    formState: { isDirty, isSubmitting },
+  } = useForm<ILogging>();
 
-  const onSubmit: SubmitHandler<Validator> = async (values) => {
+  const onSubmit: SubmitHandler<ILogging> = async (values) => {
     setSubmitSuccess('');
     setServerError('');
     const { error, response } = await handleRequest<PolkadotNode>(
@@ -38,28 +40,29 @@ function Validatordetails({ validator, name, mutate }: Props) {
     if (response) {
       mutate?.();
       reset(response);
-      setSubmitSuccess('Validator data has been updated');
+      setSubmitSuccess('Logging data has been updated');
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="px-4 py-5 sm:p-6">
-        {/* Validator */}
+      <div className="px-4 pt-5 sm:px-6">
         <Controller
           control={control}
-          name="validator"
-          defaultValue={validator}
+          name="logging"
+          defaultValue={logging}
           render={({ field }) => (
-            <Toggle
-              label="Validator"
-              checked={field.value}
+            <Select
+              label="Verbosity Levels"
+              options={LOGGINGS}
+              placeholder="Choose a logging level..."
+              value={field.value}
               onChange={field.onChange}
-              error={errors.validator?.message}
             />
           )}
         />
       </div>
+      <Logs wsUrl={`/polkadot/nodes/${name}/logs`} />
 
       <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
@@ -81,4 +84,4 @@ function Validatordetails({ validator, name, mutate }: Props) {
   );
 }
 
-export default Validatordetails;
+export default LoggingDetails;

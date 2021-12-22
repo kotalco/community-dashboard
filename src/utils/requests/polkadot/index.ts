@@ -21,6 +21,6 @@ export const updatePolkadotNode = async (
   return res.data.node;
 };
 
-// export const deleteChainlinkNode = async (name: string) => {
-//   await api.delete(`/chainlink/nodes/${name}`);
-// };
+export const deletePolkadotNode = async (name: string) => {
+  await api.delete(`/polkadot/nodes/${name}`);
+};

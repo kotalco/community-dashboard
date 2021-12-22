@@ -5,20 +5,13 @@ import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
-import DeleteChainlinkNode from '@components/organisms/Chainlink/DeleteChainlinkNode/DeleteChainlinkNode';
+import DeletePolkadotNode from '@components/organisms/Polkadot/DeletePolkadotNode/DeletePolkadotNode';
 import AccessControlDetails from '@components/organisms/Polkadot/AccessControl/AccessControl';
 import ResourcesDetails from '@components/organisms/Resources/Resources';
-import LoggingDetails from '@components/organisms/Chainlink/LoggingDetails/LoggingDetails';
-import DatabaseDetails from '@components/organisms/Chainlink/DatabaseDetails/DatabaseDetails';
-import EthereumDetails from '@components/organisms/Chainlink/EthereumDetails/EthereumDetails';
-import WalletDetails from '@components/organisms/Chainlink/WalletDetails/WalletDetails';
-import TLSDetails from '@components/organisms/Chainlink/TLSDetails/TLSDetails';
-import { updateChainlinkNode } from '@utils/requests/chainlink';
+import LoggingDetails from '@components/organisms/Polkadot/Logging/Logging';
 import { Resources } from '@interfaces/Resources';
 import { getLabel } from '@utils/helpers/getLabel';
-import { useChainlinkNode } from '@hooks/useChainlinkNode';
 import { TITLES } from '@data/polkadot/tabTitles';
-import { EVM_CHAINS } from '@data/chainlink/evmChain';
 import { useStatus } from '@hooks/useStatus';
 import { usePolkadotNode } from '@hooks/usePolkadotNode';
 import { NETWORKS } from '@data/polkadot/networks';
@@ -42,10 +35,7 @@ function PolkadotNode() {
     mutate();
   };
 
-  if (error) {
-    console.log(error);
-    return <LoadingIndicator />;
-  }
+  if (error) return push('/404');
   if (!node) return <LoadingIndicator />;
 
   const dataList = [
@@ -56,7 +46,7 @@ function PolkadotNode() {
     },
     { label: 'Client', value: 'Parity Polkadot' },
   ];
-  // console.log(node);
+
   return (
     <Layout>
       <Heading title={node.name} status={status} createdDate={node.createdAt} />
@@ -85,11 +75,7 @@ function PolkadotNode() {
           <AccessControlDetails {...node} />
 
           {/* Logging */}
-          {/* <LoggingDetails
-            logging={node.logging}
-            name={node.name}
-            setNode={mutate}
-          /> */}
+          <LoggingDetails {...node} />
 
           {/* Resources */}
           <ResourcesDetails
@@ -103,7 +89,7 @@ function PolkadotNode() {
           />
 
           {/* Danger Zone */}
-          {/* <DeleteChainlinkNode nodeName={node.name} /> */}
+          <DeletePolkadotNode nodeName={node.name} />
         </Tabs>
       </div>
     </Layout>

@@ -58,7 +58,7 @@ function NetworkingDetails({
 
     if (response) {
       mutate?.();
-      reset(values);
+      reset(response);
       setSubmitSuccess('Networking data has been updated');
     }
   };
