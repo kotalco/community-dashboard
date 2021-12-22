@@ -8,22 +8,63 @@ export interface CreatePolkadotNode {
   network: Network;
 }
 
-export interface PolkadotNode extends CreatePolkadotNode, Resources {
+export interface Networking {
   p2pPort: number;
   nodePrivateKeySecretName: string;
-  validator: boolean;
   syncMode: SyncMode;
   pruning: boolean;
   retainedBlocks: number;
-  logging: Logging;
+}
+
+export interface Validator {
+  validator: boolean;
+}
+
+export interface Telemetry {
   telemetry: boolean;
   telemetryURL: string;
+}
+
+export interface Prometheus {
   prometheus: boolean;
   prometheusPort: number;
+}
+
+export interface API {
   rpc: boolean;
   rpcPort: number;
   ws: boolean;
   wsPort: number;
+}
+
+export interface AccessControl {
   corsDomains: string[];
+}
+
+export interface ILogging {
+  logging: Logging;
+}
+
+export type UpdatePolkadotNode = Partial<
+  Networking &
+    Validator &
+    Telemetry &
+    Prometheus &
+    API &
+    AccessControl &
+    ILogging &
+    Resources
+>;
+
+export interface PolkadotNode
+  extends CreatePolkadotNode,
+    Networking,
+    Validator,
+    Telemetry,
+    Prometheus,
+    API,
+    AccessControl,
+    ILogging,
+    Resources {
   createdAt: string;
 }

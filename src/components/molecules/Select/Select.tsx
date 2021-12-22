@@ -1,4 +1,4 @@
-import { Fragment, useState, useMemo } from 'react';
+import { Fragment, useState } from 'react';
 import Link from 'next/link';
 import { Listbox, Transition } from '@headlessui/react';
 import {
@@ -30,13 +30,8 @@ const Select: React.FC<Props> = ({
   hrefTitle,
   value,
 }) => {
-  const allOptions = useMemo(
-    () => [{ label: placeholder, value: '' }, ...options],
-    [options, placeholder]
-  );
-  const defaultValue =
-    allOptions.find((option) => option.value === value) || allOptions[0];
-  const [selected, setSelected] = useState<SelectOption>(defaultValue);
+  const defaultValue = options.find((option) => option.value === value);
+  const [selected, setSelected] = useState(defaultValue);
 
   const handleChange = (option: SelectOption) => {
     setSelected(option);
@@ -58,10 +53,10 @@ const Select: React.FC<Props> = ({
             >
               <span
                 className={`block truncate ${
-                  !selected.value ? 'text-gray-500' : ''
+                  !selected?.value ? 'text-gray-500' : ''
                 }`}
               >
-                {selected.label}
+                {selected?.label || placeholder}
               </span>
               <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                 <SelectorIcon
@@ -90,15 +85,13 @@ const Select: React.FC<Props> = ({
                 static
                 className="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
               >
-                {allOptions.map((option) => (
+                {options.map((option) => (
                   <Listbox.Option
                     key={option.value}
                     value={option}
                     className={({ active }) =>
                       `${
                         active ? 'text-white bg-indigo-600' : 'text-gray-900'
-                      } ${
-                        !option.value ? 'hidden' : ''
                       } cursor-default select-none relative py-2 pl-3 pr-9`
                     }
                   >

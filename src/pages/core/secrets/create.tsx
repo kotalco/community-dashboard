@@ -75,7 +75,7 @@ const CreateSecret: React.FC = () => {
             {...register('name', nameValidations)}
           />
 
-          <div className="mt-4 max-w-xs">
+          <div className="max-w-xs mt-4">
             <Controller
               name="type"
               rules={typeValidations}
@@ -107,7 +107,8 @@ const CreateSecret: React.FC = () => {
 
           {(type === KubernetesSecretTypes.ethereumPrivatekey ||
             type === KubernetesSecretTypes.ipfsClusterPeerPrivatekey ||
-            type === KubernetesSecretTypes.ipfsSwarmKey) && (
+            type === KubernetesSecretTypes.ipfsSwarmKey ||
+            type === KubernetesSecretTypes.polkadotPrivatekey) && (
             <div className="mt-4">
               <Textarea
                 label="Key"

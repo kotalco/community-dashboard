@@ -6,4 +6,5 @@ export enum KubernetesSecretTypes {
   ipfsClusterSecret = 'ipfs_cluster_secret',
   ipfsClusterPeerPrivatekey = 'ipfs_cluster_peer_privatekey',
   tlsCertificate = 'tls_certificate',
+  polkadotPrivatekey = 'polkadot_node_private_key',
 }

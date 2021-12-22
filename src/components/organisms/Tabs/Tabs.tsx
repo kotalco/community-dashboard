@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { PropsWithChildren, ReactElement } from 'react';
+import { KeyedMutator } from 'swr';
 import { Tab } from '@headlessui/react';
 
-interface Props {
+interface Props<T> {
   tabs: string[];
+  mutate?: KeyedMutator<T>;
 }
 
-const Tabs: React.FC<Props> = ({ tabs, children }) => {
+function Tabs<T>({ tabs, children, mutate }: PropsWithChildren<Props<T>>) {
   const tabPanelArray = React.Children.toArray(children);
   return (
     <Tab.Group>
-      <Tab.List className="flex p-2 sm:px-4 sm:py-5 border-b border-gray-200 overflow-x-auto">
+      <Tab.List className="flex p-2 overflow-x-auto border-b border-gray-200 sm:px-4 sm:py-5">
         {tabs.map((title) =>
           title.includes('Danger') ? (
             <Tab
@@ -41,12 +43,16 @@ const Tabs: React.FC<Props> = ({ tabs, children }) => {
         )}
       </Tab.List>
       <Tab.Panels>
-        {React.Children.map(tabPanelArray, (child) => (
-          <Tab.Panel className="focus:outline-none">{child}</Tab.Panel>
-        ))}
+        {React.Children.map(tabPanelArray, (el) => {
+          const child = el as ReactElement;
+          const elemnet = React.cloneElement(child, { mutate });
+          return (
+            <Tab.Panel className="focus:outline-none">{elemnet}</Tab.Panel>
+          );
+        })}
       </Tab.Panels>
     </Tab.Group>
   );
-};
+}
 
 export default Tabs;

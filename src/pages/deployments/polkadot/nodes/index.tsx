@@ -18,7 +18,7 @@ import { getLabel } from '@utils/helpers/getLabel';
 import { usePolkadotNodes } from '@hooks/usePolkadotNodes';
 import { NETWORKS } from '@data/polkadot/networks';
 
-function PolkadotNode() {
+function PolkadotNodes() {
   const { name, onClose } = useNotification('polkadot');
   const {
     nodes,
@@ -115,4 +115,4 @@ function PolkadotNode() {
   );
 }
 
-export default PolkadotNode;
+export default PolkadotNodes;
