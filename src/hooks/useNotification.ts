@@ -8,6 +8,7 @@ export const useNotification = (
     | 'peer'
     | 'clusterpeer'
     | 'chainlink'
+    | 'polkadot'
 ) => {
   const [name, setName] = useState<string | null>(null);
 

@@ -39,6 +39,11 @@ export const navigation: Navigation[] = [
         href: '/deployments/chainlink/nodes',
         protocol: 'chainlink',
       },
+      {
+        name: 'Polkadot',
+        href: '/deployments/polkadot/nodes',
+        protocol: 'polkadot',
+      },
     ],
   },
   { type: 'link', name: 'Secrets', icon: KeyIcon, href: '/core/secrets' },
