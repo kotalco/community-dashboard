@@ -25,6 +25,7 @@ import { usePolkadotNode } from '@hooks/usePolkadotNode';
 import { NETWORKS } from '@data/polkadot/networks';
 import { updatePolkadotNode } from '@utils/requests/polkadot';
 import NetworkingDetails from '@components/organisms/Polkadot/Networking/Networking';
+import Validatordetails from '@components/organisms/Polkadot/Validator/Validator';
 
 function PolkadotNode() {
   const { query, push } = useRouter();
@@ -67,12 +68,7 @@ function PolkadotNode() {
           <NetworkingDetails {...node} />
 
           {/* Validator */}
-          {/* <EthereumDetails
-            name={node.name}
-            setNode={mutate}
-            ethereumWsEndpoint={node.ethereumWsEndpoint}
-            ethereumHttpEndpoints={node.ethereumHttpEndpoints}
-          /> */}
+          <Validatordetails {...node} />
 
           {/* Telemetry */}
           {/* <WalletDetails
