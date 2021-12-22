@@ -26,6 +26,7 @@ import { NETWORKS } from '@data/polkadot/networks';
 import { updatePolkadotNode } from '@utils/requests/polkadot';
 import NetworkingDetails from '@components/organisms/Polkadot/Networking/Networking';
 import Validatordetails from '@components/organisms/Polkadot/Validator/Validator';
+import TelemetryDetails from '@components/organisms/Polkadot/Telemetry/Telemetry';
 
 function PolkadotNode() {
   const { query, push } = useRouter();
@@ -71,11 +72,7 @@ function PolkadotNode() {
           <Validatordetails {...node} />
 
           {/* Telemetry */}
-          {/* <WalletDetails
-            name={node.name}
-            setNode={mutate}
-            keystorePasswordSecretName={node.keystorePasswordSecretName}
-          /> */}
+          <TelemetryDetails {...node} />
 
           {/* Prometheus */}
           {/* <TLSDetails

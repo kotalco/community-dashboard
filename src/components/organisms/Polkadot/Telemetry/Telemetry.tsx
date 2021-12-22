@@ -2,17 +2,21 @@ import { useState } from 'react';
 import { KeyedMutator } from 'swr';
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 
+import TextInput from '@components/molecules/TextInput/TextInput';
 import Button from '@components/atoms/Button/Button';
 import Toggle from '@components/molecules/Toggle/Toggle';
-import { PolkadotNode, Validator } from '@interfaces/polkadot/PolkadotNode';
+import { PolkadotNode, Telemetry } from '@interfaces/polkadot/PolkadotNode';
+
 import { handleRequest } from '@utils/helpers/handleRequest';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { updatePolkadotNode } from '@utils/requests/polkadot';
+import { telemetrySchema } from '@schemas/polkadot/telemetry';
 
 interface Props extends PolkadotNode {
   mutate?: KeyedMutator<{ node: PolkadotNode }>;
 }
 
-function Validatordetails({ validator, name, mutate }: Props) {
+function TelemetryDetails({ telemetry, telemetryURL, name, mutate }: Props) {
   const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
 
@@ -20,10 +24,16 @@ function Validatordetails({ validator, name, mutate }: Props) {
     handleSubmit,
     control,
     reset,
+    register,
+    watch,
     formState: { isDirty, isSubmitting, errors },
-  } = useForm<Validator>();
+  } = useForm<Telemetry>({
+    resolver: yupResolver(telemetrySchema),
+  });
 
-  const onSubmit: SubmitHandler<Validator> = async (values) => {
+  const telemetryState = watch('telemetry');
+
+  const onSubmit: SubmitHandler<Telemetry> = async (values) => {
     setSubmitSuccess('');
     setServerError('');
     const { error, response } = await handleRequest<PolkadotNode>(
@@ -37,27 +47,36 @@ function Validatordetails({ validator, name, mutate }: Props) {
 
     if (response) {
       mutate?.();
-      reset(values);
-      setSubmitSuccess('Validator data has been updated');
+      reset(response);
+      setSubmitSuccess('Telemetry data has been updated');
     }
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
-        {/* Validator */}
+        {/* Telemetry */}
         <Controller
           control={control}
-          name="validator"
-          defaultValue={validator}
+          name="telemetry"
+          defaultValue={telemetry}
           render={({ field }) => (
             <Toggle
-              label="Validator"
+              label="Telemetry"
               checked={field.value}
               onChange={field.onChange}
-              error={errors.validator?.message}
+              error={errors.telemetry?.message}
             />
           )}
+        />
+
+        {/* Telemetry Service URL */}
+        <TextInput
+          disabled={!telemetryState}
+          label="Telemetry Service URL"
+          error={errors.telemetryURL?.message}
+          defaultValue={telemetryURL}
+          {...register('telemetryURL')}
         />
       </div>
 
@@ -81,4 +100,4 @@ function Validatordetails({ validator, name, mutate }: Props) {
   );
 }
 
-export default Validatordetails;
+export default TelemetryDetails;

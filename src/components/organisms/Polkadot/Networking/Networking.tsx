@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { KeyedMutator } from 'swr';
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 
 import TextInput from '@components/molecules/TextInput/TextInput';
@@ -13,7 +14,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { networkingSchema } from '@schemas/polkadot/networking';
 import { updatePolkadotNode } from '@utils/requests/polkadot';
 import { SYNC_MODES } from '@data/polkadot/syncModes';
-import { KeyedMutator } from 'swr';
 
 interface Props extends PolkadotNode {
   mutate?: KeyedMutator<{ node: PolkadotNode }>;

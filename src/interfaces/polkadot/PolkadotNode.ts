@@ -22,7 +22,7 @@ export interface Validator {
 
 export interface Telemetry {
   telemetry: boolean;
-  telemetryURL: string;
+  telemetryURL?: string;
 }
 
 export interface Prometheus {
