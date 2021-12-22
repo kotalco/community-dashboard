@@ -61,7 +61,7 @@ function CreateChainlink() {
     }
 
     if (response) {
-      localStorage.setItem('node', response.name);
+      localStorage.setItem('chainlink', response.name);
       router.push('/deployments/chainlink/nodes');
     }
   };
@@ -146,8 +146,8 @@ function CreateChainlink() {
             )}
           />
 
-          <h2 className="font-bold mt-10 text-xl">API Credentials</h2>
-          <p className="text-gray-500 mb-5 text-sm">
+          <h2 className="mt-10 text-xl font-bold">API Credentials</h2>
+          <p className="mb-5 text-sm text-gray-500">
             For securing access to chainlink dashboard
           </p>
 

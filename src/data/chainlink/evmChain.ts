@@ -1,7 +1,5 @@
-import { SelectOption } from '@interfaces/SelectOption';
-
 // EVM Chains (value) format must follow this: "{id}:{address}"
-export const EVM_CHAINS: SelectOption[] = [
+export const EVM_CHAINS = [
   {
     label: 'Ethereum Mainnet',
     value: '1:0x514910771af9ca656af840dff83e8264ecf986ca',

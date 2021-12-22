@@ -3,9 +3,12 @@ import { Logging } from '@enums/Polkadot/Logging';
 import { Network } from '@enums/Polkadot/Network';
 import { SyncMode } from '@enums/Polkadot/SyncMode';
 
-export interface PolkadotNode extends Resources {
+export interface CreatePolkadotNode {
   name: string;
   network: Network;
+}
+
+export interface PolkadotNode extends CreatePolkadotNode, Resources {
   p2pPort: number;
   nodePrivateKeySecretName: string;
   validator: boolean;
