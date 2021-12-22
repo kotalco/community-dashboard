@@ -32,9 +32,9 @@ export interface Prometheus {
 
 export interface API {
   rpc: boolean;
-  rpcPort: number;
+  rpcPort?: number;
   ws: boolean;
-  wsPort: number;
+  wsPort?: number;
 }
 
 export interface AccessControl {

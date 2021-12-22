@@ -11,6 +11,6 @@ export const prometheusSchema: SchemaOf<Prometheus> = object({
       .typeError('Prometheus port is number')
       .min(1, 'Prometheus Port is between 1 and 65535')
       .max(65535, 'Prometheus Port is between 1 and 65535'),
-    otherwise: number().notRequired().default(0),
+    otherwise: number().notRequired().default(9615),
   }),
 });

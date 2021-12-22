@@ -6,7 +6,6 @@ import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
 import DeleteChainlinkNode from '@components/organisms/Chainlink/DeleteChainlinkNode/DeleteChainlinkNode';
-import APIDetails from '@components/organisms/Chainlink/APIDetails/APIDetails';
 import AccessControlDetails from '@components/organisms/Chainlink/AccessControlDetails/AccessControlDetails';
 import ResourcesDetails from '@components/organisms/Resources/Resources';
 import LoggingDetails from '@components/organisms/Chainlink/LoggingDetails/LoggingDetails';
@@ -28,6 +27,7 @@ import NetworkingDetails from '@components/organisms/Polkadot/Networking/Network
 import Validatordetails from '@components/organisms/Polkadot/Validator/Validator';
 import TelemetryDetails from '@components/organisms/Polkadot/Telemetry/Telemetry';
 import PrometheusDetails from '@components/organisms/Polkadot/Prometheus/Prometheus';
+import APIDetails from '@components/organisms/Polkadot/API/API';
 
 function PolkadotNode() {
   const { query, push } = useRouter();
@@ -79,9 +79,7 @@ function PolkadotNode() {
           <PrometheusDetails {...node} />
 
           {/* API */}
-          {/* <APIDetails
-            {...node}
-          /> */}
+          <APIDetails {...node} />
 
           {/* Access Control */}
           {/* <AccessControlDetails
