@@ -6,7 +6,7 @@ import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
 import DeleteChainlinkNode from '@components/organisms/Chainlink/DeleteChainlinkNode/DeleteChainlinkNode';
-import AccessControlDetails from '@components/organisms/Chainlink/AccessControlDetails/AccessControlDetails';
+import AccessControlDetails from '@components/organisms/Polkadot/AccessControl/AccessControl';
 import ResourcesDetails from '@components/organisms/Resources/Resources';
 import LoggingDetails from '@components/organisms/Chainlink/LoggingDetails/LoggingDetails';
 import DatabaseDetails from '@components/organisms/Chainlink/DatabaseDetails/DatabaseDetails';
@@ -82,11 +82,7 @@ function PolkadotNode() {
           <APIDetails {...node} />
 
           {/* Access Control */}
-          {/* <AccessControlDetails
-            corsDomains={node.corsDomains}
-            setNode={mutate}
-            name={node.name}
-          /> */}
+          <AccessControlDetails {...node} />
 
           {/* Logging */}
           {/* <LoggingDetails
