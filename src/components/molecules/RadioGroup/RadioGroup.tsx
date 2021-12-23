@@ -16,11 +16,11 @@ const CustomRadioGroup: React.FC<Props> = ({
   error,
 }) => {
   return (
-    <RadioGroup value={value} onChange={onChange} className="mt-4">
-      <RadioGroup.Label className="block text-sm font-medium text-gray-700 mb-1">
+    <RadioGroup value={value} onChange={onChange} className="mb-4">
+      <RadioGroup.Label className="block mb-1 text-sm font-medium text-gray-700">
         Consensus
       </RadioGroup.Label>
-      <div className="bg-white flex rounded-md space-x-10 max-w-xs">
+      <div className="flex max-w-xs space-x-10 bg-white rounded-md">
         {options.map(({ label, value }) => (
           <RadioGroup.Option
             key={value}
@@ -47,7 +47,7 @@ const CustomRadioGroup: React.FC<Props> = ({
                 >
                   <span className="rounded-full bg-white w-1.5 h-1.5" />
                 </span>
-                <div className="ml-3 flex flex-col">
+                <div className="flex flex-col ml-3">
                   <RadioGroup.Label
                     as="span"
                     className={`${checked ? 'text-indigo-900' : 'text-gray-900'}

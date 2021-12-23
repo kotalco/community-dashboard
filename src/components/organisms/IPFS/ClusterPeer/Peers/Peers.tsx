@@ -28,7 +28,7 @@ const Peers: React.FC<Props> = ({
   const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
   const { mutate } = useClusterPeer(name);
-  const { peers } = usePeers();
+  const { peers, isLoading } = usePeers();
 
   const activePeers = peers.map(({ name, apiPort }) => ({
     label: name,
@@ -69,7 +69,7 @@ const Peers: React.FC<Props> = ({
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
         {/* Peer Endpoint */}
-        {activePeers.length && (
+        {!isLoading && (
           <Controller
             control={control}
             name="peerEndpoint"

@@ -120,86 +120,77 @@ const CreateClusterPeerPage: React.FC = () => {
           />
 
           {/* Cluster Secret */}
-          <div className="max-w-xs mt-4">
-            <Controller
-              name="clusterSecretName"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  label="Cluster Secret Name"
-                  placeholder="Choose a secret..."
-                  error={errors.clusterSecretName?.message}
-                  href={`/core/secrets/create?type=${KubernetesSecretTypes.ipfsClusterSecret}`}
-                  hrefTitle="Create new secret..."
-                  options={clusterSecretNames}
-                  onChange={field.onChange}
-                />
-              )}
-            />
-          </div>
+          <Controller
+            name="clusterSecretName"
+            control={control}
+            render={({ field }) => (
+              <Select
+                label="Cluster Secret Name"
+                placeholder="Choose a secret..."
+                error={errors.clusterSecretName?.message}
+                href={`/core/secrets/create?type=${KubernetesSecretTypes.ipfsClusterSecret}`}
+                hrefTitle="Create new secret..."
+                options={clusterSecretNames}
+                onChange={field.onChange}
+              />
+            )}
+          />
 
           {/* Ask for predefined identity and private key */}
-          <div className="mt-4">
-            <Toggle
-              label="Do you want to start with predefined identity and private key?"
-              checked={isPredefined}
-              onChange={togglePredefined}
-            />
-            {isPredefined && (
-              <>
-                {/* Cluster Peer ID */}
-                <div className="mt-4">
-                  <TextInput
-                    label="ID"
-                    error={errors.id?.message}
-                    {...register('id')}
-                  />
-                </div>
-                {/* Cluster Peer Private Key */}
-                <div className="max-w-xs mt-4">
-                  <Controller
-                    name="privatekeySecretName"
-                    control={control}
-                    shouldUnregister
-                    render={({ field }) => (
-                      <Select
-                        label="Private Key"
-                        options={privateKeyNames}
-                        error={errors.privatekeySecretName?.message}
-                        placeholder="Choose a private key..."
-                        href={`/core/secrets/create?type=${KubernetesSecretTypes.ipfsClusterPeerPrivatekey}`}
-                        hrefTitle="Create new private key..."
-                        onChange={field.onChange}
-                      />
-                    )}
-                  />
-                </div>
-              </>
-            )}
-          </div>
+          <Toggle
+            label="Do you want to start with predefined identity and private key?"
+            checked={isPredefined}
+            onChange={togglePredefined}
+          />
+          {isPredefined && (
+            <>
+              {/* Cluster Peer ID */}
+              <TextInput
+                label="ID"
+                error={errors.id?.message}
+                {...register('id')}
+              />
 
-          {/* Trusted Peers */}
-          {consensusValue === ClusterConsensusAlgorithm.crdt && (
-            <div className="mt-4">
+              {/* Cluster Peer Private Key */}
               <Controller
-                shouldUnregister={true}
-                name="trustedPeers"
+                name="privatekeySecretName"
                 control={control}
-                defaultValue={['*']}
+                shouldUnregister
                 render={({ field }) => (
-                  <TextareaWithInput
-                    multiple
-                    label="Trusted Peers"
-                    helperText="* (astrisk) means trust all peers"
-                    errors={errors}
-                    error={errors.trustedPeers && field.name}
-                    value={field.value}
-                    name={field.name}
+                  <Select
+                    label="Private Key"
+                    options={privateKeyNames}
+                    error={errors.privatekeySecretName?.message}
+                    placeholder="Choose a private key..."
+                    href={`/core/secrets/create?type=${KubernetesSecretTypes.ipfsClusterPeerPrivatekey}`}
+                    hrefTitle="Create new private key..."
                     onChange={field.onChange}
                   />
                 )}
               />
-            </div>
+            </>
+          )}
+
+          {/* Trusted Peers */}
+          {consensusValue === ClusterConsensusAlgorithm.crdt && (
+            <Controller
+              shouldUnregister={true}
+              name="trustedPeers"
+              control={control}
+              defaultValue={['*']}
+              render={({ field }) => (
+                <TextareaWithInput
+                  multiple
+                  label="Trusted Peers"
+                  helperText="* (astrisk) means trust all peers"
+                  errors={errors}
+                  error={errors.trustedPeers && field.name}
+                  value={field.value}
+                  name={field.name}
+                  onChange={field.onChange}
+                />
+              )}
+            />
           )}
 
           {/* Bootstrap Peers */}
