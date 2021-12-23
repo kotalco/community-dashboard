@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 
-import Select from '@components/molecules/SelectNew/SelectNew';
+import Select from '@components/molecules/Select/Select';
 import Button from '@components/atoms/Button/Button';
 import { API, ChainlinkNode } from '@interfaces/chainlink/ChainlinkNode';
 import { KeyedMutator } from 'swr';
@@ -11,7 +11,7 @@ import { handleRequest } from '@utils/helpers/handleRequest';
 import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import TextInput from '@components/molecules/TextInput/TextInput';
-import { apiCredentialsSchema } from '@schemas/chainlink/apiCredentials';
+import { apiSchema } from '@schemas/chainlink/apiCredentials';
 
 interface Props extends API {
   name: string;
@@ -33,7 +33,9 @@ function APIDetails({ apiCredentials, name, setNode }: Props) {
     control,
     reset,
     formState: { isDirty, isSubmitting, errors },
-  } = useForm<API>({ resolver: yupResolver(apiCredentialsSchema) });
+  } = useForm<API>({
+    resolver: yupResolver(apiSchema),
+  });
 
   const onSubmit: SubmitHandler<API> = async (values) => {
     setServerError('');
@@ -72,21 +74,20 @@ function APIDetails({ apiCredentials, name, setNode }: Props) {
             render={({ field }) => (
               <Select
                 options={passwords}
-                labelProp="label"
-                valueProp="value"
                 value={field.value}
                 onChange={field.onChange}
                 label="Password"
                 error={errors.apiCredentials?.passwordSecretName?.message}
                 href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
                 hrefTitle="Create New Password..."
+                placeholder="Select a password"
               />
             )}
           />
         )}
       </div>
 
-      <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
+      <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"

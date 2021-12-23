@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 
-import Select from '@components/molecules/SelectNew/SelectNew';
+import Select from '@components/molecules/Select/Select';
 import Button from '@components/atoms/Button/Button';
 import { ChainlinkNode, TLS } from '@interfaces/chainlink/ChainlinkNode';
 import { KeyedMutator } from 'swr';
@@ -72,8 +72,6 @@ function TLSDetails({
             render={({ field }) => (
               <Select
                 options={tlsCertificates}
-                labelProp="label"
-                valueProp="value"
                 value={field.value}
                 onChange={field.onChange}
                 label="Certificate"
@@ -108,7 +106,7 @@ function TLSDetails({
         />
       </div>
 
-      <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
+      <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"

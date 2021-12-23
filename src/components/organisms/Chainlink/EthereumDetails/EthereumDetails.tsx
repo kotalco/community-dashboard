@@ -2,8 +2,9 @@ import { useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 
-import Select from '@components/molecules/SelectNew/SelectNew';
 import Button from '@components/atoms/Button/Button';
+import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
+import MultiselectWithInput from '@components/molecules/MultiSelectWithInput/MultiSelectWithInput';
 import { ChainlinkNode, Ethereum } from '@interfaces/chainlink/ChainlinkNode';
 import { KeyedMutator } from 'swr';
 import { updateChainlinkNode } from '@utils/requests/chainlink';
@@ -31,14 +32,14 @@ function EthereumDetails({
     .filter(({ ws }) => ws)
     .map(({ name, wsPort }) => ({
       label: name,
-      wsValue: `ws://${name}:${wsPort}`,
+      value: `ws://${name}:${wsPort}`,
     }));
 
   const rpcActiveNodes = nodes
     .filter(({ rpc }) => rpc)
     .map(({ name, rpcPort }) => ({
       label: name,
-      httpValue: `http://${name}:${rpcPort}`,
+      value: `http://${name}:${rpcPort}`,
     }));
 
   const {
@@ -76,17 +77,16 @@ function EthereumDetails({
             name="ethereumWsEndpoint"
             defaultValue={ethereumWsEndpoint}
             render={({ field }) => (
-              <Select
+              <SelectWithInput
                 options={wsActiveNodes}
-                labelProp="label"
-                valueProp="wsValue"
                 value={field.value}
                 onChange={field.onChange}
                 label="Ethereum Websocket Endpint"
                 error={errors.ethereumWsEndpoint?.message}
-                other
                 otherLabel="External Manged Node"
                 helperText="Showing Ethereum nodes with WebSocket enabled"
+                name={field.name}
+                placeholder="Select a node..."
               />
             )}
           />
@@ -99,22 +99,21 @@ function EthereumDetails({
             name="ethereumHttpEndpoints"
             defaultValue={ethereumHttpEndpoints}
             render={({ field }) => (
-              <Select
+              <MultiselectWithInput
                 options={rpcActiveNodes}
-                labelProp="label"
-                valueProp="httpValue"
                 value={field.value}
                 onChange={field.onChange}
                 label="Ethereum HTTP Endpints"
                 placeholder="Select nodes..."
-                multiple
+                otherLabel="Add External Nodes"
+                emptyLabel="No Enabled Internal Node"
               />
             )}
           />
         )}
       </div>
 
-      <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
+      <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"

@@ -9,11 +9,12 @@ interface Props {
   placeholder: string;
   name: string;
   onChange: (value: string) => void;
-  value: string;
+  value?: string;
   label: string;
   className?: string;
   error?: string;
   otherLabel?: string;
+  helperText?: string;
 }
 
 const SelectWithInput: React.FC<Props> = ({
@@ -25,10 +26,16 @@ const SelectWithInput: React.FC<Props> = ({
   options,
   placeholder,
   otherLabel = 'Other',
+  helperText,
 }) => {
   const allOptions = [...options, { label: otherLabel, value: 'other' }];
   const [selected, setSelected] = useState(
-    options.find((option) => option.value === value)
+    value
+      ? options.find((option) => option.value === value) || {
+          label: otherLabel,
+          value: 'other',
+        }
+      : undefined
   );
 
   const handleChange = (option: SelectOption) => {
@@ -144,6 +151,7 @@ const SelectWithInput: React.FC<Props> = ({
           />
         </div>
       )}
+      {helperText && <p className="mt-2 text-sm text-gray-500">{helperText}</p>}
       {error && (
         <p role="alert" className="mt-2 text-sm text-red-600">
           {error}

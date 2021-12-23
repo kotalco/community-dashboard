@@ -18,6 +18,7 @@ interface Props {
   href?: string;
   hrefTitle?: string;
   value?: string;
+  helperText?: string;
 }
 
 const Select: React.FC<Props> = ({
@@ -29,6 +30,7 @@ const Select: React.FC<Props> = ({
   href,
   hrefTitle,
   value,
+  helperText,
 }) => {
   const defaultValue = options.find((option) => option.value === value);
   const [selected, setSelected] = useState(defaultValue);
@@ -127,6 +129,9 @@ const Select: React.FC<Props> = ({
               </Listbox.Options>
             </Transition>
           </div>
+          {helperText && (
+            <p className="mt-2 text-sm text-gray-500">{helperText}</p>
+          )}
           {error && (
             <p role="alert" className="mt-2 text-sm text-red-600">
               {error}

@@ -1,4 +1,5 @@
 import { SchemaOf, string, object } from 'yup';
+import { API } from '@interfaces/chainlink/ChainlinkNode';
 
 export const apiCredentialsSchema: SchemaOf<{
   email: string;
@@ -9,4 +10,8 @@ export const apiCredentialsSchema: SchemaOf<{
     .email('Invalied email address')
     .trim(),
   passwordSecretName: string().required('Password is required'),
+});
+
+export const apiSchema: SchemaOf<API> = object({
+  apiCredentials: apiCredentialsSchema,
 });

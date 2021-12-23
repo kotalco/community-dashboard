@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Layout from '@components/templates/Layout/Layout';
 import FormLayout from '@components/templates/FormLayout/FormLayout';
 import TextInput from '@components/molecules/TextInput/TextInput';
-import Select from '@components/molecules/SelectNew/SelectNew';
+import Select from '@components/molecules/Select/Select';
 import Heading from '@components/templates/Heading/Heading';
 import { createSchema } from '@schemas/chainlink/create';
 import {
@@ -19,6 +19,7 @@ import { handleRequest } from '@utils/helpers/handleRequest';
 import { EVM_CHAINS } from '@data/chainlink/evmChain';
 import { useEthereumNodes } from '@hooks/useEthereumNodes';
 import { createChainlinkNode } from '@utils/requests/chainlink';
+import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 
 function CreateChainlink() {
   const [serverError, setServerError] = useState('');
@@ -88,8 +89,6 @@ function CreateChainlink() {
           {/* EVM Chain */}
           <Select
             options={EVM_CHAINS}
-            labelProp="label"
-            valueProp="value"
             label="EVM Chain"
             placeholder="Select a chain..."
             error={errors.ethereumChainId?.message}
@@ -101,17 +100,16 @@ function CreateChainlink() {
             control={control}
             name="ethereumWsEndpoint"
             render={({ field }) => (
-              <Select
+              <SelectWithInput
                 options={activeNodes}
-                labelProp="label"
-                valueProp="value"
                 label="Ethereum Websocket Endpoint"
                 placeholder="Select an ethereum node..."
                 onChange={field.onChange}
                 error={errors.ethereumWsEndpoint?.message}
-                other
                 otherLabel="Externally Managed Node"
                 helperText="Showing Ethereum nodes with WebSocket enabled"
+                name={field.name}
+                value={field.value}
               />
             )}
           />
@@ -133,8 +131,6 @@ function CreateChainlink() {
             render={({ field }) => (
               <Select
                 options={passwords}
-                labelProp="label"
-                valueProp="value"
                 label="Keystore password"
                 placeholder="Select a password..."
                 onChange={field.onChange}
@@ -168,8 +164,6 @@ function CreateChainlink() {
               render={({ field }) => (
                 <Select
                   options={passwords}
-                  labelProp="label"
-                  valueProp="value"
                   label="Password"
                   placeholder="Select a password..."
                   onChange={field.onChange}

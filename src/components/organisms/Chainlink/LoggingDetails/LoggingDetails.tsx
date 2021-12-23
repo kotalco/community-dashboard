@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 
 import Button from '@components/atoms/Button/Button';
-import Select from '@components/molecules/SelectNew/SelectNew';
+import Select from '@components/molecules/Select/Select';
 import Logs from '@components/organisms/Logging/Logging';
 import { ChainlinkNode, Logging } from '@interfaces/chainlink/ChainlinkNode';
 import { KeyedMutator } from 'swr';
@@ -57,8 +57,6 @@ function LoggingDetails({ logging, name, setNode }: Props) {
             <Select
               label="Verbosity Levels"
               options={loggingOptions}
-              labelProp="label"
-              valueProp="value"
               placeholder="Choose a logging level..."
               value={field.value}
               onChange={field.onChange}
@@ -68,7 +66,7 @@ function LoggingDetails({ logging, name, setNode }: Props) {
       </div>
       <Logs wsUrl={`/chainlink/nodes/${name}/logs`} />
 
-      <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
+      <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"
