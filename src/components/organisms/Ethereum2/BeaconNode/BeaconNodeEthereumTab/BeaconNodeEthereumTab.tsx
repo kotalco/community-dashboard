@@ -29,7 +29,7 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
   network,
 }) => {
   const { mutate } = useBeaconnode(name);
-  const { nodes } = useEthereumNodes();
+  const { nodes, isLoading } = useEthereumNodes();
   const [submitSuccess, setSubmitSuccess] = useState('');
   const [serverError, setServerError] = useState('');
 
@@ -78,7 +78,7 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
-        {activeNodes.length && (
+        {!isLoading && (
           <Controller
             name="eth1Endpoints"
             control={control}
@@ -90,6 +90,8 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
                 }
                 options={activeNodes}
                 label="Ethereum Node JSON-RPC Endpoints"
+                emptyLabel="No Internal Active Nodes"
+                helperText="Nodes must have activated JSON-RPC port"
                 placeholder={
                   client !== BeaconNodeClient.nimbus &&
                   client !== BeaconNodeClient.teku

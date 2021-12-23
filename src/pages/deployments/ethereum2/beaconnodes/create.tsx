@@ -97,6 +97,7 @@ const CreateBeaconNode: React.FC = () => {
               <SelectWithInput
                 placeholder="Choose a network..."
                 label="Network"
+                otherLabel="Other Network"
                 error={errors.network?.message}
                 options={networkOptions}
                 value={field.value}

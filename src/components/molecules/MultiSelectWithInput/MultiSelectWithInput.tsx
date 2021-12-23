@@ -13,6 +13,7 @@ type Props = {
   value?: string[];
   placeholder: string;
   otherLabel: string;
+  emptyLabel?: string;
   helperText?: string;
   onChange: (e: string[] | undefined) => void;
   single?: boolean;
@@ -38,6 +39,7 @@ const Multiselect: React.FC<Props> = ({
   otherLabel,
   helperText,
   single,
+  emptyLabel,
 }) => {
   const [textAreaValues, setTextareaValues] = useState<string[]>(
     value?.filter(
@@ -128,6 +130,15 @@ const Multiselect: React.FC<Props> = ({
                   static
                   className="absolute z-10 w-full max-w-xs py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-small"
                 >
+                  {!options.length && (
+                    <Listbox.Option
+                      disabled
+                      value={undefined}
+                      className="py-2 pl-3 text-sm text-gray-500 pr-9"
+                    >
+                      {emptyLabel}
+                    </Listbox.Option>
+                  )}
                   {options.map((option) => {
                     const selected = isSelected(option.value);
                     return (
