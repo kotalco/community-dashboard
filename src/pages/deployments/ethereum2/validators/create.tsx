@@ -118,6 +118,7 @@ const CreateValidator: React.FC = () => {
                 options={networkOptions}
                 placeholder="Choose a network..."
                 label="Network"
+                otherLabel="Other Network"
                 name={field.name}
                 value={field.value}
                 onChange={field.onChange}
@@ -174,9 +175,10 @@ const CreateValidator: React.FC = () => {
                 single={client !== ValidatorsClient.lighthouse}
                 options={activeBeaconnodes}
                 label="Beacon Node Endpoints"
+                emptyLabel="No Internal Active Beaconnodes"
                 helperText={
                   client === ValidatorsClient.lighthouse
-                    ? 'One endpoint per each line'
+                    ? 'One endpoint per line'
                     : ''
                 }
                 errors={errors}

@@ -29,7 +29,7 @@ const ValidatorBeaconNodeTab: React.FC<Props> = ({
   const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
   const { mutate } = useValidator(name);
-  const { beaconnodes } = useBeaconNodes();
+  const { beaconnodes, isLoading } = useBeaconNodes();
 
   const activeBeaconnodes = beaconnodes
     .filter(({ client, rest, rpc }) =>
@@ -82,7 +82,7 @@ const ValidatorBeaconNodeTab: React.FC<Props> = ({
   return (
     <>
       <div className="px-4 py-5 sm:p-6">
-        {activeBeaconnodes.length && (
+        {!isLoading && (
           <Controller
             name="beaconEndpoints"
             control={control}
@@ -91,6 +91,7 @@ const ValidatorBeaconNodeTab: React.FC<Props> = ({
                 single={client !== ValidatorsClient.lighthouse}
                 options={activeBeaconnodes}
                 label="Ethereum 2.0 Beacon Node Endpoints"
+                emptyLabel="No Internal Active Beaconnodes"
                 errors={errors}
                 error={errors.beaconEndpoints && field.name}
                 helperText={

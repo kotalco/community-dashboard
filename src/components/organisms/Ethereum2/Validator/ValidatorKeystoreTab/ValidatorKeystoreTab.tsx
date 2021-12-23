@@ -73,25 +73,23 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
         {/* Key Stores */}
-        <div className="max-w-xs">
-          <Controller
-            name="keystores"
-            control={control}
-            render={({ field }) => (
-              <Multiselect
-                label="Ethereum 2.0 Keystores"
-                placeholder="Choose your keystores..."
-                options={allKeystores}
-                errors={errors}
-                error={errors.keystores && field.name}
-                onChange={field.onChange}
-                value={field.value}
-                href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereum2Keystore}`}
-                hrefTitle="Create New Keystore"
-              />
-            )}
-          />
-        </div>
+        <Controller
+          name="keystores"
+          control={control}
+          render={({ field }) => (
+            <Multiselect
+              label="Ethereum 2.0 Keystores"
+              placeholder="Choose your keystores..."
+              options={allKeystores}
+              errors={errors}
+              error={errors.keystores && field.name}
+              onChange={field.onChange}
+              value={field.value}
+              href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereum2Keystore}`}
+              hrefTitle="Create New Keystore"
+            />
+          )}
+        />
 
         {walletPasswordSecretName && allWalletValues.length && (
           <div className="max-w-xs mt-4">
