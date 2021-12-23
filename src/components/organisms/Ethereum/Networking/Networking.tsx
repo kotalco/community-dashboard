@@ -4,7 +4,7 @@ import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Button from '@components/atoms/Button/Button';
-import Select from '@components/molecules/SelectNew/SelectNew';
+import Select from '@components/molecules/Select/Select';
 import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
 import { updateEthereumNode } from '@utils/requests/ethereum';
 import { EthereumNode, Networking } from '@interfaces/Ethereum/ِEthereumNode';
@@ -24,7 +24,7 @@ interface Props extends Networking {
 
 function NetworkingDetails({ name, client, setNode, ...rest }: Props) {
   const [serverError, setServerError] = useState('');
-  const { data: privateKeys } = useSecretsByType(
+  const { data: privateKeys, isLoading } = useSecretsByType(
     KubernetesSecretTypes.ethereumPrivatekey
   );
 
@@ -63,7 +63,7 @@ function NetworkingDetails({ name, client, setNode, ...rest }: Props) {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
         {/* Node Private key */}
-        <div className="max-w-xs">
+        {!isLoading && (
           <Controller
             name="nodePrivateKeySecretName"
             control={control}
@@ -73,8 +73,6 @@ function NetworkingDetails({ name, client, setNode, ...rest }: Props) {
                 label="Node private key"
                 error={errors.nodePrivateKeySecretName?.message}
                 options={privateKeys}
-                labelProp="label"
-                valueProp="value"
                 onChange={field.onChange}
                 value={field.value}
                 href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}
@@ -82,76 +80,66 @@ function NetworkingDetails({ name, client, setNode, ...rest }: Props) {
               />
             )}
           />
-        </div>
+        )}
 
         {/* P2P Port */}
-        <div className="mt-5 max-w-xs">
-          <TextInput
-            type="text"
-            label="P2P Port"
-            error={errors.p2pPort?.message}
-            {...register('p2pPort')}
-          />
-        </div>
+        <TextInput
+          type="text"
+          label="P2P Port"
+          error={errors.p2pPort?.message}
+          {...register('p2pPort')}
+        />
 
         {/* Sync Mode */}
-        <div className="mt-5 max-w-xs">
-          <Controller
-            control={control}
-            name="syncMode"
-            render={({ field }) => (
-              <Select
-                error={errors.syncMode?.message}
-                options={syncModeOptions(client)}
-                labelProp="label"
-                valueProp="value"
-                placeholder="Choose your sync mode..."
-                onChange={field.onChange}
-                value={field.value}
-                label="Sync Mode"
-              />
-            )}
-          />
-        </div>
+        <Controller
+          control={control}
+          name="syncMode"
+          render={({ field }) => (
+            <Select
+              error={errors.syncMode?.message}
+              options={syncModeOptions(client)}
+              placeholder="Choose your sync mode..."
+              onChange={field.onChange}
+              value={field.value}
+              label="Sync Mode"
+            />
+          )}
+        />
 
         {/* Static Nodes */}
-        <div className="mt-5 max-w-xs">
-          <Controller
-            control={control}
-            name="staticNodes"
-            render={({ field }) => (
-              <TextareaWithInput
-                multiple
-                helperText="One enodeURL per line"
-                name={field.name}
-                label="Static Nodes"
-                value={field.value}
-                onChange={field.onChange}
-              />
-            )}
-          />
-        </div>
+        <Controller
+          control={control}
+          name="staticNodes"
+          render={({ field }) => (
+            <TextareaWithInput
+              multiple
+              helperText="One enodeURL per line"
+              name={field.name}
+              label="Static Nodes"
+              value={field.value}
+              onChange={field.onChange}
+            />
+          )}
+        />
 
         {/* Boot Nodes */}
-        <div className="mt-5 max-w-xs">
-          <Controller
-            control={control}
-            name="bootnodes"
-            render={({ field }) => (
-              <TextareaWithInput
-                multiple
-                helperText="One enodeURL per line"
-                name={field.name}
-                label="Bootnodes"
-                value={field.value}
-                onChange={field.onChange}
-              />
-            )}
-          />
-        </div>
+        <Controller
+          control={control}
+          name="bootnodes"
+          render={({ field }) => (
+            <TextareaWithInput
+              multiple
+              helperText="One enodeURL per line"
+              name={field.name}
+              label="Bootnodes"
+              value={field.value}
+              onChange={field.onChange}
+            />
+          )}
+        />
       </div>
 
-      <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
+      <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"

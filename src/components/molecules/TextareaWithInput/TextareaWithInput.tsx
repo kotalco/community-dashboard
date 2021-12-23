@@ -54,7 +54,7 @@ const TextareaWithInput: React.FC<Props> = ({
   };
 
   return (
-    <div className="sm:col-span-6">
+    <div className="max-w-xs mb-4 sm:col-span-6">
       <div className="flex items-center">
         <label
           htmlFor={name}
