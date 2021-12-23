@@ -107,6 +107,8 @@ function EthereumDetails({
                 placeholder="Select nodes..."
                 otherLabel="Add External Nodes"
                 emptyLabel="No Enabled Internal Node"
+                errors={errors}
+                error={errors.ethereumHttpEndpoints && field.name}
               />
             )}
           />

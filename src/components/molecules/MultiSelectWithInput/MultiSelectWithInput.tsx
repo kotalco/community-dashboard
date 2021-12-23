@@ -108,15 +108,6 @@ const Multiselect: React.FC<Props> = ({
                     />
                   </span>
                 </Listbox.Button>
-                {otherLabel && !other && (
-                  <button
-                    type="button"
-                    className="ml-3 text-indigo-600"
-                    onClick={() => setOther(true)}
-                  >
-                    {otherLabel}
-                  </button>
-                )}
               </div>
 
               <Transition
@@ -192,6 +183,15 @@ const Multiselect: React.FC<Props> = ({
           </>
         )}
       </Listbox>
+      {otherLabel && !other && (
+        <button
+          type="button"
+          className="mt-1 text-sm text-indigo-600"
+          onClick={() => setOther(true)}
+        >
+          {otherLabel}
+        </button>
+      )}
       {other && !single && (
         <div className="max-w-xs">
           <textarea
