@@ -6,12 +6,12 @@ import { useRouter } from 'next/router';
 import Layout from '@components/templates/Layout/Layout';
 import FormLayout from '@components/templates/FormLayout/FormLayout';
 import TextInput from '@components/molecules/TextInput/TextInput';
-import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
 import RadioGroup from '@components/molecules/RadioGroup/RadioGroup';
 import Toggle from '@components/molecules/Toggle/Toggle';
 import Select from '@components/molecules/Select/Select';
 import Heading from '@components/templates/Heading/Heading';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
+import MultiSelectWithInput from '@components/molecules/MultiSelectWithInput/MultiSelectWithInput';
 import { createIPFSClusterPeer } from '@utils/requests/ipfs/clusterPeers';
 import { schema } from '@schemas/ipfs/clusterPeers/create';
 import { ClusterPeer, CreateClusterPeer } from '@interfaces/ipfs/ClusterPeer';
@@ -177,39 +177,40 @@ const CreateClusterPeerPage: React.FC = () => {
               shouldUnregister={true}
               name="trustedPeers"
               control={control}
-              defaultValue={['*']}
               render={({ field }) => (
-                <TextareaWithInput
-                  multiple
+                <MultiSelectWithInput
+                  options={activePeers}
                   label="Trusted Peers"
                   helperText="* (astrisk) means trust all peers"
                   errors={errors}
                   error={errors.trustedPeers && field.name}
-                  value={field.value}
-                  name={field.name}
                   onChange={field.onChange}
+                  placeholder="Select trusted peers..."
+                  otherLabel="Use External Peers"
+                  value={field.value}
                 />
               )}
             />
           )}
 
           {/* Bootstrap Peers */}
-          <div className="mt-4">
-            <Controller
-              name="bootstrapPeers"
-              control={control}
-              defaultValue={[]}
-              render={({ field }) => (
-                <TextareaWithInput
-                  multiple
-                  label="Bootstrap Peers (Optional)"
-                  value={field.value}
-                  name={field.name}
-                  onChange={field.onChange}
-                />
-              )}
-            />
-          </div>
+          <Controller
+            name="bootstrapPeers"
+            control={control}
+            defaultValue={[]}
+            render={({ field }) => (
+              <MultiSelectWithInput
+                options={activePeers}
+                label="Bootstrap Peers (Optional)"
+                errors={errors}
+                error={errors.bootstrapPeers && field.name}
+                onChange={field.onChange}
+                placeholder="Select bootstrap peers..."
+                otherLabel="Use External Peers"
+                value={field.value}
+              />
+            )}
+          />
         </FormLayout>
       </form>
     </Layout>

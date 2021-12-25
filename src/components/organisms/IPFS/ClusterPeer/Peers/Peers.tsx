@@ -4,8 +4,8 @@ import { SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { CubeIcon } from '@heroicons/react/outline';
 
-import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
+import MultiSelectWithInput from '@components/molecules/MultiSelectWithInput/MultiSelectWithInput';
 import Button from '@components/atoms/Button/Button';
 import { ClusterPeer, Peers } from '@interfaces/ipfs/ClusterPeer';
 import { updateClusterPeer } from '@utils/requests/ipfs/clusterPeers';
@@ -89,19 +89,24 @@ const Peers: React.FC<Props> = ({
         )}
 
         {/* Bootstrap Peers */}
-        <Controller
-          name="bootstrapPeers"
-          control={control}
-          render={({ field }) => (
-            <TextareaWithInput
-              multiple
-              label="Bootstrap Peers"
-              name={field.name}
-              value={field.value}
-              onChange={field.onChange}
-            />
-          )}
-        />
+        {!isLoading && (
+          <Controller
+            name="bootstrapPeers"
+            control={control}
+            render={({ field }) => (
+              <MultiSelectWithInput
+                options={activePeers}
+                label="Bootstrap Peers"
+                errors={errors}
+                error={errors.bootstrapPeers && field.name}
+                onChange={field.onChange}
+                placeholder="Select bootstrap peers..."
+                otherLabel="Use External Peers"
+                value={field.value}
+              />
+            )}
+          />
+        )}
 
         {/* Trusted Peers */}
         {!!trustedPeers.length && (
@@ -109,14 +114,10 @@ const Peers: React.FC<Props> = ({
             <h4 className="block mb-1 text-sm font-medium text-gray-700">
               Trusted Peers
             </h4>
-            <ul className="ml-2">
+            <ul className="ml-5 text-sm">
               {trustedPeers.map((peer) => (
-                <li
-                  key={peer}
-                  className="flex items-center space-x-2 text-sm text-gray-500"
-                >
-                  <CubeIcon className="w-4 h-4 text-indigo-600" />
-                  <p>{peer}</p>
+                <li key={peer} className="text-gray-500 list-disc">
+                  {peer}
                 </li>
               ))}
             </ul>
