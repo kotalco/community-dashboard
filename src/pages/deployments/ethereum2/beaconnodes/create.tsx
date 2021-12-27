@@ -20,6 +20,7 @@ import { BeaconNodeNetwork } from '@enums/Ethereum2/BeaconNodes/BeaconNodeNetwor
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { useEthereumNodes } from '@hooks/useEthereumNodes';
 import { Deployments } from '@enums/Deployments';
+import { NotificationInfo } from '@interfaces/NotificationInfo';
 
 const CreateBeaconNode: React.FC = () => {
   const [serverError, setServerError] = useState('');
@@ -53,7 +54,16 @@ const CreateBeaconNode: React.FC = () => {
     }
 
     if (response) {
-      localStorage.setItem(Deployments.beaconnode, response.name);
+      const notification: NotificationInfo = {
+        title: 'Node has been created',
+        message:
+          'Node has been created successfully, and will be up and running in few seconds.',
+        deploymentName: response.name,
+      };
+      localStorage.setItem(
+        Deployments.beaconnode,
+        JSON.stringify(notification)
+      );
       router.push('/deployments/ethereum2/beaconnodes');
     }
   };

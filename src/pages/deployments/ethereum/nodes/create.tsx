@@ -21,6 +21,7 @@ import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { Deployments } from '@enums/Deployments';
+import { NotificationInfo } from '@interfaces/NotificationInfo';
 
 function CreateNode() {
   const [serverError, setServerError] = useState('');
@@ -47,7 +48,13 @@ function CreateNode() {
     }
 
     if (response) {
-      localStorage.setItem(Deployments.node, response.name);
+      const notification: NotificationInfo = {
+        title: 'Node has been created',
+        message:
+          'Node has been created successfully, and will be up and running in few seconds.',
+        deploymentName: response.name,
+      };
+      localStorage.setItem(Deployments.node, JSON.stringify(notification));
       router.push('/deployments/ethereum/nodes');
     }
   };

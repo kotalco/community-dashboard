@@ -22,6 +22,7 @@ import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretT
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { usePeers } from '@hooks/usePeers';
 import { Deployments } from '@enums/Deployments';
+import { NotificationInfo } from '@interfaces/NotificationInfo';
 
 const CreateClusterPeerPage: React.FC = () => {
   const [serverError, setServerError] = useState('');
@@ -66,7 +67,16 @@ const CreateClusterPeerPage: React.FC = () => {
     }
 
     if (response) {
-      localStorage.setItem(Deployments.clusterpeer, response.name);
+      const notification: NotificationInfo = {
+        title: 'Peer has been created',
+        message:
+          'Peer has been created successfully, and will be up and running in few seconds.',
+        deploymentName: response.name,
+      };
+      localStorage.setItem(
+        Deployments.clusterpeer,
+        JSON.stringify(notification)
+      );
       router.push('/deployments/ipfs/clusterpeers');
     }
   };

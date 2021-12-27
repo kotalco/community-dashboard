@@ -2,34 +2,38 @@ import { useEffect, useState } from 'react';
 
 import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
 import { Deployments } from '@enums/Deployments';
+import { NotificationInfo } from '@interfaces/NotificationInfo';
 
-export const useNotification = (deployName: Deployments) => {
-  const [name, setName] = useState<string | null>(null);
+export const useNotification = (type: Deployments) => {
+  const [notification, setNotification] = useState<NotificationInfo>();
 
   useEffect(() => {
-    setName(localStorage.getItem(deployName));
-    localStorage.removeItem(deployName);
-  }, [deployName]);
+    const notification = localStorage.getItem(type);
+    if (notification) {
+      const notificationData = JSON.parse(notification) as NotificationInfo;
+      setNotification(notificationData);
+    }
+    localStorage.removeItem(type);
+  }, [type]);
 
   const onClose = () => {
-    setName(null);
+    setNotification(undefined);
   };
 
   const Notification = (
     <NotificationPanel
-      show={!!name}
-      title="Node has been created"
+      show={!!notification}
+      title={notification?.title}
       close={onClose}
     >
       <p className="mt-1 text-sm text-gray-500">
         <span className="p-1 m-1 ml-0 text-indigo-900 bg-indigo-100 rounded-md">
-          {name}
+          {notification?.deploymentName}
         </span>
-        {deployName} has been created successfully, and will be up and running
-        in few seconds.
+        {notification?.message}
       </p>
     </NotificationPanel>
   );
 
-  return { name, onClose, NotificationPanel: Notification };
+  return { NotificationPanel: Notification };
 };

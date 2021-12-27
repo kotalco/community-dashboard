@@ -23,6 +23,7 @@ import { handleRequest } from '@utils/helpers/handleRequest';
 import { useBeaconNodes } from '@hooks/useBeaconNodes';
 import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
 import { Deployments } from '@enums/Deployments';
+import { NotificationInfo } from '@interfaces/NotificationInfo';
 
 const CreateValidator: React.FC = () => {
   const [serverError, setServerError] = useState('');
@@ -73,7 +74,13 @@ const CreateValidator: React.FC = () => {
     }
 
     if (response) {
-      localStorage.setItem(Deployments.validator, response.name);
+      const notification: NotificationInfo = {
+        title: 'Node has been created',
+        message:
+          'Node has been created successfully, and will be up and running in few seconds.',
+        deploymentName: response.name,
+      };
+      localStorage.setItem(Deployments.validator, JSON.stringify(notification));
       router.push('/deployments/ethereum2/validators');
     }
   };

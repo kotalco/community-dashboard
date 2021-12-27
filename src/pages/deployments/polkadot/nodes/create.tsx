@@ -17,6 +17,7 @@ import {
 import { NETWORKS } from '@data/polkadot/networks';
 import { createPolkadotNode } from '@utils/requests/polkadot';
 import { Deployments } from '@enums/Deployments';
+import { NotificationInfo } from '@interfaces/NotificationInfo';
 
 function CreatePolkadotNode() {
   const [serverError, setServerError] = useState('');
@@ -43,7 +44,13 @@ function CreatePolkadotNode() {
     }
 
     if (response) {
-      localStorage.setItem(Deployments.polkadot, response.name);
+      const notification: NotificationInfo = {
+        title: 'Node has been created',
+        message:
+          'Node has been created successfully, and will be up and running in few seconds.',
+        deploymentName: response.name,
+      };
+      localStorage.setItem(Deployments.polkadot, JSON.stringify(notification));
       router.push('/deployments/polkadot/nodes');
     }
   };

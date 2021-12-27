@@ -8,6 +8,7 @@ import FormLayout from '@components/templates/FormLayout/FormLayout';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Select from '@components/molecules/Select/Select';
 import Heading from '@components/templates/Heading/Heading';
+import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 import { createSchema } from '@schemas/chainlink/create';
 import {
   ChainlinkNode,
@@ -19,8 +20,8 @@ import { handleRequest } from '@utils/helpers/handleRequest';
 import { EVM_CHAINS } from '@data/chainlink/evmChain';
 import { useEthereumNodes } from '@hooks/useEthereumNodes';
 import { createChainlinkNode } from '@utils/requests/chainlink';
-import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 import { Deployments } from '@enums/Deployments';
+import { NotificationInfo } from '@interfaces/NotificationInfo';
 
 function CreateChainlink() {
   const [serverError, setServerError] = useState('');
@@ -63,7 +64,13 @@ function CreateChainlink() {
     }
 
     if (response) {
-      localStorage.setItem(Deployments.chainlink, response.name);
+      const notification: NotificationInfo = {
+        title: 'Node has been created',
+        message:
+          'Node has been created successfully, and will be up and running in few seconds.',
+        deploymentName: response.name,
+      };
+      localStorage.setItem(Deployments.chainlink, JSON.stringify(notification));
       router.push('/deployments/chainlink/nodes');
     }
   };
