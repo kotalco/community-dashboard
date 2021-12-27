@@ -7,7 +7,6 @@ import Button from '@components/atoms/Button/Button';
 import DeleteModal from '@components/molecules/Dialog/Dialog';
 import { deleteValidator } from '@utils/requests/ethereum2/validators';
 import TextInput from '@components/molecules/TextInput/TextInput';
-import { useNotification } from '@components/contexts/NotificationContext';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
@@ -24,7 +23,6 @@ interface Props {
 const DeleteValidator: React.FC<Props> = ({ validatorName }) => {
   const [error, setError] = useState<string | undefined>('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const { createNotification } = useNotification();
 
   const router = useRouter();
   const {

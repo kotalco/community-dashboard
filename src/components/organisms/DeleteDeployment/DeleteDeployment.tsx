@@ -6,10 +6,11 @@ import axios from 'axios';
 import Button from '@components/atoms/Button/Button';
 import DeleteModal from '@components/molecules/Dialog/Dialog';
 import TextInput from '@components/molecules/TextInput/TextInput';
-import { useNotification } from '@components/contexts/NotificationContext';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
 import { deleteClusterPeer } from '@utils/requests/ipfs/clusterPeers';
+import { NotificationInfo } from '@interfaces/NotificationInfo';
+import { Deployments } from '@enums/Deployments';
 
 interface FormData {
   name: string;
@@ -21,7 +22,6 @@ interface Props {
 
 const DeleteDeployment: React.FC<Props> = ({ name }) => {
   const [error, setError] = useState<string | undefined>('');
-  const { createNotification } = useNotification();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const router = useRouter();
   const {
@@ -37,13 +37,16 @@ const DeleteDeployment: React.FC<Props> = ({ name }) => {
     setError('');
     try {
       await deleteClusterPeer(name);
+      const notification: NotificationInfo = {
+        title: 'Validator has been deleted',
+        message: 'Validator has been deleted successfully.',
+        deploymentName: name,
+      };
+      localStorage.setItem(
+        Deployments.clusterpeer,
+        JSON.stringify(notification)
+      );
       router.push('/deployments/ipfs/clusterpeers');
-      createNotification({
-        title: 'IPFS peer has been deleted',
-        name,
-        action: 'deleted successfuly',
-        protocol: 'peer',
-      });
     } catch (e) {
       // if (axios.isAxiosError(e)) {
       //   const error = handleAxiosError<ServerError>(e);
@@ -76,7 +79,7 @@ const DeleteDeployment: React.FC<Props> = ({ name }) => {
             Are you sure you want to delete this cluster peer?
           </p>
         </div>
-        <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
+        <div className="px-4 py-3 text-right bg-gray-50 sm:px-6">
           <Button className="btn btn-alert" onClick={openModal}>
             Delete Cluster Peer
           </Button>
@@ -109,7 +112,7 @@ const DeleteDeployment: React.FC<Props> = ({ name }) => {
           <TextInput {...register('name')} />
         </div>
         {error && (
-          <p className="text-sm text-red-600 font-medium mt-2">{error}</p>
+          <p className="mt-2 text-sm font-medium text-red-600">{error}</p>
         )}
       </DeleteModal>
     </>

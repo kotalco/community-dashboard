@@ -6,7 +6,6 @@ import axios from 'axios';
 import Button from '@components/atoms/Button/Button';
 import DeleteModal from '@components/molecules/Dialog/Dialog';
 import TextInput from '@components/molecules/TextInput/TextInput';
-import { useNotification } from '@components/contexts/NotificationContext';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
 import { deleteChainlinkNode } from '@utils/requests/chainlink';
@@ -25,7 +24,6 @@ interface Props {
 const DangerousZone: React.FC<Props> = ({ nodeName }) => {
   const [error, setError] = useState<string | undefined>('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const { createNotification } = useNotification();
 
   const router = useRouter();
   const {

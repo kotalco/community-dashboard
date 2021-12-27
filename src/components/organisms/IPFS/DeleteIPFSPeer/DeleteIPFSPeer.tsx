@@ -7,9 +7,10 @@ import Button from '@components/atoms/Button/Button';
 import DeleteModal from '@components/molecules/Dialog/Dialog';
 import { deleteIPFSPeer } from '@utils/requests/ipfs/peers';
 import TextInput from '@components/molecules/TextInput/TextInput';
-import { useNotification } from '@components/contexts/NotificationContext';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
+import { NotificationInfo } from '@interfaces/NotificationInfo';
+import { Deployments } from '@enums/Deployments';
 
 interface FormData {
   name: string;
@@ -21,7 +22,6 @@ interface Props {
 
 const DangerousZoneContent: React.FC<Props> = ({ peerName }) => {
   const [error, setError] = useState<string | undefined>('');
-  const { createNotification } = useNotification();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const router = useRouter();
   const {
@@ -37,13 +37,13 @@ const DangerousZoneContent: React.FC<Props> = ({ peerName }) => {
     setError('');
     try {
       await deleteIPFSPeer(peerName);
-      void router.push('/deployments/ipfs/peers');
-      createNotification({
-        title: 'IPFS peer has been deleted',
-        name: peerName,
-        action: 'deleted successfuly',
-        protocol: 'peer',
-      });
+      const notification: NotificationInfo = {
+        title: 'Peer has been deleted',
+        message: 'Peer has been deleted successfully.',
+        deploymentName: peerName,
+      };
+      localStorage.setItem(Deployments.peer, JSON.stringify(notification));
+      router.push('/deployments/ipfs/peers');
     } catch (e) {
       // if (axios.isAxiosError(e)) {
       //   const error = handleAxiosError<ServerError>(e);
@@ -76,7 +76,7 @@ const DangerousZoneContent: React.FC<Props> = ({ peerName }) => {
             Are you sure you want to delete this peer ?
           </p>
         </div>
-        <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
+        <div className="px-4 py-3 text-right bg-gray-50 sm:px-6">
           <Button className="btn btn-alert" onClick={openModal}>
             Delete Peer
           </Button>
@@ -109,7 +109,7 @@ const DangerousZoneContent: React.FC<Props> = ({ peerName }) => {
           <TextInput {...register('name')} />
         </div>
         {error && (
-          <p className="text-sm text-red-600 font-medium mt-2">{error}</p>
+          <p className="mt-2 text-sm font-medium text-red-600">{error}</p>
         )}
       </DeleteModal>
     </>
