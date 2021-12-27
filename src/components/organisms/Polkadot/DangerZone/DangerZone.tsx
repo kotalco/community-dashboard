@@ -9,6 +9,7 @@ import { deletePolkadotNode } from '@utils/requests/polkadot';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
 import { Deployments } from '@enums/Deployments';
 import { handleRequest } from '@utils/helpers/handleRequest';
+import { useModal } from '@hooks/useModal';
 
 interface FormData {
   name: string;
@@ -20,8 +21,7 @@ interface Props {
 
 const DangerousZone: React.FC<Props> = ({ nodeName }) => {
   const [serverError, setServerError] = useState<string>('');
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-
+  const { isOpen, open, close } = useModal();
   const router = useRouter();
   const {
     register,
@@ -52,14 +52,6 @@ const DangerousZone: React.FC<Props> = ({ nodeName }) => {
     router.push('/deployments/polkadot/nodes');
   };
 
-  const closeModal = () => {
-    setShowDeleteModal(false);
-  };
-
-  const openModal = () => {
-    setShowDeleteModal(true);
-  };
-
   return (
     <>
       <div>
@@ -77,14 +69,14 @@ const DangerousZone: React.FC<Props> = ({ nodeName }) => {
           </p>
         </div>
         <div className="px-4 py-3 text-right bg-gray-50 sm:px-6">
-          <Button className="btn btn-alert" onClick={openModal}>
+          <Button className="btn btn-alert" onClick={open}>
             Delete Node
           </Button>
         </div>
       </div>
       <DeleteModal
-        open={showDeleteModal}
-        close={closeModal}
+        open={isOpen}
+        close={close}
         title="Delete Chainlink Node"
         action={
           <Button

@@ -9,6 +9,7 @@ import { deleteClusterPeer } from '@utils/requests/ipfs/clusterPeers';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
 import { Deployments } from '@enums/Deployments';
 import { handleRequest } from '@utils/helpers/handleRequest';
+import { useModal } from '@hooks/useModal';
 
 interface FormData {
   name: string;
@@ -20,7 +21,7 @@ interface Props {
 
 const DeleteDeployment: React.FC<Props> = ({ name }) => {
   const [serverError, setServerError] = useState<string>('');
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const { isOpen, open, close } = useModal();
   const router = useRouter();
   const {
     register,
@@ -51,14 +52,6 @@ const DeleteDeployment: React.FC<Props> = ({ name }) => {
     router.push('/deployments/ipfs/clusterpeers');
   };
 
-  const closeModal = () => {
-    setShowDeleteModal(false);
-  };
-
-  const openModal = () => {
-    setShowDeleteModal(true);
-  };
-
   return (
     <>
       <div>
@@ -76,14 +69,14 @@ const DeleteDeployment: React.FC<Props> = ({ name }) => {
           </p>
         </div>
         <div className="px-4 py-3 text-right bg-gray-50 sm:px-6">
-          <Button className="btn btn-alert" onClick={openModal}>
+          <Button className="btn btn-alert" onClick={open}>
             Delete Cluster Peer
           </Button>
         </div>
       </div>
       <DeleteModal
-        open={showDeleteModal}
-        close={closeModal}
+        open={isOpen}
+        close={close}
         title="Delete Cluster Peer"
         action={
           <Button

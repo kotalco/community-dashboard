@@ -9,6 +9,7 @@ import { deleteEthereumNode } from '@utils/requests/ethereum';
 import { Deployments } from '@enums/Deployments';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
 import { handleRequest } from '@utils/helpers/handleRequest';
+import { useModal } from '@hooks/useModal';
 
 interface FormData {
   name: string;
@@ -20,8 +21,7 @@ interface Props {
 
 const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
   const [serverError, setServerError] = useState<string>('');
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-
+  const { isOpen, open, close } = useModal();
   const router = useRouter();
   const {
     register,
@@ -52,14 +52,6 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
     router.push('/deployments/ethereum/nodes');
   };
 
-  const closeModal = () => {
-    setShowDeleteModal(false);
-  };
-
-  const openModal = () => {
-    setShowDeleteModal(true);
-  };
-
   return (
     <>
       <div>
@@ -77,14 +69,14 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
           </p>
         </div>
         <div className="px-4 py-3 text-right bg-gray-50 sm:px-6">
-          <Button className="btn btn-alert" onClick={openModal}>
+          <Button className="btn btn-alert" onClick={open}>
             Delete Node
           </Button>
         </div>
       </div>
       <DeleteModal
-        open={showDeleteModal}
-        close={closeModal}
+        open={isOpen}
+        close={close}
         title="Delete Ethereum Node"
         action={
           <Button
