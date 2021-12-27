@@ -20,6 +20,7 @@ import {
 import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { handleRequest } from '@utils/helpers/handleRequest';
+import { Deployments } from '@enums/Deployments';
 
 function CreateNode() {
   const [serverError, setServerError] = useState('');
@@ -46,7 +47,7 @@ function CreateNode() {
     }
 
     if (response) {
-      localStorage.setItem('node', response.name);
+      localStorage.setItem(Deployments.node, response.name);
       router.push('/deployments/ethereum/nodes');
     }
   };

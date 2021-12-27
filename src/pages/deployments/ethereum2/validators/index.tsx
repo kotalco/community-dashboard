@@ -9,7 +9,6 @@ import ListItem from '@components/molecules/ListItem/ListItem';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import Heading from '@components/templates/Heading/Heading';
 import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
-import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import ButtonGroup from '@components/molecules/ButtonGroup/ButtonGroup';
 import EmptyState from '@components/molecules/EmptyState/EmptyState';
@@ -20,9 +19,10 @@ import { clientOptions } from '@data/ethereum2/clientOptions';
 import { useValidators } from '@hooks/useValidators';
 import { useBeaconNodes } from '@hooks/useBeaconNodes';
 import { useNotification } from '@hooks/useNotification';
+import { Deployments } from '@enums/Deployments';
 
 function Validators() {
-  const { name, onClose } = useNotification('validator');
+  const { NotificationPanel } = useNotification(Deployments.validator);
   const {
     validators,
     isEmpty,
@@ -66,7 +66,7 @@ function Validators() {
           linkUrl="/deployments/ethereum2/validators/create"
           linkName="New Validator"
         >
-          <EthereumIcon className="mx-auto w-12 h-12 text-gray-400" />
+          <EthereumIcon className="w-12 h-12 mx-auto text-gray-400" />
         </EmptyState>
       </Layout>
     );
@@ -100,19 +100,7 @@ function Validators() {
         />
       )}
 
-      <NotificationPanel
-        show={!!name}
-        title="Validator has been created"
-        close={onClose}
-      >
-        <p className="mt-1 text-sm text-gray-500">
-          <span className="text-indigo-900 bg-indigo-100 p-1 m-1 ml-0 rounded-md">
-            {name}
-          </span>
-          Validator has been created successfully, and will be up and running in
-          few seconds.
-        </p>
-      </NotificationPanel>
+      {NotificationPanel}
     </Layout>
   );
 }

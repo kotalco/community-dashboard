@@ -21,6 +21,7 @@ import { ClusterConsensusAlgorithm } from '@enums/IPFS/ClusterPeers/ClusterConse
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { usePeers } from '@hooks/usePeers';
+import { Deployments } from '@enums/Deployments';
 
 const CreateClusterPeerPage: React.FC = () => {
   const [serverError, setServerError] = useState('');
@@ -65,7 +66,7 @@ const CreateClusterPeerPage: React.FC = () => {
     }
 
     if (response) {
-      localStorage.setItem('clusterpeer', response.name);
+      localStorage.setItem(Deployments.clusterpeer, response.name);
       router.push('/deployments/ipfs/clusterpeers');
     }
   };

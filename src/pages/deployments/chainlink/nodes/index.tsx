@@ -9,7 +9,6 @@ import List from '@components/organisms/List/List';
 import ListItem from '@components/molecules/ListItem/ListItem';
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import EmptyState from '@components/molecules/EmptyState/EmptyState';
-import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import ChailinkIcon from '@components/Icons/ChainlinkIcon/ChailinkIcon';
 import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
@@ -17,9 +16,10 @@ import { useNotification } from '@hooks/useNotification';
 import { useChainlinkNodes } from '@hooks/useChainlinkNodes';
 import { getLabel } from '@utils/helpers/getLabel';
 import { EVM_CHAINS } from '@data/chainlink/evmChain';
+import { Deployments } from '@enums/Deployments';
 
 function ChainlinkNode() {
-  const { name, onClose } = useNotification('chainlink');
+  const { NotificationPanel } = useNotification(Deployments.chainlink);
   const {
     nodes,
     isEmpty,
@@ -59,7 +59,7 @@ function ChainlinkNode() {
           linkUrl="/deployments/chainlink/nodes/create"
           linkName="New Chainlink Node"
         >
-          <ChailinkIcon className="mx-auto w-12 h-12 text-gray-400" />
+          <ChailinkIcon className="w-12 h-12 mx-auto text-gray-400" />
         </EmptyState>
       </Layout>
     );
@@ -103,19 +103,7 @@ function ChainlinkNode() {
         />
       )}
 
-      <NotificationPanel
-        show={!!name}
-        title="Node has been created"
-        close={onClose}
-      >
-        <p className="mt-1 text-sm text-gray-500">
-          <span className="text-indigo-900 bg-indigo-100 p-1 m-1 ml-0 rounded-md">
-            {name}
-          </span>
-          Node has been created successfully, and will be up and running in few
-          seconds.
-        </p>
-      </NotificationPanel>
+      {NotificationPanel}
     </Layout>
   );
 }

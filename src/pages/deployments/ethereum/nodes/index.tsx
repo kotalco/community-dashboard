@@ -10,7 +10,6 @@ import ListItem from '@components/molecules/ListItem/ListItem';
 import EthereumIcon from '@components/Icons/EthereumIcon/EthereumIcon';
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import EmptyState from '@components/molecules/EmptyState/EmptyState';
-import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
 import { useNotification } from '@hooks/useNotification';
@@ -18,9 +17,10 @@ import { clientOptions } from '@data/ethereum/node/clientOptions';
 import { networkOptions } from '@data/ethereum/node/networkOptions';
 import { getLabel } from '@utils/helpers/getLabel';
 import { useEthereumNodes } from '@hooks/useEthereumNodes';
+import { Deployments } from '@enums/Deployments';
 
 function EthereumNodes() {
-  const { name, onClose } = useNotification('node');
+  const { NotificationPanel } = useNotification(Deployments.node);
   const {
     nodes,
     isEmpty,
@@ -60,7 +60,7 @@ function EthereumNodes() {
           linkUrl="/deployments/ethereum/nodes/create"
           linkName="New Node"
         >
-          <EthereumIcon className="mx-auto w-12 h-12 text-gray-400" />
+          <EthereumIcon className="w-12 h-12 mx-auto text-gray-400" />
         </EmptyState>
       </Layout>
     );
@@ -99,19 +99,7 @@ function EthereumNodes() {
         />
       )}
 
-      <NotificationPanel
-        show={!!name}
-        title="Node has been created"
-        close={onClose}
-      >
-        <p className="mt-1 text-sm text-gray-500">
-          <span className="text-indigo-900 bg-indigo-100 p-1 m-1 ml-0 rounded-md">
-            {name}
-          </span>
-          Node has been created successfully, and will be up and running in few
-          seconds.
-        </p>
-      </NotificationPanel>
+      {NotificationPanel}
     </Layout>
   );
 }

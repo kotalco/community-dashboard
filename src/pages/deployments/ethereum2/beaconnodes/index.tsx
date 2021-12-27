@@ -5,7 +5,6 @@ import { ChipIcon } from '@heroicons/react/outline';
 import Layout from '@components/templates/Layout/Layout';
 import List from '@components/organisms/List/List';
 import ListItem from '@components/molecules/ListItem/ListItem';
-import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import ButtonGroup from '@components/molecules/ButtonGroup/ButtonGroup';
 import Heading from '@components/templates/Heading/Heading';
@@ -20,9 +19,10 @@ import { getLabel } from '@utils/helpers/getLabel';
 import { networkOptions } from '@data/ethereum2/networkOptions';
 import { clientOptions } from '@data/ethereum2/clientOptions';
 import { useValidators } from '@hooks/useValidators';
+import { Deployments } from '@enums/Deployments';
 
 function Beaconnodes() {
-  const { name, onClose } = useNotification('beaconnode');
+  const { NotificationPanel } = useNotification(Deployments.beaconnode);
   const {
     beaconnodes,
     error,
@@ -102,19 +102,7 @@ function Beaconnodes() {
         />
       )}
 
-      <NotificationPanel
-        show={!!name}
-        title="Beacon node has been created"
-        close={onClose}
-      >
-        <p className="mt-1 text-sm text-gray-500">
-          <span className="p-1 m-1 ml-0 text-indigo-900 bg-indigo-100 rounded-md">
-            {name}
-          </span>
-          Beacon node has been created successfully, and will be up and running
-          in few seconds.
-        </p>
-      </NotificationPanel>
+      {NotificationPanel}
     </Layout>
   );
 }

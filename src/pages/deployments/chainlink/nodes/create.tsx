@@ -20,6 +20,7 @@ import { EVM_CHAINS } from '@data/chainlink/evmChain';
 import { useEthereumNodes } from '@hooks/useEthereumNodes';
 import { createChainlinkNode } from '@utils/requests/chainlink';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
+import { Deployments } from '@enums/Deployments';
 
 function CreateChainlink() {
   const [serverError, setServerError] = useState('');
@@ -62,7 +63,7 @@ function CreateChainlink() {
     }
 
     if (response) {
-      localStorage.setItem('chainlink', response.name);
+      localStorage.setItem(Deployments.chainlink, response.name);
       router.push('/deployments/chainlink/nodes');
     }
   };

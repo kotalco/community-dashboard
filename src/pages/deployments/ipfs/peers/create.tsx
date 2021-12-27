@@ -14,6 +14,7 @@ import { CreatePeer, Peer } from '@interfaces/ipfs/Peer';
 import { IPFSConfigurationProfile } from '@enums/IPFS/Peers/IPFSConfigurationProfile';
 import { initProfilesOptions } from '@data/ipfs/peers/initProfilesOptions';
 import { handleRequest } from '@utils/helpers/handleRequest';
+import { Deployments } from '@enums/Deployments';
 
 const CreateIPFSPeerPage: React.FC = () => {
   const [serverError, setServerError] = useState('');
@@ -41,7 +42,7 @@ const CreateIPFSPeerPage: React.FC = () => {
     }
 
     if (response) {
-      localStorage.setItem('peer', response.name);
+      localStorage.setItem(Deployments.peer, response.name);
       router.push('/deployments/ipfs/peers');
     }
   };

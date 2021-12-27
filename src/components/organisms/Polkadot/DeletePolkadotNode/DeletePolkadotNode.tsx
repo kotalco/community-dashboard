@@ -20,7 +20,7 @@ interface Props {
   nodeName: string;
 }
 
-const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
+const DangerousZone: React.FC<Props> = ({ nodeName }) => {
   const [error, setError] = useState<string | undefined>('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const { createNotification } = useNotification();
@@ -118,4 +118,4 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
   );
 };
 
-export default DangerousZoneContent;
+export default DangerousZone;

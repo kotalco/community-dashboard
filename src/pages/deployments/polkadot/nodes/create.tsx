@@ -16,6 +16,7 @@ import {
 } from '@interfaces/polkadot/PolkadotNode';
 import { NETWORKS } from '@data/polkadot/networks';
 import { createPolkadotNode } from '@utils/requests/polkadot';
+import { Deployments } from '@enums/Deployments';
 
 function CreatePolkadotNode() {
   const [serverError, setServerError] = useState('');
@@ -42,7 +43,7 @@ function CreatePolkadotNode() {
     }
 
     if (response) {
-      localStorage.setItem('polkadot', response.name);
+      localStorage.setItem(Deployments.polkadot, response.name);
       router.push('/deployments/polkadot/nodes');
     }
   };

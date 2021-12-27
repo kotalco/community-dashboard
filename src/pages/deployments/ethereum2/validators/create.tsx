@@ -22,6 +22,7 @@ import Heading from '@components/templates/Heading/Heading';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { useBeaconNodes } from '@hooks/useBeaconNodes';
 import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
+import { Deployments } from '@enums/Deployments';
 
 const CreateValidator: React.FC = () => {
   const [serverError, setServerError] = useState('');
@@ -72,7 +73,7 @@ const CreateValidator: React.FC = () => {
     }
 
     if (response) {
-      localStorage.setItem('validator', response.name);
+      localStorage.setItem(Deployments.validator, response.name);
       router.push('/deployments/ethereum2/validators');
     }
   };

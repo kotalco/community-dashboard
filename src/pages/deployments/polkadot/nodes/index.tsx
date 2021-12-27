@@ -9,7 +9,6 @@ import List from '@components/organisms/List/List';
 import ListItem from '@components/molecules/ListItem/ListItem';
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import EmptyState from '@components/molecules/EmptyState/EmptyState';
-import NotificationPanel from '@components/organisms/NotificationPanel/NotificationPanel';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import PolkadotIcon from '@components/Icons/PolkadotIcon/PolkadotIcon';
 import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
@@ -17,9 +16,10 @@ import { useNotification } from '@hooks/useNotification';
 import { getLabel } from '@utils/helpers/getLabel';
 import { usePolkadotNodes } from '@hooks/usePolkadotNodes';
 import { NETWORKS } from '@data/polkadot/networks';
+import { Deployments } from '@enums/Deployments';
 
 function PolkadotNodes() {
-  const { name, onClose } = useNotification('polkadot');
+  const { NotificationPanel } = useNotification(Deployments.polkadot);
   const {
     nodes,
     isEmpty,
@@ -98,19 +98,7 @@ function PolkadotNodes() {
         />
       )}
 
-      <NotificationPanel
-        show={!!name}
-        title="Node has been created"
-        close={onClose}
-      >
-        <p className="mt-1 text-sm text-gray-500">
-          <span className="p-1 m-1 ml-0 text-indigo-900 bg-indigo-100 rounded-md">
-            {name}
-          </span>
-          Node has been created successfully, and will be up and running in few
-          seconds.
-        </p>
-      </NotificationPanel>
+      {NotificationPanel}
     </Layout>
   );
 }
