@@ -6,10 +6,11 @@ import axios from 'axios';
 import Button from '@components/atoms/Button/Button';
 import DeleteModal from '@components/molecules/Dialog/Dialog';
 import TextInput from '@components/molecules/TextInput/TextInput';
-import { useNotification } from '@components/contexts/NotificationContext';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
 import { deleteChainlinkNode } from '@utils/requests/chainlink';
+import { NotificationInfo } from '@interfaces/NotificationInfo';
+import { Deployments } from '@enums/Deployments';
 
 interface FormData {
   name: string;
@@ -22,7 +23,6 @@ interface Props {
 const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
   const [error, setError] = useState<string | undefined>('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const { createNotification } = useNotification();
 
   const router = useRouter();
   const {
@@ -38,12 +38,12 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
     setError('');
     try {
       await deleteChainlinkNode(nodeName);
-      createNotification({
+      const notification: NotificationInfo = {
         title: 'Node has been deleted',
-        protocol: 'node',
-        name: nodeName,
-        action: 'deleted successfully',
-      });
+        message: 'Node has been deleted successfully.',
+        deploymentName: nodeName,
+      };
+      localStorage.setItem(Deployments.chainlink, JSON.stringify(notification));
       router.push('/deployments/chainlink/nodes');
     } catch (e) {
       // if (axios.isAxiosError(e)) {
@@ -77,7 +77,7 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
             Are you sure you want to delete this node ?
           </p>
         </div>
-        <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
+        <div className="px-4 py-3 text-right bg-gray-50 sm:px-6">
           <Button className="btn btn-alert" onClick={openModal}>
             Delete Node
           </Button>
@@ -110,7 +110,7 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
           <TextInput {...register('name')} />
         </div>
         {error && (
-          <p className="text-sm text-red-600 font-medium mt-2">{error}</p>
+          <p className="mt-2 text-sm font-medium text-red-600">{error}</p>
         )}
       </DeleteModal>
     </>

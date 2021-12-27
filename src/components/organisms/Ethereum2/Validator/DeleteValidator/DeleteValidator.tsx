@@ -10,6 +10,8 @@ import TextInput from '@components/molecules/TextInput/TextInput';
 import { useNotification } from '@components/contexts/NotificationContext';
 import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
+import { NotificationInfo } from '@interfaces/NotificationInfo';
+import { Deployments } from '@enums/Deployments';
 
 interface FormData {
   name: string;
@@ -38,13 +40,16 @@ const DeleteValidator: React.FC<Props> = ({ validatorName }) => {
     setError('');
     try {
       await deleteValidator(validatorName);
-      createNotification({
+      const notification: NotificationInfo = {
         title: 'Validator has been deleted',
-        protocol: 'Validator',
-        name: validatorName,
-        action: 'deleted successfully',
-      });
-      void router.push('/deployments/ethereum2/validators');
+        message: 'Validator has been deleted successfully.',
+        deploymentName: validatorName,
+      };
+      localStorage.setItem(
+        Deployments.beaconnode,
+        JSON.stringify(notification)
+      );
+      router.push('/deployments/ethereum2/validators');
     } catch (e) {
       // if (axios.isAxiosError(e)) {
       //   const error = handleAxiosError<ServerError>(e);
@@ -78,7 +83,7 @@ const DeleteValidator: React.FC<Props> = ({ validatorName }) => {
           </p>
         </div>
         {error && <p>{error}</p>}
-        <div className="px-4 py-3 bg-gray-50 text-right sm:px-6">
+        <div className="px-4 py-3 text-right bg-gray-50 sm:px-6">
           <Button className="btn btn-alert" onClick={openModal}>
             Delete Validator
           </Button>

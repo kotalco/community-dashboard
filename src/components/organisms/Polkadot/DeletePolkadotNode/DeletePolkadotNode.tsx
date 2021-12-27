@@ -11,6 +11,8 @@ import { handleAxiosError } from '@utils/axios';
 import { ServerError } from '@interfaces/ServerError';
 import { deleteChainlinkNode } from '@utils/requests/chainlink';
 import { deletePolkadotNode } from '@utils/requests/polkadot';
+import { NotificationInfo } from '@interfaces/NotificationInfo';
+import { Deployments } from '@enums/Deployments';
 
 interface FormData {
   name: string;
@@ -39,12 +41,12 @@ const DangerousZone: React.FC<Props> = ({ nodeName }) => {
     setError('');
     try {
       await deletePolkadotNode(nodeName);
-      createNotification({
+      const notification: NotificationInfo = {
         title: 'Node has been deleted',
-        protocol: 'node',
-        name: nodeName,
-        action: 'deleted successfully',
-      });
+        message: 'Node has been deleted successfully.',
+        deploymentName: nodeName,
+      };
+      localStorage.setItem(Deployments.polkadot, JSON.stringify(notification));
       router.push('/deployments/polkadot/nodes');
     } catch (e) {
       // if (axios.isAxiosError(e)) {
