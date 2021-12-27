@@ -1,17 +1,14 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
 
 import Button from '@components/atoms/Button/Button';
 import DeleteModal from '@components/molecules/Dialog/Dialog';
 import TextInput from '@components/molecules/TextInput/TextInput';
-import { handleAxiosError } from '@utils/axios';
-import { ServerError } from '@interfaces/ServerError';
-import { deleteChainlinkNode } from '@utils/requests/chainlink';
 import { deletePolkadotNode } from '@utils/requests/polkadot';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
 import { Deployments } from '@enums/Deployments';
+import { handleRequest } from '@utils/helpers/handleRequest';
 
 interface FormData {
   name: string;
@@ -22,7 +19,7 @@ interface Props {
 }
 
 const DangerousZone: React.FC<Props> = ({ nodeName }) => {
-  const [error, setError] = useState<string | undefined>('');
+  const [serverError, setServerError] = useState<string>('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const router = useRouter();
@@ -36,22 +33,23 @@ const DangerousZone: React.FC<Props> = ({ nodeName }) => {
   const [name] = watch(['name']);
 
   const onSubmit = async () => {
-    setError('');
-    try {
-      await deletePolkadotNode(nodeName);
-      const notification: NotificationInfo = {
-        title: 'Node has been deleted',
-        message: 'Node has been deleted successfully.',
-        deploymentName: nodeName,
-      };
-      localStorage.setItem(Deployments.polkadot, JSON.stringify(notification));
-      router.push('/deployments/polkadot/nodes');
-    } catch (e) {
-      // if (axios.isAxiosError(e)) {
-      //   const error = handleAxiosError<ServerError>(e);
-      //   setError(error.response?.data.error);
-      // }
+    setServerError('');
+    const { error } = await handleRequest(
+      deletePolkadotNode.bind(undefined, nodeName)
+    );
+
+    if (error) {
+      setServerError(error);
+      return;
     }
+
+    const notification: NotificationInfo = {
+      title: 'Node has been deleted',
+      message: 'Node has been deleted successfully.',
+      deploymentName: nodeName,
+    };
+    localStorage.setItem(Deployments.polkadot, JSON.stringify(notification));
+    router.push('/deployments/polkadot/nodes');
   };
 
   const closeModal = () => {
@@ -110,8 +108,8 @@ const DangerousZone: React.FC<Props> = ({ nodeName }) => {
           </p>
           <TextInput {...register('name')} />
         </div>
-        {error && (
-          <p className="mt-2 text-sm font-medium text-red-600">{error}</p>
+        {serverError && (
+          <p className="mt-2 text-sm font-medium text-red-600">{serverError}</p>
         )}
       </DeleteModal>
     </>

@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
-import axios from 'axios';
 
 import Button from '@components/atoms/Button/Button';
 import DeleteModal from '@components/molecules/Dialog/Dialog';
 import TextInput from '@components/molecules/TextInput/TextInput';
-import { handleAxiosError } from '@utils/axios';
-import { ServerError } from '@interfaces/ServerError';
 import { deleteClusterPeer } from '@utils/requests/ipfs/clusterPeers';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
 import { Deployments } from '@enums/Deployments';
+import { handleRequest } from '@utils/helpers/handleRequest';
 
 interface FormData {
   name: string;
@@ -21,7 +19,7 @@ interface Props {
 }
 
 const DeleteDeployment: React.FC<Props> = ({ name }) => {
-  const [error, setError] = useState<string | undefined>('');
+  const [serverError, setServerError] = useState<string>('');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const router = useRouter();
   const {
@@ -34,25 +32,23 @@ const DeleteDeployment: React.FC<Props> = ({ name }) => {
   const input = watch('name');
 
   const onSubmit = async () => {
-    setError('');
-    try {
-      await deleteClusterPeer(name);
-      const notification: NotificationInfo = {
-        title: 'Validator has been deleted',
-        message: 'Validator has been deleted successfully.',
-        deploymentName: name,
-      };
-      localStorage.setItem(
-        Deployments.clusterpeer,
-        JSON.stringify(notification)
-      );
-      router.push('/deployments/ipfs/clusterpeers');
-    } catch (e) {
-      // if (axios.isAxiosError(e)) {
-      //   const error = handleAxiosError<ServerError>(e);
-      //   setError(error.response?.data.error);
-      // }
+    setServerError('');
+    const { error } = await handleRequest(
+      deleteClusterPeer.bind(undefined, name)
+    );
+
+    if (error) {
+      setServerError(error);
+      return;
     }
+
+    const notification: NotificationInfo = {
+      title: 'Validator has been deleted',
+      message: 'Validator has been deleted successfully.',
+      deploymentName: name,
+    };
+    localStorage.setItem(Deployments.clusterpeer, JSON.stringify(notification));
+    router.push('/deployments/ipfs/clusterpeers');
   };
 
   const closeModal = () => {
@@ -111,8 +107,8 @@ const DeleteDeployment: React.FC<Props> = ({ name }) => {
           </p>
           <TextInput {...register('name')} />
         </div>
-        {error && (
-          <p className="mt-2 text-sm font-medium text-red-600">{error}</p>
+        {serverError && (
+          <p className="mt-2 text-sm font-medium text-red-600">{serverError}</p>
         )}
       </DeleteModal>
     </>

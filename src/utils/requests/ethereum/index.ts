@@ -22,6 +22,6 @@ export const updateEthereumNode = async (
   return data.node;
 };
 
-export const deleteNode = async (name: string) => {
+export const deleteEthereumNode = async (name: string) => {
   await api.delete(`/ethereum/nodes/${name}`);
 };
