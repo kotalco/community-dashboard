@@ -6,7 +6,7 @@ import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
-import DeleteEthereumNode from '@components/organisms/Ethereum/DeleteEthereumNode/DeleteEthereumNode';
+import DangerZone from '@components/organisms/Ethereum/DangerZone/DangerZone';
 import NetworkingDetails from '@components/organisms/Ethereum/Networking/Networking';
 import APIDetails from '@components/organisms/Ethereum/APIDetails/APIDetails';
 import AccessControlDetails from '@components/organisms/Ethereum/AccessControlDetails/AccessControlDetails';
@@ -123,7 +123,7 @@ function EthereumNodeDetailsPage() {
           />
 
           {/* Danger Zone */}
-          <DeleteEthereumNode nodeName={node.name} />
+          <DangerZone nodeName={node.name} />
         </Tabs>
       </div>
     </Layout>

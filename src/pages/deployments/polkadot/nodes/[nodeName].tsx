@@ -5,7 +5,7 @@ import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
-import DeletePolkadotNode from '@components/organisms/Polkadot/DeletePolkadotNode/DeletePolkadotNode';
+import DangerZone from '@components/organisms/Polkadot/DangerZone/DangerZone';
 import AccessControlDetails from '@components/organisms/Polkadot/AccessControl/AccessControl';
 import ResourcesDetails from '@components/organisms/Resources/Resources';
 import LoggingDetails from '@components/organisms/Polkadot/Logging/Logging';
@@ -89,7 +89,7 @@ function PolkadotNode() {
           />
 
           {/* Danger Zone */}
-          <DeletePolkadotNode nodeName={node.name} />
+          <DangerZone nodeName={node.name} />
         </Tabs>
       </div>
     </Layout>

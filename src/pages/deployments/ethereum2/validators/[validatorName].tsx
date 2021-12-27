@@ -10,7 +10,7 @@ import ValidatorBeaconNodeTab from '@components/organisms/Ethereum2/Validator/Va
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
 import Logging from '@components/organisms/Logging/Logging';
 import Resources from '@components/organisms/Resources/Resources';
-import DeleteValidator from '@components/organisms/Ethereum2/Validator/DeleteValidator/DeleteValidator';
+import DangerZone from '@components/organisms/Ethereum2/Validator/DangerZone/DangerZone';
 import { updateValidator } from '@utils/requests/ethereum2/validators';
 import { tabTitles } from '@data/ethereum2/validator/tabTitles';
 import { UpdateValidator } from '@interfaces/ethereum2/Validator';
@@ -84,7 +84,7 @@ function ValidatorDetailsPage() {
             updateResources={updateResources}
           />
 
-          <DeleteValidator validatorName={validator.name} />
+          <DangerZone validatorName={validator.name} />
         </Tabs>
       </div>
     </Layout>

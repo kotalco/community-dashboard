@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
-import DeleteIPFSPeer from '@components/organisms/IPFS/DeleteIPFSPeer/DeleteIPFSPeer';
+import DangerZone from '@components/organisms/IPFS/DangerZone/DangerZone';
 import Tabs from '@components/organisms/Tabs/Tabs';
 import IPFSConfigrationProfiles from '@components/organisms/IPFS/IPFSConfigrationProfiles/IPFSConfigrationProfiles';
 import IPFSApiDetails from '@components/organisms/IPFS/IPFSApiDetails/IPFSApiDetails';
@@ -78,7 +78,7 @@ function IPFSPeerDetailsPage() {
             updateResources={updateResources}
           />
 
-          <DeleteIPFSPeer peerName={peer.name} />
+          <DangerZone peerName={peer.name} />
         </Tabs>
       </div>
     </Layout>

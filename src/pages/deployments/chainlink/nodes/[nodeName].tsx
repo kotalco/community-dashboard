@@ -5,7 +5,7 @@ import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
-import DeleteChainlinkNode from '@components/organisms/Chainlink/DeleteChainlinkNode/DeleteChainlinkNode';
+import DangerZone from '@components/organisms/Chainlink/DangerZone/DangerZone';
 import APIDetails from '@components/organisms/Chainlink/APIDetails/APIDetails';
 import AccessControlDetails from '@components/organisms/Chainlink/AccessControlDetails/AccessControlDetails';
 import ResourcesDetails from '@components/organisms/Resources/Resources';
@@ -56,7 +56,7 @@ function ChainlinkNode() {
     <Layout>
       <Heading title={node.name} status={status} createdDate={node.createdAt} />
 
-      <div className="bg-white shadow rounded-lg divided-y divided-gray-200">
+      <div className="bg-white rounded-lg shadow divided-y divided-gray-200">
         <Tabs tabs={titles}>
           {/* Protocol */}
           <ProtocolDetails dataList={dataList} />
@@ -125,7 +125,7 @@ function ChainlinkNode() {
           />
 
           {/* Danger Zone */}
-          <DeleteChainlinkNode nodeName={node.name} />
+          <DangerZone nodeName={node.name} />
         </Tabs>
       </div>
     </Layout>

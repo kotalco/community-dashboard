@@ -8,7 +8,7 @@ import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndi
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
 import BeaconNodeAPITab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeAPITab/BeaconNodeAPITab';
 import BeaconNodeEthereumTab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeEthereumTab/BeaconNodeEthereumTab';
-import DeleteBeaconNode from '@components/organisms/Ethereum2/BeaconNode/DeleteBeaconNode/DeleteBeaconNode';
+import DangerZone from '@components/organisms/Ethereum2/BeaconNode/DangerZone/DangerZone';
 import Resources from '@components/organisms/Resources/Resources';
 import { tabTitles } from '@data/ethereum2/beaconNode/tabTitles';
 import { clientOptions } from '@data/ethereum2/clientOptions';
@@ -92,7 +92,7 @@ function Ethereum2NodeDetailsPage() {
           />
 
           {/* Danger zone */}
-          <DeleteBeaconNode nodeName={beaconnode.name} />
+          <DangerZone nodeName={beaconnode.name} />
         </Tabs>
       </div>
     </Layout>
