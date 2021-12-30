@@ -1,5 +1,4 @@
-import axios, { fetcher } from '../../../axios';
-import useSWR, { SWRConfiguration } from 'swr';
+import axios from '../../../axios';
 
 import {
   CreateBeaconNode,
@@ -7,9 +6,7 @@ import {
   UpdateBeaconnode,
 } from '@interfaces/ethereum2/BeaconNode';
 
-export const createBeaconNode = async (
-  values: CreateBeaconNode
-): Promise<BeaconNode> => {
+export const createBeaconNode = async (values: CreateBeaconNode) => {
   const { data } = await axios.post<{ beaconnode: BeaconNode }>(
     '/ethereum2/beaconnodes',
     values
@@ -18,10 +15,6 @@ export const createBeaconNode = async (
   return data.beaconnode;
 };
 
-/**
- * Send a delete request to delete the beacon node
- * @param nodeName Node name to be deleted
- */
 export const deleteBeaconNode = async (nodeName: string): Promise<void> => {
   await axios.delete(`/ethereum2/beaconnodes/${nodeName}`);
 };
@@ -29,7 +22,7 @@ export const deleteBeaconNode = async (nodeName: string): Promise<void> => {
 export const updateBeaconNode = async (
   nodeName: string,
   nodeData: UpdateBeaconnode
-): Promise<BeaconNode> => {
+) => {
   const { data } = await axios.put<{ beaconnode: BeaconNode }>(
     `/ethereum2/beaconnodes/${nodeName}`,
     nodeData

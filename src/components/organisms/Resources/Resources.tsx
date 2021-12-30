@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
-import axios from 'axios';
 
 import Button from '@components/atoms/Button/Button';
-import { updateResourcesSchema } from '@schemas/ethereum2/beaconNode/updateBeaconNode';
 import UnitTextInput from '@components/molecules/UnitTextInput/UnitTextInput';
-import { handleAxiosError } from '@utils/axios';
-import { ServerError } from '@interfaces/ServerError';
+import { updateResourcesSchema } from '@schemas/ethereum2/beaconNode/updateBeaconNode';
 import { Resources } from '@interfaces/Resources';
+import { handleRequest } from '@utils/helpers/handleRequest';
 
 interface Props {
   cpu: string;
@@ -35,7 +33,7 @@ const ResourcesTab: React.FC<Props> = ({
   name,
   updateResources,
 }) => {
-  const [submitError, setSubmitError] = useState('');
+  const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
   const defaultValues = { cpu, cpuLimit, memory, memoryLimit, storage };
 
@@ -50,21 +48,20 @@ const ResourcesTab: React.FC<Props> = ({
   });
 
   const onSubmit: SubmitHandler<Resources> = async (values) => {
-    setSubmitError('');
+    setServerError('');
     setSubmitSuccess('');
 
-    try {
-      await updateResources(name, values);
-      reset(values);
-      setSubmitSuccess('Resources has been updated');
-    } catch (e) {
-      // if (axios.isAxiosError(e)) {
-      //   const error = handleAxiosError<ServerError>(e);
-      //   setSubmitError(
-      //     error.response?.data.error || 'Something wrong happened'
-      //   );
-      // }
+    const { error } = await handleRequest(
+      updateResources.bind(undefined, name, values)
+    );
+
+    if (error) {
+      setServerError(error);
+      return;
     }
+
+    reset(values);
+    setSubmitSuccess('Resources has been updated');
   };
 
   return (
@@ -151,8 +148,8 @@ const ResourcesTab: React.FC<Props> = ({
         >
           Save
         </Button>
-        {submitError && (
-          <p className="mb-5 text-center text-red-500">{submitError}</p>
+        {serverError && (
+          <p className="mb-5 text-center text-red-500">{serverError}</p>
         )}
         {submitSuccess && <p>{submitSuccess}</p>}
       </div>

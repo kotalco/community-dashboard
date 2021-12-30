@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Listbox, Transition } from '@headlessui/react';
 import {
@@ -39,6 +39,10 @@ const Select: React.FC<Props> = ({
     setSelected(option);
     onChange(option.value);
   };
+
+  useEffect(() => {
+    setSelected(options.find((option) => option.value === value));
+  }, [options, value]);
 
   return (
     <Listbox value={selected} onChange={handleChange}>

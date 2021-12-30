@@ -1,6 +1,6 @@
+import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm, Controller } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import axios from 'axios';
 
 import Layout from '@components/templates/Layout/Layout';
 import Heading from '@components/templates/Heading/Heading';
@@ -20,25 +20,30 @@ import {
 } from '@schemas/kubernetesSecrets/createKubernetesSecret';
 import { createSecret } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
-import { handleAxiosError } from '@utils/axios';
-import { ServerError } from '@interfaces/ServerError';
+import { handleRequest } from '@utils/helpers/handleRequest';
 
 const CreateSecret: React.FC = () => {
+  const [serverError, setServerError] = useState('');
   const router = useRouter();
-  const secretTypeQuery = router.query.type as KubernetesSecretTypes;
+  const secretTypeQuery = router.query.type as
+    | KubernetesSecretTypes
+    | undefined;
   const {
     register,
     handleSubmit,
     watch,
-    setError,
+    reset,
     control,
     formState: { errors, isSubmitted, isValid, isSubmitting },
-  } = useForm<CreateKubernetesSecret>({
-    defaultValues: { type: secretTypeQuery },
-  });
+  } = useForm<CreateKubernetesSecret>();
   const type = watch('type');
 
+  useEffect(() => {
+    if (secretTypeQuery) reset({ type: secretTypeQuery });
+  }, [reset, secretTypeQuery]);
+
   const onSubmit: SubmitHandler<CreateKubernetesSecret> = async (values) => {
+    setServerError('');
     if (values.data['tls/crt'] && values.data['tls/key']) {
       values.data['tls.crt'] = values.data['tls/crt'];
       values.data['tls.key'] = values.data['tls/key'];
@@ -46,18 +51,14 @@ const CreateSecret: React.FC = () => {
       delete values.data['tls/key'];
     }
 
-    try {
-      await createSecret(values);
-      router.push('/core/secrets');
-    } catch (e) {
-      // if (axios.isAxiosError(e)) {
-      //   const error = handleAxiosError<ServerError>(e);
-      //   setError('name', {
-      //     type: 'server',
-      //     message: error.response?.data.error,
-      //   });
-      // }
+    const { error } = await handleRequest(createSecret.bind(undefined, values));
+
+    if (error) {
+      setServerError(error);
+      return;
     }
+
+    router.push('/core/secrets');
   };
 
   return (
@@ -68,6 +69,7 @@ const CreateSecret: React.FC = () => {
           isSubmitted={isSubmitted}
           isSubmitting={isSubmitting}
           isValid={isValid}
+          error={serverError}
         >
           <TextInput
             label="Secret Name"
