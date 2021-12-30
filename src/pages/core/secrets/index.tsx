@@ -14,6 +14,7 @@ import DeleteSecretDialog from '@components/organisms/KubernetesSecrets/DeleteSe
 import { useSecrets } from '@hooks/useSecrets';
 import { getLabel } from '@utils/helpers/getLabel';
 import { secretTypesOptions } from '@data/kubernetesSecrets/secretTypesOptions';
+import { useModal } from '@hooks/useModal';
 
 function KubernetesSecrets() {
   const {
@@ -27,11 +28,11 @@ function KubernetesSecrets() {
     error,
   } = useSecrets();
 
-  const [openDelete, setOpenDelete] = useState(false);
+  const { isOpen, open, close } = useModal();
   const [selectedSecret, setSelectedSecret] = useState('');
 
   const confirmDelete = (secretName: string) => {
-    setOpenDelete(true);
+    open();
     setSelectedSecret(secretName);
   };
 
@@ -84,7 +85,7 @@ function KubernetesSecrets() {
                     </div>
                   </div>
                 </div>
-                <div className="shrink-0 ml-5 transition-opacity opacity-0 group-hover:opacity-100">
+                <div className="ml-5 transition-opacity opacity-0 shrink-0 group-hover:opacity-100">
                   <IconButton onClick={() => confirmDelete(name)}>
                     <TrashIcon className="w-5 h-5 text-red-600" />
                   </IconButton>
@@ -102,8 +103,8 @@ function KubernetesSecrets() {
       </div>
       {/* This Dialog appears when user clicks on delete button */}
       <DeleteSecretDialog
-        setOpen={setOpenDelete}
-        open={openDelete}
+        close={close}
+        isOpen={isOpen}
         secretName={selectedSecret}
       />
     </Layout>

@@ -1,55 +1,55 @@
-import { useState, Dispatch, SetStateAction } from 'react';
-import { mutate } from 'swr';
-import axios from 'axios';
+import { useState } from 'react';
 
 import Button from '@components/atoms/Button/Button';
 import Dialog from '@components/molecules/Dialog/Dialog';
 import { deleteSecret as sendDeleteRequest } from '@utils/requests/secrets';
-import { handleAxiosError } from '@utils/axios';
-import { ServerError } from '@interfaces/ServerError';
 import { useSecrets } from '@hooks/useSecrets';
+import { handleRequest } from '@utils/helpers/handleRequest';
 
 interface Props {
-  setOpen: Dispatch<SetStateAction<boolean>>;
-  open: boolean;
+  close: () => void;
+  isOpen: boolean;
   secretName: string;
 }
 
 const DeleteSecretDialoge: React.FC<Props> = ({
-  setOpen,
-  open,
+  close,
+  isOpen,
   secretName,
 }) => {
-  const [error, setError] = useState<string | undefined>('');
+  const [serverError, setServerError] = useState<string | undefined>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { mutate } = useSecrets();
 
   const closeDialog = () => {
-    setOpen(false);
-    setError('');
+    close();
+    setServerError('');
   };
 
   const deleteSecret = async (secretName: string) => {
-    try {
-      setError('');
-      setIsSubmitting(true);
-      await sendDeleteRequest(secretName);
-      mutate();
-      setOpen(false);
-    } catch (e) {
-      // if (axios.isAxiosError(e)) {
-      //   const error = handleAxiosError<ServerError>(e);
-      //   setError(error.response?.data.error);
-      // }
+    setServerError('');
+    setIsSubmitting(true);
+
+    const { error } = await handleRequest(
+      sendDeleteRequest.bind(undefined, secretName)
+    );
+
+    if (error) {
+      setServerError(error);
+      setIsSubmitting(false);
+      return;
     }
+
+    mutate();
+    close();
     setIsSubmitting(false);
   };
 
   return (
     <Dialog
-      open={open}
+      open={isOpen}
       close={closeDialog}
-      error={error}
+      error={serverError}
       cancel
       action={
         <Button
