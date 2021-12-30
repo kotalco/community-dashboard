@@ -23,11 +23,13 @@ import { handleRequest } from '@utils/helpers/handleRequest';
 import { usePeers } from '@hooks/usePeers';
 import { Deployments } from '@enums/Deployments';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
+import { useClusterPeers } from '@hooks/useClusterPeers';
 
 const CreateClusterPeerPage: React.FC = () => {
   const [serverError, setServerError] = useState('');
   const [isPredefined, setIsPredefined] = useState(false);
   const { peers } = usePeers();
+  const { clusterpeers } = useClusterPeers();
   const { data: privateKeyNames } = useSecretsByType(
     KubernetesSecretTypes.ipfsClusterPeerPrivatekey
   );
@@ -35,9 +37,22 @@ const CreateClusterPeerPage: React.FC = () => {
     KubernetesSecretTypes.ipfsClusterSecret
   );
 
-  const activePeers = peers.map(({ name, apiPort }) => ({
+  // Get peer endpoints opions
+  const peerEndoints = peers.map(({ name }) => ({
     label: name,
-    value: `http://${name}:${apiPort}`,
+    value: `/dns4/${name}/tcp/5001`,
+  }));
+
+  // Get cluster bootsrap peers
+  const bootstrapPeers = clusterpeers.map(({ name, id }) => ({
+    label: name,
+    value: `/dns4/${name}/tcp/4001/p2p/${id}`,
+  }));
+
+  // Get cluster trusted peers
+  const trustedPeers = clusterpeers.map(({ name, id }) => ({
+    label: name,
+    value: id,
   }));
 
   const togglePredefined = () => {
@@ -104,7 +119,7 @@ const CreateClusterPeerPage: React.FC = () => {
             name="peerEndpoint"
             render={({ field }) => (
               <SelectWithInput
-                options={activePeers}
+                options={peerEndoints}
                 placeholder="Select peer..."
                 name={field.name}
                 value={field.value}
@@ -190,7 +205,7 @@ const CreateClusterPeerPage: React.FC = () => {
               control={control}
               render={({ field }) => (
                 <MultiSelectWithInput
-                  options={activePeers}
+                  options={trustedPeers}
                   label="Trusted Peers"
                   helperText="* (astrisk) means trust all peers"
                   errors={errors}
@@ -211,7 +226,7 @@ const CreateClusterPeerPage: React.FC = () => {
             defaultValue={[]}
             render={({ field }) => (
               <MultiSelectWithInput
-                options={activePeers}
+                options={bootstrapPeers}
                 label="Bootstrap Peers (Optional)"
                 errors={errors}
                 error={errors.bootstrapPeers && field.name}

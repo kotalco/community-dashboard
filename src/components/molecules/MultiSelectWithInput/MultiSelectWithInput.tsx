@@ -82,7 +82,7 @@ const Multiselect: React.FC<Props> = ({
   };
 
   return (
-    <>
+    <div className="mb-4">
       <Listbox as="div" value={text} onChange={handleChange}>
         {({ open }) => (
           <>
@@ -226,7 +226,7 @@ const Multiselect: React.FC<Props> = ({
           as={<p className="mt-2 text-sm text-red-600" />}
         />
       )}
-    </>
+    </div>
   );
 };
 export default Multiselect;

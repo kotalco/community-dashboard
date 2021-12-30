@@ -10,12 +10,12 @@ import Layout from '@components/templates/Layout/Layout';
 import Heading from '@components/templates/Heading/Heading';
 import Tabs from '@components/organisms/Tabs/Tabs';
 import Security from '@components/organisms/IPFS/ClusterPeer/Security/Security';
+import Logging from '@components/organisms/Logging/Logging';
 import Peers from '@components/organisms/IPFS/ClusterPeer/Peers/Peers';
 import Resources from '@components/organisms/Resources/Resources';
 import DangerZone from '@components/organisms/IPFS/ClusterPeer/DangerZone/DangerZone';
 import { getLabel } from '@utils/helpers/getLabel';
 import { consensusOptions } from '@data/ipfs/clusterPeers/consensusOptions';
-import Logging from '@components/organisms/Logging/Logging';
 import { useStatus } from '@hooks/useStatus';
 
 function ClusterPeerDetailsPage() {

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { CubeIcon } from '@heroicons/react/outline';
 
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 import MultiSelectWithInput from '@components/molecules/MultiSelectWithInput/MultiSelectWithInput';
@@ -13,6 +12,7 @@ import { useClusterPeer } from '@hooks/useClusterPeer';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { usePeers } from '@hooks/usePeers';
 import { schema } from '@schemas/ipfs/clusterPeers/peers';
+import { useClusterPeers } from '@hooks/useClusterPeers';
 
 interface Props extends Peers {
   name: string;
@@ -28,11 +28,19 @@ const Peers: React.FC<Props> = ({
   const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
   const { mutate } = useClusterPeer(name);
-  const { peers, isLoading } = usePeers();
+  const { peers, isLoading: isLoadingPeers } = usePeers();
+  const { clusterpeers, isLoading: isLoadingClusterpeers } = useClusterPeers();
 
-  const activePeers = peers.map(({ name, apiPort }) => ({
+  // Get peers endpoints
+  const peerEndpoints = peers.map(({ name }) => ({
     label: name,
-    value: `http://${name}:${apiPort}`,
+    value: `/dns4/${name}/tcp/5001`,
+  }));
+
+  // Get cluster bootstrap peers
+  const bootstrapPeersOptions = clusterpeers.map(({ name, id }) => ({
+    label: name,
+    value: `/dns4/${name}/tcp/4001/p2p/${id}`,
   }));
 
   const {
@@ -69,13 +77,13 @@ const Peers: React.FC<Props> = ({
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
         {/* Peer Endpoint */}
-        {!isLoading && (
+        {!isLoadingPeers && (
           <Controller
             control={control}
             name="peerEndpoint"
             render={({ field }) => (
               <SelectWithInput
-                options={activePeers}
+                options={peerEndpoints}
                 error={errors.peerEndpoint?.message}
                 label="IPFS Peer"
                 placeholder="Select a peer"
@@ -89,13 +97,13 @@ const Peers: React.FC<Props> = ({
         )}
 
         {/* Bootstrap Peers */}
-        {!isLoading && (
+        {!isLoadingClusterpeers && (
           <Controller
             name="bootstrapPeers"
             control={control}
             render={({ field }) => (
               <MultiSelectWithInput
-                options={activePeers}
+                options={bootstrapPeersOptions}
                 label="Bootstrap Peers"
                 errors={errors}
                 error={errors.bootstrapPeers && field.name}
