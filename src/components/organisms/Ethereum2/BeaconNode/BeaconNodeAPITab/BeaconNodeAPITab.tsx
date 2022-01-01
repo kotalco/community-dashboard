@@ -1,32 +1,20 @@
 import { useState } from 'react';
 import { useForm, useWatch, Controller, SubmitHandler } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
-import axios from 'axios';
 
 import Button from '@components/atoms/Button/Button';
 import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
-import { useBeaconnode } from '@hooks/useBeaconNode';
 import { updateAPISchema } from '@schemas/ethereum2/beaconNode/updateBeaconNode';
-import { API } from '@interfaces/ethereum2/BeaconNode';
+import { API, BeaconNode } from '@interfaces/ethereum2/BeaconNode';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Separator from '@components/atoms/Separator/Separator';
 import Toggle from '@components/molecules/Toggle/Toggle';
 import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
-import { handleAxiosError } from '@utils/axios';
-import { ServerError } from '@interfaces/ServerError';
+import { KeyedMutator } from 'swr';
+import { handleRequest } from '@utils/helpers/handleRequest';
 
-interface Props {
-  name: string;
-  rest?: boolean;
-  restHost?: string;
-  restPort?: number;
-  rpc: boolean;
-  rpcHost: string;
-  rpcPort: number;
-  grpc: boolean;
-  grpcHost: string;
-  grpcPort: number;
-  client: BeaconNodeClient;
+interface Props extends BeaconNode {
+  mutate?: KeyedMutator<{ beaconnode: BeaconNode }>;
 }
 
 const BeaconNodeProtocolTab: React.FC<Props> = ({
@@ -41,9 +29,9 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
   grpcHost,
   grpcPort,
   client,
+  mutate,
 }) => {
-  const { mutate } = useBeaconnode(name);
-  const [submitError, setSubmitError] = useState<string | undefined>('');
+  const [serverError, setServerError] = useState<string | undefined>('');
   const [submitSuccess, setSubmitSuccess] = useState('');
 
   const defaultValues = {
@@ -76,18 +64,22 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
   });
 
   const onSubmit: SubmitHandler<API> = async (values) => {
-    setSubmitError('');
+    setServerError('');
     setSubmitSuccess('');
-    try {
-      const beaconnode = await updateBeaconNode(name, values);
-      void mutate({ beaconnode });
+
+    const { error, response } = await handleRequest(
+      updateBeaconNode.bind(undefined, name, values)
+    );
+
+    if (error) {
+      setServerError(error);
+      return;
+    }
+
+    if (response) {
+      mutate?.();
       reset(values);
       setSubmitSuccess('Beacon node has been updated');
-    } catch (e) {
-      // if (axios.isAxiosError(e)) {
-      //   const error = handleAxiosError<ServerError>(e);
-      //   setSubmitError(error.response?.data.error);
-      // }
     }
   };
 
@@ -224,8 +216,8 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
         >
           Save
         </Button>
-        {submitError && (
-          <p className="mb-5 text-center text-red-500">{submitError}</p>
+        {serverError && (
+          <p className="mb-5 text-center text-red-500">{serverError}</p>
         )}
         {submitSuccess && <p>{submitSuccess}</p>}
       </div>

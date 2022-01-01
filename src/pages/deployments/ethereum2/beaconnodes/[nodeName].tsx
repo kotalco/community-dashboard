@@ -1,7 +1,5 @@
 import { useRouter } from 'next/router';
 
-import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
-import { useBeaconnode } from '@hooks/useBeaconNode';
 import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
@@ -9,15 +7,16 @@ import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetai
 import BeaconNodeAPITab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeAPITab/BeaconNodeAPITab';
 import BeaconNodeEthereumTab from '@components/organisms/Ethereum2/BeaconNode/BeaconNodeEthereumTab/BeaconNodeEthereumTab';
 import DangerZone from '@components/organisms/Ethereum2/BeaconNode/DangerZone/DangerZone';
+import Heading from '@components/templates/Heading/Heading';
 import Resources from '@components/organisms/Resources/Resources';
+import Logging from '@components/organisms/Logging/Logging';
+import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
+import { useBeaconnode } from '@hooks/useBeaconNode';
 import { tabTitles } from '@data/ethereum2/beaconNode/tabTitles';
 import { clientOptions } from '@data/ethereum2/clientOptions';
 import { networkOptions } from '@data/ethereum2/networkOptions';
 import { UpdateBeaconnode } from '@interfaces/ethereum2/BeaconNode';
-import React from 'react';
-import Heading from '@components/templates/Heading/Heading';
 import { getLabel } from '@utils/helpers/getLabel';
-import Logging from '@components/organisms/Logging/Logging';
 import { useStatus } from '@hooks/useStatus';
 
 function Ethereum2NodeDetailsPage() {
@@ -50,32 +49,15 @@ function Ethereum2NodeDetailsPage() {
       />
 
       <div className="mt-4 bg-white rounded-lg shadow">
-        <Tabs tabs={tabTitles}>
+        <Tabs tabs={tabTitles} mutate={mutate}>
           {/* Protocol */}
           <ProtocolDetails dataList={dataList} />
 
           {/* Ethereum */}
-          <BeaconNodeEthereumTab
-            name={beaconnode.name}
-            client={beaconnode.client}
-            eth1Endpoints={beaconnode.eth1Endpoints}
-            network={beaconnode.network}
-          />
+          <BeaconNodeEthereumTab {...beaconnode} />
 
           {/* API */}
-          <BeaconNodeAPITab
-            name={beaconnode.name}
-            rest={beaconnode.rest}
-            restHost={beaconnode.restHost}
-            restPort={beaconnode.restPort}
-            rpc={beaconnode.rpc}
-            rpcPort={beaconnode.rpcPort}
-            rpcHost={beaconnode.rpcHost}
-            grpc={beaconnode.grpc}
-            grpcHost={beaconnode.grpcHost}
-            grpcPort={beaconnode.grpcPort}
-            client={beaconnode.client}
-          />
+          <BeaconNodeAPITab {...beaconnode} />
 
           {/* Logging */}
           <Logging wsUrl={`/ethereum2/beaconnodes/${beaconnode.name}/logs`} />

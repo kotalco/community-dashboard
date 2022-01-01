@@ -5,7 +5,6 @@ import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import Button from '@components/atoms/Button/Button';
 import MultiSelectWithInput from '@components/molecules/MultiSelectWithInput/MultiSelectWithInput';
 import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
-import { useBeaconnode } from '@hooks/useBeaconNode';
 import { BeaconNode, Eth1Endpoints } from '@interfaces/ethereum2/BeaconNode';
 import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
 import { useEthereumNodes } from '@hooks/useEthereumNodes';
@@ -15,11 +14,10 @@ import {
   optionalSchema,
   onlyOneSchema,
 } from '@schemas/ethereum2/beaconNode/ethereum1Endpoint';
+import { KeyedMutator } from 'swr';
 
-interface Props extends Eth1Endpoints {
-  name: string;
-  client: BeaconNodeClient;
-  network: string;
+interface Props extends BeaconNode {
+  mutate?: KeyedMutator<{ beaconnode: BeaconNode }>;
 }
 
 const BeaconNodeEthereumTab: React.FC<Props> = ({
@@ -27,8 +25,8 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
   client,
   eth1Endpoints,
   network,
+  mutate,
 }) => {
-  const { mutate } = useBeaconnode(name);
   const { nodes, isLoading } = useEthereumNodes();
   const [submitSuccess, setSubmitSuccess] = useState('');
   const [serverError, setServerError] = useState('');
@@ -69,7 +67,7 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
     }
 
     if (response) {
-      mutate();
+      mutate?.();
       reset(values);
       setSubmitSuccess('Beacon node has been updated');
     }
