@@ -14,9 +14,8 @@ import TextInput from '@components/molecules/TextInput/TextInput';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { schema } from '@schemas/chainlink/tls';
 
-interface Props extends TLS {
-  name: string;
-  setNode: KeyedMutator<{
+interface Props extends ChainlinkNode {
+  mutate?: KeyedMutator<{
     node: ChainlinkNode;
   }>;
 }
@@ -26,7 +25,7 @@ function TLSDetails({
   tlsPort,
   secureCookies,
   name,
-  setNode,
+  mutate,
 }: Props) {
   const [submitSuccess, setSubmitSuccess] = useState('');
   const [serverError, setServerError] = useState('');
@@ -54,7 +53,7 @@ function TLSDetails({
     }
 
     if (response) {
-      setNode();
+      mutate?.();
       reset(values);
       setSubmitSuccess('TLS certificate data has been updated');
     }

@@ -13,14 +13,14 @@ import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretT
 import TextInput from '@components/molecules/TextInput/TextInput';
 import { apiSchema } from '@schemas/chainlink/apiCredentials';
 
-interface Props extends API {
+interface Props extends ChainlinkNode {
   name: string;
-  setNode: KeyedMutator<{
+  mutate?: KeyedMutator<{
     node: ChainlinkNode;
   }>;
 }
 
-function APIDetails({ apiCredentials, name, setNode }: Props) {
+function APIDetails({ apiCredentials, name, mutate }: Props) {
   const [submitSuccess, setSubmitSuccess] = useState('');
   const [serverError, setServerError] = useState('');
   const { data: passwords, isLoading } = useSecretsByType(
@@ -49,7 +49,7 @@ function APIDetails({ apiCredentials, name, setNode }: Props) {
     }
 
     if (response) {
-      setNode();
+      mutate?.();
       reset(values);
       setSubmitSuccess('API credentials has been updated');
     }

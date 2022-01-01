@@ -13,14 +13,14 @@ import { updateChainlinkNode } from '@utils/requests/chainlink';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { accessControlSchema } from '@schemas/chainlink/accessControl';
 
-interface Props extends AccessControl {
+interface Props extends ChainlinkNode {
   name: string;
-  setNode: KeyedMutator<{
+  mutate?: KeyedMutator<{
     node: ChainlinkNode;
   }>;
 }
 
-function AccessControlDetails({ corsDomains, name, setNode }: Props) {
+function AccessControlDetails({ corsDomains, name, mutate }: Props) {
   const [submitSuccess, setSubmitSuccess] = useState('');
   const [serverError, setServerError] = useState('');
 
@@ -43,7 +43,7 @@ function AccessControlDetails({ corsDomains, name, setNode }: Props) {
     }
 
     if (response) {
-      setNode();
+      mutate?.();
       reset(values);
       setSubmitSuccess('CORS domains has been updated');
     }
@@ -70,7 +70,7 @@ function AccessControlDetails({ corsDomains, name, setNode }: Props) {
         />
       </div>
 
-      <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
+      <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"

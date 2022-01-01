@@ -12,14 +12,13 @@ import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { walletSchema } from '@schemas/chainlink/wallet';
 
-interface Props extends Wallet {
-  name: string;
-  setNode: KeyedMutator<{
+interface Props extends ChainlinkNode {
+  mutate?: KeyedMutator<{
     node: ChainlinkNode;
   }>;
 }
 
-function WalletDetails({ keystorePasswordSecretName, name, setNode }: Props) {
+function WalletDetails({ keystorePasswordSecretName, name, mutate }: Props) {
   const [submitSuccess, setSubmitSuccess] = useState('');
   const [serverError, setServerError] = useState('');
   const { data: passwords, isLoading } = useSecretsByType(
@@ -45,7 +44,7 @@ function WalletDetails({ keystorePasswordSecretName, name, setNode }: Props) {
     }
 
     if (response) {
-      setNode();
+      mutate?.();
       reset(values);
       setSubmitSuccess('Wallet keystore password has been updated');
     }

@@ -12,9 +12,8 @@ import { handleRequest } from '@utils/helpers/handleRequest';
 import { useEthereumNodes } from '@hooks/useEthereumNodes';
 import { ethereumSchema } from '@schemas/chainlink/ethereum';
 
-interface Props extends Ethereum {
-  name: string;
-  setNode: KeyedMutator<{
+interface Props extends ChainlinkNode {
+  mutate?: KeyedMutator<{
     node: ChainlinkNode;
   }>;
 }
@@ -23,7 +22,7 @@ function EthereumDetails({
   ethereumHttpEndpoints,
   ethereumWsEndpoint,
   name,
-  setNode,
+  mutate,
 }: Props) {
   const [submitSuccess, setSubmitSuccess] = useState('');
   const [serverError, setServerError] = useState('');
@@ -61,7 +60,7 @@ function EthereumDetails({
     }
 
     if (response) {
-      setNode();
+      mutate?.();
       reset(values);
       setSubmitSuccess('Ethereum data has been updated');
     }

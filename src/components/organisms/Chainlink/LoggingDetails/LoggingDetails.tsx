@@ -10,14 +10,13 @@ import { updateChainlinkNode } from '@utils/requests/chainlink';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { loggingOptions } from '@data/chainlink/loggingOptions';
 
-interface Props extends Logging {
-  name: string;
-  setNode: KeyedMutator<{
+interface Props extends ChainlinkNode {
+  mutate?: KeyedMutator<{
     node: ChainlinkNode;
   }>;
 }
 
-function LoggingDetails({ logging, name, setNode }: Props) {
+function LoggingDetails({ logging, name, mutate }: Props) {
   const [submitSuccess, setSubmitSuccess] = useState('');
   const [serverError, setServerError] = useState('');
 
@@ -40,7 +39,7 @@ function LoggingDetails({ logging, name, setNode }: Props) {
     }
 
     if (response) {
-      setNode();
+      mutate?.();
       reset(values);
       setSubmitSuccess('Logging data has been updated');
     }

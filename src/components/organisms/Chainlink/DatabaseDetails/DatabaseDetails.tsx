@@ -10,14 +10,13 @@ import { updateChainlinkNode } from '@utils/requests/chainlink';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { databaseSchema } from '@schemas/chainlink/database';
 
-interface Props extends Database {
-  name: string;
-  setNode: KeyedMutator<{
+interface Props extends ChainlinkNode {
+  mutate?: KeyedMutator<{
     node: ChainlinkNode;
   }>;
 }
 
-function DatabaseDetails({ databaseURL, name, setNode }: Props) {
+function DatabaseDetails({ databaseURL, name, mutate }: Props) {
   const [submitSuccess, setSubmitSuccess] = useState('');
   const [serverError, setServerError] = useState('');
   const {
@@ -39,7 +38,7 @@ function DatabaseDetails({ databaseURL, name, setNode }: Props) {
     }
 
     if (response) {
-      setNode();
+      mutate?.();
       reset(values);
       setSubmitSuccess('Database Connection URL has been updated');
     }
@@ -57,7 +56,7 @@ function DatabaseDetails({ databaseURL, name, setNode }: Props) {
         />
       </div>
 
-      <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
+      <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"

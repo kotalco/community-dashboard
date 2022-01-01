@@ -18,7 +18,7 @@ import { updateChainlinkNode } from '@utils/requests/chainlink';
 import { Resources } from '@interfaces/Resources';
 import { getLabel } from '@utils/helpers/getLabel';
 import { useChainlinkNode } from '@hooks/useChainlinkNode';
-import { titles } from '@data/chainlink/tabTitles';
+import { TITLES } from '@data/chainlink/tabTitles';
 import { EVM_CHAINS } from '@data/chainlink/evmChain';
 import { useStatus } from '@hooks/useStatus';
 
@@ -57,61 +57,30 @@ function ChainlinkNode() {
       <Heading title={node.name} status={status} createdDate={node.createdAt} />
 
       <div className="bg-white rounded-lg shadow divided-y divided-gray-200">
-        <Tabs tabs={titles}>
+        <Tabs tabs={TITLES} mutate={mutate}>
           {/* Protocol */}
           <ProtocolDetails dataList={dataList} />
 
           {/* Networking */}
-          <DatabaseDetails
-            databaseURL={node.databaseURL}
-            name={node.name}
-            setNode={mutate}
-          />
+          <DatabaseDetails {...node} />
 
           {/* Ethereum */}
-          <EthereumDetails
-            name={node.name}
-            setNode={mutate}
-            ethereumWsEndpoint={node.ethereumWsEndpoint}
-            ethereumHttpEndpoints={node.ethereumHttpEndpoints}
-          />
+          <EthereumDetails {...node} />
 
           {/* Wallet */}
-          <WalletDetails
-            name={node.name}
-            setNode={mutate}
-            keystorePasswordSecretName={node.keystorePasswordSecretName}
-          />
+          <WalletDetails {...node} />
 
           {/* TLS */}
-          <TLSDetails
-            name={node.name}
-            setNode={mutate}
-            certSecretName={node.certSecretName}
-            secureCookies={node.secureCookies}
-            tlsPort={node.tlsPort}
-          />
+          <TLSDetails {...node} />
 
           {/* API Credentials */}
-          <APIDetails
-            name={node.name}
-            setNode={mutate}
-            apiCredentials={node.apiCredentials}
-          />
+          <APIDetails {...node} />
 
           {/* Access Control */}
-          <AccessControlDetails
-            corsDomains={node.corsDomains}
-            setNode={mutate}
-            name={node.name}
-          />
+          <AccessControlDetails {...node} />
 
           {/* Logging */}
-          <LoggingDetails
-            logging={node.logging}
-            name={node.name}
-            setNode={mutate}
-          />
+          <LoggingDetails {...node} />
 
           {/* Resources */}
           <ResourcesDetails
