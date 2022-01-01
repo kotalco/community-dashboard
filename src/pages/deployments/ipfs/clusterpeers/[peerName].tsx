@@ -1,9 +1,5 @@
 import { useRouter } from 'next/router';
 
-import { UpdateClusterPeer } from '@interfaces/ipfs/ClusterPeer';
-import { updateClusterPeer } from '@utils/requests/ipfs/clusterPeers';
-import { useClusterPeer } from '@hooks/useClusterPeer';
-import { tabTitles } from '@data/ipfs/clusterPeers/tabTitles';
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import Layout from '@components/templates/Layout/Layout';
@@ -14,6 +10,10 @@ import Logging from '@components/organisms/Logging/Logging';
 import Peers from '@components/organisms/IPFS/ClusterPeer/Peers/Peers';
 import Resources from '@components/organisms/Resources/Resources';
 import DangerZone from '@components/organisms/IPFS/ClusterPeer/DangerZone/DangerZone';
+import { UpdateClusterPeer } from '@interfaces/ipfs/ClusterPeer';
+import { updateClusterPeer } from '@utils/requests/ipfs/clusterPeers';
+import { useClusterPeer } from '@hooks/useClusterPeer';
+import { tabTitles } from '@data/ipfs/clusterPeers/tabTitles';
 import { getLabel } from '@utils/helpers/getLabel';
 import { consensusOptions } from '@data/ipfs/clusterPeers/consensusOptions';
 import { useStatus } from '@hooks/useStatus';
@@ -56,17 +56,12 @@ function ClusterPeerDetailsPage() {
       />
 
       <div className="mt-4 bg-white rounded-lg shadow">
-        <Tabs tabs={tabTitles}>
+        <Tabs tabs={tabTitles} mutate={mutate}>
           <ProtocolDetails dataList={dataList} />
 
-          <Peers
-            peerEndpoint={clusterpeer.peerEndpoint}
-            trustedPeers={clusterpeer.trustedPeers || []}
-            bootstrapPeers={clusterpeer.bootstrapPeers || []}
-            name={clusterpeer.name}
-          />
+          <Peers {...clusterpeer} />
 
-          <Security clusterSecretName={clusterpeer.clusterSecretName} />
+          <Security {...clusterpeer} />
 
           <Logging wsUrl={`/ipfs/clusterpeers/${clusterpeer.name}/logs`} />
 

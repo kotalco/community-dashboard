@@ -8,15 +8,14 @@ import MultiSelectWithInput from '@components/molecules/MultiSelectWithInput/Mul
 import Button from '@components/atoms/Button/Button';
 import { ClusterPeer, Peers } from '@interfaces/ipfs/ClusterPeer';
 import { updateClusterPeer } from '@utils/requests/ipfs/clusterPeers';
-import { useClusterPeer } from '@hooks/useClusterPeer';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { usePeers } from '@hooks/usePeers';
 import { schema } from '@schemas/ipfs/clusterPeers/peers';
 import { useClusterPeers } from '@hooks/useClusterPeers';
+import { KeyedMutator } from 'swr';
 
-interface Props extends Peers {
-  name: string;
-  trustedPeers: string[];
+interface Props extends ClusterPeer {
+  mutate?: KeyedMutator<{ clusterpeer: ClusterPeer }>;
 }
 
 const Peers: React.FC<Props> = ({
@@ -24,10 +23,10 @@ const Peers: React.FC<Props> = ({
   name,
   trustedPeers,
   bootstrapPeers,
+  mutate,
 }) => {
   const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
-  const { mutate } = useClusterPeer(name);
   const { peers, isLoading: isLoadingPeers } = usePeers();
   const { clusterpeers, isLoading: isLoadingClusterpeers } = useClusterPeers();
 
@@ -67,7 +66,7 @@ const Peers: React.FC<Props> = ({
     }
 
     if (response) {
-      mutate();
+      mutate?.();
       reset(values);
       setSubmitSuccess('Cluster peer has been updated');
     }
@@ -117,7 +116,7 @@ const Peers: React.FC<Props> = ({
         )}
 
         {/* Trusted Peers */}
-        {!!trustedPeers.length && (
+        {!!trustedPeers && (
           <div className="max-w-xs mt-4">
             <h4 className="block mb-1 text-sm font-medium text-gray-700">
               Trusted Peers

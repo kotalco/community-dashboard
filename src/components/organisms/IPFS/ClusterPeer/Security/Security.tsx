@@ -1,6 +1,11 @@
-import { Security } from '@interfaces/ipfs/ClusterPeer';
+import { ClusterPeer, Security } from '@interfaces/ipfs/ClusterPeer';
+import { KeyedMutator } from 'swr';
 
-const Security: React.FC<Security> = ({ clusterSecretName }) => {
+interface Props extends ClusterPeer {
+  mutate?: KeyedMutator<{ clusterpeer: ClusterPeer }>;
+}
+
+const Security: React.FC<Props> = ({ clusterSecretName }) => {
   return (
     <div className="px-4 py-5 sm:p-6">
       <dl>
