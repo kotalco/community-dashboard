@@ -16,16 +16,11 @@ import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretT
 import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
 import { handleRequest } from '@utils/helpers/handleRequest';
 
-interface Props extends Mining {
-  rpc: boolean;
-  ws: boolean;
-  graphql: boolean;
-  client: EthereumNodeClient;
-  name: string;
-  setNode: KeyedMutator<{ node: EthereumNode }>;
+interface Props extends EthereumNode {
+  mutate?: KeyedMutator<{ node: EthereumNode }>;
 }
 
-function MiningDetails({ name, setNode, ...rest }: Props) {
+function MiningDetails({ name, mutate, ...rest }: Props) {
   const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
 
@@ -85,7 +80,7 @@ function MiningDetails({ name, setNode, ...rest }: Props) {
     }
 
     if (response) {
-      setNode();
+      mutate?.();
       reset(values);
       setSubmitSuccess('Mining data data has been updated');
     }

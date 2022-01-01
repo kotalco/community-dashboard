@@ -11,18 +11,15 @@ import { EthereumNode, Networking } from '@interfaces/Ethereum/ِEthereumNode';
 import { syncModeOptions } from '@data/ethereum/node/syncModeOptions';
 import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
-import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { networkingSchema } from '@schemas/ethereum/networking';
 
-interface Props extends Networking {
-  name: string;
-  setNode: KeyedMutator<{ node: EthereumNode }>;
-  client: EthereumNodeClient;
+interface Props extends EthereumNode {
+  mutate?: KeyedMutator<{ node: EthereumNode }>;
 }
 
-function NetworkingDetails({ name, client, setNode, ...rest }: Props) {
+function NetworkingDetails({ name, client, mutate, ...rest }: Props) {
   const [serverError, setServerError] = useState('');
   const { data: privateKeys, isLoading } = useSecretsByType(
     KubernetesSecretTypes.ethereumPrivatekey
@@ -53,7 +50,7 @@ function NetworkingDetails({ name, client, setNode, ...rest }: Props) {
     }
 
     if (response) {
-      setNode();
+      mutate?.();
       reset(values);
       setSubmitSuccess('Networking data has been updated');
     }

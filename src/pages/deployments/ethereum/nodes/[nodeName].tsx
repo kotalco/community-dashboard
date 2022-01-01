@@ -48,68 +48,26 @@ function EthereumNodeDetailsPage() {
       <Heading title={node.name} status={status} createdDate={node.createdAt} />
 
       <div className="bg-white rounded-lg shadow divided-y divided-gray-200">
-        <Tabs tabs={tabTitles(node.client)}>
+        <Tabs tabs={tabTitles(node.client)} mutate={mutate}>
           {/* Protocol */}
           <ProtocolDetails dataList={dataList} />
 
           {/* Networking */}
-          <NetworkingDetails
-            client={node.client}
-            name={node.name}
-            p2pPort={node.p2pPort}
-            syncMode={node.syncMode}
-            bootnodes={node.bootnodes}
-            staticNodes={node.staticNodes}
-            nodePrivateKeySecretName={node.nodePrivateKeySecretName}
-            setNode={mutate}
-          />
+          <NetworkingDetails {...node} />
 
           {/* API */}
-          <APIDetails
-            miner={node.miner}
-            client={node.client}
-            rpc={node.rpc}
-            rpcPort={node.rpcPort}
-            rpcAPI={node.rpcAPI}
-            ws={node.ws}
-            wsPort={node.wsPort}
-            wsAPI={node.wsAPI}
-            graphql={node.graphql}
-            graphqlPort={node.graphqlPort}
-            name={node.name}
-            setNode={mutate}
-          />
+          <APIDetails {...node} />
 
           {/* Access Control */}
           {node.client !== EthereumNodeClient.nethermind && (
-            <AccessControlDetails
-              hosts={node.hosts}
-              corsDomains={node.corsDomains}
-              name={node.name}
-              setNode={mutate}
-            />
+            <AccessControlDetails {...node} />
           )}
 
           {/* Mining */}
-          <MiningDetails
-            rpc={node.rpc}
-            ws={node.ws}
-            graphql={node.graphql}
-            client={node.client}
-            miner={node.miner}
-            coinbase={node.coinbase}
-            import={node.import}
-            name={node.name}
-            setNode={mutate}
-          />
+          <MiningDetails {...node} />
 
           {/* Logging */}
-          <LoggingDetails
-            client={node.client}
-            logging={node.logging}
-            name={node.name}
-            setNode={mutate}
-          />
+          <LoggingDetails {...node} />
 
           {/* Resources */}
           <ResourcesDetails

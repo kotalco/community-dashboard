@@ -8,12 +8,7 @@ import { updateResourcesSchema } from '@schemas/ethereum2/beaconNode/updateBeaco
 import { Resources } from '@interfaces/Resources';
 import { handleRequest } from '@utils/helpers/handleRequest';
 
-interface Props {
-  cpu: string;
-  cpuLimit: string;
-  storage: string;
-  memory: string;
-  memoryLimit: string;
+interface Props extends Resources {
   name: string;
   updateResources: (name: string, values: Resources) => Promise<void>;
 }

@@ -20,7 +20,7 @@ interface Props {
 }
 
 const IPFSPeerDetails: React.FC<Props> = ({ routing, peerName }) => {
-  const [submitError, setSubmitError] = useState<string | undefined>('');
+  const [serverError, setServerError] = useState<string | undefined>('');
   const [submitSuccess, setSubmitSuccess] = useState('');
 
   const {
@@ -34,12 +34,12 @@ const IPFSPeerDetails: React.FC<Props> = ({ routing, peerName }) => {
   });
 
   const onSubmit: SubmitHandler<Routing> = async (values) => {
-    setSubmitError('');
+    setServerError('');
     setSubmitSuccess('');
 
     try {
       const peer = await updateIPFSPeer(peerName, values);
-      void mutate(peerName, peer);
+      mutate(peerName, peer);
       reset(values);
       setSubmitSuccess('Peer has been updated');
     } catch (e) {
@@ -52,7 +52,7 @@ const IPFSPeerDetails: React.FC<Props> = ({ routing, peerName }) => {
 
   return (
     <>
-      <div className="px-4 py-5 max-w-xs sm:p-6">
+      <div className="max-w-xs px-4 py-5 sm:p-6">
         <Controller
           name="routing"
           control={control}
@@ -69,7 +69,7 @@ const IPFSPeerDetails: React.FC<Props> = ({ routing, peerName }) => {
         />
       </div>
 
-      <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
+      <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           className="btn btn-primary"
           disabled={!isDirty || isSubmitting}
@@ -78,8 +78,8 @@ const IPFSPeerDetails: React.FC<Props> = ({ routing, peerName }) => {
         >
           Save
         </Button>
-        {submitError && (
-          <p className="text-center text-red-500 mb-5">{submitError}</p>
+        {serverError && (
+          <p className="mb-5 text-center text-red-500">{serverError}</p>
         )}
         {submitSuccess && <p>{submitSuccess}</p>}
       </div>

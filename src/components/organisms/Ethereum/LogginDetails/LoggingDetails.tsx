@@ -11,16 +11,13 @@ import {
   LoggingInterface,
 } from '@interfaces/Ethereum/ِEthereumNode';
 import { loggingOptions } from '@data/ethereum/node/loggingOptions';
-import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
 import { handleRequest } from '@utils/helpers/handleRequest';
 
-interface Props extends LoggingInterface {
-  client: EthereumNodeClient;
-  name: string;
-  setNode: KeyedMutator<{ node: EthereumNode }>;
+interface Props extends EthereumNode {
+  mutate?: KeyedMutator<{ node: EthereumNode }>;
 }
 
-function LoggingDetails({ name, client, setNode, ...rest }: Props) {
+function LoggingDetails({ name, client, mutate, ...rest }: Props) {
   const [submitSuccess, setSubmitSuccess] = useState('');
   const [serverError, setServerError] = useState('');
 
@@ -47,7 +44,7 @@ function LoggingDetails({ name, client, setNode, ...rest }: Props) {
     }
 
     if (response) {
-      setNode();
+      mutate?.();
       reset(values);
       setSubmitSuccess('Mining data data has been updated');
     }

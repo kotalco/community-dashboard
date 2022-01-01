@@ -16,14 +16,11 @@ import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
 import { KeyedMutator } from 'swr';
 import { handleRequest } from '@utils/helpers/handleRequest';
 
-interface Props extends API {
-  name: string;
-  client: EthereumNodeClient;
-  miner: boolean;
-  setNode: KeyedMutator<{ node: EthereumNode }>;
+interface Props extends EthereumNode {
+  mutate?: KeyedMutator<{ node: EthereumNode }>;
 }
 
-function APIDetails({ name, setNode, ...rest }: Props) {
+function APIDetails({ name, mutate, ...rest }: Props) {
   const [open, setOpen] = useState(false);
   const [submitSuccess, setSubmitSuccess] = useState('');
   const [serverError, setServerError] = useState('');
@@ -82,7 +79,7 @@ function APIDetails({ name, setNode, ...rest }: Props) {
     }
 
     if (response) {
-      setNode();
+      mutate?.();
       reset(values);
       setSubmitSuccess('API data has been updated');
     }

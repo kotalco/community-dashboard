@@ -13,12 +13,11 @@ import { KeyedMutator } from 'swr';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { schema } from '@schemas/ethereum/accessControl';
 
-interface Props extends AccessControl {
-  name: string;
-  setNode: KeyedMutator<{ node: EthereumNode }>;
+interface Props extends EthereumNode {
+  mutate?: KeyedMutator<{ node: EthereumNode }>;
 }
 
-function AccessControlDetails({ name, setNode, ...rest }: Props) {
+function AccessControlDetails({ name, mutate, ...rest }: Props) {
   const [submitSuccess, setSubmitSuccess] = useState('');
   const [serverError, setServerError] = useState('');
   const {
@@ -45,7 +44,7 @@ function AccessControlDetails({ name, setNode, ...rest }: Props) {
     }
 
     if (response) {
-      setNode();
+      mutate?.();
       reset(values);
       setSubmitSuccess('Access control data has been updated');
     }
