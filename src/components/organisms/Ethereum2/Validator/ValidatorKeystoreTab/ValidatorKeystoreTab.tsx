@@ -9,24 +9,22 @@ import Select from '@components/molecules/Select/Select';
 import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { handleRequest } from '@utils/helpers/handleRequest';
-import { useValidator } from '@hooks/useValidator';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { schema } from '@schemas/ethereum2/validator/keystores';
+import { KeyedMutator } from 'swr';
 
-interface Props {
-  name: string;
-  keystores: { secretName: string }[];
-  walletPasswordSecretName: string;
+interface Props extends Validator {
+  mutate?: KeyedMutator<{ validator: Validator }>;
 }
 
 const ValidatorKeystoreTab: React.FC<Props> = ({
   name,
   keystores,
   walletPasswordSecretName,
+  mutate,
 }) => {
   const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
-  const { mutate } = useValidator(name);
   const { data: allKeystores } = useSecretsByType(
     KubernetesSecretTypes.ethereum2Keystore
   );
@@ -63,7 +61,7 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
     }
 
     if (response) {
-      mutate();
+      mutate?.();
       reset(values);
       setSubmitSuccess('Validator has been updated');
     }

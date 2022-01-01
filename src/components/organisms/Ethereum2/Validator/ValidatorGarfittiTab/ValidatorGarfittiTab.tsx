@@ -5,18 +5,17 @@ import Button from '@components/atoms/Button/Button';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import { updateValidator } from '@utils/requests/ethereum2/validators';
 import { Grafitti } from '@interfaces/ethereum2/Validator';
-import { useValidator } from '@hooks/useValidator';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { Validator } from '@interfaces/ethereum2/Validator';
+import { KeyedMutator } from 'swr';
 
-interface Props extends Grafitti {
-  name: string;
+interface Props extends Validator {
+  mutate?: KeyedMutator<{ validator: Validator }>;
 }
 
-const ValidatorGarfittiTab: React.FC<Props> = ({ name, graffiti }) => {
+const ValidatorGarfittiTab: React.FC<Props> = ({ name, graffiti, mutate }) => {
   const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
-  const { mutate } = useValidator(name);
 
   const {
     reset,
@@ -41,7 +40,7 @@ const ValidatorGarfittiTab: React.FC<Props> = ({ name, graffiti }) => {
     }
 
     if (response) {
-      mutate();
+      mutate?.();
       reset(values);
       setSubmitSuccess('Validator has been updated');
     }

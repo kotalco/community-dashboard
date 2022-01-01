@@ -6,7 +6,6 @@ import MultiSelectWithInput from '@components/molecules/MultiSelectWithInput/Mul
 import { BeaconEndpoints, Validator } from '@interfaces/ethereum2/Validator';
 import { updateValidator } from '@utils/requests/ethereum2/validators';
 import { ValidatorsClient } from '@enums/Ethereum2/Validators/ValidatorsClient';
-import { useValidator } from '@hooks/useValidator';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { useBeaconNodes } from '@hooks/useBeaconNodes';
 import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
@@ -15,20 +14,20 @@ import {
   onlyOneSchema,
 } from '@schemas/ethereum2/validator/beaconnodes';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { KeyedMutator } from 'swr';
 
-interface Props extends BeaconEndpoints {
-  name: string;
-  client: ValidatorsClient;
+interface Props extends Validator {
+  mutate?: KeyedMutator<{ validator: Validator }>;
 }
 
 const ValidatorBeaconNodeTab: React.FC<Props> = ({
   name,
   beaconEndpoints,
   client,
+  mutate,
 }) => {
   const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
-  const { mutate } = useValidator(name);
   const { beaconnodes, isLoading } = useBeaconNodes();
 
   const activeBeaconnodes = beaconnodes
@@ -73,7 +72,7 @@ const ValidatorBeaconNodeTab: React.FC<Props> = ({
     }
 
     if (response) {
-      mutate();
+      mutate?.();
       reset(values);
       setSubmitSuccess('Validator has been updated');
     }

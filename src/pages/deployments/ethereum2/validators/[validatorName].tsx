@@ -52,25 +52,14 @@ function ValidatorDetailsPage() {
       />
 
       <div className="mt-4 bg-white rounded-lg shadow divided-y divided-gray-200">
-        <Tabs tabs={tabTitles}>
+        <Tabs tabs={tabTitles} mutate={mutate}>
           <ProtocolDetails dataList={dataList} />
 
-          <ValidatorGraffitiTab
-            name={validator.name}
-            graffiti={validator.graffiti}
-          />
+          <ValidatorGraffitiTab {...validator} />
 
-          <ValidatorKeystoreTab
-            name={validator.name}
-            keystores={validator.keystores}
-            walletPasswordSecretName={validator.walletPasswordSecretName}
-          />
+          <ValidatorKeystoreTab {...validator} />
 
-          <ValidatorBeaconNodeTab
-            name={validator.name}
-            beaconEndpoints={validator.beaconEndpoints}
-            client={validator.client}
-          />
+          <ValidatorBeaconNodeTab {...validator} />
 
           <Logging wsUrl={`/ethereum2/validators/${validator.name}/logs`} />
 
