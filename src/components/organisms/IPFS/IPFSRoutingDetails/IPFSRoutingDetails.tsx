@@ -1,26 +1,22 @@
 import React, { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { mutate } from 'swr';
+import { KeyedMutator } from 'swr';
 import { joiResolver } from '@hookform/resolvers/joi';
-import axios from 'axios';
 
 import Button from '@components/atoms/Button/Button';
-import { Routing } from '@interfaces/ipfs/Peer';
+import { Peer, Routing } from '@interfaces/ipfs/Peer';
 import Select from '@components/molecules/Select/Select';
 import { routingOptions } from '@data/ipfs/peers/routingOptions';
 import { updateRoutingSchema } from '@schemas/ipfs/peers/updateIPFSPeer';
 import { updateIPFSPeer } from '@utils/requests/ipfs/peers';
-import { IPFSRouting } from '@enums/IPFS/Peers/IPFSRouting';
-import { handleAxiosError } from '@utils/axios';
-import { ServerError } from '@interfaces/ServerError';
+import { handleRequest } from '@utils/helpers/handleRequest';
 
-interface Props {
-  peerName: string;
-  routing: IPFSRouting;
+interface Props extends Peer {
+  mutate?: KeyedMutator<{ peer: Peer }>;
 }
 
-const IPFSPeerDetails: React.FC<Props> = ({ routing, peerName }) => {
-  const [serverError, setServerError] = useState<string | undefined>('');
+const IPFSPeerDetails: React.FC<Props> = ({ routing, name, mutate }) => {
+  const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
 
   const {
@@ -37,16 +33,16 @@ const IPFSPeerDetails: React.FC<Props> = ({ routing, peerName }) => {
     setServerError('');
     setSubmitSuccess('');
 
-    try {
-      const peer = await updateIPFSPeer(peerName, values);
-      mutate(peerName, peer);
+    const { error, response } = await handleRequest(
+      updateIPFSPeer.bind(undefined, name, values)
+    );
+
+    if (error) return setServerError(error);
+
+    if (response) {
+      mutate?.();
       reset(values);
       setSubmitSuccess('Peer has been updated');
-    } catch (e) {
-      // if (axios.isAxiosError(e)) {
-      //   const error = handleAxiosError<ServerError>(e);
-      //   setSubmitError(error.response?.data.error);
-      // }
     }
   };
 

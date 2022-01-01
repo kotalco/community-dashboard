@@ -44,27 +44,16 @@ function IPFSPeerDetailsPage() {
       <Heading title={peer.name} status={status} createdDate={peer.createdAt} />
 
       <div className="mt-4 bg-white rounded-lg shadow divided-y divided-gray-200">
-        <Tabs tabs={tabsTitles}>
+        <Tabs tabs={tabsTitles} mutate={mutate}>
           <ProtocolDetails dataList={dataList} />
 
-          <IPFSConfigrationProfiles
-            peerName={peer.name}
-            profiles={peer.profiles}
-            initProfiles={peer.initProfiles}
-          />
-          <IPFSApiDetails
-            peerName={peer.name}
-            apiPort={peer.apiPort}
-            apiHost={peer.apiHost}
-          />
+          <IPFSConfigrationProfiles {...peer} />
 
-          <IPFSGatewayDetails
-            peerName={peer.name}
-            gatewayPort={peer.gatewayPort}
-            gatewayHost={peer.gatewayHost}
-          />
+          <IPFSApiDetails {...peer} />
 
-          <IPFSRoutingDetails peerName={peer.name} routing={peer.routing} />
+          <IPFSGatewayDetails {...peer} />
+
+          <IPFSRoutingDetails {...peer} />
 
           <Logging wsUrl={`/ipfs/peers/${peer.name}/logs`} />
 

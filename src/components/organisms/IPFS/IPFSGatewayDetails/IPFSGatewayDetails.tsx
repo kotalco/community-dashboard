@@ -1,33 +1,31 @@
 import React, { useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { mutate } from 'swr';
+import { KeyedMutator } from 'swr';
 import { joiResolver } from '@hookform/resolvers/joi';
-import axios from 'axios';
 
 import Button from '@components/atoms/Button/Button';
 import TextInput from '@components/molecules/TextInput/TextInput';
-import { Gateway } from '@interfaces/ipfs/Peer';
+import { Gateway, Peer } from '@interfaces/ipfs/Peer';
 import { updateGatewaySchema } from '@schemas/ipfs/peers/updateIPFSPeer';
 import { updateIPFSPeer } from '@utils/requests/ipfs/peers';
-import { handleAxiosError } from '@utils/axios';
-import { ServerError } from '@interfaces/ServerError';
+import { handleRequest } from '@utils/helpers/handleRequest';
 
-interface Props {
-  peerName: string;
-  gatewayPort: number;
-  gatewayHost: string;
+interface Props extends Peer {
+  mutate?: KeyedMutator<{ peer: Peer }>;
 }
 
-const IPFSPeerDetails: React.FC<Props> = (props) => {
-  const [submitError, setSubmitError] = useState<string | undefined>('');
+const IPFSPeerDetails: React.FC<Props> = ({
+  gatewayPort,
+  gatewayHost,
+  name,
+  mutate,
+}) => {
+  const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
-
-  const { gatewayPort, gatewayHost, peerName } = props;
 
   const {
     reset,
     register,
-    control,
     handleSubmit,
     formState: { isDirty, isSubmitting, errors },
   } = useForm<Gateway>({
@@ -36,19 +34,19 @@ const IPFSPeerDetails: React.FC<Props> = (props) => {
   });
 
   const onSubmit: SubmitHandler<Gateway> = async (values) => {
-    setSubmitError('');
+    setServerError('');
     setSubmitSuccess('');
 
-    try {
-      const peer = await updateIPFSPeer(peerName, values);
-      void mutate(peerName, peer);
+    const { error, response } = await handleRequest(
+      updateIPFSPeer.bind(undefined, name, values)
+    );
+
+    if (error) return setServerError(error);
+
+    if (response) {
+      mutate?.();
       reset(values);
       setSubmitSuccess('Peer has been updated');
-    } catch (e) {
-      // if (axios.isAxiosError(e)) {
-      //   const error = handleAxiosError<ServerError>(e);
-      //   setSubmitError(error.response?.data.error);
-      // }
     }
   };
 
@@ -69,7 +67,7 @@ const IPFSPeerDetails: React.FC<Props> = (props) => {
         </div>
       </div>
 
-      <div className="flex space-x-2 space-x-reverse flex-row-reverse items-center px-4 py-3 bg-gray-50 sm:px-6">
+      <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           className="btn btn-primary"
           disabled={!isDirty || isSubmitting}
@@ -78,8 +76,8 @@ const IPFSPeerDetails: React.FC<Props> = (props) => {
         >
           Save
         </Button>
-        {submitError && (
-          <p className="text-center text-red-500 mb-5">{submitError}</p>
+        {serverError && (
+          <p className="mb-5 text-center text-red-500">{serverError}</p>
         )}
         {submitSuccess && <p>{submitSuccess}</p>}
       </div>
