@@ -46,7 +46,7 @@ const CreateClusterPeerPage: React.FC = () => {
   // Get cluster bootsrap peers
   const bootstrapPeers = clusterpeers.map(({ name, id }) => ({
     label: name,
-    value: `/dns4/${name}/tcp/4001/p2p/${id}`,
+    value: `/dns4/${name}/tcp/9096/p2p/${id}`,
   }));
 
   // Get cluster trusted peers

@@ -27,7 +27,7 @@ function CreateChainlink() {
   const [serverError, setServerError] = useState('');
   const router = useRouter();
   const { nodes } = useEthereumNodes();
-  console.log(nodes);
+
   const activeNodes = nodes
     .filter(({ ws }) => ws)
     .map(({ name, wsPort }) => ({

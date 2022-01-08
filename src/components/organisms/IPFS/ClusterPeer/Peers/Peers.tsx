@@ -39,7 +39,7 @@ const Peers: React.FC<Props> = ({
   // Get cluster bootstrap peers
   const bootstrapPeersOptions = clusterpeers.map(({ name, id }) => ({
     label: name,
-    value: `/dns4/${name}/tcp/4001/p2p/${id}`,
+    value: `/dns4/${name}/tcp/9096/p2p/${id}`,
   }));
 
   const {
