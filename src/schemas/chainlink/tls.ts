@@ -16,6 +16,6 @@ export const schema: SchemaOf<TLS> = object({
     .when('certSecretName', {
       is: (value: string) => !!value,
       then: boolean().default(false),
-      otherwise: boolean().strip(),
+      otherwise: boolean().isFalse(),
     }),
 });

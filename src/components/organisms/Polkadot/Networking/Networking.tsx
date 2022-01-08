@@ -82,6 +82,7 @@ function NetworkingDetails({
                 value={field.value}
                 href={`/core/secrets/create?type=${KubernetesSecretTypes.polkadotPrivatekey}`}
                 hrefTitle="Create new private key..."
+                withClear
               />
             )}
           />

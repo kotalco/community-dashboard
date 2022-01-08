@@ -3,14 +3,14 @@ import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 
 import Select from '@components/molecules/Select/Select';
 import Button from '@components/atoms/Button/Button';
+import Toggle from '@components/molecules/Toggle/Toggle';
+import TextInput from '@components/molecules/TextInput/TextInput';
 import { ChainlinkNode, TLS } from '@interfaces/chainlink/ChainlinkNode';
 import { KeyedMutator } from 'swr';
 import { updateChainlinkNode } from '@utils/requests/chainlink';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
-import Toggle from '@components/molecules/Toggle/Toggle';
-import TextInput from '@components/molecules/TextInput/TextInput';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { schema } from '@schemas/chainlink/tls';
 
@@ -41,7 +41,9 @@ function TLSDetails({
     watch,
     setValue,
     formState: { isDirty, isSubmitting, errors },
-  } = useForm<TLS>({ resolver: yupResolver(schema) });
+  } = useForm<TLS>({
+    resolver: yupResolver(schema),
+  });
 
   const tlsCertificate = watch('certSecretName');
 
@@ -55,7 +57,7 @@ function TLSDetails({
       setServerError(error);
       return;
     }
-
+    console.log(response);
     if (response) {
       mutate?.();
       reset(values);
@@ -80,6 +82,7 @@ function TLSDetails({
                   if (!value) setValue('secureCookies', false);
                   field.onChange(value);
                 }}
+                withClear
                 label="Certificate"
                 error={errors.certSecretName?.message}
                 placeholder="Select a certificate..."

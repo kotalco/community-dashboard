@@ -19,6 +19,7 @@ interface Props {
   hrefTitle?: string;
   value?: string;
   helperText?: string;
+  withClear?: boolean;
 }
 
 const Select: React.FC<Props> = ({
@@ -31,6 +32,7 @@ const Select: React.FC<Props> = ({
   hrefTitle,
   value,
   helperText,
+  withClear,
 }) => {
   const defaultValue = options.find((option) => option.value === value);
   const [selected, setSelected] = useState(defaultValue);
@@ -44,10 +46,15 @@ const Select: React.FC<Props> = ({
     setSelected(options.find((option) => option.value === value));
   }, [options, value]);
 
+  const clear = () => {
+    setSelected(undefined);
+    onChange('');
+  };
+
   return (
     <Listbox value={selected} onChange={handleChange}>
       {({ open }) => (
-        <div className="max-w-xs mb-4">
+        <div className="relative max-w-xs mb-4">
           <Listbox.Label className="block text-sm font-medium text-gray-700">
             {label}
           </Listbox.Label>
@@ -133,6 +140,15 @@ const Select: React.FC<Props> = ({
               </Listbox.Options>
             </Transition>
           </div>
+          {withClear && selected?.value && (
+            <button
+              type="button"
+              className="absolute mt-1 text-sm text-red-600 -right-10 top-7"
+              onClick={clear}
+            >
+              Clear
+            </button>
+          )}
           {helperText && (
             <p className="mt-2 text-sm text-gray-500">{helperText}</p>
           )}

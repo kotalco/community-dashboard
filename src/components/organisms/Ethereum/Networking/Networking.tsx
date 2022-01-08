@@ -74,6 +74,7 @@ function NetworkingDetails({ name, client, mutate, ...rest }: Props) {
                 value={field.value}
                 href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}
                 hrefTitle="Create new private key..."
+                withClear
               />
             )}
           />

@@ -165,23 +165,21 @@ function CreateChainlink() {
           />
 
           {/* Password */}
-          {passwords && (
-            <Controller
-              control={control}
-              name="apiCredentials.passwordSecretName"
-              render={({ field }) => (
-                <Select
-                  options={passwords}
-                  label="Password"
-                  placeholder="Select a password..."
-                  onChange={field.onChange}
-                  error={errors.apiCredentials?.passwordSecretName?.message}
-                  href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
-                  hrefTitle="Create New Password..."
-                />
-              )}
-            />
-          )}
+          <Controller
+            control={control}
+            name="apiCredentials.passwordSecretName"
+            render={({ field }) => (
+              <Select
+                options={passwords}
+                label="Password"
+                placeholder="Select a password..."
+                onChange={field.onChange}
+                error={errors.apiCredentials?.passwordSecretName?.message}
+                href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
+                hrefTitle="Create New Password..."
+              />
+            )}
+          />
         </FormLayout>
       </form>
     </Layout>

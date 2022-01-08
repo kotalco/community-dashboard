@@ -77,23 +77,21 @@ const CreateSecret: React.FC = () => {
             {...register('name', nameValidations)}
           />
 
-          <div className="max-w-xs mt-4">
-            <Controller
-              name="type"
-              rules={typeValidations}
-              control={control}
-              render={({ field }) => (
-                <Select
-                  placeholder="Choose a type..."
-                  label="Secret Type"
-                  error={errors.type?.message}
-                  options={secretTypesOptions}
-                  onChange={field.onChange}
-                  value={field.value}
-                />
-              )}
-            />
-          </div>
+          <Controller
+            name="type"
+            rules={typeValidations}
+            control={control}
+            render={({ field }) => (
+              <Select
+                placeholder="Choose a type..."
+                label="Secret Type"
+                error={errors.type?.message}
+                options={secretTypesOptions}
+                onChange={field.onChange}
+                value={field.value}
+              />
+            )}
+          />
 
           {(type === KubernetesSecretTypes.password ||
             type === KubernetesSecretTypes.ethereum2Keystore) && (

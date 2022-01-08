@@ -125,6 +125,7 @@ function CreateNode() {
                 onChange={field.onChange}
                 href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}
                 hrefTitle="Create new private key..."
+                withClear
               />
             )}
           />

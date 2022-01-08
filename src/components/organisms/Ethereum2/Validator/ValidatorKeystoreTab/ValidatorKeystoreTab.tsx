@@ -28,7 +28,7 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
   const { data: allKeystores } = useSecretsByType(
     KubernetesSecretTypes.ethereum2Keystore
   );
-  const { data: allWalletValues } = useSecretsByType(
+  const { data: allWalletValues, isLoading } = useSecretsByType(
     KubernetesSecretTypes.password
   );
 
@@ -89,7 +89,7 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
           )}
         />
 
-        {walletPasswordSecretName && allWalletValues.length && (
+        {walletPasswordSecretName && !isLoading && (
           <div className="max-w-xs mt-4">
             <Controller
               name="walletPasswordSecretName"
