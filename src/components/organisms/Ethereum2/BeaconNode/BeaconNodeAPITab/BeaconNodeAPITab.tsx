@@ -36,14 +36,14 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
 
   const defaultValues = {
     rest,
-    restHost: restHost || '0.0.0.0',
-    restPort: restPort || 5051,
+    restHost: restHost,
+    restPort: restPort,
     rpc,
-    rpcHost: rpcHost || '0.0.0.0',
-    rpcPort: rpcPort || 4000,
+    rpcHost: rpcHost,
+    rpcPort: rpcPort,
     grpc,
-    grpcHost: grpcHost || '0.0.0.0',
-    grpcPort: grpcPort || 3500,
+    grpcHost: grpcHost,
+    grpcPort: grpcPort,
     client,
   };
 
@@ -94,6 +94,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
             <Controller
               name="rest"
               control={control}
+              defaultValue={rest}
               render={({ field }) => (
                 <Toggle
                   label="REST API Server"
@@ -109,6 +110,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
                 disabled={!restState}
                 label="REST API Server Port"
                 error={errors.restPort?.message}
+                defaultValue={restPort}
                 {...register('restPort')}
               />
             </div>
@@ -131,6 +133,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
             <Controller
               name="rpc"
               control={control}
+              defaultValue={rpc}
               render={({ field }) => (
                 <Toggle
                   label="JSON-RPC Server"
@@ -154,6 +157,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
                 disabled={!rpcState}
                 label="JSON-RPC Server Port"
                 error={errors.rpcPort?.message}
+                defaultValue={rpcPort}
                 {...register('rpcPort')}
               />
             </div>
@@ -162,6 +166,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
                 disabled={!rpcState}
                 label="JSON-RPC Server Host"
                 error={errors.rpcHost?.message}
+                defaultValue={rpcHost}
                 {...register('rpcHost')}
               />
             </div>
@@ -177,6 +182,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
             <Controller
               name="grpc"
               control={control}
+              defaultValue={grpc}
               render={({ field }) => (
                 <Toggle
                   label="GRPC Gateway Server"
@@ -192,6 +198,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
                 disabled={!grpcState}
                 label="GRPC Gateway Server Port"
                 error={errors.grpcPort?.message}
+                defaultValue={grpcPort}
                 {...register('grpcPort')}
               />
             </div>
@@ -200,6 +207,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
                 disabled={!grpcState}
                 label="GRPC Gateway Server Host"
                 error={errors.grpcHost?.message}
+                defaultValue={grpcHost}
                 {...register('grpcHost')}
               />
             </div>
