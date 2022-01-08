@@ -8,10 +8,7 @@ export const syncModeOptions = (client: EthereumNodeClient) => {
     { label: 'Light', value: SyncMode.light },
   ];
 
-  if (
-    client === EthereumNodeClient.besu ||
-    client === EthereumNodeClient.parity
-  ) {
+  if (client === EthereumNodeClient.besu) {
     options = options.filter((option) => option.value !== SyncMode.light);
   }
 

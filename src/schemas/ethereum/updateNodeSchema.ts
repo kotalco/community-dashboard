@@ -68,7 +68,7 @@ export const updateAPISchema = Joi.object<
       }),
   }),
   graphql: Joi.when('client', {
-    is: ['parity', 'nethermind'],
+    is: 'nethermind',
     then: Joi.any().strip(),
     otherwise: Joi.boolean(),
   }),

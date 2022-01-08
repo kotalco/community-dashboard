@@ -167,41 +167,40 @@ function APIDetails({ name, mutate, ...rest }: Props) {
               />
             </>
           )}
-          {rest.client !== EthereumNodeClient.parity &&
-            rest.client !== EthereumNodeClient.nethermind && (
-              <>
-                <Separator />
+          {rest.client !== EthereumNodeClient.nethermind && (
+            <>
+              <Separator />
 
-                {/* Enable GraphQl Server */}
-                <Controller
-                  control={control}
-                  name="graphql"
-                  defaultValue={rest.graphql}
-                  render={({ field }) => (
-                    <Toggle
-                      label="GraphQl Server"
-                      checked={field.value}
-                      onChange={(state) =>
-                        handleApiChange(state, field.onChange, field.name)
-                      }
-                    />
-                  )}
-                />
-
-                {/* GraphQl Server Port */}
-                {graphql && (
-                  <div className="max-w-xs mt-5">
-                    <TextInput
-                      disabled={!graphql}
-                      label="GraphQl Server Port"
-                      error={errors.graphqlPort?.message}
-                      defaultValue={rest.graphqlPort || 8547}
-                      {...register('graphqlPort')}
-                    />
-                  </div>
+              {/* Enable GraphQl Server */}
+              <Controller
+                control={control}
+                name="graphql"
+                defaultValue={rest.graphql}
+                render={({ field }) => (
+                  <Toggle
+                    label="GraphQl Server"
+                    checked={field.value}
+                    onChange={(state) =>
+                      handleApiChange(state, field.onChange, field.name)
+                    }
+                  />
                 )}
-              </>
-            )}
+              />
+
+              {/* GraphQl Server Port */}
+              {graphql && (
+                <div className="max-w-xs mt-5">
+                  <TextInput
+                    disabled={!graphql}
+                    label="GraphQl Server Port"
+                    error={errors.graphqlPort?.message}
+                    defaultValue={rest.graphqlPort || 8547}
+                    {...register('graphqlPort')}
+                  />
+                </div>
+              )}
+            </>
+          )}
         </div>
 
         <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">

@@ -15,7 +15,6 @@ export const schema: SchemaOf<CreateEthereumNode> = object({
       [
         EthereumNodeClient.geth,
         EthereumNodeClient.besu,
-        EthereumNodeClient.parity,
         EthereumNodeClient.nethermind,
       ],
       '${value} is not valid value'
