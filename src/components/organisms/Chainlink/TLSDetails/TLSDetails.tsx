@@ -38,8 +38,12 @@ function TLSDetails({
     register,
     control,
     reset,
+    watch,
+    setValue,
     formState: { isDirty, isSubmitting, errors },
   } = useForm<TLS>({ resolver: yupResolver(schema) });
+
+  const tlsCertificate = watch('certSecretName');
 
   const onSubmit: SubmitHandler<TLS> = async (values) => {
     setServerError('');
@@ -72,7 +76,10 @@ function TLSDetails({
               <Select
                 options={tlsCertificates}
                 value={field.value}
-                onChange={field.onChange}
+                onChange={(value) => {
+                  if (!value) setValue('secureCookies', false);
+                  field.onChange(value);
+                }}
                 label="Certificate"
                 error={errors.certSecretName?.message}
                 placeholder="Select a certificate..."
@@ -92,13 +99,17 @@ function TLSDetails({
             <Toggle
               label="Secure Cookies"
               checked={field.value}
-              onChange={field.onChange}
+              onChange={(state) => {
+                if (!tlsCertificate) return;
+                field.onChange(state);
+              }}
             />
           )}
         />
 
         {/* TLS Port */}
         <TextInput
+          disabled={!tlsCertificate}
           defaultValue={tlsPort}
           label="TLS Port"
           {...register('tlsPort')}

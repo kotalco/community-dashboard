@@ -41,7 +41,7 @@ const Toggle: React.FC<Props> = ({
         </Switch.Label>
       </Switch.Group>
       {error && (
-        <p role="error" className="text-sm text-red-600 mt-2">
+        <p role="error" className="mt-2 text-sm text-red-600">
           {error}
         </p>
       )}
