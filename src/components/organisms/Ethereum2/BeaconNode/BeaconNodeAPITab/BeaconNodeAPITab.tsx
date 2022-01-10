@@ -9,7 +9,7 @@ import { API, BeaconNode } from '@interfaces/ethereum2/BeaconNode';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Separator from '@components/atoms/Separator/Separator';
 import Toggle from '@components/molecules/Toggle/Toggle';
-import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
+import { Ethereum2Client } from '@enums/Ethereum2/Ethereum2Client';
 import { KeyedMutator } from 'swr';
 import { handleRequest } from '@utils/helpers/handleRequest';
 
@@ -88,8 +88,8 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
       <div className="px-4 py-5 sm:p-6">
         {/* REST API */}
         {/* Supported by Teku and Lighthouse only */}
-        {(client === BeaconNodeClient.teku ||
-          client === BeaconNodeClient.lighthouse) && (
+        {(client === Ethereum2Client.teku ||
+          client === Ethereum2Client.lighthouse) && (
           <>
             <Controller
               name="rest"
@@ -127,8 +127,8 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
 
         {/* JSON-RPC Server */}
         {/* Supoorted only by Prysm and Nimbus */}
-        {(client === BeaconNodeClient.nimbus ||
-          client === BeaconNodeClient.prysm) && (
+        {(client === Ethereum2Client.nimbus ||
+          client === Ethereum2Client.prysm) && (
           <>
             <Controller
               name="rpc"
@@ -138,13 +138,13 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
                 <Toggle
                   label="JSON-RPC Server"
                   onChange={(state) => {
-                    if (client === BeaconNodeClient.prysm) {
+                    if (client === Ethereum2Client.prysm) {
                       return;
                     }
                     field.onChange(state);
                   }}
                   helperText={
-                    client === BeaconNodeClient.prysm
+                    client === Ethereum2Client.prysm
                       ? ` (RPC Server couldn't turned of in case of Prysm Client)`
                       : ''
                   }
@@ -175,7 +175,7 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
 
         {/* GRPC Gateway Server */}
         {/* Supported by Prysm only */}
-        {client === BeaconNodeClient.prysm && (
+        {client === Ethereum2Client.prysm && (
           <>
             <Separator />
 

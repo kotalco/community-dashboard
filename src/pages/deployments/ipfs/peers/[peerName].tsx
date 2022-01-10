@@ -17,6 +17,7 @@ import ResourcesTab from '@components/organisms/Resources/Resources';
 import { Resources } from '@interfaces/Resources';
 import { usePeer } from '@hooks/usePeer';
 import { useStatus } from '@hooks/useStatus';
+import { DataList } from '@interfaces/DataList';
 
 function IPFSPeerDetailsPage() {
   const { push, query } = useRouter();
@@ -33,10 +34,14 @@ function IPFSPeerDetailsPage() {
     mutate();
   };
 
-  const dataList = [
+  const dataList: DataList[] = [
     { label: 'Protocol', value: 'IPFS' },
     { label: 'Chain', value: 'public-swarm' },
-    { label: 'client', value: 'go-ipfs' },
+    {
+      label: 'client',
+      value: 'go-ipfs',
+      href: 'https://github.com/ipfs/go-ipfs',
+    },
   ];
 
   return (

@@ -21,6 +21,8 @@ import { getLabel } from '@utils/helpers/getLabel';
 import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
 import { useStatus } from '@hooks/useStatus';
 import { useEthereumNode } from '@hooks/useEthereumNode';
+import { DataList } from '@interfaces/DataList';
+import { getHref } from '@utils/helpers/getHref';
 
 function EthereumNodeDetailsPage() {
   const { query, push } = useRouter();
@@ -37,10 +39,14 @@ function EthereumNodeDetailsPage() {
   if (error) push('/404');
   if (!node) return <LoadingIndicator />;
 
-  const dataList = [
+  const dataList: DataList[] = [
     { label: 'Protocol', value: 'Ethereum' },
     { label: 'Chain', value: getLabel(node.network, networkOptions) },
-    { label: 'Client', value: getLabel(node.client, clientOptions) },
+    {
+      label: 'Client',
+      value: getLabel(node.client, clientOptions),
+      href: getHref(node.client),
+    },
   ];
 
   return (

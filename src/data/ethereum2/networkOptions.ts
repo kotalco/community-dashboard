@@ -1,8 +1,8 @@
 import { SelectOption } from '@interfaces/SelectOption';
-import { ValidatorsNetworks } from '@enums/Ethereum2/Validators/ValidatorsNetworks';
+import { Ethereum2Network } from '@enums/Ethereum2/Ethereum2Network';
 
 export const networkOptions: SelectOption[] = [
-  { label: 'Mainnet', value: ValidatorsNetworks.mainnet },
-  { label: 'Pyrmont', value: ValidatorsNetworks.pyrmont },
-  { label: 'Prater', value: ValidatorsNetworks.prater },
+  { label: 'Mainnet', value: Ethereum2Network.mainnet },
+  { label: 'Pyrmont', value: Ethereum2Network.pyrmont },
+  { label: 'Prater', value: Ethereum2Network.prater },
 ];

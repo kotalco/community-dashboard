@@ -38,7 +38,11 @@ function ClusterPeerDetailsPage() {
   const dataList = [
     { label: 'Protocol', value: 'IPFS' },
     { label: 'Chain', value: 'public-swarm' },
-    { label: 'Client', value: 'ipfs-cluster-service' },
+    {
+      label: 'Client',
+      value: 'ipfs-cluster-service',
+      href: 'https://github.com/ipfs/ipfs-cluster',
+    },
     {
       label: 'Consensus',
       value: getLabel(clusterpeer.consensus, consensusOptions),

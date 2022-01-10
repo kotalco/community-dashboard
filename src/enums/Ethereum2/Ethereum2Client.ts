@@ -1,4 +1,4 @@
-export enum BeaconNodeClient {
+export enum Ethereum2Client {
   teku = 'teku',
   prysm = 'prysm',
   lighthouse = 'lighthouse',

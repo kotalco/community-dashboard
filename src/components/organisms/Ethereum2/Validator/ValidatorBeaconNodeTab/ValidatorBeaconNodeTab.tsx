@@ -5,10 +5,9 @@ import Button from '@components/atoms/Button/Button';
 import MultiSelectWithInput from '@components/molecules/MultiSelectWithInput/MultiSelectWithInput';
 import { BeaconEndpoints, Validator } from '@interfaces/ethereum2/Validator';
 import { updateValidator } from '@utils/requests/ethereum2/validators';
-import { ValidatorsClient } from '@enums/Ethereum2/Validators/ValidatorsClient';
+import { Ethereum2Client } from '@enums/Ethereum2/Ethereum2Client';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { useBeaconNodes } from '@hooks/useBeaconNodes';
-import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
 import {
   MultipleSchema,
   onlyOneSchema,
@@ -32,15 +31,14 @@ const ValidatorBeaconNodeTab: React.FC<Props> = ({
 
   const activeBeaconnodes = beaconnodes
     .filter(({ client, rest, rpc }) =>
-      client === BeaconNodeClient.teku || client === BeaconNodeClient.lighthouse
+      client === Ethereum2Client.teku || client === Ethereum2Client.lighthouse
         ? rest
         : rpc
     )
     .map(({ name, client, rpcPort, restPort }) => ({
       label: name,
       value: `http://${name}:${
-        client === BeaconNodeClient.teku ||
-        client === BeaconNodeClient.lighthouse
+        client === Ethereum2Client.teku || client === Ethereum2Client.lighthouse
           ? restPort
           : rpcPort
       }`,
@@ -54,7 +52,7 @@ const ValidatorBeaconNodeTab: React.FC<Props> = ({
   } = useForm<BeaconEndpoints>({
     defaultValues: { beaconEndpoints },
     resolver: yupResolver(
-      client === ValidatorsClient.lighthouse ? MultipleSchema : onlyOneSchema
+      client === Ethereum2Client.lighthouse ? MultipleSchema : onlyOneSchema
     ),
   });
 
@@ -87,26 +85,26 @@ const ValidatorBeaconNodeTab: React.FC<Props> = ({
             control={control}
             render={({ field }) => (
               <MultiSelectWithInput
-                single={client !== ValidatorsClient.lighthouse}
+                single={client !== Ethereum2Client.lighthouse}
                 options={activeBeaconnodes}
                 label="Ethereum 2.0 Beacon Node Endpoints"
                 emptyLabel="No Internal Active Beaconnodes"
                 errors={errors}
                 error={errors.beaconEndpoints && field.name}
                 helperText={
-                  client === ValidatorsClient.lighthouse
+                  client === Ethereum2Client.lighthouse
                     ? 'One endpoint per each line'
                     : ''
                 }
                 value={field.value}
                 onChange={field.onChange}
                 placeholder={
-                  client === ValidatorsClient.lighthouse
+                  client === Ethereum2Client.lighthouse
                     ? 'Select beacon nodes...'
                     : 'Select beacon node'
                 }
                 otherLabel={
-                  client === ValidatorsClient.lighthouse
+                  client === Ethereum2Client.lighthouse
                     ? 'Add External Beacon Nodes'
                     : 'Use External Beacon Node'
                 }

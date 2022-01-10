@@ -15,13 +15,12 @@ import { networkOptions } from '@data/ethereum2/networkOptions';
 import { schema } from '@schemas/ethereum2/validator/create';
 import { CreateValidator, Validator } from '@interfaces/ethereum2/Validator';
 import { createValidator } from '@utils/requests/ethereum2/validators';
-import { ValidatorsClient } from '@enums/Ethereum2/Validators/ValidatorsClient';
+import { Ethereum2Client } from '@enums/Ethereum2/Ethereum2Client';
 import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import Heading from '@components/templates/Heading/Heading';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { useBeaconNodes } from '@hooks/useBeaconNodes';
-import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
 import { Deployments } from '@enums/Deployments';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
 
@@ -38,15 +37,14 @@ const CreateValidator: React.FC = () => {
 
   const activeBeaconnodes = beaconnodes
     .filter(({ client, rest, rpc }) =>
-      client === BeaconNodeClient.teku || client === BeaconNodeClient.lighthouse
+      client === Ethereum2Client.teku || client === Ethereum2Client.lighthouse
         ? rest
         : rpc
     )
     .map(({ name, client, rpcPort, restPort }) => ({
       label: name,
       value: `http://${name}:${
-        client === BeaconNodeClient.teku ||
-        client === BeaconNodeClient.lighthouse
+        client === Ethereum2Client.teku || client === Ethereum2Client.lighthouse
           ? restPort
           : rpcPort
       }`,
@@ -155,7 +153,7 @@ const CreateValidator: React.FC = () => {
           />
 
           {/* Prysm Client Wallet Password */}
-          {client === ValidatorsClient.prysm && (
+          {client === Ethereum2Client.prysm && (
             <Controller
               name="walletPasswordSecretName"
               control={control}
@@ -180,12 +178,12 @@ const CreateValidator: React.FC = () => {
             control={control}
             render={({ field }) => (
               <MultiSelectWithInput
-                single={client !== ValidatorsClient.lighthouse}
+                single={client !== Ethereum2Client.lighthouse}
                 options={activeBeaconnodes}
                 label="Beacon Node Endpoints"
                 emptyLabel="No Internal Active Beaconnodes"
                 helperText={
-                  client === ValidatorsClient.lighthouse
+                  client === Ethereum2Client.lighthouse
                     ? 'One endpoint per line'
                     : ''
                 }
@@ -194,12 +192,12 @@ const CreateValidator: React.FC = () => {
                 value={field.value}
                 onChange={field.onChange}
                 placeholder={
-                  client === ValidatorsClient.lighthouse
+                  client === Ethereum2Client.lighthouse
                     ? 'Select beacon nodes...'
                     : 'Select a beacon node...'
                 }
                 otherLabel={
-                  client === ValidatorsClient.lighthouse
+                  client === Ethereum2Client.lighthouse
                     ? 'Add external beacon nodes'
                     : 'Use external beacon node'
                 }

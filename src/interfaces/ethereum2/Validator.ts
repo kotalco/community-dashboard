@@ -1,10 +1,10 @@
-import { ValidatorsClient } from '@enums/Ethereum2/Validators/ValidatorsClient';
+import { Ethereum2Client } from '@enums/Ethereum2/Ethereum2Client';
 import { Resources } from '@interfaces/Resources';
 
 export interface CreateValidator {
   name: string;
   network: string;
-  client: ValidatorsClient;
+  client: Ethereum2Client;
   keystores: string[];
   walletPasswordSecretName?: string;
   beaconEndpoints: string[];

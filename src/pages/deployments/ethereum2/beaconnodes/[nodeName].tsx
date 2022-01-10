@@ -18,6 +18,8 @@ import { networkOptions } from '@data/ethereum2/networkOptions';
 import { UpdateBeaconnode } from '@interfaces/ethereum2/BeaconNode';
 import { getLabel } from '@utils/helpers/getLabel';
 import { useStatus } from '@hooks/useStatus';
+import { DataList } from '@interfaces/DataList';
+import { getHref } from '@utils/helpers/getHref';
 
 function Ethereum2NodeDetailsPage() {
   const { query, push } = useRouter();
@@ -35,10 +37,14 @@ function Ethereum2NodeDetailsPage() {
   if (error) push('/404');
   if (!beaconnode) return <LoadingIndicator />;
 
-  const dataList = [
+  const dataList: DataList[] = [
     { label: 'Protocol', value: 'Ethereum 2.0' },
     { label: 'Chain', value: getLabel(beaconnode.network, networkOptions) },
-    { label: 'Client', value: getLabel(beaconnode.client, clientOptions) },
+    {
+      label: 'Client',
+      value: getLabel(beaconnode.client, clientOptions),
+      href: getHref(beaconnode.client),
+    },
   ];
   return (
     <Layout>

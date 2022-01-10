@@ -14,9 +14,9 @@ import { clientOptions } from '@data/ethereum2/clientOptions';
 import { networkOptions } from '@data/ethereum2/networkOptions';
 import { createBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
 import { schema } from '@schemas/ethereum2/beaconNode/create';
-import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
+import { Ethereum2Client } from '@enums/Ethereum2/Ethereum2Client';
 import { BeaconNode, CreateBeaconNode } from '@interfaces/ethereum2/BeaconNode';
-import { BeaconNodeNetwork } from '@enums/Ethereum2/BeaconNodes/BeaconNodeNetwork';
+import { Ethereum2Network } from '@enums/Ethereum2/Ethereum2Network';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { useEthereumNodes } from '@hooks/useEthereumNodes';
 import { Deployments } from '@enums/Deployments';
@@ -119,8 +119,8 @@ const CreateBeaconNode: React.FC = () => {
           />
 
           {/* Ethereum Endpoint in case of client is Prysm and network is not Mainnet */}
-          {client === BeaconNodeClient.prysm &&
-            network !== BeaconNodeNetwork.mainnet && (
+          {client === Ethereum2Client.prysm &&
+            network !== Ethereum2Network.mainnet && (
               <Controller
                 name="eth1Endpoints"
                 control={control}

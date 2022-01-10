@@ -19,6 +19,8 @@ import { networkOptions } from '@data/ethereum2/networkOptions';
 import { clientOptions } from '@data/ethereum2/clientOptions';
 import { useValidator } from '@hooks/useValidator';
 import { useStatus } from '@hooks/useStatus';
+import { DataList } from '@interfaces/DataList';
+import { getHref } from '@utils/helpers/getHref';
 
 function ValidatorDetailsPage() {
   const { query, push } = useRouter();
@@ -37,10 +39,14 @@ function ValidatorDetailsPage() {
   if (error) push('/404');
   if (!validator) return <LoadingIndicator />;
 
-  const dataList = [
+  const dataList: DataList[] = [
     { label: 'Protocol', value: 'Ethereum 2.0' },
     { label: 'Chain', value: getLabel(validator.network, networkOptions) },
-    { label: 'Client', value: getLabel(validator.client, clientOptions) },
+    {
+      label: 'Client',
+      value: getLabel(validator.client, clientOptions),
+      href: getHref(validator.client),
+    },
   ];
 
   return (

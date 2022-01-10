@@ -21,6 +21,7 @@ import Validatordetails from '@components/organisms/Polkadot/Validator/Validator
 import TelemetryDetails from '@components/organisms/Polkadot/Telemetry/Telemetry';
 import PrometheusDetails from '@components/organisms/Polkadot/Prometheus/Prometheus';
 import APIDetails from '@components/organisms/Polkadot/API/API';
+import { DataList } from '@interfaces/DataList';
 
 function PolkadotNode() {
   const { query, push } = useRouter();
@@ -38,13 +39,17 @@ function PolkadotNode() {
   if (error) return push('/404');
   if (!node) return <LoadingIndicator />;
 
-  const dataList = [
+  const dataList: DataList[] = [
     { label: 'Protocol', value: 'Polkadot' },
     {
       label: 'Network',
       value: getLabel(node.network, NETWORKS),
     },
-    { label: 'Client', value: 'Parity Polkadot' },
+    {
+      label: 'Client',
+      value: 'Parity Polkadot',
+      href: 'https://github.com/paritytech/polkadot',
+    },
   ];
 
   return (

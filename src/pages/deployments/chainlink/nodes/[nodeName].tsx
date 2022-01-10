@@ -21,6 +21,7 @@ import { useChainlinkNode } from '@hooks/useChainlinkNode';
 import { TITLES } from '@data/chainlink/tabTitles';
 import { EVM_CHAINS } from '@data/chainlink/evmChain';
 import { useStatus } from '@hooks/useStatus';
+import { DataList } from '@interfaces/DataList';
 
 function ChainlinkNode() {
   const { query, push } = useRouter();
@@ -38,7 +39,7 @@ function ChainlinkNode() {
   if (error) push('/404');
   if (!node) return <LoadingIndicator />;
 
-  const dataList = [
+  const dataList: DataList[] = [
     { label: 'Protocol', value: 'Chainlink' },
     {
       label: 'EVM Chain',
@@ -49,7 +50,11 @@ function ChainlinkNode() {
     },
     { label: 'Chain ID', value: node.ethereumChainId },
     { label: 'Link Contact Address', value: node.linkContractAddress },
-    { label: 'Client', value: 'Chainlink' },
+    {
+      label: 'Client',
+      value: 'Chainlink',
+      href: 'https://github.com/smartcontractkit/chainlink',
+    },
   ];
 
   return (

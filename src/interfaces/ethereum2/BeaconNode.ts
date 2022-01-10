@@ -1,9 +1,9 @@
-import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
+import { Ethereum2Client } from '@enums/Ethereum2/Ethereum2Client';
 import { Resources } from '@interfaces/Resources';
 
 export interface CreateBeaconNode {
   name: string;
-  client: BeaconNodeClient;
+  client: Ethereum2Client;
   network: string;
   eth1Endpoints?: string[];
 }

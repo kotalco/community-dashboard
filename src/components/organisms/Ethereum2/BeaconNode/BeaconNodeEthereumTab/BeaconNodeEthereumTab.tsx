@@ -6,7 +6,7 @@ import Button from '@components/atoms/Button/Button';
 import MultiSelectWithInput from '@components/molecules/MultiSelectWithInput/MultiSelectWithInput';
 import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
 import { BeaconNode, Eth1Endpoints } from '@interfaces/ethereum2/BeaconNode';
-import { BeaconNodeClient } from '@enums/Ethereum2/BeaconNodes/BeaconNodeClient';
+import { Ethereum2Client } from '@enums/Ethereum2/Ethereum2Client';
 import { useEthereumNodes } from '@hooks/useEthereumNodes';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import {
@@ -46,9 +46,9 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
   } = useForm<Eth1Endpoints>({
     defaultValues: { eth1Endpoints },
     resolver: yupResolver(
-      client === BeaconNodeClient.prysm && network !== 'mainnet'
+      client === Ethereum2Client.prysm && network !== 'mainnet'
         ? requiredSchema
-        : client === BeaconNodeClient.nimbus || client === BeaconNodeClient.teku
+        : client === Ethereum2Client.nimbus || client === Ethereum2Client.teku
         ? onlyOneSchema
         : optionalSchema
     ),
@@ -83,16 +83,16 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
             render={({ field }) => (
               <MultiSelectWithInput
                 single={
-                  client === BeaconNodeClient.nimbus ||
-                  client === BeaconNodeClient.teku
+                  client === Ethereum2Client.nimbus ||
+                  client === Ethereum2Client.teku
                 }
                 options={activeNodes}
                 label="Ethereum Node JSON-RPC Endpoints"
                 emptyLabel="No Internal Active Nodes"
                 helperText="Nodes must have activated JSON-RPC port"
                 placeholder={
-                  client !== BeaconNodeClient.nimbus &&
-                  client !== BeaconNodeClient.teku
+                  client !== Ethereum2Client.nimbus &&
+                  client !== Ethereum2Client.teku
                     ? 'Select nodes...'
                     : 'Select a node...'
                 }
@@ -101,8 +101,8 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
                 error={errors.eth1Endpoints && field.name}
                 onChange={field.onChange}
                 otherLabel={
-                  client !== BeaconNodeClient.nimbus &&
-                  client !== BeaconNodeClient.teku
+                  client !== Ethereum2Client.nimbus &&
+                  client !== Ethereum2Client.teku
                     ? 'Add external nodes'
                     : 'Use external node'
                 }

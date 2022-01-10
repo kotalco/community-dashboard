@@ -2,21 +2,21 @@ import { object, SchemaOf, string, mixed, array } from 'yup';
 
 import { CreateValidator } from '@interfaces/ethereum2/Validator';
 import { nameRegex } from '@utils/helpers/regex';
-import { ValidatorsClient } from '@enums/Ethereum2/Validators/ValidatorsClient';
+import { Ethereum2Client } from '@enums/Ethereum2/Ethereum2Client';
 
 export const schema: SchemaOf<CreateValidator> = object({
   name: string()
     .required('Name is required')
     .trim()
     .matches(nameRegex, 'Spaces not allowed'),
-  client: mixed<ValidatorsClient>()
+  client: mixed<Ethereum2Client>()
     .required('Client is required')
-    .oneOf<ValidatorsClient>(
+    .oneOf<Ethereum2Client>(
       [
-        ValidatorsClient.lighthouse,
-        ValidatorsClient.nimbus,
-        ValidatorsClient.prysm,
-        ValidatorsClient.teku,
+        Ethereum2Client.lighthouse,
+        Ethereum2Client.nimbus,
+        Ethereum2Client.prysm,
+        Ethereum2Client.teku,
       ],
       '${value} is not valid value'
     ),
@@ -35,7 +35,7 @@ export const schema: SchemaOf<CreateValidator> = object({
     .compact()
     .min(1, '1 keystore at least is required'),
   walletPasswordSecretName: string().when('client', {
-    is: ValidatorsClient.prysm,
+    is: Ethereum2Client.prysm,
     then: string().required('Wallet password is required'),
     otherwise: string().strip(),
   }),
@@ -44,7 +44,7 @@ export const schema: SchemaOf<CreateValidator> = object({
     .ensure()
     .compact()
     .when('client', {
-      is: ValidatorsClient.lighthouse,
+      is: Ethereum2Client.lighthouse,
       then: array().min(1, 'Beacon node endpoints are required'),
       otherwise: array().length(1, 'Only one beacon node endpoint is allowed'),
     }),
