@@ -8,6 +8,8 @@ import FormLayout from '@components/templates/FormLayout/FormLayout';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Select from '@components/molecules/Select/Select';
 import Heading from '@components/templates/Heading/Heading';
+import Toggle from '@components/molecules/Toggle/Toggle';
+import Alert from '@components/atoms/Alert/Alert';
 import { createSchema } from '@schemas/polkadot/create';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import {
@@ -19,7 +21,7 @@ import { createPolkadotNode } from '@utils/requests/polkadot';
 import { Deployments } from '@enums/Deployments';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
 
-function CreatePolkadotNode() {
+function CreateNode() {
   const [serverError, setServerError] = useState('');
   const router = useRouter();
 
@@ -88,10 +90,36 @@ function CreatePolkadotNode() {
               />
             )}
           />
+
+          {/* Pruning */}
+          <Controller
+            control={control}
+            name="pruning"
+            defaultValue={false}
+            render={({ field }) => (
+              <Toggle
+                label="Pruning"
+                checked={field.value}
+                onChange={field.onChange}
+                error={errors.pruning?.message}
+              />
+            )}
+          />
+          <Alert>
+            <h3 className="text-sm font-medium text-yellow-800">Attension</h3>
+            <ul className="mt-2 ml-4 text-sm text-yellow-700 list-disc">
+              <li>Validator nodes must run in archive mode.</li>
+              <li>Disable pruning to enable archive mode.</li>
+              <li>
+                You can enable validator mode after node is up and running &amp;
+                fully synced
+              </li>
+            </ul>
+          </Alert>
         </FormLayout>
       </form>
     </Layout>
   );
 }
 
-export default CreatePolkadotNode;
+export default CreateNode;

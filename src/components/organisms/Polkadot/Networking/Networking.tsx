@@ -5,7 +5,6 @@ import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Button from '@components/atoms/Button/Button';
 import Select from '@components/molecules/Select/Select';
-import Toggle from '@components/molecules/Toggle/Toggle';
 import { PolkadotNode, Networking } from '@interfaces/polkadot/PolkadotNode';
 import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
@@ -23,7 +22,6 @@ function NetworkingDetails({
   nodePrivateKeySecretName,
   p2pPort,
   syncMode,
-  pruning,
   retainedBlocks,
   name,
   mutate,
@@ -110,21 +108,6 @@ function NetworkingDetails({
               onChange={field.onChange}
               value={field.value}
               label="Sync Mode"
-            />
-          )}
-        />
-
-        {/* Pruning */}
-        <Controller
-          control={control}
-          name="pruning"
-          defaultValue={pruning}
-          render={({ field }) => (
-            <Toggle
-              label="Pruning"
-              checked={field.value}
-              onChange={field.onChange}
-              error={errors.pruning?.message}
             />
           )}
         />

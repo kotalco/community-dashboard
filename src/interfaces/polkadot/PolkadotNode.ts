@@ -6,13 +6,13 @@ import { SyncMode } from '@enums/Polkadot/SyncMode';
 export interface CreatePolkadotNode {
   name: string;
   network: Network;
+  pruning: boolean;
 }
 
 export interface Networking {
   p2pPort: number;
   nodePrivateKeySecretName: string;
   syncMode: SyncMode;
-  pruning: boolean;
   retainedBlocks: number;
 }
 

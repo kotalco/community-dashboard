@@ -1,4 +1,4 @@
-import { object, SchemaOf, string, mixed } from 'yup';
+import { object, SchemaOf, string, mixed, boolean } from 'yup';
 
 import { CreatePolkadotNode } from '@interfaces/polkadot/PolkadotNode';
 import { Network } from '@enums/Polkadot/Network';
@@ -8,4 +8,5 @@ export const createSchema: SchemaOf<CreatePolkadotNode> = object({
   network: mixed<Network>()
     .required('Netwrok is required')
     .oneOf([Network.kusama, Network.polkadot, Network.rococo, Network.westend]),
+  pruning: boolean().default(false),
 });
