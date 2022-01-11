@@ -10,7 +10,8 @@ const ChainlinkIcon: React.FC<Props> = ({ className }) => {
       height="64"
       viewBox="0 0 64 64"
       fill="none"
-      strokeWidth="1px"
+      strokeWidth={3}
+      strokeMiterlimit={5}
       stroke="#000"
       className={className}
     >

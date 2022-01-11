@@ -6,4 +6,5 @@ export enum Deployments {
   clusterpeer = 'Cluster Peer',
   chainlink = 'Chainlink',
   polkadot = 'Polkadot',
+  filecoin = 'Filecoin',
 }

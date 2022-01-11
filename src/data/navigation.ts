@@ -33,6 +33,11 @@ export const navigation: Navigation[] = [
         href: '/deployments/ethereum2/beaconnodes',
         protocol: 'ethereum2',
       },
+      {
+        name: 'Filecoin',
+        href: '/deployments/filecoin/nodes',
+        protocol: 'filecoin',
+      },
       { name: 'IPFS', href: '/deployments/ipfs/peers', protocol: 'ipfs' },
       {
         name: 'Chainlink',
