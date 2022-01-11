@@ -18,7 +18,7 @@ import { Deployments } from '@enums/Deployments';
 import { useFilecoinNodes } from '@hooks/useFilecoinNodes';
 import { NETWORKS } from '@data/filecoin/networks';
 
-function ChainlinkNode() {
+function FilecoinNode() {
   const { NotificationPanel } = useNotification(Deployments.chainlink);
   const {
     nodes,
@@ -106,4 +106,4 @@ function ChainlinkNode() {
   );
 }
 
-export default ChainlinkNode;
+export default FilecoinNode;

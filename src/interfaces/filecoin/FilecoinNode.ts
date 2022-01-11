@@ -1,8 +1,11 @@
 import { Resources } from '@interfaces/Resources';
 
-export interface FilecoinNode extends Resources {
+export interface CreateFilecoinNode {
   name: string;
   network: string;
+}
+
+export interface FilecoinNode extends CreateFilecoinNode, Resources {
   api: boolean;
   apiPort: number;
   apiHost: string;

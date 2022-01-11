@@ -1,6 +1,7 @@
-import { Network } from '@enums/Polkadot/Network';
+import { Network } from '@enums/Filecoin/Network';
 import { SelectOption } from '@interfaces/SelectOption';
 
 export const NETWORKS: SelectOption[] = [
-  { label: 'Mainnet', value: Network.kusama },
+  { label: 'Mainnet', value: Network.mainnet },
+  { label: 'Calibration', value: Network.calibration },
 ];
