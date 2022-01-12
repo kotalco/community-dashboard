@@ -6,33 +6,30 @@ import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
 import DangerZone from '@components/organisms/Chainlink/DangerZone/DangerZone';
-import APIDetails from '@components/organisms/Chainlink/APIDetails/APIDetails';
-import AccessControlDetails from '@components/organisms/Chainlink/AccessControlDetails/AccessControlDetails';
+import APIDetails from '@components/organisms/Filecoin/API/API';
 import ResourcesDetails from '@components/organisms/Resources/Resources';
-import LoggingDetails from '@components/organisms/Chainlink/LoggingDetails/LoggingDetails';
-import DatabaseDetails from '@components/organisms/Chainlink/DatabaseDetails/DatabaseDetails';
-import EthereumDetails from '@components/organisms/Chainlink/EthereumDetails/EthereumDetails';
-import WalletDetails from '@components/organisms/Chainlink/WalletDetails/WalletDetails';
-import TLSDetails from '@components/organisms/Chainlink/TLSDetails/TLSDetails';
-import { updateChainlinkNode } from '@utils/requests/chainlink';
+import LoggingDetails from '@components/organisms/Filecoin/Logging/Logging';
+import NetworkingDetails from '@components/organisms/Filecoin/Networking/Networking';
+import IPFSDetails from '@components/organisms/Filecoin/IPFS/IPFS';
 import { Resources } from '@interfaces/Resources';
 import { getLabel } from '@utils/helpers/getLabel';
-import { useChainlinkNode } from '@hooks/useChainlinkNode';
 import { TITLES } from '@data/chainlink/tabTitles';
-import { EVM_CHAINS } from '@data/chainlink/evmChain';
 import { useStatus } from '@hooks/useStatus';
 import { DataList } from '@interfaces/DataList';
+import { useFilecoinNode } from '@hooks/useFilecoinNode';
+import { updateFilecoinNode } from '@utils/requests/filecoin';
+import { NETWORKS } from '@data/filecoin/networks';
 
-function ChainlinkNode() {
+function FilecoinNode() {
   const { query, push } = useRouter();
   const nodeName = query.nodeName as string | undefined;
   const { status } = useStatus(
-    nodeName && `/chainlink/nodes/${nodeName}/status`
+    nodeName && `/filecoin/nodes/${nodeName}/status`
   );
-  const { node, mutate, error } = useChainlinkNode(nodeName);
+  const { node, mutate, error } = useFilecoinNode(nodeName);
 
   const updateResources = async (name: string, values: Resources) => {
-    await updateChainlinkNode(values, name);
+    await updateFilecoinNode(values, name);
     mutate();
   };
 
@@ -40,20 +37,16 @@ function ChainlinkNode() {
   if (!node) return <LoadingIndicator />;
 
   const dataList: DataList[] = [
-    { label: 'Protocol', value: 'Chainlink' },
+    { label: 'Protocol', value: 'Filecoin' },
     {
-      label: 'EVM Chain',
-      value: getLabel(
-        `${node.ethereumChainId}:${node.linkContractAddress}`,
-        EVM_CHAINS
-      ),
+      label: 'Network',
+      value: getLabel(node.network, NETWORKS),
     },
-    { label: 'Chain ID', value: node.ethereumChainId },
-    { label: 'Link Contact Address', value: node.linkContractAddress },
+
     {
       label: 'Client',
-      value: 'Chainlink',
-      href: 'https://github.com/smartcontractkit/chainlink',
+      value: 'Lotus',
+      href: 'https://github.com/filecoin-project/lotus',
     },
   ];
 
@@ -67,22 +60,13 @@ function ChainlinkNode() {
           <ProtocolDetails dataList={dataList} />
 
           {/* Networking */}
-          <DatabaseDetails {...node} />
+          <NetworkingDetails {...node} />
 
-          {/* Ethereum */}
-          <EthereumDetails {...node} />
-
-          {/* Wallet */}
-          <WalletDetails {...node} />
-
-          {/* TLS */}
-          <TLSDetails {...node} />
-
-          {/* API Credentials */}
+          {/* API */}
           <APIDetails {...node} />
 
-          {/* Access Control */}
-          <AccessControlDetails {...node} />
+          {/* IPFS */}
+          <IPFSDetails {...node} />
 
           {/* Logging */}
           <LoggingDetails {...node} />
@@ -99,11 +83,11 @@ function ChainlinkNode() {
           />
 
           {/* Danger Zone */}
-          <DangerZone nodeName={node.name} />
+          {/* <DangerZone nodeName={node.name} /> */}
         </Tabs>
       </div>
     </Layout>
   );
 }
 
-export default ChainlinkNode;
+export default FilecoinNode;

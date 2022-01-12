@@ -5,16 +5,38 @@ export interface CreateFilecoinNode {
   network: string;
 }
 
-export interface FilecoinNode extends CreateFilecoinNode, Resources {
+export interface Networking {
+  p2pPort: number;
+  p2pHost: string;
+}
+
+export interface API {
   api: boolean;
   apiPort: number;
   apiHost: string;
   apiRequestTimeout: number;
-  disableMetadataLog: boolean;
-  p2pPort: number;
-  p2pHost: string;
+}
+
+export interface IPFS {
   ipfsForRetrieval: boolean;
   ipfsPeerEndpoint: string;
   ipfsOnlineMode: boolean;
+}
+
+export interface Logging {
+  disableMetadataLog: boolean;
+}
+
+export type UpdateFilecoinNode = Partial<
+  Resources & Networking & API & IPFS & Logging
+>;
+
+export interface FilecoinNode
+  extends CreateFilecoinNode,
+    Networking,
+    API,
+    IPFS,
+    Logging,
+    Resources {
   createdAt: string;
 }

@@ -15,6 +15,7 @@ interface Props {
   error?: string;
   otherLabel?: string;
   helperText?: string;
+  withClear?: boolean;
 }
 
 const SelectWithInput: React.FC<Props> = ({
@@ -27,6 +28,7 @@ const SelectWithInput: React.FC<Props> = ({
   placeholder,
   otherLabel = 'Other',
   helperText,
+  withClear,
 }) => {
   const allOptions = [...options, { label: otherLabel, value: 'other' }];
   const [selected, setSelected] = useState(
@@ -47,8 +49,13 @@ const SelectWithInput: React.FC<Props> = ({
     }
   };
 
+  const clear = () => {
+    setSelected(undefined);
+    onChange('');
+  };
+
   return (
-    <div className="max-w-xs mb-4">
+    <div className="relative max-w-xs mb-4">
       <Listbox value={selected} onChange={handleChange}>
         {({ open }) => (
           <>
@@ -150,6 +157,15 @@ const SelectWithInput: React.FC<Props> = ({
             }`}
           />
         </div>
+      )}
+      {withClear && selected?.value && (
+        <button
+          type="button"
+          className="absolute text-sm text-red-600 top-8 -right-10"
+          onClick={clear}
+        >
+          Clear
+        </button>
       )}
       {helperText && <p className="mt-2 text-sm text-gray-500">{helperText}</p>}
       {error && (

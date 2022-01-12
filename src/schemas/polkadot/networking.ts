@@ -1,4 +1,4 @@
-import { number, object, SchemaOf, string, mixed, boolean } from 'yup';
+import { number, object, SchemaOf, string, mixed } from 'yup';
 
 import { Networking } from '@interfaces/polkadot/PolkadotNode';
 import { SyncMode } from '@enums/Polkadot/SyncMode';
@@ -14,7 +14,6 @@ export const networkingSchema: SchemaOf<Networking> = object({
   syncMode: mixed<SyncMode>()
     .oneOf([SyncMode.fast, SyncMode.full])
     .default(SyncMode.full),
-  pruning: boolean().default(true),
   retainedBlocks: number()
     .typeError('Retained Blocks is number')
     .notRequired()

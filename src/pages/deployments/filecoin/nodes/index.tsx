@@ -31,7 +31,6 @@ function FilecoinNode() {
     totalCount,
     error,
   } = useFilecoinNodes();
-  console.log(nodes);
 
   const tabs = [
     {

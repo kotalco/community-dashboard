@@ -1,9 +1,5 @@
 import React, { MouseEvent, useState } from 'react';
-import {
-  ExclamationCircleIcon,
-  EyeIcon,
-  EyeOffIcon,
-} from '@heroicons/react/solid';
+import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid';
 import { ChangeHandler } from 'react-hook-form';
 
 import InputLabel from '@components/atoms/InputLabel/InputLabel';
@@ -21,6 +17,7 @@ interface Props {
   id?: string;
   disabled?: boolean;
   placeholder?: string;
+  unit?: string;
 }
 
 const TextInput = React.forwardRef<HTMLInputElement, Props>(
@@ -37,6 +34,7 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>(
       placeholder,
       disabled,
       defaultValue,
+      unit,
     },
     ref
   ) => {
@@ -68,21 +66,19 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>(
             name={name}
             defaultValue={defaultValue}
           />
-          {error && type !== 'password' && (
-            <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-              <ExclamationCircleIcon
-                className="h-5 w-5 text-red-500"
-                aria-hidden="true"
-              />
+          {unit && (
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+              <span className="text-gray-500 sm:text-sm">{unit}</span>
             </div>
           )}
+
           {type === 'password' && (
-            <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3">
               <IconButton onClick={togglePassword}>
                 {inputType === 'password' ? (
-                  <EyeIcon className="h-5 w-5 text-gray-400" />
+                  <EyeIcon className="w-5 h-5 text-gray-400" />
                 ) : (
-                  <EyeOffIcon className="h-5 w-5 text-gray-400" />
+                  <EyeOffIcon className="w-5 h-5 text-gray-400" />
                 )}
               </IconButton>
             </div>
