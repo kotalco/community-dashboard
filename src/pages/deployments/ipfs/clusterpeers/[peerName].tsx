@@ -79,7 +79,7 @@ function ClusterPeerDetailsPage() {
             updateResources={updateResources}
           />
 
-          <DangerZone name={clusterpeer.name} />
+          <DangerZone peerName={clusterpeer.name} />
         </Tabs>
       </div>
     </Layout>

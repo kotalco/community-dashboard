@@ -65,7 +65,7 @@ function CreateChainlink() {
 
     if (response) {
       const notification: NotificationInfo = {
-        title: 'Node has been created',
+        title: 'Chainlink Node has been created',
         message:
           'Node has been created successfully, and will be up and running in few seconds.',
         deploymentName: response.name,

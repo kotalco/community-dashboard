@@ -83,9 +83,9 @@ const CreateClusterPeerPage: React.FC = () => {
 
     if (response) {
       const notification: NotificationInfo = {
-        title: 'Peer has been created',
+        title: 'IPFS Cluster Peer has been created',
         message:
-          'Peer has been created successfully, and will be up and running in few seconds.',
+          'Cluster Peer has been created successfully, and will be up and running in few seconds.',
         deploymentName: response.name,
       };
       localStorage.setItem(

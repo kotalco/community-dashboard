@@ -73,9 +73,9 @@ const CreateValidator: React.FC = () => {
 
     if (response) {
       const notification: NotificationInfo = {
-        title: 'Node has been created',
+        title: 'Ethereum 2.0 Validator has been created',
         message:
-          'Node has been created successfully, and will be up and running in few seconds.',
+          'Validator has been created successfully, and will be up and running in few seconds.',
         deploymentName: response.name,
       };
       localStorage.setItem(Deployments.validator, JSON.stringify(notification));

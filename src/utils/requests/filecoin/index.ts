@@ -22,6 +22,6 @@ export const updateFilecoinNode = async (
   return res.data.node;
 };
 
-// export const deletePolkadotNode = async (name: string) => {
-//   await api.delete(`/polkadot/nodes/${name}`);
-// };
+export const deleteFilecoinNode = async (name: string) => {
+  await api.delete(`/filecoin/nodes/${name}`);
+};

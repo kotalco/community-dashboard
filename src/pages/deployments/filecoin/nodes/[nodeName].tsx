@@ -5,7 +5,7 @@ import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
-import DangerZone from '@components/organisms/Chainlink/DangerZone/DangerZone';
+import DangerZone from '@components/organisms/Filecoin/DangerZone/DangerZone';
 import APIDetails from '@components/organisms/Filecoin/API/API';
 import ResourcesDetails from '@components/organisms/Resources/Resources';
 import LoggingDetails from '@components/organisms/Filecoin/Logging/Logging';
@@ -83,7 +83,7 @@ function FilecoinNode() {
           />
 
           {/* Danger Zone */}
-          {/* <DangerZone nodeName={node.name} /> */}
+          <DangerZone nodeName={node.name} />
         </Tabs>
       </div>
     </Layout>

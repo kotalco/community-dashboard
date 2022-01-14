@@ -31,6 +31,7 @@ function EthereumNodeDetailsPage() {
   const { node, mutate, error } = useEthereumNode(nodeName);
   const { status } = useStatus(node && `/ethereum/nodes/${node.name}/status`);
 
+  // Update Resources Funtion
   const updateResources = async (name: string, values: Resources) => {
     await updateEthereumNode(values, name);
     mutate();
@@ -87,7 +88,7 @@ function EthereumNodeDetailsPage() {
           />
 
           {/* Danger Zone */}
-          <DangerZone nodeName={node.name} />
+          <DangerZone resourceName={node.name} />
         </Tabs>
       </div>
     </Layout>

@@ -15,13 +15,14 @@ import { updateAPISchema } from '@schemas/ethereum/updateNodeSchema';
 import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
 import { KeyedMutator } from 'swr';
 import { handleRequest } from '@utils/helpers/handleRequest';
+import { useModal } from '@hooks/useModal';
 
 interface Props extends EthereumNode {
   mutate?: KeyedMutator<{ node: EthereumNode }>;
 }
 
 function APIDetails({ name, mutate, ...rest }: Props) {
-  const [open, setOpen] = useState(false);
+  const { isOpen, close, open } = useModal();
   const [submitSuccess, setSubmitSuccess] = useState('');
   const [serverError, setServerError] = useState('');
   const [selectedApi, setSelectedApi] = useState<'rpc' | 'ws' | 'graphql'>(
@@ -37,22 +38,23 @@ function APIDetails({ name, mutate, ...rest }: Props) {
     formState: { isDirty, isSubmitting, errors },
   } = useForm<API & { miner: boolean }>({
     defaultValues: {
-      rpcAPI: rest.rpcAPI || ['eth', 'net', 'web3'],
-      wsAPI: rest.wsAPI || ['eth', 'net', 'web3'],
+      miner: rest.miner,
+      rpcAPI: rest.rpcAPI,
+      wsAPI: rest.wsAPI,
     },
     resolver: joiResolver(updateAPISchema),
   });
 
-  const [rpc, ws, graphql] = watch(['rpc', 'ws', 'graphql']);
+  const [rpc, ws, graphql, miner] = watch(['rpc', 'ws', 'graphql', 'miner']);
 
   const handleApiChange = (
     state: boolean,
     onChange: (value: boolean) => void,
     name: 'rpc' | 'ws' | 'graphql'
   ) => {
-    if (state && rest.miner && rest.client !== EthereumNodeClient.besu) {
+    if (state && miner && rest.client !== EthereumNodeClient.besu) {
       setSelectedApi(name);
-      setOpen(true);
+      open();
       return;
     }
 
@@ -62,10 +64,11 @@ function APIDetails({ name, mutate, ...rest }: Props) {
   const confirmApis = () => {
     setValue('miner', false);
     setValue(selectedApi, true, { shouldDirty: true });
-    setOpen(false);
+    close();
   };
 
   const onSubmit: SubmitHandler<API> = async (values) => {
+    console.log(values);
     setServerError('');
     setSubmitSuccess('');
 
@@ -113,7 +116,7 @@ function APIDetails({ name, mutate, ...rest }: Props) {
                 disabled={!rpc}
                 label="JSON-RPC Server Port"
                 error={errors.rpcPort?.message}
-                defaultValue={rest.rpcPort || 8545}
+                defaultValue={rest.rpcPort}
                 {...register('rpcPort')}
               />
 
@@ -153,7 +156,7 @@ function APIDetails({ name, mutate, ...rest }: Props) {
                   disabled={!ws}
                   label="Web Socket Server Port"
                   error={errors.wsPort?.message}
-                  defaultValue={rest.wsPort || 8546}
+                  defaultValue={rest.wsPort}
                   {...register('wsPort')}
                 />
               </div>
@@ -194,7 +197,7 @@ function APIDetails({ name, mutate, ...rest }: Props) {
                     disabled={!graphql}
                     label="GraphQl Server Port"
                     error={errors.graphqlPort?.message}
-                    defaultValue={rest.graphqlPort || 8547}
+                    defaultValue={rest.graphqlPort}
                     {...register('graphqlPort')}
                   />
                 </div>
@@ -222,11 +225,18 @@ function APIDetails({ name, mutate, ...rest }: Props) {
       </form>
 
       {/* Confirmation Dialog if any APIs activated */}
-      <Dialog
-        open={open}
-        close={() => setOpen(false)}
-        cancel
-        action={
+      <Dialog open={isOpen} close={close}>
+        <p>
+          Activating APIs (JSON-RPC Server, Web Socket Server or GraphQl Server)
+          will disable mining. Are you sure you want to continue?
+        </p>
+        <div className="flex flex-col items-center justify-end mt-5 sm:mt-4 sm:flex-row sm:space-x-4">
+          <Button
+            onClick={close}
+            className="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+          >
+            Cancel
+          </Button>
           <Button
             loading={isSubmitting}
             className="btn btn-primary"
@@ -234,10 +244,7 @@ function APIDetails({ name, mutate, ...rest }: Props) {
           >
             Confirm
           </Button>
-        }
-      >
-        Activating APIs (JSON-RPC Server, Web Socket Server or GraphQl Server)
-        will disable mining. Are you sure you want to continue?
+        </div>
       </Dialog>
     </>
   );

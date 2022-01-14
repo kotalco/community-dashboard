@@ -15,6 +15,7 @@ import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
 import { handleRequest } from '@utils/helpers/handleRequest';
+import { useModal } from '@hooks/useModal';
 
 interface Props extends EthereumNode {
   mutate?: KeyedMutator<{ node: EthereumNode }>;
@@ -28,7 +29,7 @@ function MiningDetails({ name, mutate, ...rest }: Props) {
     KubernetesSecretTypes.ethereumPrivatekey
   );
   const { data: passwords } = useSecretsByType(KubernetesSecretTypes.password);
-  const [open, setOpen] = useState(false);
+  const { isOpen, open, close } = useModal();
   const {
     handleSubmit,
     control,
@@ -38,7 +39,6 @@ function MiningDetails({ name, mutate, ...rest }: Props) {
     setValue,
     formState: { isDirty, isSubmitting, errors },
   } = useForm<Mining & API>({
-    defaultValues: rest,
     resolver: joiResolver(updateMiningSchema),
   });
 
@@ -51,7 +51,7 @@ function MiningDetails({ name, mutate, ...rest }: Props) {
       (rest.rpc || rest.ws || rest.graphql) &&
       rest.client !== EthereumNodeClient.besu
     ) {
-      setOpen(true);
+      open();
     } else {
       setValue('miner', value, { shouldDirty: true });
     }
@@ -63,7 +63,7 @@ function MiningDetails({ name, mutate, ...rest }: Props) {
     setValue('ws', false);
     setValue('graphql', false);
     setValue('miner', true, { shouldDirty: true });
-    setOpen(false);
+    close();
   };
 
   const onSubmit: SubmitHandler<Mining> = async (values) => {
@@ -93,6 +93,7 @@ function MiningDetails({ name, mutate, ...rest }: Props) {
         <Controller
           control={control}
           name="miner"
+          defaultValue={rest.miner}
           render={({ field }) => (
             <Toggle
               label="Miner"
@@ -110,6 +111,7 @@ function MiningDetails({ name, mutate, ...rest }: Props) {
                 label="Coinbase Account"
                 error={errors.coinbase?.message}
                 disabled={!miner}
+                defaultValue={rest.coinbase}
                 {...register('coinbase')}
               />
             </div>
@@ -119,6 +121,7 @@ function MiningDetails({ name, mutate, ...rest }: Props) {
               <Controller
                 control={control}
                 name="import.privateKeySecretName"
+                defaultValue={rest.import?.privateKeySecretName}
                 render={({ field }) => (
                   <Select
                     label="Account Private Key"
@@ -139,6 +142,7 @@ function MiningDetails({ name, mutate, ...rest }: Props) {
               <Controller
                 control={control}
                 name="import.passwordSecretName"
+                defaultValue={rest.import?.passwordSecretName}
                 render={({ field }) => (
                   <Select
                     label="Account Password"
@@ -175,11 +179,19 @@ function MiningDetails({ name, mutate, ...rest }: Props) {
       </div>
 
       {/* Confirmation Dialog if any APIs activated */}
-      <Dialog
-        open={open}
-        close={() => setOpen(false)}
-        cancel
-        action={
+      <Dialog open={isOpen} close={close}>
+        <p>
+          Importing account for mining will disable any activated APIs (JSON-RPC
+          Server, Web Socket Server and GraphQl Server). Are you sure you want
+          to continue?
+        </p>
+        <div className="flex flex-col items-center justify-end mt-5 sm:mt-4 sm:flex-row sm:space-x-4">
+          <Button
+            onClick={close}
+            className="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+          >
+            Cancel
+          </Button>
           <Button
             loading={isSubmitting}
             className="btn btn-primary"
@@ -187,11 +199,7 @@ function MiningDetails({ name, mutate, ...rest }: Props) {
           >
             Confirm
           </Button>
-        }
-      >
-        Importing account for mining will disable any activated APIs (JSON-RPC
-        Server, Web Socket Server and GraphQl Server). Are you sure you want to
-        continue?
+        </div>
       </Dialog>
     </form>
   );

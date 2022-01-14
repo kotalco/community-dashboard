@@ -46,12 +46,18 @@ const DeleteSecretDialoge: React.FC<Props> = ({
   };
 
   return (
-    <Dialog
-      open={isOpen}
-      close={closeDialog}
-      error={serverError}
-      cancel
-      action={
+    <Dialog open={isOpen} close={closeDialog} error={serverError}>
+      <p className="text-sm text-gray-500">
+        Are you sure you want to delete secret:{' '}
+        <span className="font-semibold">{secretName}</span>?
+      </p>
+      <div className="flex flex-col items-center justify-end mt-5 sm:mt-4 sm:flex-row sm:space-x-4">
+        <Button
+          onClick={closeDialog}
+          className="inline-flex justify-center w-full px-4 py-2 mt-3 text-base font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:w-auto sm:text-sm"
+        >
+          Cancel
+        </Button>
         <Button
           className="btn btn-alert"
           onClick={() => deleteSecret(secretName)}
@@ -60,12 +66,7 @@ const DeleteSecretDialoge: React.FC<Props> = ({
         >
           Confirm
         </Button>
-      }
-    >
-      <p className="text-sm text-gray-500">
-        Are you sure you want to delete secret:{' '}
-        <span className="font-semibold">{secretName}</span>?
-      </p>
+      </div>
     </Dialog>
   );
 };

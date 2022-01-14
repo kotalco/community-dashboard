@@ -1,41 +1,27 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
-import { useForm } from 'react-hook-form';
 
 import Button from '@components/atoms/Button/Button';
-import DeleteModal from '@components/molecules/Dialog/Dialog';
-import TextInput from '@components/molecules/TextInput/TextInput';
 import { deleteClusterPeer } from '@utils/requests/ipfs/clusterPeers';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
 import { Deployments } from '@enums/Deployments';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { useModal } from '@hooks/useModal';
-
-interface FormData {
-  name: string;
-}
+import DeleteDialog from '@components/organisms/DeleteDialog/DeleteDialog';
 
 interface Props {
-  name: string;
+  peerName: string;
 }
 
-const DeleteDeployment: React.FC<Props> = ({ name }) => {
+const DeleteDeployment: React.FC<Props> = ({ peerName }) => {
   const [serverError, setServerError] = useState<string>('');
   const { isOpen, open, close } = useModal();
   const router = useRouter();
-  const {
-    register,
-    watch,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = useForm<FormData>();
-
-  const input = watch('name');
 
   const onSubmit = async () => {
     setServerError('');
     const { error } = await handleRequest(
-      deleteClusterPeer.bind(undefined, name)
+      deleteClusterPeer.bind(undefined, peerName)
     );
 
     if (error) {
@@ -44,9 +30,9 @@ const DeleteDeployment: React.FC<Props> = ({ name }) => {
     }
 
     const notification: NotificationInfo = {
-      title: 'Validator has been deleted',
-      message: 'Validator has been deleted successfully.',
-      deploymentName: name,
+      title: 'IPFS Cluster Peer has been deleted',
+      message: 'Cluster Peer has been deleted successfully.',
+      deploymentName: peerName,
     };
     localStorage.setItem(Deployments.clusterpeer, JSON.stringify(notification));
     router.push('/deployments/ipfs/clusterpeers');
@@ -74,36 +60,16 @@ const DeleteDeployment: React.FC<Props> = ({ name }) => {
           </Button>
         </div>
       </div>
-      <DeleteModal
-        open={isOpen}
+
+      <DeleteDialog
+        isOpen={isOpen}
         close={close}
-        title="Delete Cluster Peer"
-        action={
-          <Button
-            className="btn btn-alert"
-            onClick={handleSubmit(onSubmit)}
-            disabled={input !== name || isSubmitting}
-            loading={isSubmitting}
-          >
-            I understand the consequnces, delete this cluster peer
-          </Button>
-        }
-      >
-        <p className="text-sm text-gray-500">
-          This action cann&apos;t be undone. This will permnantly delete ({name}
-          ) cluster peer.
-        </p>
-        <div className="mt-4">
-          <p className="mb-2">
-            Please type the cluster peer name (
-            <span className="font-bold">{name}</span>) to confirm
-          </p>
-          <TextInput {...register('name')} />
-        </div>
-        {serverError && (
-          <p className="mt-2 text-sm font-medium text-red-600">{serverError}</p>
-        )}
-      </DeleteModal>
+        name={peerName}
+        protocol="IPFS"
+        resource="Cluster Peer"
+        error={serverError}
+        onSubmit={onSubmit}
+      />
     </>
   );
 };

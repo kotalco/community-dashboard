@@ -1,41 +1,27 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
-import { useForm } from 'react-hook-form';
 
 import Button from '@components/atoms/Button/Button';
-import DeleteModal from '@components/molecules/Dialog/Dialog';
-import TextInput from '@components/molecules/TextInput/TextInput';
+import DeleteDialog from '@components/organisms/DeleteDialog/DeleteDialog';
 import { deleteEthereumNode } from '@utils/requests/ethereum';
 import { Deployments } from '@enums/Deployments';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { useModal } from '@hooks/useModal';
 
-interface FormData {
-  name: string;
-}
-
 interface Props {
-  nodeName: string;
+  resourceName: string;
 }
 
-const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
+const DangerZone: React.FC<Props> = ({ resourceName }) => {
   const [serverError, setServerError] = useState<string>('');
-  const { isOpen, open, close } = useModal();
+  const { isOpen, open } = useModal();
   const router = useRouter();
-  const {
-    register,
-    watch,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = useForm<FormData>();
-
-  const [name] = watch(['name']);
 
   const onSubmit = async () => {
     setServerError('');
     const { error } = await handleRequest(
-      deleteEthereumNode.bind(undefined, nodeName)
+      deleteEthereumNode.bind(undefined, resourceName)
     );
 
     if (error) {
@@ -44,9 +30,9 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
     }
 
     const notification: NotificationInfo = {
-      title: 'Node has been deleted',
+      title: 'Ethereum Node has been deleted',
       message: 'Node has been deleted successfully.',
-      deploymentName: nodeName,
+      deploymentName: resourceName,
     };
     localStorage.setItem(Deployments.node, JSON.stringify(notification));
     router.push('/deployments/ethereum/nodes');
@@ -74,38 +60,18 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
           </Button>
         </div>
       </div>
-      <DeleteModal
-        open={isOpen}
+
+      <DeleteDialog
+        isOpen={isOpen}
         close={close}
-        title="Delete Ethereum Node"
-        action={
-          <Button
-            className="btn btn-alert"
-            onClick={handleSubmit(onSubmit)}
-            disabled={name !== nodeName || isSubmitting}
-            loading={isSubmitting}
-          >
-            I understand the consequnces, delete this node
-          </Button>
-        }
-      >
-        <p className="text-sm text-gray-500">
-          This action cannot be undone. This will permnantly delete the node (
-          {nodeName}) node.
-        </p>
-        <div className="mt-4">
-          <p className="mb-2">
-            Please type the node name (
-            <span className="font-bold">{nodeName}</span>) to confirm
-          </p>
-          <TextInput {...register('name')} />
-        </div>
-        {serverError && (
-          <p className="mt-2 text-sm font-medium text-red-600">{serverError}</p>
-        )}
-      </DeleteModal>
+        name={resourceName}
+        protocol="Ethereum"
+        resource="Node"
+        error={serverError}
+        onSubmit={onSubmit}
+      />
     </>
   );
 };
 
-export default DangerousZoneContent;
+export default DangerZone;

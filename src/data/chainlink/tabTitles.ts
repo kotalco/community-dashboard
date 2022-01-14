@@ -1,8 +1,11 @@
 export const TITLES = [
   'Protocol',
-  'Netwroking',
+  'Database',
+  'Ethereum',
+  'Wallet',
+  'TLS',
   'API',
-  'IPFS',
+  'Access Control',
   'Logging',
   'Resources',
   'Danger Zone',

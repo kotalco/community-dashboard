@@ -19,7 +19,7 @@ import { useFilecoinNodes } from '@hooks/useFilecoinNodes';
 import { NETWORKS } from '@data/filecoin/networks';
 
 function FilecoinNode() {
-  const { NotificationPanel } = useNotification(Deployments.chainlink);
+  const { NotificationPanel } = useNotification(Deployments.filecoin);
   const {
     nodes,
     isEmpty,
