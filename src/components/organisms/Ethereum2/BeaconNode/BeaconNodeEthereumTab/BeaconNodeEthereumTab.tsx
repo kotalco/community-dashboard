@@ -44,7 +44,6 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
     control,
     formState: { isDirty, isSubmitting, errors },
   } = useForm<Eth1Endpoints>({
-    defaultValues: { eth1Endpoints },
     resolver: yupResolver(
       client === Ethereum2Client.prysm && network !== 'mainnet'
         ? requiredSchema
@@ -80,6 +79,7 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
           <Controller
             name="eth1Endpoints"
             control={control}
+            defaultValue={eth1Endpoints}
             render={({ field }) => (
               <MultiSelectWithInput
                 single={

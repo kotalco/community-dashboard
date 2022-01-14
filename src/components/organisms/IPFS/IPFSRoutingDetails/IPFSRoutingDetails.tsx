@@ -25,7 +25,6 @@ const IPFSPeerDetails: React.FC<Props> = ({ routing, name, mutate }) => {
     control,
     formState: { isDirty, isSubmitting, errors },
   } = useForm<Routing>({
-    defaultValues: { routing },
     resolver: joiResolver(updateRoutingSchema),
   });
 
@@ -52,6 +51,7 @@ const IPFSPeerDetails: React.FC<Props> = ({ routing, name, mutate }) => {
         <Controller
           name="routing"
           control={control}
+          defaultValue={routing}
           render={({ field }) => (
             <Select
               placeholder="Choose routing option..."

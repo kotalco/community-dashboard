@@ -29,7 +29,6 @@ const IPFSPeerDetails: React.FC<Props> = ({
     handleSubmit,
     formState: { isDirty, isSubmitting, errors },
   } = useForm<Gateway>({
-    defaultValues: { gatewayHost, gatewayPort },
     resolver: joiResolver(updateGatewaySchema),
   });
 
@@ -56,12 +55,14 @@ const IPFSPeerDetails: React.FC<Props> = ({
         <TextInput
           error={errors.gatewayPort?.message}
           label="Local Gateway IPFS Server Port"
+          defaultValue={gatewayPort}
           {...register('gatewayPort')}
         />
         <div className="mt-4">
           <TextInput
             error={errors.gatewayHost?.message}
             label="Local Gateway IPFS Server Host"
+            defaultValue={gatewayHost}
             {...register('gatewayHost')}
           />
         </div>

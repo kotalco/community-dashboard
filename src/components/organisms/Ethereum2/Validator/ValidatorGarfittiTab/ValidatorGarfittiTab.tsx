@@ -22,9 +22,7 @@ const ValidatorGarfittiTab: React.FC<Props> = ({ name, graffiti, mutate }) => {
     register,
     handleSubmit,
     formState: { isDirty, isSubmitting },
-  } = useForm<Grafitti>({
-    defaultValues: { graffiti },
-  });
+  } = useForm<Grafitti>();
 
   const onSubmit: SubmitHandler<Grafitti> = async (values) => {
     setServerError('');
@@ -49,7 +47,11 @@ const ValidatorGarfittiTab: React.FC<Props> = ({ name, graffiti, mutate }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
-        <TextInput label="Graffiti" {...register('graffiti')} />
+        <TextInput
+          label="Graffiti"
+          defaultValue={graffiti}
+          {...register('graffiti')}
+        />
       </div>
 
       <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">

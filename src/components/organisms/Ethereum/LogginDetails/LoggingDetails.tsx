@@ -17,7 +17,7 @@ interface Props extends EthereumNode {
   mutate?: KeyedMutator<{ node: EthereumNode }>;
 }
 
-function LoggingDetails({ name, client, mutate, ...rest }: Props) {
+function LoggingDetails({ name, client, mutate, logging }: Props) {
   const [submitSuccess, setSubmitSuccess] = useState('');
   const [serverError, setServerError] = useState('');
 
@@ -26,9 +26,7 @@ function LoggingDetails({ name, client, mutate, ...rest }: Props) {
     control,
     reset,
     formState: { isDirty, isSubmitting, isValid },
-  } = useForm<LoggingInterface>({
-    defaultValues: rest,
-  });
+  } = useForm<LoggingInterface>();
 
   const onSubmit: SubmitHandler<LoggingInterface> = async (values) => {
     setSubmitSuccess('');
@@ -58,6 +56,7 @@ function LoggingDetails({ name, client, mutate, ...rest }: Props) {
           <Controller
             control={control}
             name="logging"
+            defaultValue={logging}
             render={({ field }) => (
               <Select
                 label="Verbosity Levels"

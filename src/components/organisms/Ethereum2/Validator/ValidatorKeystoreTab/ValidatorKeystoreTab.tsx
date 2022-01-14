@@ -41,10 +41,6 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
     formState: { isDirty, isSubmitting, errors },
   } = useForm<Keystores>({
     resolver: yupResolver(schema),
-    defaultValues: {
-      keystores: selectedKeystores,
-      walletPasswordSecretName,
-    },
   });
 
   const onSubmit: SubmitHandler<Keystores> = async (values) => {
@@ -74,6 +70,7 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
         <Controller
           name="keystores"
           control={control}
+          defaultValue={selectedKeystores}
           render={({ field }) => (
             <Multiselect
               label="Ethereum 2.0 Keystores"
@@ -94,6 +91,7 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
             <Controller
               name="walletPasswordSecretName"
               control={control}
+              defaultValue={walletPasswordSecretName}
               render={({ field }) => (
                 <Select
                   placeholder="Choose a wallet password"

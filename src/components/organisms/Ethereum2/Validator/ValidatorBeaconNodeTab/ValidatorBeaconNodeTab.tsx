@@ -50,7 +50,6 @@ const ValidatorBeaconNodeTab: React.FC<Props> = ({
     control,
     formState: { isDirty, isSubmitting, errors },
   } = useForm<BeaconEndpoints>({
-    defaultValues: { beaconEndpoints },
     resolver: yupResolver(
       client === Ethereum2Client.lighthouse ? MultipleSchema : onlyOneSchema
     ),
@@ -83,6 +82,7 @@ const ValidatorBeaconNodeTab: React.FC<Props> = ({
           <Controller
             name="beaconEndpoints"
             control={control}
+            defaultValue={beaconEndpoints}
             render={({ field }) => (
               <MultiSelectWithInput
                 single={client !== Ethereum2Client.lighthouse}

@@ -29,7 +29,6 @@ const IPFSPeerDetails: React.FC<Props> = ({
     handleSubmit,
     formState: { isDirty, isSubmitting, errors },
   } = useForm<API>({
-    defaultValues: { apiPort, apiHost },
     resolver: joiResolver(updateAPIsSchema),
   });
 
@@ -56,11 +55,13 @@ const IPFSPeerDetails: React.FC<Props> = ({
         <TextInput
           error={errors.apiPort?.message}
           label="API Server Port"
+          defaultValue={apiPort}
           {...register('apiPort')}
         />
         <TextInput
           error={errors.apiHost?.message}
           label="API Server Host"
+          defaultValue={apiHost}
           {...register('apiHost')}
         />
       </div>

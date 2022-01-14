@@ -19,7 +19,16 @@ interface Props extends EthereumNode {
   mutate?: KeyedMutator<{ node: EthereumNode }>;
 }
 
-function NetworkingDetails({ name, client, mutate, ...rest }: Props) {
+function NetworkingDetails({
+  name,
+  client,
+  mutate,
+  nodePrivateKeySecretName,
+  p2pPort,
+  syncMode,
+  staticNodes,
+  bootnodes,
+}: Props) {
   const [serverError, setServerError] = useState('');
   const { data: privateKeys, isLoading } = useSecretsByType(
     KubernetesSecretTypes.ethereumPrivatekey
@@ -33,7 +42,6 @@ function NetworkingDetails({ name, client, mutate, ...rest }: Props) {
     register,
     formState: { isDirty, isSubmitting, errors },
   } = useForm<Networking>({
-    defaultValues: rest,
     resolver: yupResolver(networkingSchema),
   });
 
@@ -64,6 +72,7 @@ function NetworkingDetails({ name, client, mutate, ...rest }: Props) {
           <Controller
             name="nodePrivateKeySecretName"
             control={control}
+            defaultValue={nodePrivateKeySecretName}
             render={({ field }) => (
               <Select
                 placeholder="Choose a private key..."
@@ -85,6 +94,7 @@ function NetworkingDetails({ name, client, mutate, ...rest }: Props) {
           type="text"
           label="P2P Port"
           error={errors.p2pPort?.message}
+          defaultValue={p2pPort}
           {...register('p2pPort')}
         />
 
@@ -92,6 +102,7 @@ function NetworkingDetails({ name, client, mutate, ...rest }: Props) {
         <Controller
           control={control}
           name="syncMode"
+          defaultValue={syncMode}
           render={({ field }) => (
             <Select
               error={errors.syncMode?.message}
@@ -108,6 +119,7 @@ function NetworkingDetails({ name, client, mutate, ...rest }: Props) {
         <Controller
           control={control}
           name="staticNodes"
+          defaultValue={staticNodes}
           render={({ field }) => (
             <TextareaWithInput
               multiple
@@ -124,6 +136,7 @@ function NetworkingDetails({ name, client, mutate, ...rest }: Props) {
         <Controller
           control={control}
           name="bootnodes"
+          defaultValue={bootnodes}
           render={({ field }) => (
             <TextareaWithInput
               multiple

@@ -49,7 +49,6 @@ const Peers: React.FC<Props> = ({
     formState: { isDirty, isSubmitting, errors },
   } = useForm<Peers>({
     resolver: yupResolver(schema),
-    defaultValues: { peerEndpoint, bootstrapPeers },
   });
 
   const onSubmit: SubmitHandler<Peers> = async (values) => {
@@ -80,6 +79,7 @@ const Peers: React.FC<Props> = ({
           <Controller
             control={control}
             name="peerEndpoint"
+            defaultValue={peerEndpoint}
             render={({ field }) => (
               <SelectWithInput
                 options={peerEndpoints}
@@ -100,6 +100,7 @@ const Peers: React.FC<Props> = ({
           <Controller
             name="bootstrapPeers"
             control={control}
+            defaultValue={bootstrapPeers}
             render={({ field }) => (
               <MultiSelectWithInput
                 options={bootstrapPeersOptions}

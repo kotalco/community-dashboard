@@ -17,7 +17,7 @@ interface Props extends EthereumNode {
   mutate?: KeyedMutator<{ node: EthereumNode }>;
 }
 
-function AccessControlDetails({ name, mutate, ...rest }: Props) {
+function AccessControlDetails({ name, mutate, hosts, corsDomains }: Props) {
   const [submitSuccess, setSubmitSuccess] = useState('');
   const [serverError, setServerError] = useState('');
   const {
@@ -26,7 +26,6 @@ function AccessControlDetails({ name, mutate, ...rest }: Props) {
     reset,
     formState: { isDirty, isSubmitting, errors, isValid },
   } = useForm<AccessControl>({
-    defaultValues: rest,
     resolver: yupResolver(schema),
   });
 
@@ -57,6 +56,7 @@ function AccessControlDetails({ name, mutate, ...rest }: Props) {
         <Controller
           control={control}
           name="hosts"
+          defaultValue={hosts}
           render={({ field }) => (
             <TextareaWithInput
               multiple
@@ -77,6 +77,7 @@ function AccessControlDetails({ name, mutate, ...rest }: Props) {
           <Controller
             control={control}
             name="corsDomains"
+            defaultValue={corsDomains}
             render={({ field }) => (
               <TextareaWithInput
                 multiple
