@@ -13,6 +13,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { networkingSchema } from '@schemas/polkadot/networking';
 import { updatePolkadotNode } from '@utils/requests/polkadot';
 import { SYNC_MODES } from '@data/polkadot/syncModes';
+import Toggle from '@components/molecules/Toggle/Toggle';
 
 interface Props extends PolkadotNode {
   mutate?: KeyedMutator<{ node: PolkadotNode }>;
@@ -23,6 +24,7 @@ function NetworkingDetails({
   p2pPort,
   syncMode,
   retainedBlocks,
+  pruning,
   name,
   mutate,
 }: Props) {
@@ -108,6 +110,23 @@ function NetworkingDetails({
               onChange={field.onChange}
               value={field.value}
               label="Sync Mode"
+            />
+          )}
+        />
+
+        {/* Pruning */}
+        <Controller
+          control={control}
+          name="pruning"
+          defaultValue={pruning}
+          render={({ field }) => (
+            <Toggle
+              label="Pruning"
+              checked={field.value}
+              disabled
+              onChange={() => {
+                return;
+              }}
             />
           )}
         />

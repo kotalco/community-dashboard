@@ -3,10 +3,9 @@ import { Logging } from '@enums/Polkadot/Logging';
 import { Network } from '@enums/Polkadot/Network';
 import { SyncMode } from '@enums/Polkadot/SyncMode';
 
-export interface CreatePolkadotNode {
+export interface CreatePolkadotNode extends Pick<Networking, 'pruning'> {
   name: string;
   network: Network;
-  pruning: boolean;
 }
 
 export interface Networking {
@@ -14,6 +13,7 @@ export interface Networking {
   nodePrivateKeySecretName: string;
   syncMode: SyncMode;
   retainedBlocks: number;
+  pruning: boolean;
 }
 
 export interface Validator {
