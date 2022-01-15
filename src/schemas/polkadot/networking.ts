@@ -1,4 +1,4 @@
-import { number, object, SchemaOf, string, mixed } from 'yup';
+import { number, object, SchemaOf, string, mixed, boolean } from 'yup';
 
 import { Networking } from '@interfaces/polkadot/PolkadotNode';
 import { SyncMode } from '@enums/Polkadot/SyncMode';
@@ -19,4 +19,5 @@ export const networkingSchema: SchemaOf<Networking> = object({
     .notRequired()
     .min(1, 'Retained blocks should be more than 0')
     .default(256),
+  pruning: boolean().required(),
 });
