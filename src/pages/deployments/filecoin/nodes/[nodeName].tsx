@@ -13,7 +13,7 @@ import NetworkingDetails from '@components/organisms/Filecoin/Networking/Network
 import IPFSDetails from '@components/organisms/Filecoin/IPFS/IPFS';
 import { Resources } from '@interfaces/Resources';
 import { getLabel } from '@utils/helpers/getLabel';
-import { TITLES } from '@data/chainlink/tabTitles';
+import { TITLES } from '@data/filecoin/tabTitles';
 import { useStatus } from '@hooks/useStatus';
 import { DataList } from '@interfaces/DataList';
 import { useFilecoinNode } from '@hooks/useFilecoinNode';
