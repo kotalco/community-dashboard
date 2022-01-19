@@ -8,18 +8,16 @@ import FormLayout from '@components/templates/FormLayout/FormLayout';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Select from '@components/molecules/Select/Select';
 import Heading from '@components/templates/Heading/Heading';
-import { createSchema } from '@schemas/filecoin/create';
+import { createSchema } from '@schemas/near/create';
 import { handleRequest } from '@utils/helpers/handleRequest';
-import { NETWORKS } from '@data/filecoin/networks';
+import { NETWORKS } from '@data/near/networks';
 import { Deployments } from '@enums/Deployments';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
-import {
-  CreateFilecoinNode,
-  FilecoinNode,
-} from '@interfaces/filecoin/FilecoinNode';
-import { createFilecoinNode } from '@utils/requests/filecoin';
+import { CreateNearNode, NearNode } from '@interfaces/near/NearNode';
+import { createNearNode } from '@utils/requests/near';
+import Toggle from '@components/molecules/Toggle/Toggle';
 
-function CreateNode() {
+function CreateNearNode() {
   const [serverError, setServerError] = useState('');
   const router = useRouter();
 
@@ -28,14 +26,14 @@ function CreateNode() {
     register,
     control,
     formState: { errors, isSubmitted, isValid, isSubmitting },
-  } = useForm<CreateFilecoinNode>({
+  } = useForm<CreateNearNode>({
     resolver: yupResolver(createSchema),
   });
 
-  const onSubmit: SubmitHandler<CreateFilecoinNode> = async (values) => {
+  const onSubmit: SubmitHandler<CreateNearNode> = async (values) => {
     setServerError('');
-    const { error, response } = await handleRequest<FilecoinNode>(
-      createFilecoinNode.bind(undefined, values)
+    const { error, response } = await handleRequest<NearNode>(
+      createNearNode.bind(undefined, values)
     );
 
     if (error) {
@@ -45,19 +43,19 @@ function CreateNode() {
 
     if (response) {
       const notification: NotificationInfo = {
-        title: 'Filecoin Node has been created',
+        title: 'Near Node has been created',
         message:
           'Node has been created successfully, and will be up and running in few seconds.',
         deploymentName: response.name,
       };
-      localStorage.setItem(Deployments.filecoin, JSON.stringify(notification));
-      router.push('/deployments/filecoin/nodes');
+      localStorage.setItem(Deployments.near, JSON.stringify(notification));
+      router.push('/deployments/near/nodes');
     }
   };
 
   return (
     <Layout>
-      <Heading title="Create New Filecoin Node" />
+      <Heading title="Create New Near Node" />
       <form onSubmit={handleSubmit(onSubmit)}>
         <FormLayout
           error={serverError}
@@ -88,10 +86,25 @@ function CreateNode() {
               />
             )}
           />
+
+          {/* Archive Node */}
+          <Controller
+            control={control}
+            name="archive"
+            defaultValue={false}
+            render={({ field }) => (
+              <Toggle
+                label="Archive Node"
+                checked={field.value}
+                onChange={field.onChange}
+                error={errors.archive?.message}
+              />
+            )}
+          />
         </FormLayout>
       </form>
     </Layout>
   );
 }
 
-export default CreateNode;
+export default CreateNearNode;
