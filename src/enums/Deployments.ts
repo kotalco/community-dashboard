@@ -7,4 +7,5 @@ export enum Deployments {
   chainlink = 'Chainlink',
   polkadot = 'Polkadot',
   filecoin = 'Filecoin',
+  near = 'Near',
 }

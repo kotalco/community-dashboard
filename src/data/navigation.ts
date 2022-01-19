@@ -49,6 +49,11 @@ export const navigation: Navigation[] = [
         href: '/deployments/polkadot/nodes',
         protocol: 'polkadot',
       },
+      {
+        name: 'Near',
+        href: '/deployments/near/nodes',
+        protocol: 'near',
+      },
     ],
   },
   { type: 'link', name: 'Secrets', icon: KeyIcon, href: '/core/secrets' },

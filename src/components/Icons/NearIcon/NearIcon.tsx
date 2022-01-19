@@ -2,7 +2,7 @@ interface Props {
   className: string;
 }
 
-const PolkadotIcon: React.FC<Props> = ({ className }) => {
+const NearIcon: React.FC<Props> = ({ className }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -11,14 +11,13 @@ const PolkadotIcon: React.FC<Props> = ({ className }) => {
       viewBox="0 0 64 64"
       fill="none"
       strokeWidth={2}
+      strokeMiterlimit={5}
       stroke="#000"
       className={className}
     >
-      <path d="m26 24-7 32" />
-      <path d="M13.81 33.88a18 18 0 1 1 34.09-9.76C48.94 34 43.72 40 36.54 41.87c-7.48 2-14.64.87-16.5 9.37" />
-      <circle cx="48" cy="52" r="4" />
+      <path d="M36 28 51.58 9.06A2.5 2.5 0 0 1 56 10.68v42.79a2.5 2.5 0 0 1-4.4 1.64L12.4 8.89A2.5 2.5 0 0 0 8 10.53v42.79a2.5 2.5 0 0 0 4.42 1.62L28 36" />
     </svg>
   );
 };
 
-export default PolkadotIcon;
+export default NearIcon;

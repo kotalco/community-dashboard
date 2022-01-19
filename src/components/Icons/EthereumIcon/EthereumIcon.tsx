@@ -10,7 +10,7 @@ const EthereumIcon: React.FC<Props> = ({ className }) => {
       height="64"
       viewBox="0 0 64 64"
       fill="none"
-      strokeWidth={3}
+      strokeWidth={2}
       stroke="#000"
       className={className}
     >
