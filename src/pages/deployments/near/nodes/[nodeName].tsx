@@ -5,8 +5,8 @@ import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
+import RPCDetails from '@components/organisms/Near/RPC/RPC';
 import DangerZone from '@components/organisms/Filecoin/DangerZone/DangerZone';
-import APIDetails from '@components/organisms/Filecoin/API/API';
 import ResourcesDetails from '@components/organisms/Resources/Resources';
 import LoggingDetails from '@components/organisms/Filecoin/Logging/Logging';
 import NetworkingDetails from '@components/organisms/Near/Networking/Networking';
@@ -63,7 +63,7 @@ function NearNode() {
           <NetworkingDetails {...node} />
 
           {/* API */}
-          <APIDetails {...node} />
+          <RPCDetails {...node} />
 
           {/* IPFS */}
           <IPFSDetails {...node} />
