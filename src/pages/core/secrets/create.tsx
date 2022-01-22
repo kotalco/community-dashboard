@@ -108,7 +108,8 @@ const CreateSecret: React.FC = () => {
           {(type === KubernetesSecretTypes.ethereumPrivatekey ||
             type === KubernetesSecretTypes.ipfsClusterPeerPrivatekey ||
             type === KubernetesSecretTypes.ipfsSwarmKey ||
-            type === KubernetesSecretTypes.polkadotPrivatekey) && (
+            type === KubernetesSecretTypes.polkadotPrivatekey ||
+            type === KubernetesSecretTypes.nearPrivateKey) && (
             <div className="mt-4">
               <Textarea
                 label="Key"

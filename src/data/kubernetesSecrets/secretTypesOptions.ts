@@ -12,6 +12,10 @@ export const secretTypesOptions: SelectOption[] = [
     value: KubernetesSecretTypes.polkadotPrivatekey,
   },
   {
+    label: 'NEAR Private Key',
+    value: KubernetesSecretTypes.nearPrivateKey,
+  },
+  {
     label: 'Ethereum 2.0 Keystore',
     value: KubernetesSecretTypes.ethereum2Keystore,
   },

@@ -9,27 +9,27 @@ import DangerZone from '@components/organisms/Filecoin/DangerZone/DangerZone';
 import APIDetails from '@components/organisms/Filecoin/API/API';
 import ResourcesDetails from '@components/organisms/Resources/Resources';
 import LoggingDetails from '@components/organisms/Filecoin/Logging/Logging';
-import NetworkingDetails from '@components/organisms/Filecoin/Networking/Networking';
+import NetworkingDetails from '@components/organisms/Near/Networking/Networking';
 import IPFSDetails from '@components/organisms/Filecoin/IPFS/IPFS';
 import { Resources } from '@interfaces/Resources';
 import { getLabel } from '@utils/helpers/getLabel';
-import { TITLES } from '@data/filecoin/tabTitles';
+import { TITLES } from '@data/near/tabTitles';
 import { useStatus } from '@hooks/useStatus';
 import { DataList } from '@interfaces/DataList';
 import { useFilecoinNode } from '@hooks/useFilecoinNode';
 import { updateFilecoinNode } from '@utils/requests/filecoin';
-import { NETWORKS } from '@data/filecoin/networks';
+import { NETWORKS } from '@data/near/networks';
+import { useNearNode } from '@hooks/useNearNode';
+import { updateNearNode } from '@utils/requests/near';
 
-function FilecoinNode() {
+function NearNode() {
   const { query, push } = useRouter();
   const nodeName = query.nodeName as string | undefined;
-  const { status } = useStatus(
-    nodeName && `/filecoin/nodes/${nodeName}/status`
-  );
-  const { node, mutate, error } = useFilecoinNode(nodeName);
+  const { status } = useStatus(nodeName && `/near/nodes/${nodeName}/status`);
+  const { node, mutate, error } = useNearNode(nodeName);
 
   const updateResources = async (name: string, values: Resources) => {
-    await updateFilecoinNode(values, name);
+    await updateNearNode(values, name);
     mutate();
   };
 
@@ -37,7 +37,7 @@ function FilecoinNode() {
   if (!node) return <LoadingIndicator />;
 
   const dataList: DataList[] = [
-    { label: 'Protocol', value: 'Filecoin' },
+    { label: 'Protocol', value: 'NEAR' },
     {
       label: 'Network',
       value: getLabel(node.network, NETWORKS),
@@ -45,8 +45,8 @@ function FilecoinNode() {
 
     {
       label: 'Client',
-      value: 'Lotus',
-      href: 'https://github.com/filecoin-project/lotus',
+      value: 'nearcore',
+      href: 'https://github.com/near/nearcore',
     },
   ];
 
@@ -90,4 +90,4 @@ function FilecoinNode() {
   );
 }
 
-export default FilecoinNode;
+export default NearNode;
