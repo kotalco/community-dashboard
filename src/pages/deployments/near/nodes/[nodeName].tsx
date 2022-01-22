@@ -20,6 +20,7 @@ import { NETWORKS } from '@data/near/networks';
 import { useNearNode } from '@hooks/useNearNode';
 import { updateNearNode } from '@utils/requests/near';
 import PrometheusDetails from '@components/organisms/Near/Prometheus/Prometheus';
+import TelemetryDetails from '@components/organisms/Near/Telemetry/Telemetry';
 
 function NearNode() {
   const { query, push } = useRouter();
@@ -71,6 +72,7 @@ function NearNode() {
           <PrometheusDetails {...node} />
 
           {/* Telemetry */}
+          <TelemetryDetails {...node} />
 
           {/* Logging */}
           <LoggingDetails {...node} />
