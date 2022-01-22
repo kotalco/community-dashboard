@@ -19,6 +19,7 @@ import { DataList } from '@interfaces/DataList';
 import { NETWORKS } from '@data/near/networks';
 import { useNearNode } from '@hooks/useNearNode';
 import { updateNearNode } from '@utils/requests/near';
+import PrometheusDetails from '@components/organisms/Near/Prometheus/Prometheus';
 
 function NearNode() {
   const { query, push } = useRouter();
@@ -67,6 +68,7 @@ function NearNode() {
           <ValidatorDetails {...node} />
 
           {/* Prometheus */}
+          <PrometheusDetails {...node} />
 
           {/* Telemetry */}
 
