@@ -6,7 +6,7 @@ import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
 import RPCDetails from '@components/organisms/Near/RPC/RPC';
-import DangerZone from '@components/organisms/Filecoin/DangerZone/DangerZone';
+import DangerZone from '@components/organisms/Near/DangerZone/DangerZone';
 import ResourcesDetails from '@components/organisms/Resources/Resources';
 import ValidatorDetails from '@components/organisms/Near/Validator/Validator';
 import NetworkingDetails from '@components/organisms/Near/Networking/Networking';
