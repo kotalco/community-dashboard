@@ -8,9 +8,9 @@ import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetai
 import RPCDetails from '@components/organisms/Near/RPC/RPC';
 import DangerZone from '@components/organisms/Filecoin/DangerZone/DangerZone';
 import ResourcesDetails from '@components/organisms/Resources/Resources';
-import LoggingDetails from '@components/organisms/Filecoin/Logging/Logging';
 import ValidatorDetails from '@components/organisms/Near/Validator/Validator';
 import NetworkingDetails from '@components/organisms/Near/Networking/Networking';
+import Logging from '@components/organisms/Logging/Logging';
 import { Resources } from '@interfaces/Resources';
 import { getLabel } from '@utils/helpers/getLabel';
 import { TITLES } from '@data/near/tabTitles';
@@ -75,7 +75,7 @@ function NearNode() {
           <TelemetryDetails {...node} />
 
           {/* Logging */}
-          <LoggingDetails {...node} />
+          <Logging wsUrl={`/near/nodes/${node.name}/logs`} />
 
           {/* Resources */}
           <ResourcesDetails
