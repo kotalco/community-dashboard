@@ -1,6 +1,6 @@
 import Error from 'next/error';
 import { GlobeAltIcon } from '@heroicons/react/solid';
-import { ChipIcon, CubeIcon } from '@heroicons/react/outline';
+import { ChipIcon } from '@heroicons/react/outline';
 
 import Layout from '@components/templates/Layout/Layout';
 import List from '@components/organisms/List/List';
@@ -16,6 +16,7 @@ import { usePeers } from '@hooks/usePeers';
 import { useClusterPeers } from '@hooks/useClusterPeers';
 import { useNotification } from '@hooks/useNotification';
 import { Deployments } from '@enums/Deployments';
+import IPFSIcon from '@components/Icons/IPFSIcon/IPFSIcon';
 
 function Peers() {
   const { NotificationPanel } = useNotification(Deployments.peer);
@@ -62,7 +63,7 @@ function Peers() {
           linkUrl="/deployments/ipfs/peers/create"
           linkName="New Peer"
         >
-          <CubeIcon className="w-12 h-12 mx-auto text-gray-400" />
+          <IPFSIcon className="w-12 h-12 mx-auto text-gray-400" />
         </EmptyState>
       </Layout>
     );
