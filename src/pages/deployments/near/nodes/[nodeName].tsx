@@ -9,15 +9,13 @@ import RPCDetails from '@components/organisms/Near/RPC/RPC';
 import DangerZone from '@components/organisms/Filecoin/DangerZone/DangerZone';
 import ResourcesDetails from '@components/organisms/Resources/Resources';
 import LoggingDetails from '@components/organisms/Filecoin/Logging/Logging';
+import ValidatorDetails from '@components/organisms/Near/Validator/Validator';
 import NetworkingDetails from '@components/organisms/Near/Networking/Networking';
-import IPFSDetails from '@components/organisms/Filecoin/IPFS/IPFS';
 import { Resources } from '@interfaces/Resources';
 import { getLabel } from '@utils/helpers/getLabel';
 import { TITLES } from '@data/near/tabTitles';
 import { useStatus } from '@hooks/useStatus';
 import { DataList } from '@interfaces/DataList';
-import { useFilecoinNode } from '@hooks/useFilecoinNode';
-import { updateFilecoinNode } from '@utils/requests/filecoin';
 import { NETWORKS } from '@data/near/networks';
 import { useNearNode } from '@hooks/useNearNode';
 import { updateNearNode } from '@utils/requests/near';
@@ -62,11 +60,15 @@ function NearNode() {
           {/* Networking */}
           <NetworkingDetails {...node} />
 
-          {/* API */}
+          {/* RPC */}
           <RPCDetails {...node} />
 
-          {/* IPFS */}
-          <IPFSDetails {...node} />
+          {/* Validator */}
+          <ValidatorDetails {...node} />
+
+          {/* Prometheus */}
+
+          {/* Telemetry */}
 
           {/* Logging */}
           <LoggingDetails {...node} />
