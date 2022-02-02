@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { StatusData } from '@interfaces/StatusData';
-import { getStatus, Status } from '@enums/Status';
+import { StatsResponse, StatsError } from '@interfaces/Stats';
 
 const NEXT_PUBLIC_WS_BASE_URL = process.env.NEXT_PUBLIC_WS_BASE_URL as string;
 const TIME_INTERVAL = 10000;
 
-export const useStatus = (pathname?: string) => {
-  const [status, setStatus] = useState<StatusData>();
+export const useStats = (pathname?: string) => {
+  const [stats, setStats] = useState<StatsResponse>();
+  const [error, setError] = useState<StatsError>();
   const [counter, setCounter] = useState(0);
   const timeoutRef = useRef<NodeJS.Timeout>();
   const counterRef = useRef<NodeJS.Timer>();
@@ -26,7 +26,7 @@ export const useStatus = (pathname?: string) => {
     };
 
     ws.onopen = () => {
-      console.log('Listening to status...');
+      console.log('Listening to stats...');
 
       websocketRef.current = ws;
       if (timeoutRef.current) {
@@ -37,13 +37,19 @@ export const useStatus = (pathname?: string) => {
       }
     };
 
-    ws.onmessage = (event: MessageEvent<Status>) => {
-      setStatus(getStatus(event.data));
+    ws.onmessage = (event: MessageEvent<string>) => {
+      const stats = JSON.parse(event.data) as StatsResponse | StatsError;
+      if ('error' in stats) {
+        return setError(stats);
+      }
+      setStats(stats);
+      setError(undefined);
     };
 
     ws.onclose = () => {
       setCounter(TIME_INTERVAL - 1000);
-      setStatus(getStatus(Status.DISCONNECTED));
+      setStats(undefined);
+      setError(undefined);
 
       timeoutRef.current = setTimeout(check, TIME_INTERVAL);
     };
@@ -75,6 +81,7 @@ export const useStatus = (pathname?: string) => {
   }, [counter]);
 
   return {
-    status,
+    stats,
+    error,
   };
 };
