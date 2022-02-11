@@ -31,12 +31,13 @@ import {
 } from '@heroicons/react/outline';
 import { ExclamationIcon } from '@heroicons/react/solid';
 import { getMigaOrKiloBit } from '@utils/helpers/getMegaOrKiloBit';
+import { NearStatsResponse } from '@interfaces/Stats';
 
 function NearNode() {
   const { query, push } = useRouter();
   const nodeName = query.nodeName as string | undefined;
   const { status } = useStatus(nodeName && `/near/nodes/${nodeName}/status`);
-  const { stats, error: statsError } = useStats(
+  const { stats, error: statsError } = useStats<NearStatsResponse>(
     nodeName && `/near/nodes/${nodeName}/stats`
   );
   const { node, mutate, error } = useNearNode(nodeName);
@@ -79,7 +80,11 @@ function NearNode() {
             ) : (
               <ExclamationIcon className="w-4 h-4 text-yellow-500" />
             )}
-            <span>{stats?.latestBlockHeight}</span>
+            {stats && (
+              <span>
+                {new Intl.NumberFormat('en-US').format(stats.latestBlockHeight)}
+              </span>
+            )}
           </div>
         </Card>
         <Card title="Peers" tooltipTitle="Active peers / out of max peers">

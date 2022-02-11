@@ -62,6 +62,8 @@ function EthereumNodes() {
         >
           <EthereumIcon className="w-12 h-12 mx-auto text-gray-400" />
         </EmptyState>
+
+        {NotificationPanel}
       </Layout>
     );
   }

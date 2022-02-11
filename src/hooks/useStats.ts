@@ -1,12 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { StatsResponse, StatsError } from '@interfaces/Stats';
+import { StatsError } from '@interfaces/Stats';
 
 const NEXT_PUBLIC_WS_BASE_URL = process.env.NEXT_PUBLIC_WS_BASE_URL as string;
 const TIME_INTERVAL = 10000;
 
-export const useStats = (pathname?: string) => {
-  const [stats, setStats] = useState<StatsResponse>();
+export function useStats<T>(pathname?: string) {
+  const [stats, setStats] = useState<T>();
   const [error, setError] = useState<StatsError>();
   const [counter, setCounter] = useState(0);
   const timeoutRef = useRef<NodeJS.Timeout>();
@@ -38,7 +38,7 @@ export const useStats = (pathname?: string) => {
     };
 
     ws.onmessage = (event: MessageEvent<string>) => {
-      const stats = JSON.parse(event.data) as StatsResponse | StatsError;
+      const stats = JSON.parse(event.data) as T | StatsError;
       if ('error' in stats) {
         return setError(stats);
       }
@@ -84,4 +84,4 @@ export const useStats = (pathname?: string) => {
     stats,
     error,
   };
-};
+}

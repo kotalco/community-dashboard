@@ -13,6 +13,8 @@ import AccessControlDetails from '@components/organisms/Ethereum/AccessControlDe
 import MiningDetails from '@components/organisms/Ethereum/MiningDetails/MiningDetails';
 import ResourcesDetails from '@components/organisms/Resources/Resources';
 import LoggingDetails from '@components/organisms/Ethereum/LogginDetails/LoggingDetails';
+import Cards from '@components/templates/Cards/Cards';
+import Card from '@components/atoms/Card/Card';
 import { Resources } from '@interfaces/Resources';
 import { tabTitles } from '@data/ethereum/node/tabTitles';
 import { clientOptions } from '@data/ethereum/node/clientOptions';
@@ -23,12 +25,18 @@ import { useStatus } from '@hooks/useStatus';
 import { useEthereumNode } from '@hooks/useEthereumNode';
 import { DataList } from '@interfaces/DataList';
 import { getHref } from '@utils/helpers/getHref';
+import { useStats } from '@hooks/useStats';
+import { EthereumStatsResponse } from '@interfaces/Stats';
+import { ExclamationIcon, RefreshIcon } from '@heroicons/react/outline';
 
 function EthereumNodeDetailsPage() {
   const { query, push } = useRouter();
   const nodeName = query.nodeName as string | undefined;
 
   const { node, mutate, error } = useEthereumNode(nodeName);
+  const { stats, error: statsError } = useStats<EthereumStatsResponse>(
+    nodeName && `/ethereum/nodes/${nodeName}/stats`
+  );
   const { status } = useStatus(node && `/ethereum/nodes/${node.name}/status`);
 
   // Update Resources Funtion
@@ -53,6 +61,24 @@ function EthereumNodeDetailsPage() {
   return (
     <Layout>
       <Heading title={node.name} status={status} createdDate={node.createdAt} />
+      {/* Stats Cards */}
+      <Cards error={statsError?.error}>
+        <Card title="Blocks">
+          <div className="flex items-center space-x-1">
+            {stats?.peersCount ? (
+              <RefreshIcon className="w-3 h-3 text-gray-700 animate-spin" />
+            ) : (
+              <ExclamationIcon className="w-4 h-4 text-yellow-500" />
+            )}
+            {stats && (
+              <span>
+                {((stats.currentBlock / stats.highestBlock) * 100).toFixed(2)}%
+              </span>
+            )}
+          </div>
+        </Card>
+        <Card title="Peers">{stats?.peersCount}</Card>
+      </Cards>
 
       <div className="bg-white rounded-lg shadow divided-y divided-gray-200">
         <Tabs tabs={tabTitles(node.client)} mutate={mutate}>
