@@ -64,23 +64,29 @@ function PolkadotNode() {
     <Layout>
       <Heading title={node.name} status={status} createdDate={node.createdAt} />
       {/* Stats Cards */}
-      <Cards error={statsError?.error}>
-        <Card title="Blocks">
-          <div className="flex items-center space-x-1">
-            {stats?.syncing ? (
-              <RefreshIcon className="w-3 h-3 text-gray-700 animate-spin" />
-            ) : (
-              <ExclamationIcon className="w-4 h-4 text-yellow-500" />
-            )}
-            {stats && (
+      {stats && (
+        <Cards error={statsError?.error}>
+          <Card
+            title="Blocks"
+            tooltipTitle={`${(
+              (stats.currentBlock / stats.highestBlock) *
+              100
+            ).toFixed(2)}%`}
+          >
+            <div className="flex items-center space-x-1">
+              {stats?.syncing ? (
+                <RefreshIcon className="w-3 h-3 text-gray-700 animate-spin" />
+              ) : (
+                <ExclamationIcon className="w-4 h-4 text-yellow-500" />
+              )}
               <span>
-                {((stats.currentBlock / stats.highestBlock) * 100).toFixed(2)}%
+                {new Intl.NumberFormat('en-US').format(stats.currentBlock)}
               </span>
-            )}
-          </div>
-        </Card>
-        <Card title="Peers">{stats?.peersCount}</Card>
-      </Cards>
+            </div>
+          </Card>
+          <Card title="Peers">{stats?.peersCount}</Card>
+        </Cards>
+      )}
 
       <div className="bg-white rounded-lg shadow divided-y divided-gray-200">
         <Tabs mutate={mutate} tabs={TITLES}>
