@@ -1,0 +1,10 @@
+[
+  {
+    "label": "Private Key 1",
+    "value": "privateKey1"
+  },
+  {
+    "label": "Private Key 2",
+    "value": "privateKey2"
+  }
+]
