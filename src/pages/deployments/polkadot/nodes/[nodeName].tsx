@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import { ExclamationIcon, RefreshIcon } from '@heroicons/react/outline';
 
 import Heading from '@components/templates/Heading/Heading';
 import Tabs from '@components/organisms/Tabs/Tabs';
@@ -9,6 +10,13 @@ import DangerZone from '@components/organisms/Polkadot/DangerZone/DangerZone';
 import AccessControlDetails from '@components/organisms/Polkadot/AccessControl/AccessControl';
 import ResourcesDetails from '@components/organisms/Resources/Resources';
 import LoggingDetails from '@components/organisms/Polkadot/Logging/Logging';
+import NetworkingDetails from '@components/organisms/Polkadot/Networking/Networking';
+import Validatordetails from '@components/organisms/Polkadot/Validator/Validator';
+import TelemetryDetails from '@components/organisms/Polkadot/Telemetry/Telemetry';
+import PrometheusDetails from '@components/organisms/Polkadot/Prometheus/Prometheus';
+import APIDetails from '@components/organisms/Polkadot/API/API';
+import Cards from '@components/templates/Cards/Cards';
+import Card from '@components/atoms/Card/Card';
 import { Resources } from '@interfaces/Resources';
 import { getLabel } from '@utils/helpers/getLabel';
 import { TITLES } from '@data/polkadot/tabTitles';
@@ -16,18 +24,18 @@ import { useStatus } from '@hooks/useStatus';
 import { usePolkadotNode } from '@hooks/usePolkadotNode';
 import { NETWORKS } from '@data/polkadot/networks';
 import { updatePolkadotNode } from '@utils/requests/polkadot';
-import NetworkingDetails from '@components/organisms/Polkadot/Networking/Networking';
-import Validatordetails from '@components/organisms/Polkadot/Validator/Validator';
-import TelemetryDetails from '@components/organisms/Polkadot/Telemetry/Telemetry';
-import PrometheusDetails from '@components/organisms/Polkadot/Prometheus/Prometheus';
-import APIDetails from '@components/organisms/Polkadot/API/API';
 import { DataList } from '@interfaces/DataList';
+import { useStats } from '@hooks/useStats';
+import { PolkadotStatsResponse } from '@interfaces/Stats';
 
 function PolkadotNode() {
   const { query, push } = useRouter();
   const nodeName = query.nodeName as string | undefined;
   const { status } = useStatus(
     nodeName && `/polkadot/nodes/${nodeName}/status`
+  );
+  const { stats, error: statsError } = useStats<PolkadotStatsResponse>(
+    nodeName && `/polkadot/nodes/${nodeName}/stats`
   );
   const { node, mutate, error } = usePolkadotNode(nodeName);
 
@@ -55,6 +63,24 @@ function PolkadotNode() {
   return (
     <Layout>
       <Heading title={node.name} status={status} createdDate={node.createdAt} />
+      {/* Stats Cards */}
+      <Cards error={statsError?.error}>
+        <Card title="Blocks">
+          <div className="flex items-center space-x-1">
+            {stats?.syncing ? (
+              <RefreshIcon className="w-3 h-3 text-gray-700 animate-spin" />
+            ) : (
+              <ExclamationIcon className="w-4 h-4 text-yellow-500" />
+            )}
+            {stats && (
+              <span>
+                {((stats.currentBlock / stats.highestBlock) * 100).toFixed(2)}%
+              </span>
+            )}
+          </div>
+        </Card>
+        <Card title="Peers">{stats?.peersCount}</Card>
+      </Cards>
 
       <div className="bg-white rounded-lg shadow divided-y divided-gray-200">
         <Tabs mutate={mutate} tabs={TITLES}>
