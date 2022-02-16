@@ -1,14 +1,14 @@
 export const getMigaOrKiloBit = (bytes = 0) => {
-  let unit = 'Bit/s';
-  let rate = bytes * 8;
+  let unit = 'Byte/s';
+  let rate = bytes;
 
   if (rate >= 800) {
-    unit = 'KiB/s';
-    rate = rate / 1000;
+    unit = 'KB/s';
+    rate = rate / 1024;
 
     if (rate >= 800) {
-      unit = 'MiB/s';
-      rate = rate / 1000;
+      unit = 'MB/s';
+      rate = rate / 1024;
     }
   }
 
