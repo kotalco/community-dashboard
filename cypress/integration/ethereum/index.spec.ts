@@ -2,14 +2,22 @@
 
 describe('Ethereum Home Page', () => {
   beforeEach(() => {
-    cy.visit('/deployments/ethereum/nodes');
-  });
-
-  it('Should show empty state page of no ethereum nodes', () => {
     cy.intercept('GET', 'http://localhost:4000/api/v1/ethereum/nodes', {
       nodes: [],
     });
+    cy.intercept(
+      'GET',
+      'http://localhost:4000/api/v1/core/secrets?type=ethereum_privatekey',
+      { fixture: 'nodePrivateKeys.json' }
+    );
+    cy.visit('/');
+    cy.get('button').contains('Deployments').click();
+    cy.get('a').contains('Ethereum').click();
+  });
+
+  it('Should show empty state page of no ethereum nodes', () => {
     cy.get('h3').contains('There is no nodes created');
+    cy.get('a').contains('New Node').click();
     // // Write Node Name
     // cy.get('input#name').type('new-node');
     // // Choose a client
