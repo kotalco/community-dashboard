@@ -1,10 +1,14 @@
-[
-  {
-    "label": "Private Key 1",
-    "value": "privateKey1"
-  },
-  {
-    "label": "Private Key 2",
-    "value": "privateKey2"
-  }
-]
+{
+  "secrets": [
+    {
+      "createdAt": "32198739821739",
+      "name": "privateKey1",
+      "type": "ethereum_privatekey"
+    },
+    {
+      "createdAt": "32198739821739",
+      "name": "privateKey2",
+      "type": "ethereum_privatekey"
+    }
+  ]
+}

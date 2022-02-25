@@ -9,7 +9,10 @@ describe('Ethereum Home Page', () => {
       'GET',
       'http://localhost:4000/api/v1/core/secrets?type=ethereum_privatekey',
       { fixture: 'nodePrivateKeys.json' }
-    );
+    ).as('getPrivateKeys');
+    cy.intercept('POST', 'http://localhost:4000/api/v1/ethereum/nodes', {
+      fixture: 'ethereumNode.json',
+    }).as('nodeCreated');
     cy.visit('/');
     cy.get('button').contains('Deployments').click();
     cy.get('a').contains('Ethereum').click();
@@ -28,10 +31,6 @@ describe('Ethereum Home Page', () => {
     cy.get('li').contains('Rinkeby').click();
 
     // Submit
-    cy.intercept('POST', 'http://localhost:4000/api/v1/ethereum/nodes', {
-      fixture: 'ethereumNode.json',
-    }).as('nodeCreated');
-
     cy.get('button[type=submit]').click();
     cy.wait('@nodeCreated');
     cy.url().should('include', '/deployments/ethereum/nodes');
@@ -48,13 +47,22 @@ describe('Ethereum Home Page', () => {
     cy.get('button').contains('Choose a network...').click();
     cy.get('li').contains('Mainnet').click();
     // Choose a node private key
+    cy.wait('@getPrivateKeys');
     cy.get('button').contains('Choose a private key...').click();
-    cy.get('li').contains('Private Key 1').click();
+    cy.get('li').contains('privateKey1').click();
     // Submit
-    // cy.get('button[type=submit]').click();
+    cy.get('button[type=submit]').click();
+    cy.wait('@nodeCreated');
+    cy.url().should('include', '/deployments/ethereum/nodes');
+    cy.get('span').contains('my-node');
   });
 
-  // it('Should not create new ethereum node if missing field', () => {});
+  it('Should not create new ethereum node if missing required field', () => {
+    // Submit
+    cy.get('button[type=submit]').click();
+    // Find errrs
+    cy.get('form').find('p[role=alert]').should('have.length', 3);
+  });
 });
 
 export {};
