@@ -5,5 +5,5 @@
     "lib": ["es5", "dom"],
     "types": ["cypress"]
   },
-  "include": ["./**/*.ts", "../node_modules/cypress"]
+  "include": ["./**/*.ts"]
 }

@@ -1,3 +1,4 @@
+/// <reference types="cypress" />
 // ***********************************************
 // This example commands.js shows you how to
 // create various custom commands and overwrite
@@ -23,3 +24,33 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('getInputByLabel', (label) => {
+  cy.log('**getInputByLabel**');
+  cy.contains('label', label)
+    .invoke('attr', 'for')
+    .then((id) => {
+      if (id) cy.get(`#${id}`);
+    });
+});
+
+Cypress.Commands.add('getSelectByLabel', (label) => {
+  cy.contains('label', label).parent();
+});
+
+Cypress.Commands.add('choose', { prevSubject: 'element' }, (subject, text) => {
+  cy.wrap(subject)
+    .find('label')
+    .click()
+    .focused()
+    .click()
+    .get('li')
+    .contains(text)
+    .click();
+});
+
+Cypress.Commands.add('clearSelect', { prevSubject: 'element' }, (subject) => {
+  cy.wrap(subject).find('button[type=reset]').click();
+});
+
+export {};
