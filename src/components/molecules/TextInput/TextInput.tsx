@@ -18,6 +18,7 @@ interface Props {
   disabled?: boolean;
   placeholder?: string;
   unit?: string;
+  fullWidth?: boolean;
 }
 
 const TextInput = React.forwardRef<HTMLInputElement, Props>(
@@ -34,6 +35,7 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>(
       disabled,
       defaultValue,
       unit,
+      fullWidth,
     },
     ref
   ) => {
@@ -51,12 +53,15 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>(
     return (
       <div className="mb-4">
         {label && <InputLabel htmlFor={name}>{label}</InputLabel>}
-        <fieldset disabled={disabled} className="relative max-w-xs">
+        <fieldset
+          disabled={disabled}
+          className={`relative ${fullWidth ? 'w-full' : 'max-w-xs'}`}
+        >
           <input
             ref={ref}
             type={inputType}
             id={name}
-            className={`shadow-sm focus:ring-indigo-500 block w-full sm:text-sm disabled:bg-gray-100 disabled:text-gray-500 rounded-md ${
+            className={`appearance-none shadow-sm focus:ring-indigo-500 block w-full sm:text-sm disabled:bg-gray-100 disabled:text-gray-500 rounded-md ${
               error ? 'border-red-300' : 'border-gray-300'
             }`}
             placeholder={placeholder}
