@@ -1,0 +1,34 @@
+{
+  "node": {
+    "name": "my-node",
+    "network": "rinkeby",
+    "client": "geth",
+    "logging": "debug",
+    "nodePrivateKeySecretName": "",
+    "p2pPort": 4444,
+    "syncMode": "full",
+    "staticNodes": [],
+    "bootnodes": [],
+    "miner": true,
+    "coinbase": "0x5dfA5dB515748f3E2BCc8677A9332f4aFFad5A5E",
+    "import": {
+      "privateKeySecretName": "my-account-private-key",
+      "passwordSecretName": "my-account-password"
+    },
+    "rpc": true,
+    "rpcPort": 55555,
+    "rpcAPI": ["eth"],
+    "ws": true,
+    "wsPort": 8888,
+    "wsAPI": ["eth"],
+    "graphql": true,
+    "graphqlPort": 666666,
+    "hosts": ["my.domain.com", "your.domain.com"],
+    "corsDomains": ["my.domain.com", "your.domain.com"],
+    "cpu": "2",
+    "cpuLimit": "4",
+    "memory": "4Gi",
+    "memoryLimit": "8Gi",
+    "storage": "200Gi"
+  }
+}

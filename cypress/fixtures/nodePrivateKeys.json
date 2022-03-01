@@ -1,0 +1,14 @@
+{
+  "secrets": [
+    {
+      "createdAt": "32198739821739",
+      "name": "privateKey1",
+      "type": "ethereum_privatekey"
+    },
+    {
+      "createdAt": "32198739821739",
+      "name": "privateKey2",
+      "type": "ethereum_privatekey"
+    }
+  ]
+}

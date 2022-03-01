@@ -142,7 +142,7 @@ const Select: React.FC<Props> = ({
           </div>
           {withClear && selected?.value && (
             <button
-              type="button"
+              type="reset"
               className="absolute mt-1 text-sm text-red-600 -right-10 top-7"
               onClick={clear}
             >

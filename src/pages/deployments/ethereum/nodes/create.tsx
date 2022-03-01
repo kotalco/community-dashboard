@@ -26,7 +26,7 @@ import { NotificationInfo } from '@interfaces/NotificationInfo';
 function CreateNode() {
   const [serverError, setServerError] = useState('');
   const router = useRouter();
-  const { data: privateKeys } = useSecretsByType(
+  const { data: privateKeys, isLoading } = useSecretsByType(
     KubernetesSecretTypes.ethereumPrivatekey
   );
   const {
@@ -113,22 +113,24 @@ function CreateNode() {
           />
 
           {/* Node Private Key */}
-          <Controller
-            name="nodePrivateKeySecretName"
-            control={control}
-            render={({ field }) => (
-              <Select
-                placeholder="Choose a private key..."
-                label="Node private key (optional)"
-                error={errors.nodePrivateKeySecretName?.message}
-                options={privateKeys}
-                onChange={field.onChange}
-                href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}
-                hrefTitle="Create new private key..."
-                withClear
-              />
-            )}
-          />
+          {!isLoading && (
+            <Controller
+              name="nodePrivateKeySecretName"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  placeholder="Choose a private key..."
+                  label="Node private key (optional)"
+                  error={errors.nodePrivateKeySecretName?.message}
+                  options={privateKeys}
+                  onChange={field.onChange}
+                  href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}
+                  hrefTitle="Create new private key..."
+                  withClear
+                />
+              )}
+            />
+          )}
         </FormLayout>
       </form>
     </Layout>
