@@ -6,7 +6,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Layout from '@components/templates/Layout/Layout';
 import FormLayout from '@components/templates/FormLayout/FormLayout';
 import TextInput from '@components/molecules/TextInput/TextInput';
-import Checkbox from '@components/molecules/CheckBox/CheckBox';
+import CheckboxGroup from '@components/molecules/CheckBoxGroup/CheckBoxGroup';
 import Heading from '@components/templates/Heading/Heading';
 import { createIPFSPeer } from '@utils/requests/ipfs/peers';
 import { schema } from '@schemas/ipfs/peers/createPeer';
@@ -74,7 +74,7 @@ const CreateIPFSPeerPage: React.FC = () => {
           />
 
           {/* <!-- configuration profiles --> */}
-          <Checkbox
+          <CheckboxGroup
             options={initProfilesOptions}
             label="Initial Configuration Profiles:"
             error={initProfilesError?.message}

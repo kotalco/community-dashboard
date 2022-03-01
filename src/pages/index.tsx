@@ -4,7 +4,7 @@ import { NextPage } from 'next';
 import { LockClosedIcon } from '@heroicons/react/solid';
 
 import TextInput from '@components/molecules/TextInput/TextInput';
-import Checkbox from '@components/molecules/CheckBox/CheckBox';
+import CheckBox from '@components/molecules/CheckBox/CheckBox';
 import Button from '@components/atoms/Button/Button';
 
 const Login: NextPage = () => {
@@ -34,20 +34,8 @@ const Login: NextPage = () => {
 
             <div className="flex items-center justify-between">
               {/* Remember me */}
-              <div className="flex items-center">
-                <input
-                  type="checkbox"
-                  id="remember-me"
-                  name="remember-me"
-                  className="w-4 h-4 border-gray-300 rounded focus:ring-indigo-500"
-                />
-                <label
-                  htmlFor="remember-me"
-                  className="block ml-2 text-sm text-gray-900"
-                >
-                  Remember me
-                </label>
-              </div>
+              <CheckBox label="Remember me" {...register('remember')} />
+
               {/* Forget Password */}
               <div className="text-sm">
                 <Link href="/forgot-password">
