@@ -1,6 +1,6 @@
 import Error from 'next/error';
 import { GlobeAltIcon } from '@heroicons/react/solid';
-import { ChipIcon, CubeIcon } from '@heroicons/react/outline';
+import { ChipIcon } from '@heroicons/react/outline';
 
 import Layout from '@components/templates/Layout/Layout';
 import List from '@components/organisms/List/List';
@@ -11,6 +11,7 @@ import Heading from '@components/templates/Heading/Heading';
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import ButtonGroup from '@components/molecules/ButtonGroup/ButtonGroup';
 import EmptyState from '@components/molecules/EmptyState/EmptyState';
+import IPFSIcon from '@components/Icons/IPFSIcon/IPFSIcon';
 import { createButtons } from '@data/ipfs/links';
 import { useClusterPeers } from '@hooks/useClusterPeers';
 import { usePeers } from '@hooks/usePeers';
@@ -62,7 +63,7 @@ function ClusterPeers() {
           linkUrl="/deployments/ipfs/clusterpeers/create"
           linkName="New Cluster Peer"
         >
-          <CubeIcon className="w-12 h-12 mx-auto text-gray-400" />
+          <IPFSIcon className="w-12 h-12 mx-auto text-gray-400" />
         </EmptyState>
       </Layout>
     );

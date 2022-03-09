@@ -5,7 +5,7 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Button from '@components/atoms/Button/Button';
 import Toggle from '@components/molecules/Toggle/Toggle';
-import Checkbox from '@components/molecules/CheckBox/CheckBox';
+import CheckboxGroup from '@components/molecules/CheckBoxGroup/CheckBoxGroup';
 import Separator from '@components/atoms/Separator/Separator';
 import Dialog from '@components/molecules/Dialog/Dialog';
 import { updateEthereumNode } from '@utils/requests/ethereum';
@@ -121,7 +121,7 @@ function APIDetails({ name, mutate, ...rest }: Props) {
               />
 
               {/* JSON-RPC Server APIs */}
-              <Checkbox
+              <CheckboxGroup
                 label="JSON-RPC Server APIs"
                 options={apiOptions}
                 error={errors.rpcAPI?.message}
@@ -162,7 +162,7 @@ function APIDetails({ name, mutate, ...rest }: Props) {
               </div>
 
               {/* Web Socket Server APIs */}
-              <Checkbox
+              <CheckboxGroup
                 options={apiOptions}
                 label="Web Socket Server APIs"
                 error={errors.wsAPI?.message}

@@ -76,7 +76,7 @@ function NetworkingDetails({
             render={({ field }) => (
               <Select
                 placeholder="Choose a private key..."
-                label="Node private key"
+                label="Node Private Key"
                 error={errors.nodePrivateKeySecretName?.message}
                 options={privateKeys}
                 onChange={field.onChange}

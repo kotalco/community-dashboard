@@ -13,13 +13,13 @@ const Layout: React.FC = ({ children }) => {
       <SidebarMobile isOpen={isOpen} setIsOpen={setIsOpen} />
       <SidebarDesktop />
 
-      <div className="flex flex-col w-0 flex-1">
+      <div className="flex flex-col flex-1 w-0 h-screen">
         <div className="overflow-hidden">
           <Navbar setIsOpen={setIsOpen} />
         </div>
 
-        <main className="flex-1 z-10 focus:outline-none" tabIndex={0}>
-          <div className="max-w-7xl mx-auto sm:px-6 md:px-8 px-4 py-6">
+        <main className="z-10 flex-1 focus:outline-none" tabIndex={0}>
+          <div className="h-full px-4 py-6 mx-auto max-w-7xl sm:px-6 md:px-8">
             {children}
           </div>
         </main>

@@ -4,7 +4,7 @@ import { KeyedMutator } from 'swr';
 import { joiResolver } from '@hookform/resolvers/joi';
 
 import Button from '@components/atoms/Button/Button';
-import Checkbox from '@components/molecules/CheckBox/CheckBox';
+import CheckboxGroup from '@components/molecules/CheckBoxGroup/CheckBoxGroup';
 import { initProfilesOptions } from '@data/ipfs/peers/initProfilesOptions';
 import { updateConfigProfilesSchema } from '@schemas/ipfs/peers/updateIPFSPeer';
 import { updateIPFSPeer } from '@utils/requests/ipfs/peers';
@@ -67,7 +67,7 @@ const IPFSPeerDetails: React.FC<Props> = ({
           ))}
         </ul>
 
-        <Checkbox
+        <CheckboxGroup
           options={remainingProfilesOptions}
           label="Configration Profiles"
           {...register('profiles')}
