@@ -105,7 +105,7 @@ function CreateNode() {
               />
             )}
           />
-          <Alert>
+          <Alert role="warn">
             <h3 className="text-sm font-medium text-yellow-800">Attension</h3>
             <ul className="mt-2 ml-4 text-sm text-yellow-700 list-disc">
               <li>Validator nodes must run in archive mode.</li>
