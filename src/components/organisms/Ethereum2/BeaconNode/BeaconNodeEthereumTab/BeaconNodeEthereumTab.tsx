@@ -4,10 +4,10 @@ import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 
 import Button from '@components/atoms/Button/Button';
 import MultiSelectWithInput from '@components/molecules/MultiSelectWithInput/MultiSelectWithInput';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
 import { BeaconNode, Eth1Endpoints } from '@interfaces/ethereum2/BeaconNode';
 import { Ethereum2Client } from '@enums/Ethereum2/Ethereum2Client';
-import { useEthereumNodes } from '@hooks/useEthereumNodes';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import {
   requiredSchema,
@@ -15,6 +15,7 @@ import {
   onlyOneSchema,
 } from '@schemas/ethereum2/beaconNode/ethereum1Endpoint';
 import { KeyedMutator } from 'swr';
+import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 
 interface Props extends BeaconNode {
   mutate?: KeyedMutator<{ beaconnode: BeaconNode }>;
@@ -27,11 +28,12 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
   network,
   mutate,
 }) => {
-  const { nodes, isLoading } = useEthereumNodes();
+  const { data: ethereumNodes, isLoading } =
+    useInfiniteRequest<EthereumNode>('/ethereum/nodes');
   const [submitSuccess, setSubmitSuccess] = useState('');
   const [serverError, setServerError] = useState('');
 
-  const activeNodes = nodes
+  const activeNodes = ethereumNodes
     .filter(({ rpc }) => rpc)
     .map(({ rpcPort, name }) => ({
       label: name,

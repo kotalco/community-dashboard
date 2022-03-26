@@ -10,15 +10,16 @@ import List from '@components/organisms/List/List';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import EmptyState from '@components/molecules/EmptyState/EmptyState';
 import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import DeleteSecretDialog from '@components/organisms/KubernetesSecrets/DeleteSecretDialog/DeleteSecretDialoge';
-import { useSecrets } from '@hooks/useSecrets';
 import { getLabel } from '@utils/helpers/getLabel';
 import { secretTypesOptions } from '@data/kubernetesSecrets/secretTypesOptions';
 import { useModal } from '@hooks/useModal';
+import { KubernetesSecret } from '@interfaces/KubernetesSecret/KubernetesSecret';
 
 function KubernetesSecrets() {
   const {
-    secrets,
+    data: secrets,
     isEmpty,
     isInitialLoading,
     size,
@@ -26,7 +27,7 @@ function KubernetesSecrets() {
     isReachedEnd,
     isLoading,
     error,
-  } = useSecrets();
+  } = useInfiniteRequest<KubernetesSecret>('/core/secrets');
 
   const { isOpen, open, close } = useModal();
   const [selectedSecret, setSelectedSecret] = useState('');

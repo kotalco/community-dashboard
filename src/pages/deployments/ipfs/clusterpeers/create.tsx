@@ -12,6 +12,7 @@ import Select from '@components/molecules/Select/Select';
 import Heading from '@components/templates/Heading/Heading';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 import MultiSelectWithInput from '@components/molecules/MultiSelectWithInput/MultiSelectWithInput';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import { createIPFSClusterPeer } from '@utils/requests/ipfs/clusterPeers';
 import { schema } from '@schemas/ipfs/clusterPeers/create';
 import { ClusterPeer, CreateClusterPeer } from '@interfaces/ipfs/ClusterPeer';
@@ -20,16 +21,16 @@ import { useSecretsByType } from '@utils/requests/secrets';
 import { ClusterConsensusAlgorithm } from '@enums/IPFS/ClusterPeers/ClusterConsensusAlgorithm';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { handleRequest } from '@utils/helpers/handleRequest';
-import { usePeers } from '@hooks/usePeers';
 import { Deployments } from '@enums/Deployments';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
-import { useClusterPeers } from '@hooks/useClusterPeers';
+import { Peer } from '@interfaces/ipfs/Peer';
 
 const CreateClusterPeerPage: React.FC = () => {
   const [serverError, setServerError] = useState('');
   const [isPredefined, setIsPredefined] = useState(false);
-  const { peers } = usePeers();
-  const { clusterpeers } = useClusterPeers();
+  const { data: peers } = useInfiniteRequest<Peer>('/ipfs/peers');
+  const { data: clusterpeers } =
+    useInfiniteRequest<ClusterPeer>('/ipfs/clusterpeers');
   const { data: privateKeyNames } = useSecretsByType(
     KubernetesSecretTypes.ipfsClusterPeerPrivatekey
   );

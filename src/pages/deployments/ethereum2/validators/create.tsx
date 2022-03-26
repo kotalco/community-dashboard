@@ -10,6 +10,8 @@ import Select from '@components/molecules/Select/Select';
 import MultiSelectWithInput from '@components/molecules/MultiSelectWithInput/MultiSelectWithInput';
 import Multiselect from '@components/molecules/Multiselect/Multiselect';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
+import Heading from '@components/templates/Heading/Heading';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import { clientOptions } from '@data/ethereum2/clientOptions';
 import { networkOptions } from '@data/ethereum2/networkOptions';
 import { schema } from '@schemas/ethereum2/validator/create';
@@ -18,11 +20,10 @@ import { createValidator } from '@utils/requests/ethereum2/validators';
 import { Ethereum2Client } from '@enums/Ethereum2/Ethereum2Client';
 import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
-import Heading from '@components/templates/Heading/Heading';
 import { handleRequest } from '@utils/helpers/handleRequest';
-import { useBeaconNodes } from '@hooks/useBeaconNodes';
 import { Deployments } from '@enums/Deployments';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
+import { BeaconNode } from '@interfaces/ethereum2/BeaconNode';
 
 const CreateValidator: React.FC = () => {
   const [serverError, setServerError] = useState('');
@@ -33,7 +34,9 @@ const CreateValidator: React.FC = () => {
   const { data: walletPasswordOptions } = useSecretsByType(
     KubernetesSecretTypes.password
   );
-  const { beaconnodes } = useBeaconNodes();
+  const { data: beaconnodes } = useInfiniteRequest<BeaconNode>(
+    '/ethereum2/beaconnodes'
+  );
 
   const activeBeaconnodes = beaconnodes
     .filter(({ client, rest, rpc }) =>

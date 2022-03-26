@@ -12,26 +12,28 @@ import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import EmptyState from '@components/molecules/EmptyState/EmptyState';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import { useNotification } from '@hooks/useNotification';
 import { clientOptions } from '@data/ethereum/node/clientOptions';
 import { networkOptions } from '@data/ethereum/node/networkOptions';
 import { getLabel } from '@utils/helpers/getLabel';
-import { useEthereumNodes } from '@hooks/useEthereumNodes';
 import { Deployments } from '@enums/Deployments';
+import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 
 function EthereumNodes() {
   const { NotificationPanel } = useNotification(Deployments.node);
+
   const {
-    nodes,
-    isEmpty,
+    data: ethereumNodes,
     isInitialLoading,
-    size,
-    setSize,
-    isReachedEnd,
-    isLoading,
-    totalCount,
+    isEmpty,
     error,
-  } = useEthereumNodes();
+    setSize,
+    isLoading,
+    isReachedEnd,
+    size,
+    totalCount,
+  } = useInfiniteRequest<EthereumNode>('/ethereum/nodes');
 
   const tabs = [
     {
@@ -81,7 +83,7 @@ function EthereumNodes() {
 
       <LinkedTabs tabs={tabs} />
       <List>
-        {nodes.map(({ name, client, network }) => (
+        {ethereumNodes.map(({ name, client, network }) => (
           <ListItem
             key={name}
             link={`/deployments/ethereum/nodes/${name}`}

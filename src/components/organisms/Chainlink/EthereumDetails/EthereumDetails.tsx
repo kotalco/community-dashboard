@@ -5,12 +5,13 @@ import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import Button from '@components/atoms/Button/Button';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 import MultiselectWithInput from '@components/molecules/MultiSelectWithInput/MultiSelectWithInput';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import { ChainlinkNode, Ethereum } from '@interfaces/chainlink/ChainlinkNode';
 import { KeyedMutator } from 'swr';
 import { updateChainlinkNode } from '@utils/requests/chainlink';
 import { handleRequest } from '@utils/helpers/handleRequest';
-import { useEthereumNodes } from '@hooks/useEthereumNodes';
 import { ethereumSchema } from '@schemas/chainlink/ethereum';
+import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 
 interface Props extends ChainlinkNode {
   mutate?: KeyedMutator<{
@@ -26,15 +27,17 @@ function EthereumDetails({
 }: Props) {
   const [submitSuccess, setSubmitSuccess] = useState('');
   const [serverError, setServerError] = useState('');
-  const { nodes, isLoading } = useEthereumNodes();
-  const wsActiveNodes = nodes
+  const { data: ethereumNodes, isLoading } =
+    useInfiniteRequest<EthereumNode>('/ethereum/nodes');
+
+  const wsActiveNodes = ethereumNodes
     .filter(({ ws }) => ws)
     .map(({ name, wsPort }) => ({
       label: name,
       value: `ws://${name}:${wsPort}`,
     }));
 
-  const rpcActiveNodes = nodes
+  const rpcActiveNodes = ethereumNodes
     .filter(({ rpc }) => rpc)
     .map(({ name, rpcPort }) => ({
       label: name,

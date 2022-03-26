@@ -10,6 +10,7 @@ import Select from '@components/molecules/Select/Select';
 import MultiSelectWithInput from '@components/molecules/MultiSelectWithInput/MultiSelectWithInput';
 import Heading from '@components/templates/Heading/Heading';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import { clientOptions } from '@data/ethereum2/clientOptions';
 import { networkOptions } from '@data/ethereum2/networkOptions';
 import { createBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
@@ -18,16 +19,17 @@ import { Ethereum2Client } from '@enums/Ethereum2/Ethereum2Client';
 import { BeaconNode, CreateBeaconNode } from '@interfaces/ethereum2/BeaconNode';
 import { Ethereum2Network } from '@enums/Ethereum2/Ethereum2Network';
 import { handleRequest } from '@utils/helpers/handleRequest';
-import { useEthereumNodes } from '@hooks/useEthereumNodes';
 import { Deployments } from '@enums/Deployments';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
+import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 
 const CreateBeaconNode: React.FC = () => {
   const [serverError, setServerError] = useState('');
-  const { nodes } = useEthereumNodes();
+  const { data: ethereumNodes } =
+    useInfiniteRequest<EthereumNode>('/ethereum/nodes');
   const router = useRouter();
 
-  const activeNodes = nodes
+  const activeNodes = ethereumNodes
     .filter(({ rpc }) => rpc)
     .map(({ rpcPort, name }) => ({
       label: name,

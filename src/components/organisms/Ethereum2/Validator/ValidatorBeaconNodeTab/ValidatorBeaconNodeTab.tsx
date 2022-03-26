@@ -3,17 +3,18 @@ import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 
 import Button from '@components/atoms/Button/Button';
 import MultiSelectWithInput from '@components/molecules/MultiSelectWithInput/MultiSelectWithInput';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import { BeaconEndpoints, Validator } from '@interfaces/ethereum2/Validator';
 import { updateValidator } from '@utils/requests/ethereum2/validators';
 import { Ethereum2Client } from '@enums/Ethereum2/Ethereum2Client';
 import { handleRequest } from '@utils/helpers/handleRequest';
-import { useBeaconNodes } from '@hooks/useBeaconNodes';
 import {
   MultipleSchema,
   onlyOneSchema,
 } from '@schemas/ethereum2/validator/beaconnodes';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { KeyedMutator } from 'swr';
+import { BeaconNode } from '@interfaces/ethereum2/BeaconNode';
 
 interface Props extends Validator {
   mutate?: KeyedMutator<{ validator: Validator }>;
@@ -27,7 +28,8 @@ const ValidatorBeaconNodeTab: React.FC<Props> = ({
 }) => {
   const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
-  const { beaconnodes, isLoading } = useBeaconNodes();
+  const { data: beaconnodes, isLoading } =
+    useInfiniteRequest<BeaconNode>('/ethereum2/nodes');
 
   const activeBeaconnodes = beaconnodes
     .filter(({ client, rest, rpc }) =>

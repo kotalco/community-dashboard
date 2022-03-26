@@ -12,16 +12,17 @@ import EmptyState from '@components/molecules/EmptyState/EmptyState';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import PolkadotIcon from '@components/Icons/PolkadotIcon/PolkadotIcon';
 import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import { useNotification } from '@hooks/useNotification';
 import { getLabel } from '@utils/helpers/getLabel';
-import { usePolkadotNodes } from '@hooks/usePolkadotNodes';
 import { NETWORKS } from '@data/polkadot/networks';
 import { Deployments } from '@enums/Deployments';
+import { PolkadotNode } from '@interfaces/polkadot/PolkadotNode';
 
 function PolkadotNodes() {
   const { NotificationPanel } = useNotification(Deployments.polkadot);
   const {
-    nodes,
+    data: polkadotNodes,
     isEmpty,
     isInitialLoading,
     size,
@@ -30,7 +31,7 @@ function PolkadotNodes() {
     isLoading,
     totalCount,
     error,
-  } = usePolkadotNodes();
+  } = useInfiniteRequest<PolkadotNode>('/polkadot/nodes');
 
   const tabs = [
     {
@@ -78,7 +79,7 @@ function PolkadotNodes() {
 
       <LinkedTabs tabs={tabs} />
       <List>
-        {nodes.map(({ name, network }) => (
+        {polkadotNodes.map(({ name, network }) => (
           <ListItem
             key={name}
             link={`/deployments/polkadot/nodes/${name}`}

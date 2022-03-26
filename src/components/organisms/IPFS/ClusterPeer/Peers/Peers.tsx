@@ -6,13 +6,13 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 import MultiSelectWithInput from '@components/molecules/MultiSelectWithInput/MultiSelectWithInput';
 import Button from '@components/atoms/Button/Button';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import { ClusterPeer, Peers } from '@interfaces/ipfs/ClusterPeer';
 import { updateClusterPeer } from '@utils/requests/ipfs/clusterPeers';
 import { handleRequest } from '@utils/helpers/handleRequest';
-import { usePeers } from '@hooks/usePeers';
 import { schema } from '@schemas/ipfs/clusterPeers/peers';
-import { useClusterPeers } from '@hooks/useClusterPeers';
 import { KeyedMutator } from 'swr';
+import { Peer } from '@interfaces/ipfs/Peer';
 
 interface Props extends ClusterPeer {
   mutate?: KeyedMutator<{ clusterpeer: ClusterPeer }>;
@@ -27,8 +27,10 @@ const Peers: React.FC<Props> = ({
 }) => {
   const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
-  const { peers, isLoading: isLoadingPeers } = usePeers();
-  const { clusterpeers, isLoading: isLoadingClusterpeers } = useClusterPeers();
+  const { data: peers, isLoading: isLoadingPeers } =
+    useInfiniteRequest<Peer>('/ipfs/peers');
+  const { data: clusterpeers, isLoading: isLoadingClusterpeers } =
+    useInfiniteRequest<ClusterPeer>('/ipfs/clusterpeers');
 
   // Get peers endpoints
   const peerEndpoints = peers.map(({ name }) => ({

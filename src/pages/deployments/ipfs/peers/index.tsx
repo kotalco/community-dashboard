@@ -11,17 +11,17 @@ import ButtonGroup from '@components/molecules/ButtonGroup/ButtonGroup';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
 import EmptyState from '@components/molecules/EmptyState/EmptyState';
+import IPFSIcon from '@components/Icons/IPFSIcon/IPFSIcon';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import { createButtons } from '@data/ipfs/links';
-import { usePeers } from '@hooks/usePeers';
-import { useClusterPeers } from '@hooks/useClusterPeers';
 import { useNotification } from '@hooks/useNotification';
 import { Deployments } from '@enums/Deployments';
-import IPFSIcon from '@components/Icons/IPFSIcon/IPFSIcon';
+import { Peer } from '@interfaces/ipfs/Peer';
 
 function Peers() {
   const { NotificationPanel } = useNotification(Deployments.peer);
   const {
-    peers,
+    data: peers,
     isEmpty,
     isInitialLoading,
     size,
@@ -30,8 +30,9 @@ function Peers() {
     isLoading,
     error,
     totalCount: peersCount,
-  } = usePeers();
-  const { totalCount: clusterpeersCount } = useClusterPeers();
+  } = useInfiniteRequest<Peer>('/ipfs/peers');
+  const { totalCount: clusterpeersCount } =
+    useInfiniteRequest('/ipfs/clusterpeers');
 
   const tabs = [
     {

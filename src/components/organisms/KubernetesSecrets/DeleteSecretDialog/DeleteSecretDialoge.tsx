@@ -2,9 +2,10 @@ import { useState } from 'react';
 
 import Button from '@components/atoms/Button/Button';
 import Dialog from '@components/molecules/Dialog/Dialog';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import { deleteSecret as sendDeleteRequest } from '@utils/requests/secrets';
-import { useSecrets } from '@hooks/useSecrets';
 import { handleRequest } from '@utils/helpers/handleRequest';
+import { KubernetesSecret } from '@interfaces/KubernetesSecret/KubernetesSecret';
 
 interface Props {
   close: () => void;
@@ -19,7 +20,7 @@ const DeleteSecretDialoge: React.FC<Props> = ({
 }) => {
   const [serverError, setServerError] = useState<string | undefined>('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { mutate } = useSecrets();
+  const { mutate } = useInfiniteRequest<KubernetesSecret>('/core/secrets');
 
   const closeDialog = () => {
     close();

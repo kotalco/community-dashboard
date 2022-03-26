@@ -5,11 +5,12 @@ import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 import Button from '@components/atoms/Button/Button';
 import Toggle from '@components/molecules/Toggle/Toggle';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import { IPFS } from '@interfaces/filecoin/FilecoinNode';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { FilecoinNode } from '@interfaces/filecoin/FilecoinNode';
 import { updateFilecoinNode } from '@utils/requests/filecoin';
-import { usePeers } from '@hooks/usePeers';
+import { Peer } from '@interfaces/ipfs/Peer';
 
 interface Props extends FilecoinNode {
   mutate?: KeyedMutator<{ node: FilecoinNode }>;
@@ -25,7 +26,7 @@ function IPFSDetails({
   const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
 
-  const { peers, isLoading } = usePeers();
+  const { data: peers, isLoading } = useInfiniteRequest<Peer>('/ipfs/peers');
   const peersOptions = peers.map(({ name }) => ({
     label: name,
     value: `/dns4/${name}/tcp/5001`,

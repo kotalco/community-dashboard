@@ -9,6 +9,7 @@ import TextInput from '@components/molecules/TextInput/TextInput';
 import Select from '@components/molecules/Select/Select';
 import Heading from '@components/templates/Heading/Heading';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import { createSchema } from '@schemas/chainlink/create';
 import {
   ChainlinkNode,
@@ -18,17 +19,18 @@ import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { EVM_CHAINS } from '@data/chainlink/evmChain';
-import { useEthereumNodes } from '@hooks/useEthereumNodes';
 import { createChainlinkNode } from '@utils/requests/chainlink';
 import { Deployments } from '@enums/Deployments';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
+import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 
 function CreateChainlink() {
   const [serverError, setServerError] = useState('');
   const router = useRouter();
-  const { nodes } = useEthereumNodes();
+  const { data: ethereumNodes } =
+    useInfiniteRequest<EthereumNode>('/ethereum/nodes');
 
-  const activeNodes = nodes
+  const activeNodes = ethereumNodes
     .filter(({ ws }) => ws)
     .map(({ name, wsPort }) => ({
       label: name,
