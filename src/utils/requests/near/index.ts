@@ -4,11 +4,11 @@ import {
   UpdateNearNode,
 } from '@interfaces/near/NearNode';
 
-import api from '../../axios';
+import { api } from '@utils/axios';
 
 export const createNearNode = async (body: CreateNearNode) => {
-  const res = await api.post<{ node: NearNode }>(`/near/nodes`, body);
-  return res.data.node;
+  const node = await api.post<never, NearNode>(`/near/nodes`, body);
+  return node;
 };
 
 export const updateNearNode = async (body: UpdateNearNode, name: string) => {

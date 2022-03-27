@@ -1,6 +1,6 @@
 import useSWR, { SWRConfiguration } from 'swr';
 
-import axios, { fetcher } from '../../axios';
+import { fetcher, api } from '../../axios';
 import {
   CreateKubernetesSecret,
   KubernetesSecret,
@@ -24,26 +24,12 @@ export const useSecretsByType = (
   return { data: arranged, error, isLoading: !error && !data, ...rest };
 };
 
-/**
- * Create new secret type
- * @param secret Secret data
- * @returns the name and type of the created secret
- */
-export const createSecret = async (
-  secret: CreateKubernetesSecret
-): Promise<KubernetesSecret> => {
-  const { data } = await axios.post<{ secret: KubernetesSecret }>(
-    '/core/secrets',
-    secret
-  );
+export const createSecret = async (body: CreateKubernetesSecret) => {
+  const secret = await api.post<never, KubernetesSecret>('/core/secrets', body);
 
-  return data.secret;
+  return secret;
 };
 
-/**
- * Deletes kubernetes secret
- * @param name Name of the secret
- */
 export const deleteSecret = async (name: string): Promise<void> => {
-  await axios.delete(`/core/secrets/${name}`);
+  await api.delete(`/core/secrets/${name}`);
 };

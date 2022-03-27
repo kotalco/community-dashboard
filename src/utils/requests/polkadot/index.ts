@@ -3,11 +3,11 @@ import {
   PolkadotNode,
   UpdatePolkadotNode,
 } from '@interfaces/polkadot/PolkadotNode';
-import api from '../../axios';
+import { api } from '@utils/axios';
 
 export const createPolkadotNode = async (body: CreatePolkadotNode) => {
-  const res = await api.post<{ node: PolkadotNode }>(`/polkadot/nodes`, body);
-  return res.data.node;
+  const node = await api.post<never, PolkadotNode>(`/polkadot/nodes`, body);
+  return node;
 };
 
 export const updatePolkadotNode = async (

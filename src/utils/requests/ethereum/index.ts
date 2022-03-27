@@ -4,11 +4,11 @@ import {
   UpdateEthereumNode,
 } from '@interfaces/Ethereum/ِEthereumNode';
 
-import api from '../../axios';
+import { api } from '../../axios';
 
 export const createEthereumNode = async (body: CreateEthereumNode) => {
-  const res = await api.post<{ node: EthereumNode }>(`/ethereum/nodes`, body);
-  return res.data.node;
+  const node = await api.post<never, EthereumNode>(`/ethereum/nodes`, body);
+  return node;
 };
 
 export const updateEthereumNode = async (

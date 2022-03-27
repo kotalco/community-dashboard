@@ -4,11 +4,11 @@ import {
   UpdateFilecoinNode,
 } from '@interfaces/filecoin/FilecoinNode';
 
-import api from '../../axios';
+import { api } from '../../axios';
 
 export const createFilecoinNode = async (body: CreateFilecoinNode) => {
-  const res = await api.post<{ node: FilecoinNode }>(`/filecoin/nodes`, body);
-  return res.data.node;
+  const node = await api.post<never, FilecoinNode>(`/filecoin/nodes`, body);
+  return node;
 };
 
 export const updateFilecoinNode = async (

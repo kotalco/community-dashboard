@@ -4,7 +4,7 @@ import useSWRInfinite, {
 } from 'swr/infinite';
 import { AxiosResponse, AxiosError } from 'axios';
 
-import axios from '@utils/axios';
+import { api } from '@utils/axios';
 
 const PAGE_SIZE = 2;
 
@@ -48,7 +48,7 @@ export default function useInfiniteRequest<Data = unknown, Error = unknown>(
       if (pageIndex === 0) return url;
       return `${url}?page=${pageIndex}`;
     },
-    (url: string) => axios.get<{ data: Data[] }>(url),
+    (url: string) => api.get<{ data: Data[] }>(url),
     {
       ...config,
       fallbackData:

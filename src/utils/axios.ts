@@ -1,7 +1,16 @@
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
-const api = axios.create({
+export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BASE_URL,
+});
+
+api.interceptors.response.use(function (
+  response: AxiosResponse<{ data: unknown }>
+) {
+  if (response.config.method !== 'get') {
+    return response.data.data;
+  }
+  return response;
 });
 
 export async function fetcher<T>(url: string): Promise<T> {
@@ -15,5 +24,3 @@ export function handleAxiosError<T extends { error: string }>(
 ) {
   return e.response?.data.error;
 }
-
-export default api;

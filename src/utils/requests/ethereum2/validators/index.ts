@@ -1,4 +1,4 @@
-import axios from '../../../axios';
+import { api } from '../../../axios';
 
 import {
   CreateValidator,
@@ -7,12 +7,12 @@ import {
 } from '@interfaces/ethereum2/Validator';
 
 export const createValidator = async (values: CreateValidator) => {
-  const { data } = await axios.post<{ validator: Validator }>(
+  const validator = await api.post<never, Validator>(
     '/ethereum2/validators',
     values
   );
 
-  return data.validator;
+  return validator;
 };
 
 /**
@@ -20,7 +20,7 @@ export const createValidator = async (values: CreateValidator) => {
  * @param validatorName Vaidator name to be deleted
  */
 export const deleteValidator = async (validatorName: string): Promise<void> => {
-  await axios.delete(`/ethereum2/validators/${validatorName}`);
+  await api.delete(`/ethereum2/validators/${validatorName}`);
 };
 
 /**
@@ -33,7 +33,7 @@ export const updateValidator = async (
   validatorName: string,
   validatorData: UpdateValidator
 ): Promise<Validator> => {
-  const { data } = await axios.put<{ validator: Validator }>(
+  const { data } = await api.put<{ validator: Validator }>(
     `/ethereum2/validators/${validatorName}`,
     validatorData
   );

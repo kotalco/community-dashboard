@@ -13,7 +13,7 @@ const Layout: React.FC = ({ children }) => {
       <SidebarMobile isOpen={isOpen} setIsOpen={setIsOpen} />
       <SidebarDesktop />
 
-      <div className="flex flex-col flex-1 w-0 h-screen">
+      <div className="flex flex-col flex-1 w-0 h-screen overflow-y-auto">
         <div className="overflow-hidden">
           <Navbar setIsOpen={setIsOpen} />
         </div>

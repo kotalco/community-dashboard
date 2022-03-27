@@ -1,4 +1,4 @@
-import axios from '@utils/axios';
+import { api } from '@utils/axios';
 import {
   CreateClusterPeer,
   ClusterPeer,
@@ -14,18 +14,18 @@ import { UnpackNestedValue } from 'react-hook-form';
 export const createIPFSClusterPeer = async (
   body: UnpackNestedValue<CreateClusterPeer>
 ): Promise<ClusterPeer> => {
-  const { data } = await axios.post<{ clusterpeer: ClusterPeer }>(
+  const clusterpeer = await api.post<never, ClusterPeer>(
     `/ipfs/clusterpeers`,
     body
   );
-  return data.clusterpeer;
+  return clusterpeer;
 };
 
 export const updateClusterPeer = async (
   name: string,
   body: UpdateClusterPeer
 ) => {
-  const { data } = await axios.put<{ clusterpeer: ClusterPeer }>(
+  const { data } = await api.put<{ clusterpeer: ClusterPeer }>(
     `/ipfs/clusterpeers/${name}`,
     body
   );
@@ -38,5 +38,5 @@ export const updateClusterPeer = async (
  * @param name IPFS Cluster Peer name
  */
 export const deleteClusterPeer = async (name: string): Promise<void> => {
-  await axios.delete(`/ipfs/clusterpeers/${name}`);
+  await api.delete(`/ipfs/clusterpeers/${name}`);
 };

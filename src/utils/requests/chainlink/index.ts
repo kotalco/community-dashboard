@@ -3,11 +3,11 @@ import {
   CreateChainlinkNode,
   UpdateChainlinkNode,
 } from '@interfaces/chainlink/ChainlinkNode';
-import api from '../../axios';
+import { api } from '../../axios';
 
 export const createChainlinkNode = async (body: CreateChainlinkNode) => {
-  const res = await api.post<{ node: ChainlinkNode }>(`/chainlink/nodes`, body);
-  return res.data.node;
+  const node = await api.post<never, ChainlinkNode>(`/chainlink/nodes`, body);
+  return node;
 };
 
 export const updateChainlinkNode = async (
