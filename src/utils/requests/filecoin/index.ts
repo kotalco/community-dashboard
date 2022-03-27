@@ -15,11 +15,11 @@ export const updateFilecoinNode = async (
   body: UpdateFilecoinNode,
   name: string
 ) => {
-  const res = await api.put<{ node: FilecoinNode }>(
+  const node = await api.put<never, FilecoinNode>(
     `/filecoin/nodes/${name}`,
     body
   );
-  return res.data.node;
+  return node;
 };
 
 export const deleteFilecoinNode = async (name: string) => {

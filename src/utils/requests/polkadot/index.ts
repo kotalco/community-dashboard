@@ -14,11 +14,11 @@ export const updatePolkadotNode = async (
   body: UpdatePolkadotNode,
   name: string
 ) => {
-  const res = await api.put<{ node: PolkadotNode }>(
+  const node = await api.put<never, PolkadotNode>(
     `/polkadot/nodes/${name}`,
     body
   );
-  return res.data.node;
+  return node;
 };
 
 export const deletePolkadotNode = async (name: string) => {

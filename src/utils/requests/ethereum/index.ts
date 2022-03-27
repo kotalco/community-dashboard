@@ -15,11 +15,11 @@ export const updateEthereumNode = async (
   nodeData: UpdateEthereumNode,
   nodeName: string
 ) => {
-  const { data } = await api.put<{ node: EthereumNode }>(
+  const node = await api.put<never, EthereumNode>(
     `/ethereum/nodes/${nodeName}`,
     nodeData
   );
-  return data.node;
+  return node;
 };
 
 export const deleteEthereumNode = async (name: string) => {

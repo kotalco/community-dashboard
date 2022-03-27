@@ -26,10 +26,9 @@ export const useSecretsByType = (
 
 export const createSecret = async (body: CreateKubernetesSecret) => {
   const secret = await api.post<never, KubernetesSecret>('/core/secrets', body);
-
   return secret;
 };
 
-export const deleteSecret = async (name: string): Promise<void> => {
+export const deleteSecret = async (name: string) => {
   await api.delete(`/core/secrets/${name}`);
 };

@@ -12,8 +12,8 @@ export const createNearNode = async (body: CreateNearNode) => {
 };
 
 export const updateNearNode = async (body: UpdateNearNode, name: string) => {
-  const res = await api.put<{ node: NearNode }>(`/near/nodes/${name}`, body);
-  return res.data.node;
+  const node = await api.put<never, NearNode>(`/near/nodes/${name}`, body);
+  return node;
 };
 
 export const deleteNearNode = async (name: string) => {
