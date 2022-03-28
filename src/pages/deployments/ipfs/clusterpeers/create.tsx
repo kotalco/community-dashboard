@@ -17,26 +17,27 @@ import { createIPFSClusterPeer } from '@utils/requests/ipfs/clusterPeers';
 import { schema } from '@schemas/ipfs/clusterPeers/create';
 import { ClusterPeer, CreateClusterPeer } from '@interfaces/ipfs/ClusterPeer';
 import { consensusOptions } from '@data/ipfs/clusterPeers/consensusOptions';
-import { useSecretsByType } from '@utils/requests/secrets';
 import { ClusterConsensusAlgorithm } from '@enums/IPFS/ClusterPeers/ClusterConsensusAlgorithm';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { Deployments } from '@enums/Deployments';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
 import { Peer } from '@interfaces/ipfs/Peer';
+import { useSecretTypes } from '@hooks/useSecretTypes';
 
 const CreateClusterPeerPage: React.FC = () => {
   const [serverError, setServerError] = useState('');
   const [isPredefined, setIsPredefined] = useState(false);
+
   const { data: peers } = useInfiniteRequest<Peer>('/ipfs/peers');
   const { data: clusterpeers } =
     useInfiniteRequest<ClusterPeer>('/ipfs/clusterpeers');
-  const { data: privateKeyNames } = useSecretsByType(
-    KubernetesSecretTypes.ipfsClusterPeerPrivatekey
-  );
-  const { data: clusterSecretNames } = useSecretsByType(
-    KubernetesSecretTypes.ipfsClusterSecret
-  );
+
+  const { data: privateKeyOptions, isLoading: isLoadingPrivateKeys } =
+    useSecretTypes(KubernetesSecretTypes.ipfsClusterPeerPrivatekey);
+
+  const { data: clusterSecretOptions, isLoading: isLoadingClusterSecrets } =
+    useSecretTypes(KubernetesSecretTypes.ipfsClusterSecret);
 
   // Get peer endpoints opions
   const peerEndoints = peers.map(({ name }) => ({
@@ -147,21 +148,23 @@ const CreateClusterPeerPage: React.FC = () => {
           />
 
           {/* Cluster Secret */}
-          <Controller
-            name="clusterSecretName"
-            control={control}
-            render={({ field }) => (
-              <Select
-                label="Cluster Secret Name"
-                placeholder="Choose a secret..."
-                error={errors.clusterSecretName?.message}
-                href={`/core/secrets/create?type=${KubernetesSecretTypes.ipfsClusterSecret}`}
-                hrefTitle="Create new secret..."
-                options={clusterSecretNames}
-                onChange={field.onChange}
-              />
-            )}
-          />
+          {!isLoadingClusterSecrets && (
+            <Controller
+              name="clusterSecretName"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  label="Cluster Secret Name"
+                  placeholder="Choose a secret..."
+                  error={errors.clusterSecretName?.message}
+                  href={`/core/secrets/create?type=${KubernetesSecretTypes.ipfsClusterSecret}`}
+                  hrefTitle="Create new secret..."
+                  options={clusterSecretOptions}
+                  onChange={field.onChange}
+                />
+              )}
+            />
+          )}
 
           {/* Ask for predefined identity and private key */}
           <Toggle
@@ -179,22 +182,24 @@ const CreateClusterPeerPage: React.FC = () => {
               />
 
               {/* Cluster Peer Private Key */}
-              <Controller
-                name="privatekeySecretName"
-                control={control}
-                shouldUnregister
-                render={({ field }) => (
-                  <Select
-                    label="Private Key"
-                    options={privateKeyNames}
-                    error={errors.privatekeySecretName?.message}
-                    placeholder="Choose a private key..."
-                    href={`/core/secrets/create?type=${KubernetesSecretTypes.ipfsClusterPeerPrivatekey}`}
-                    hrefTitle="Create new private key..."
-                    onChange={field.onChange}
-                  />
-                )}
-              />
+              {!isLoadingPrivateKeys && (
+                <Controller
+                  name="privatekeySecretName"
+                  control={control}
+                  shouldUnregister
+                  render={({ field }) => (
+                    <Select
+                      label="Private Key"
+                      options={privateKeyOptions}
+                      error={errors.privatekeySecretName?.message}
+                      placeholder="Choose a private key..."
+                      href={`/core/secrets/create?type=${KubernetesSecretTypes.ipfsClusterPeerPrivatekey}`}
+                      hrefTitle="Create new private key..."
+                      onChange={field.onChange}
+                    />
+                  )}
+                />
+              )}
             </>
           )}
 

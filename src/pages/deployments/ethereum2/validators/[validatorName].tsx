@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import Error from 'next/error';
 
 import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
@@ -11,32 +12,38 @@ import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetai
 import Logging from '@components/organisms/Logging/Logging';
 import Resources from '@components/organisms/Resources/Resources';
 import DangerZone from '@components/organisms/Ethereum2/Validator/DangerZone/DangerZone';
+import useRequest from '@hooks/useRequest';
 import { updateValidator } from '@utils/requests/ethereum2/validators';
 import { tabTitles } from '@data/ethereum2/validator/tabTitles';
-import { UpdateValidator } from '@interfaces/ethereum2/Validator';
+import { UpdateValidator, Validator } from '@interfaces/ethereum2/Validator';
 import { getLabel } from '@utils/helpers/getLabel';
 import { networkOptions } from '@data/ethereum2/networkOptions';
 import { clientOptions } from '@data/ethereum2/clientOptions';
-import { useValidator } from '@hooks/useValidator';
 import { useStatus } from '@hooks/useStatus';
 import { DataList } from '@interfaces/DataList';
 import { getHref } from '@utils/helpers/getHref';
 
 function ValidatorDetailsPage() {
-  const { query, push } = useRouter();
+  const { query } = useRouter();
   const validatorName = query.validatorName as string | undefined;
 
-  const { validator, error, mutate } = useValidator(validatorName);
+  const {
+    data: validator,
+    mutate,
+    error,
+  } = useRequest<Validator>(
+    validatorName ? { url: `/ethereum2/validators/${validatorName}` } : null
+  );
   const { status } = useStatus(
     validator && `/ethereum2/validators/${validator.name}/status`
   );
 
   const updateResources = async (name: string, values: UpdateValidator) => {
-    const validator = await updateValidator(name, values);
-    mutate({ validator });
+    await updateValidator(name, values);
+    mutate();
   };
 
-  if (error) push('/404');
+  if (error) return <Error statusCode={error.response?.status || 500} />;
   if (!validator) return <LoadingIndicator />;
 
   const dataList: DataList[] = [

@@ -15,7 +15,6 @@ import {
   ChainlinkNode,
   CreateChainlinkNode,
 } from '@interfaces/chainlink/ChainlinkNode';
-import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { EVM_CHAINS } from '@data/chainlink/evmChain';
@@ -23,6 +22,7 @@ import { createChainlinkNode } from '@utils/requests/chainlink';
 import { Deployments } from '@enums/Deployments';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
 import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
+import { useSecretTypes } from '@hooks/useSecretTypes';
 
 function CreateChainlink() {
   const [serverError, setServerError] = useState('');
@@ -36,7 +36,10 @@ function CreateChainlink() {
       label: name,
       value: `ws://${name}:${wsPort}`,
     }));
-  const { data: passwords } = useSecretsByType(KubernetesSecretTypes.password);
+
+  const { data: passwordOptions, isLoading } = useSecretTypes(
+    KubernetesSecretTypes.password
+  );
 
   const {
     handleSubmit,
@@ -135,22 +138,24 @@ function CreateChainlink() {
           />
 
           {/* Keystore Password */}
-          <Controller
-            control={control}
-            name="keystorePasswordSecretName"
-            render={({ field }) => (
-              <Select
-                options={passwords}
-                label="Keystore password"
-                placeholder="Select a password..."
-                onChange={field.onChange}
-                error={errors.keystorePasswordSecretName?.message}
-                href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
-                hrefTitle="Create a password..."
-                helperText="For securing access to chainlink wallet"
-              />
-            )}
-          />
+          {!isLoading && (
+            <Controller
+              control={control}
+              name="keystorePasswordSecretName"
+              render={({ field }) => (
+                <Select
+                  options={passwordOptions}
+                  label="Keystore password"
+                  placeholder="Select a password..."
+                  onChange={field.onChange}
+                  error={errors.keystorePasswordSecretName?.message}
+                  href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
+                  hrefTitle="Create a password..."
+                  helperText="For securing access to chainlink wallet"
+                />
+              )}
+            />
+          )}
 
           <h2 className="mt-10 text-xl font-bold">API Credentials</h2>
           <p className="mb-5 text-sm text-gray-500">
@@ -167,21 +172,23 @@ function CreateChainlink() {
           />
 
           {/* Password */}
-          <Controller
-            control={control}
-            name="apiCredentials.passwordSecretName"
-            render={({ field }) => (
-              <Select
-                options={passwords}
-                label="Password"
-                placeholder="Select a password..."
-                onChange={field.onChange}
-                error={errors.apiCredentials?.passwordSecretName?.message}
-                href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
-                hrefTitle="Create New Password..."
-              />
-            )}
-          />
+          {!isLoading && (
+            <Controller
+              control={control}
+              name="apiCredentials.passwordSecretName"
+              render={({ field }) => (
+                <Select
+                  options={passwordOptions}
+                  label="Password"
+                  placeholder="Select a password..."
+                  onChange={field.onChange}
+                  error={errors.apiCredentials?.passwordSecretName?.message}
+                  href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
+                  hrefTitle="Create New Password..."
+                />
+              )}
+            />
+          )}
         </FormLayout>
       </form>
     </Layout>

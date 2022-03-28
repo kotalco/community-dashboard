@@ -8,9 +8,9 @@ import { ChainlinkNode, Wallet } from '@interfaces/chainlink/ChainlinkNode';
 import { KeyedMutator } from 'swr';
 import { updateChainlinkNode } from '@utils/requests/chainlink';
 import { handleRequest } from '@utils/helpers/handleRequest';
-import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { walletSchema } from '@schemas/chainlink/wallet';
+import { useSecretTypes } from '@hooks/useSecretTypes';
 
 interface Props extends ChainlinkNode {
   mutate?: KeyedMutator<{
@@ -21,7 +21,8 @@ interface Props extends ChainlinkNode {
 function WalletDetails({ keystorePasswordSecretName, name, mutate }: Props) {
   const [submitSuccess, setSubmitSuccess] = useState('');
   const [serverError, setServerError] = useState('');
-  const { data: passwords, isLoading } = useSecretsByType(
+
+  const { data: passwordOptions, isLoading } = useSecretTypes(
     KubernetesSecretTypes.password
   );
 
@@ -61,7 +62,7 @@ function WalletDetails({ keystorePasswordSecretName, name, mutate }: Props) {
             defaultValue={keystorePasswordSecretName}
             render={({ field }) => (
               <Select
-                options={passwords}
+                options={passwordOptions}
                 value={field.value}
                 onChange={field.onChange}
                 label="Keystore Password"

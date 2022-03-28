@@ -2,7 +2,7 @@ import useSWRInfinite, {
   SWRInfiniteConfiguration,
   SWRInfiniteResponse,
 } from 'swr/infinite';
-import { AxiosResponse, AxiosError } from 'axios';
+import { AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
 
 import { api } from '@utils/axios';
 
@@ -31,6 +31,7 @@ export interface InfiniteConfig<Data = unknown, Error = unknown>
 
 export default function useInfiniteRequest<Data = unknown, Error = unknown>(
   url: string,
+  axiosConfig?: AxiosRequestConfig<Data>,
   { fallbackData, ...config }: InfiniteConfig<{ data: Data[] }, Error> = {}
 ): InfiniteReturn<Data, Error> {
   const {
@@ -48,7 +49,7 @@ export default function useInfiniteRequest<Data = unknown, Error = unknown>(
       if (pageIndex === 0) return url;
       return `${url}?page=${pageIndex}`;
     },
-    (url: string) => api.get<{ data: Data[] }>(url),
+    (url: string) => api.get<{ data: Data[] }>(url, axiosConfig),
     {
       ...config,
       fallbackData:

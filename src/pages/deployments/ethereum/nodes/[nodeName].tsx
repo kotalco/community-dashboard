@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import Error from 'next/error';
 
 import { updateEthereumNode } from '@utils/requests/ethereum';
 import Heading from '@components/templates/Heading/Heading';
@@ -15,6 +16,7 @@ import ResourcesDetails from '@components/organisms/Resources/Resources';
 import LoggingDetails from '@components/organisms/Ethereum/LogginDetails/LoggingDetails';
 import Cards from '@components/templates/Cards/Cards';
 import Card from '@components/atoms/Card/Card';
+import useRequest from '@hooks/useRequest';
 import { Resources } from '@interfaces/Resources';
 import { tabTitles } from '@data/ethereum/node/tabTitles';
 import { clientOptions } from '@data/ethereum/node/clientOptions';
@@ -22,18 +24,25 @@ import { networkOptions } from '@data/ethereum/node/networkOptions';
 import { getLabel } from '@utils/helpers/getLabel';
 import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
 import { useStatus } from '@hooks/useStatus';
-import { useEthereumNode } from '@hooks/useEthereumNode';
 import { DataList } from '@interfaces/DataList';
 import { getHref } from '@utils/helpers/getHref';
 import { useStats } from '@hooks/useStats';
 import { EthereumStatsResponse } from '@interfaces/Stats';
 import { ExclamationIcon, RefreshIcon } from '@heroicons/react/outline';
+import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 
 function EthereumNodeDetailsPage() {
-  const { query, push } = useRouter();
+  const { query } = useRouter();
   const nodeName = query.nodeName as string | undefined;
 
-  const { node, mutate, error } = useEthereumNode(nodeName);
+  const {
+    data: node,
+    mutate,
+    error,
+  } = useRequest<EthereumNode>(
+    nodeName ? { url: `/ethereum/nodes/${nodeName}` } : null
+  );
+
   const { stats, error: statsError } = useStats<EthereumStatsResponse>(
     nodeName && `/ethereum/nodes/${nodeName}/stats`
   );
@@ -45,7 +54,7 @@ function EthereumNodeDetailsPage() {
     mutate();
   };
 
-  if (error) push('/404');
+  if (error) return <Error statusCode={error.response?.status || 500} />;
   if (!node) return <LoadingIndicator />;
 
   const dataList: DataList[] = [

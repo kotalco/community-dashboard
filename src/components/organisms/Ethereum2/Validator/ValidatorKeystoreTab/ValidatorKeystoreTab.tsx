@@ -6,12 +6,12 @@ import { updateValidator } from '@utils/requests/ethereum2/validators';
 import { Keystores, Validator } from '@interfaces/ethereum2/Validator';
 import Multiselect from '@components/molecules/Multiselect/Multiselect';
 import Select from '@components/molecules/Select/Select';
-import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { schema } from '@schemas/ethereum2/validator/keystores';
 import { KeyedMutator } from 'swr';
+import { useSecretTypes } from '@hooks/useSecretTypes';
 
 interface Props extends Validator {
   mutate?: KeyedMutator<{ validator: Validator }>;
@@ -25,12 +25,12 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
 }) => {
   const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
-  const { data: allKeystores } = useSecretsByType(
-    KubernetesSecretTypes.ethereum2Keystore
-  );
-  const { data: allWalletValues, isLoading } = useSecretsByType(
-    KubernetesSecretTypes.password
-  );
+
+  const { data: keystoreOptions, isLoading: isLoadingKeystores } =
+    useSecretTypes(KubernetesSecretTypes.ethereum2Keystore);
+
+  const { data: passwordOptions, isLoading: isLoadingPasswords } =
+    useSecretTypes(KubernetesSecretTypes.password);
 
   const selectedKeystores = keystores.map(({ secretName }) => secretName);
 
@@ -67,26 +67,28 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
         {/* Key Stores */}
-        <Controller
-          name="keystores"
-          control={control}
-          defaultValue={selectedKeystores}
-          render={({ field }) => (
-            <Multiselect
-              label="Ethereum 2.0 Keystores"
-              placeholder="Choose your keystores..."
-              options={allKeystores}
-              errors={errors}
-              error={errors.keystores && field.name}
-              onChange={field.onChange}
-              value={field.value}
-              href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereum2Keystore}`}
-              hrefTitle="Create New Keystore"
-            />
-          )}
-        />
+        {!isLoadingKeystores && (
+          <Controller
+            name="keystores"
+            control={control}
+            defaultValue={selectedKeystores}
+            render={({ field }) => (
+              <Multiselect
+                label="Ethereum 2.0 Keystores"
+                placeholder="Choose your keystores..."
+                options={keystoreOptions}
+                errors={errors}
+                error={errors.keystores && field.name}
+                onChange={field.onChange}
+                value={field.value}
+                href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereum2Keystore}`}
+                hrefTitle="Create New Keystore"
+              />
+            )}
+          />
+        )}
 
-        {walletPasswordSecretName && !isLoading && (
+        {walletPasswordSecretName && !isLoadingPasswords && (
           <div className="max-w-xs mt-4">
             <Controller
               name="walletPasswordSecretName"
@@ -96,7 +98,7 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
                 <Select
                   placeholder="Choose a wallet password"
                   label="Prysm Client Wallet Password"
-                  options={allWalletValues}
+                  options={passwordOptions}
                   onChange={field.onChange}
                   value={field.value}
                   href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}

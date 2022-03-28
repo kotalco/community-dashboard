@@ -13,7 +13,7 @@ import { networkingSchema } from '@schemas/near/networking';
 import { NearNode } from '@interfaces/near/NearNode';
 import { updateNearNode } from '@utils/requests/near';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
-import { useSecretsByType } from '@utils/requests/secrets';
+import { useSecretTypes } from '@hooks/useSecretTypes';
 
 interface Props extends NearNode {
   mutate?: KeyedMutator<{ node: NearNode }>;
@@ -30,7 +30,8 @@ function NetworkingDetails({
 }: Props) {
   const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
-  const { data: privateKeys, isLoading } = useSecretsByType(
+
+  const { data: privateKeyOptions, isLoading } = useSecretTypes(
     KubernetesSecretTypes.nearPrivateKey
   );
 
@@ -77,7 +78,7 @@ function NetworkingDetails({
                 placeholder="Choose a private key..."
                 label="Node private key"
                 error={errors.nodePrivateKeySecretName?.message}
-                options={privateKeys}
+                options={privateKeyOptions}
                 onChange={field.onChange}
                 value={field.value}
                 href={`/core/secrets/create?type=${KubernetesSecretTypes.nearPrivateKey}`}

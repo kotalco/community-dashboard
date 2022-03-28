@@ -10,19 +10,25 @@ import Logging from '@components/organisms/Logging/Logging';
 import Peers from '@components/organisms/IPFS/ClusterPeer/Peers/Peers';
 import Resources from '@components/organisms/Resources/Resources';
 import DangerZone from '@components/organisms/IPFS/ClusterPeer/DangerZone/DangerZone';
-import { UpdateClusterPeer } from '@interfaces/ipfs/ClusterPeer';
+import { ClusterPeer, UpdateClusterPeer } from '@interfaces/ipfs/ClusterPeer';
 import { updateClusterPeer } from '@utils/requests/ipfs/clusterPeers';
-import { useClusterPeer } from '@hooks/useClusterPeer';
 import { tabTitles } from '@data/ipfs/clusterPeers/tabTitles';
 import { getLabel } from '@utils/helpers/getLabel';
 import { consensusOptions } from '@data/ipfs/clusterPeers/consensusOptions';
 import { useStatus } from '@hooks/useStatus';
+import useRequest from '@hooks/useRequest';
 
 function ClusterPeerDetailsPage() {
   const { query, push } = useRouter();
   const peerName = query.peerName as string | undefined;
 
-  const { clusterpeer, mutate, error } = useClusterPeer(peerName);
+  const {
+    data: clusterpeer,
+    mutate,
+    error,
+  } = useRequest<ClusterPeer>(
+    peerName ? { url: `/ipfs/clusterpeers/${peerName}` } : null
+  );
   const { status } = useStatus(
     clusterpeer && `/ipfs/clusterpeers/${clusterpeer.name}/status`
   );

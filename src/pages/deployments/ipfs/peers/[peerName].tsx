@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import Error from 'next/error';
 
 import Layout from '@components/templates/Layout/Layout';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
@@ -10,23 +11,28 @@ import IPFSApiDetails from '@components/organisms/IPFS/IPFSApiDetails/IPFSApiDet
 import IPFSGatewayDetails from '@components/organisms/IPFS/IPFSGatewayDetails/IPFSGatewayDetails';
 import IPFSRoutingDetails from '@components/organisms/IPFS/IPFSRoutingDetails/IPFSRoutingDetails';
 import Logging from '@components/organisms/Logging/Logging';
+import ResourcesTab from '@components/organisms/Resources/Resources';
+import Heading from '@components/templates/Heading/Heading';
+import useRequest from '@hooks/useRequest';
 import { updateIPFSPeer } from '@utils/requests/ipfs/peers';
 import { tabsTitles } from '@data/ipfs/peers/tabsTitles';
-import Heading from '@components/templates/Heading/Heading';
-import ResourcesTab from '@components/organisms/Resources/Resources';
 import { Resources } from '@interfaces/Resources';
-import { usePeer } from '@hooks/usePeer';
 import { useStatus } from '@hooks/useStatus';
 import { DataList } from '@interfaces/DataList';
+import { Peer } from '@interfaces/ipfs/Peer';
 
 function IPFSPeerDetailsPage() {
-  const { push, query } = useRouter();
+  const { query } = useRouter();
   const peerName = query.peerName as string | undefined;
 
-  const { peer, mutate, error } = usePeer(peerName);
+  const {
+    data: peer,
+    mutate,
+    error,
+  } = useRequest<Peer>(peerName ? { url: `/ipfs/peers/${peerName}` } : null);
   const { status } = useStatus(peer && `/ipfs/peers/${peer.name}/status`);
 
-  if (error) push('/404');
+  if (error) <Error statusCode={error.response?.status || 500} />;
   if (!peer) return <LoadingIndicator />;
 
   const updateResources = async (name: string, values: Resources) => {

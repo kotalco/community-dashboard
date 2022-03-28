@@ -9,11 +9,11 @@ import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaW
 import { updateEthereumNode } from '@utils/requests/ethereum';
 import { EthereumNode, Networking } from '@interfaces/Ethereum/ِEthereumNode';
 import { syncModeOptions } from '@data/ethereum/node/syncModeOptions';
-import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { networkingSchema } from '@schemas/ethereum/networking';
+import { useSecretTypes } from '@hooks/useSecretTypes';
 
 interface Props extends EthereumNode {
   mutate?: KeyedMutator<{ node: EthereumNode }>;
@@ -30,7 +30,8 @@ function NetworkingDetails({
   bootnodes,
 }: Props) {
   const [serverError, setServerError] = useState('');
-  const { data: privateKeys, isLoading } = useSecretsByType(
+
+  const { data: privateKeyOptions, isLoading } = useSecretTypes(
     KubernetesSecretTypes.ethereumPrivatekey
   );
 
@@ -78,7 +79,7 @@ function NetworkingDetails({
                 placeholder="Choose a private key..."
                 label="Node Private Key"
                 error={errors.nodePrivateKeySecretName?.message}
-                options={privateKeys}
+                options={privateKeyOptions}
                 onChange={field.onChange}
                 value={field.value}
                 href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}

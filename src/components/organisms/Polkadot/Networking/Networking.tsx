@@ -6,7 +6,6 @@ import TextInput from '@components/molecules/TextInput/TextInput';
 import Button from '@components/atoms/Button/Button';
 import Select from '@components/molecules/Select/Select';
 import { PolkadotNode, Networking } from '@interfaces/polkadot/PolkadotNode';
-import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -14,6 +13,7 @@ import { networkingSchema } from '@schemas/polkadot/networking';
 import { updatePolkadotNode } from '@utils/requests/polkadot';
 import { SYNC_MODES } from '@data/polkadot/syncModes';
 import Toggle from '@components/molecules/Toggle/Toggle';
+import { useSecretTypes } from '@hooks/useSecretTypes';
 
 interface Props extends PolkadotNode {
   mutate?: KeyedMutator<{ node: PolkadotNode }>;
@@ -30,7 +30,8 @@ function NetworkingDetails({
 }: Props) {
   const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
-  const { data: privateKeys, isLoading } = useSecretsByType(
+
+  const { data: privateKeyOptions, isLoading } = useSecretTypes(
     KubernetesSecretTypes.polkadotPrivatekey
   );
 
@@ -77,7 +78,7 @@ function NetworkingDetails({
                 placeholder="Choose a private key..."
                 label="Node private key"
                 error={errors.nodePrivateKeySecretName?.message}
-                options={privateKeys}
+                options={privateKeyOptions}
                 onChange={field.onChange}
                 value={field.value}
                 href={`/core/secrets/create?type=${KubernetesSecretTypes.polkadotPrivatekey}`}

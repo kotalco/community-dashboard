@@ -9,10 +9,10 @@ import { ChainlinkNode, TLS } from '@interfaces/chainlink/ChainlinkNode';
 import { KeyedMutator } from 'swr';
 import { updateChainlinkNode } from '@utils/requests/chainlink';
 import { handleRequest } from '@utils/helpers/handleRequest';
-import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { schema } from '@schemas/chainlink/tls';
+import { useSecretTypes } from '@hooks/useSecretTypes';
 
 interface Props extends ChainlinkNode {
   mutate?: KeyedMutator<{
@@ -29,7 +29,8 @@ function TLSDetails({
 }: Props) {
   const [submitSuccess, setSubmitSuccess] = useState('');
   const [serverError, setServerError] = useState('');
-  const { data: tlsCertificates, isLoading } = useSecretsByType(
+
+  const { data: tlsCertificateOptions, isLoading } = useSecretTypes(
     KubernetesSecretTypes.tlsCertificate
   );
 
@@ -57,7 +58,7 @@ function TLSDetails({
       setServerError(error);
       return;
     }
-    console.log(response);
+
     if (response) {
       mutate?.();
       reset(values);
@@ -76,7 +77,7 @@ function TLSDetails({
             defaultValue={certSecretName}
             render={({ field }) => (
               <Select
-                options={tlsCertificates}
+                options={tlsCertificateOptions}
                 value={field.value}
                 onChange={(value) => {
                   if (!value) setValue('secureCookies', false);

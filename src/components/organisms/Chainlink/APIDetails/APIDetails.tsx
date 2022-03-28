@@ -8,10 +8,10 @@ import { API, ChainlinkNode } from '@interfaces/chainlink/ChainlinkNode';
 import { KeyedMutator } from 'swr';
 import { updateChainlinkNode } from '@utils/requests/chainlink';
 import { handleRequest } from '@utils/helpers/handleRequest';
-import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import { apiSchema } from '@schemas/chainlink/apiCredentials';
+import { useSecretTypes } from '@hooks/useSecretTypes';
 
 interface Props extends ChainlinkNode {
   name: string;
@@ -23,7 +23,8 @@ interface Props extends ChainlinkNode {
 function APIDetails({ apiCredentials, name, mutate }: Props) {
   const [submitSuccess, setSubmitSuccess] = useState('');
   const [serverError, setServerError] = useState('');
-  const { data: passwords, isLoading } = useSecretsByType(
+
+  const { data: passwordOptions, isLoading } = useSecretTypes(
     KubernetesSecretTypes.password
   );
 
@@ -73,7 +74,7 @@ function APIDetails({ apiCredentials, name, mutate }: Props) {
             defaultValue={apiCredentials.passwordSecretName}
             render={({ field }) => (
               <Select
-                options={passwords}
+                options={passwordOptions}
                 value={field.value}
                 onChange={field.onChange}
                 label="Password"

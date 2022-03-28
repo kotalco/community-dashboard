@@ -11,11 +11,11 @@ import Dialog from '@components/molecules/Dialog/Dialog';
 import { updateEthereumNode } from '@utils/requests/ethereum';
 import { Mining, API, EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { updateMiningSchema } from '@schemas/ethereum/updateNodeSchema';
-import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { EthereumNodeClient } from '@enums/Ethereum/EthereumNodeClient';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { useModal } from '@hooks/useModal';
+import { useSecretTypes } from '@hooks/useSecretTypes';
 
 interface Props extends EthereumNode {
   mutate?: KeyedMutator<{ node: EthereumNode }>;
@@ -25,10 +25,11 @@ function MiningDetails({ name, mutate, ...rest }: Props) {
   const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
 
-  const { data: privateKeys } = useSecretsByType(
-    KubernetesSecretTypes.ethereumPrivatekey
-  );
-  const { data: passwords } = useSecretsByType(KubernetesSecretTypes.password);
+  const { data: privateKeyOptions, isLoading: isLoadingPrivateKeys } =
+    useSecretTypes(KubernetesSecretTypes.ethereumPrivatekey);
+  const { data: passwordOptions, isLoading: isLoadingPasswords } =
+    useSecretTypes(KubernetesSecretTypes.password);
+
   const { isOpen, open, close } = useModal();
   const {
     handleSubmit,
@@ -106,18 +107,16 @@ function MiningDetails({ name, mutate, ...rest }: Props) {
         {miner && rest.client !== EthereumNodeClient.besu && (
           <>
             {/* Coinbase Account */}
-            <div className="mt-5">
-              <TextInput
-                label="Coinbase Account"
-                error={errors.coinbase?.message}
-                disabled={!miner}
-                defaultValue={rest.coinbase}
-                {...register('coinbase')}
-              />
-            </div>
+            <TextInput
+              label="Coinbase Account"
+              error={errors.coinbase?.message}
+              disabled={!miner}
+              defaultValue={rest.coinbase}
+              {...register('coinbase')}
+            />
 
             {/* Ethereum Private Keys */}
-            <div className="max-w-xs mt-5">
+            {!isLoadingPrivateKeys && (
               <Controller
                 control={control}
                 name="import.privateKeySecretName"
@@ -125,7 +124,7 @@ function MiningDetails({ name, mutate, ...rest }: Props) {
                 render={({ field }) => (
                   <Select
                     label="Account Private Key"
-                    options={privateKeys}
+                    options={privateKeyOptions}
                     placeholder="Choose a private key..."
                     hrefTitle="Create a new ethereum private key..."
                     href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}
@@ -135,10 +134,10 @@ function MiningDetails({ name, mutate, ...rest }: Props) {
                   />
                 )}
               />
-            </div>
+            )}
 
             {/* Account Password */}
-            <div className="max-w-xs mt-5">
+            {!isLoadingPasswords && (
               <Controller
                 control={control}
                 name="import.passwordSecretName"
@@ -146,7 +145,7 @@ function MiningDetails({ name, mutate, ...rest }: Props) {
                 render={({ field }) => (
                   <Select
                     label="Account Password"
-                    options={passwords}
+                    options={passwordOptions}
                     placeholder="Choose a password..."
                     hrefTitle="Create a new password..."
                     href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
@@ -156,7 +155,7 @@ function MiningDetails({ name, mutate, ...rest }: Props) {
                   />
                 )}
               />
-            </div>
+            )}
           </>
         )}
       </div>

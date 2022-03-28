@@ -18,22 +18,23 @@ import { schema } from '@schemas/ethereum2/validator/create';
 import { CreateValidator, Validator } from '@interfaces/ethereum2/Validator';
 import { createValidator } from '@utils/requests/ethereum2/validators';
 import { Ethereum2Client } from '@enums/Ethereum2/Ethereum2Client';
-import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { Deployments } from '@enums/Deployments';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
 import { BeaconNode } from '@interfaces/ethereum2/BeaconNode';
+import { useSecretTypes } from '@hooks/useSecretTypes';
 
 const CreateValidator: React.FC = () => {
   const [serverError, setServerError] = useState('');
   const router = useRouter();
-  const { data: keystoreOptions } = useSecretsByType(
-    KubernetesSecretTypes.ethereum2Keystore
-  );
-  const { data: walletPasswordOptions } = useSecretsByType(
-    KubernetesSecretTypes.password
-  );
+
+  const { data: keystoreOptions, isLoading: isLoadingKeystores } =
+    useSecretTypes(KubernetesSecretTypes.ethereum2Keystore);
+
+  const { data: passwordOptions, isLoading: isLoadingPasswords } =
+    useSecretTypes(KubernetesSecretTypes.password);
+
   const { data: beaconnodes } = useInfiniteRequest<BeaconNode>(
     '/ethereum2/beaconnodes'
   );
@@ -137,26 +138,28 @@ const CreateValidator: React.FC = () => {
           />
 
           {/* Key Stores */}
-          <Controller
-            name="keystores"
-            control={control}
-            render={({ field }) => (
-              <Multiselect
-                label="Ethereum 2.0 Keystores"
-                placeholder="Choose your keystores..."
-                options={keystoreOptions}
-                errors={errors}
-                error={errors.keystores && field.name}
-                onChange={field.onChange}
-                value={field.value}
-                href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereum2Keystore}`}
-                hrefTitle="Create New Keystore"
-              />
-            )}
-          />
+          {!isLoadingKeystores && (
+            <Controller
+              name="keystores"
+              control={control}
+              render={({ field }) => (
+                <Multiselect
+                  label="Ethereum 2.0 Keystores"
+                  placeholder="Choose your keystores..."
+                  options={keystoreOptions}
+                  errors={errors}
+                  error={errors.keystores && field.name}
+                  onChange={field.onChange}
+                  value={field.value}
+                  href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereum2Keystore}`}
+                  hrefTitle="Create New Keystore"
+                />
+              )}
+            />
+          )}
 
           {/* Prysm Client Wallet Password */}
-          {client === Ethereum2Client.prysm && (
+          {client === Ethereum2Client.prysm && !isLoadingPasswords && (
             <Controller
               name="walletPasswordSecretName"
               control={control}
@@ -166,7 +169,7 @@ const CreateValidator: React.FC = () => {
                   placeholder="Choose your wallet password..."
                   label="Prysm Client Wallet Password"
                   error={errors.walletPasswordSecretName?.message}
-                  options={walletPasswordOptions}
+                  options={passwordOptions}
                   onChange={field.onChange}
                   href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
                   hrefTitle="Create New Password"

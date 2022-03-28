@@ -10,8 +10,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { NearNode } from '@interfaces/near/NearNode';
 import { updateNearNode } from '@utils/requests/near';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
-import { useSecretsByType } from '@utils/requests/secrets';
 import { validatorSchema } from '@schemas/near/validator';
+import { useSecretTypes } from '@hooks/useSecretTypes';
 
 interface Props extends NearNode {
   mutate?: KeyedMutator<{ node: NearNode }>;
@@ -20,7 +20,8 @@ interface Props extends NearNode {
 function ValidatorDetails({ validatorSecretName, name, mutate }: Props) {
   const [serverError, setServerError] = useState('');
   const [submitSuccess, setSubmitSuccess] = useState('');
-  const { data: privateKeys, isLoading } = useSecretsByType(
+
+  const { data: privateKeyOptions, isLoading } = useSecretTypes(
     KubernetesSecretTypes.nearPrivateKey
   );
 
@@ -66,7 +67,7 @@ function ValidatorDetails({ validatorSecretName, name, mutate }: Props) {
                 placeholder="Choose a private key..."
                 label="Validator key"
                 error={errors.validatorSecretName?.message}
-                options={privateKeys}
+                options={privateKeyOptions}
                 onChange={field.onChange}
                 value={field.value}
                 href={`/core/secrets/create?type=${KubernetesSecretTypes.nearPrivateKey}`}

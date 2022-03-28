@@ -1,4 +1,8 @@
 import { KubernetesSecret } from '@interfaces/KubernetesSecret/KubernetesSecret';
+import { SelectOption } from '@interfaces/SelectOption';
 
-export const arrangeSecrets = (secrets: KubernetesSecret[]) =>
-  secrets.map(({ name }) => ({ label: name, value: name }));
+export function formatSecretOptions(
+  secrets?: KubernetesSecret[]
+): SelectOption[] {
+  return secrets?.map(({ name }) => ({ label: name, value: name })) || [];
+}

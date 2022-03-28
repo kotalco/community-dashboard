@@ -1,4 +1,5 @@
 import { useRouter } from 'next/router';
+import Error from 'next/error';
 
 import Heading from '@components/templates/Heading/Heading';
 import Tabs from '@components/organisms/Tabs/Tabs';
@@ -15,13 +16,13 @@ import TelemetryDetails from '@components/organisms/Near/Telemetry/Telemetry';
 import Logging from '@components/organisms/Logging/Logging';
 import Cards from '@components/templates/Cards/Cards';
 import Card from '@components/atoms/Card/Card';
+import useRequest from '@hooks/useRequest';
 import { Resources } from '@interfaces/Resources';
 import { getLabel } from '@utils/helpers/getLabel';
 import { TITLES } from '@data/near/tabTitles';
 import { useStatus } from '@hooks/useStatus';
 import { DataList } from '@interfaces/DataList';
 import { NETWORKS } from '@data/near/networks';
-import { useNearNode } from '@hooks/useNearNode';
 import { updateNearNode } from '@utils/requests/near';
 import { useStats } from '@hooks/useStats';
 import {
@@ -32,22 +33,29 @@ import {
 import { ExclamationIcon } from '@heroicons/react/solid';
 import { getMigaOrKiloBit } from '@utils/helpers/getMegaOrKiloBit';
 import { NearStatsResponse } from '@interfaces/Stats';
+import { NearNode } from '@interfaces/near/NearNode';
 
 function NearNode() {
-  const { query, push } = useRouter();
+  const { query } = useRouter();
   const nodeName = query.nodeName as string | undefined;
   const { status } = useStatus(nodeName && `/near/nodes/${nodeName}/status`);
   const { stats, error: statsError } = useStats<NearStatsResponse>(
     nodeName && `/near/nodes/${nodeName}/stats`
   );
-  const { node, mutate, error } = useNearNode(nodeName);
+  const {
+    data: node,
+    mutate,
+    error,
+  } = useRequest<NearNode>(
+    nodeName ? { url: `/near/nodes/${nodeName}` } : null
+  );
 
   const updateResources = async (name: string, values: Resources) => {
     await updateNearNode(values, name);
     mutate();
   };
 
-  if (error) push('/404');
+  if (error) <Error statusCode={error.response?.status || 500} />;
   if (!node) return <LoadingIndicator />;
 
   const dataList: DataList[] = [

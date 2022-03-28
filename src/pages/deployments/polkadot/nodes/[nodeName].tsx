@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { ExclamationIcon, RefreshIcon } from '@heroicons/react/outline';
+import Error from 'next/error';
 
 import Heading from '@components/templates/Heading/Heading';
 import Tabs from '@components/organisms/Tabs/Tabs';
@@ -17,19 +18,20 @@ import PrometheusDetails from '@components/organisms/Polkadot/Prometheus/Prometh
 import APIDetails from '@components/organisms/Polkadot/API/API';
 import Cards from '@components/templates/Cards/Cards';
 import Card from '@components/atoms/Card/Card';
+import useRequest from '@hooks/useRequest';
 import { Resources } from '@interfaces/Resources';
 import { getLabel } from '@utils/helpers/getLabel';
 import { TITLES } from '@data/polkadot/tabTitles';
 import { useStatus } from '@hooks/useStatus';
-import { usePolkadotNode } from '@hooks/usePolkadotNode';
 import { NETWORKS } from '@data/polkadot/networks';
 import { updatePolkadotNode } from '@utils/requests/polkadot';
 import { DataList } from '@interfaces/DataList';
 import { useStats } from '@hooks/useStats';
 import { PolkadotStatsResponse } from '@interfaces/Stats';
+import { PolkadotNode } from '@interfaces/polkadot/PolkadotNode';
 
 function PolkadotNode() {
-  const { query, push } = useRouter();
+  const { query } = useRouter();
   const nodeName = query.nodeName as string | undefined;
   const { status } = useStatus(
     nodeName && `/polkadot/nodes/${nodeName}/status`
@@ -37,14 +39,20 @@ function PolkadotNode() {
   const { stats, error: statsError } = useStats<PolkadotStatsResponse>(
     nodeName && `/polkadot/nodes/${nodeName}/stats`
   );
-  const { node, mutate, error } = usePolkadotNode(nodeName);
+  const {
+    data: node,
+    mutate,
+    error,
+  } = useRequest<PolkadotNode>(
+    nodeName ? { url: `/polkadot/nodes/${nodeName}` } : null
+  );
 
   const updateResources = async (name: string, values: Resources) => {
     await updatePolkadotNode(values, name);
     mutate();
   };
 
-  if (error) return push('/404');
+  if (error) return <Error statusCode={error.response?.status || 500} />;
   if (!node) return <LoadingIndicator />;
 
   const dataList: DataList[] = [
