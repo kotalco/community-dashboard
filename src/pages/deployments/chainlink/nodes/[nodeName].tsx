@@ -1,10 +1,8 @@
-import { useRouter } from 'next/router';
-import Error from 'next/error';
+import { NextPage } from 'next';
 
 import Heading from '@components/templates/Heading/Heading';
 import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
-import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
 import DangerZone from '@components/organisms/Chainlink/DangerZone/DangerZone';
 import APIDetails from '@components/organisms/Chainlink/APIDetails/APIDetails';
@@ -15,7 +13,7 @@ import DatabaseDetails from '@components/organisms/Chainlink/DatabaseDetails/Dat
 import EthereumDetails from '@components/organisms/Chainlink/EthereumDetails/EthereumDetails';
 import WalletDetails from '@components/organisms/Chainlink/WalletDetails/WalletDetails';
 import TLSDetails from '@components/organisms/Chainlink/TLSDetails/TLSDetails';
-import useRequest from '@hooks/useRequest';
+import withParams from '@components/hoc/withParams/withParams';
 import { updateChainlinkNode } from '@utils/requests/chainlink';
 import { Resources } from '@interfaces/Resources';
 import { getLabel } from '@utils/helpers/getLabel';
@@ -24,28 +22,18 @@ import { EVM_CHAINS } from '@data/chainlink/evmChain';
 import { useStatus } from '@hooks/useStatus';
 import { DataList } from '@interfaces/DataList';
 import { ChainlinkNode } from '@interfaces/chainlink/ChainlinkNode';
+import { PageWithParams } from '@interfaces/PageWithParams';
 
-function ChainlinkNode() {
-  const { query } = useRouter();
-  const nodeName = query.nodeName as string | undefined;
-  const { status } = useStatus(
-    nodeName && `/chainlink/nodes/${nodeName}/status`
-  );
-  const {
-    data: node,
-    mutate,
-    error,
-  } = useRequest<ChainlinkNode>(
-    nodeName ? { url: `/chainlink/nodes/${nodeName}` } : null
-  );
+const ChainlinkNodeDetailsPage: NextPage<PageWithParams<ChainlinkNode>> = ({
+  data: node,
+  mutate,
+}) => {
+  const { status } = useStatus(`/chainlink/nodes/${node.name}/status`);
 
   const updateResources = async (name: string, values: Resources) => {
     await updateChainlinkNode(values, name);
     mutate();
   };
-
-  if (error) <Error statusCode={error.response?.status || 500} />;
-  if (!node) return <LoadingIndicator />;
 
   const dataList: DataList[] = [
     { label: 'Protocol', value: 'Chainlink' },
@@ -112,6 +100,9 @@ function ChainlinkNode() {
       </div>
     </Layout>
   );
-}
+};
 
-export default ChainlinkNode;
+export default withParams(ChainlinkNodeDetailsPage, {
+  params: 'nodeName',
+  url: '/chainlink/nodes',
+});

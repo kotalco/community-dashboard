@@ -2,6 +2,7 @@ import useSWR, { SWRConfiguration, SWRResponse } from 'swr';
 import { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
 import { api } from '@utils/axios';
+import { FetchError } from '@interfaces/api/FetchError';
 
 export type GetRequest = AxiosRequestConfig | null;
 
@@ -22,7 +23,7 @@ export interface Config<Data = unknown, Error = unknown>
   fallbackData?: Data;
 }
 
-export default function useRequest<Data = unknown, Error = unknown>(
+export default function useRequest<Data = unknown, Error = FetchError>(
   request: GetRequest,
   { fallbackData, ...config }: Config<{ data: Data }, Error> = {}
 ): Return<Data, Error> {

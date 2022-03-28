@@ -1,8 +1,6 @@
-import { useRouter } from 'next/router';
-import Error from 'next/error';
+import { NextPage } from 'next';
 
 import Layout from '@components/templates/Layout/Layout';
-import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
 import DangerZone from '@components/organisms/IPFS/DangerZone/DangerZone';
 import Tabs from '@components/organisms/Tabs/Tabs';
@@ -13,27 +11,20 @@ import IPFSRoutingDetails from '@components/organisms/IPFS/IPFSRoutingDetails/IP
 import Logging from '@components/organisms/Logging/Logging';
 import ResourcesTab from '@components/organisms/Resources/Resources';
 import Heading from '@components/templates/Heading/Heading';
-import useRequest from '@hooks/useRequest';
+import withParams from '@components/hoc/withParams/withParams';
 import { updateIPFSPeer } from '@utils/requests/ipfs/peers';
 import { tabsTitles } from '@data/ipfs/peers/tabsTitles';
 import { Resources } from '@interfaces/Resources';
 import { useStatus } from '@hooks/useStatus';
 import { DataList } from '@interfaces/DataList';
 import { Peer } from '@interfaces/ipfs/Peer';
+import { PageWithParams } from '@interfaces/PageWithParams';
 
-function IPFSPeerDetailsPage() {
-  const { query } = useRouter();
-  const peerName = query.peerName as string | undefined;
-
-  const {
-    data: peer,
-    mutate,
-    error,
-  } = useRequest<Peer>(peerName ? { url: `/ipfs/peers/${peerName}` } : null);
+const IPFSPeerDetailsPage: NextPage<PageWithParams<Peer>> = ({
+  data: peer,
+  mutate,
+}) => {
   const { status } = useStatus(peer && `/ipfs/peers/${peer.name}/status`);
-
-  if (error) <Error statusCode={error.response?.status || 500} />;
-  if (!peer) return <LoadingIndicator />;
 
   const updateResources = async (name: string, values: Resources) => {
     await updateIPFSPeer(name, values);
@@ -83,6 +74,9 @@ function IPFSPeerDetailsPage() {
       </div>
     </Layout>
   );
-}
+};
 
-export default IPFSPeerDetailsPage;
+export default withParams(IPFSPeerDetailsPage, {
+  params: 'peerName',
+  url: '/ipfs/peers',
+});

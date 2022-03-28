@@ -1,9 +1,7 @@
-import { useRouter } from 'next/router';
-import Error from 'next/error';
+import { NextPage } from 'next';
 
 import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
-import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import Heading from '@components/templates/Heading/Heading';
 import ValidatorGraffitiTab from '@components/organisms/Ethereum2/Validator/ValidatorGarfittiTab/ValidatorGarfittiTab';
 import ValidatorKeystoreTab from '@components/organisms/Ethereum2/Validator/ValidatorKeystoreTab/ValidatorKeystoreTab';
@@ -12,7 +10,7 @@ import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetai
 import Logging from '@components/organisms/Logging/Logging';
 import Resources from '@components/organisms/Resources/Resources';
 import DangerZone from '@components/organisms/Ethereum2/Validator/DangerZone/DangerZone';
-import useRequest from '@hooks/useRequest';
+import withParams from '@components/hoc/withParams/withParams';
 import { updateValidator } from '@utils/requests/ethereum2/validators';
 import { tabTitles } from '@data/ethereum2/validator/tabTitles';
 import { UpdateValidator, Validator } from '@interfaces/ethereum2/Validator';
@@ -22,18 +20,12 @@ import { clientOptions } from '@data/ethereum2/clientOptions';
 import { useStatus } from '@hooks/useStatus';
 import { DataList } from '@interfaces/DataList';
 import { getHref } from '@utils/helpers/getHref';
+import { PageWithParams } from '@interfaces/PageWithParams';
 
-function ValidatorDetailsPage() {
-  const { query } = useRouter();
-  const validatorName = query.validatorName as string | undefined;
-
-  const {
-    data: validator,
-    mutate,
-    error,
-  } = useRequest<Validator>(
-    validatorName ? { url: `/ethereum2/validators/${validatorName}` } : null
-  );
+const ValidatorDetailsPage: NextPage<PageWithParams<Validator>> = ({
+  data: validator,
+  mutate,
+}) => {
   const { status } = useStatus(
     validator && `/ethereum2/validators/${validator.name}/status`
   );
@@ -42,9 +34,6 @@ function ValidatorDetailsPage() {
     await updateValidator(name, values);
     mutate();
   };
-
-  if (error) return <Error statusCode={error.response?.status || 500} />;
-  if (!validator) return <LoadingIndicator />;
 
   const dataList: DataList[] = [
     { label: 'Protocol', value: 'Ethereum 2.0' },
@@ -91,6 +80,9 @@ function ValidatorDetailsPage() {
       </div>
     </Layout>
   );
-}
+};
 
-export default ValidatorDetailsPage;
+export default withParams(ValidatorDetailsPage, {
+  params: 'validatorName',
+  url: '/ethereum2/validators',
+});
