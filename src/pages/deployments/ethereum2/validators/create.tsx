@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { SubmitHandler, useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -11,11 +10,13 @@ import MultiSelectWithInput from '@components/molecules/MultiSelectWithInput/Mul
 import Multiselect from '@components/molecules/Multiselect/Multiselect';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 import Heading from '@components/templates/Heading/Heading';
+import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
+import Button from '@components/atoms/Button/Button';
 import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import { clientOptions } from '@data/ethereum2/clientOptions';
 import { networkOptions } from '@data/ethereum2/networkOptions';
 import { schema } from '@schemas/ethereum2/validator/create';
-import { CreateValidator, Validator } from '@interfaces/ethereum2/Validator';
+import { CreateValidator } from '@interfaces/ethereum2/Validator';
 import { createValidator } from '@utils/requests/ethereum2/validators';
 import { Ethereum2Client } from '@enums/Ethereum2/Ethereum2Client';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
@@ -26,7 +27,6 @@ import { BeaconNode } from '@interfaces/ethereum2/BeaconNode';
 import { useSecretTypes } from '@hooks/useSecretTypes';
 
 const CreateValidator: React.FC = () => {
-  const [serverError, setServerError] = useState('');
   const router = useRouter();
 
   const { data: keystoreOptions, isLoading: isLoadingKeystores } =
@@ -59,21 +59,18 @@ const CreateValidator: React.FC = () => {
     register,
     control,
     handleSubmit,
-    formState: { errors, isSubmitted, isValid, isSubmitting },
+    setError,
+    clearErrors,
+    formState: { errors, isSubmitted, isValid, isSubmitting, isDirty },
   } = useForm<CreateValidator>({ resolver: yupResolver(schema) });
 
   const client = watch('client');
 
   const onSubmit: SubmitHandler<CreateValidator> = async (values) => {
-    setServerError('');
-    const { response, error } = await handleRequest<Validator>(
-      createValidator.bind(undefined, values)
+    const { response } = await handleRequest(
+      () => createValidator(values),
+      setError
     );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
 
     if (response) {
       const notification: NotificationInfo = {
@@ -91,12 +88,7 @@ const CreateValidator: React.FC = () => {
     <Layout>
       <Heading title="Create New Validator" />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormLayout
-          error={serverError}
-          isSubmitted={isSubmitted}
-          isSubmitting={isSubmitting}
-          isValid={isValid}
-        >
+        <FormLayout>
           {/* Beacon Node Name */}
           <TextInput
             label="Validator Name"
@@ -210,6 +202,20 @@ const CreateValidator: React.FC = () => {
               />
             )}
           />
+
+          <ErrorSummary errors={errors} />
+
+          <div className="flex flex-row-reverse items-center px-4 py-3 mt-5 -mx-6 -mb-6 bg-gray-50 sm:px-6">
+            <Button
+              type="submit"
+              className="btn btn-primary"
+              disabled={(isSubmitted && !isValid) || isSubmitting || !isDirty}
+              loading={isSubmitting}
+              onClick={() => clearErrors()}
+            >
+              Create
+            </Button>
+          </div>
         </FormLayout>
       </form>
     </Layout>

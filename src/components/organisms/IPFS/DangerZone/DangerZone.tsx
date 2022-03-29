@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 import Button from '@components/atoms/Button/Button';
@@ -6,7 +5,6 @@ import DeleteDialog from '@components/organisms/DeleteDialog/DeleteDialog';
 import { deleteIPFSPeer } from '@utils/requests/ipfs/peers';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
 import { Deployments } from '@enums/Deployments';
-import { handleRequest } from '@utils/helpers/handleRequest';
 import { useModal } from '@hooks/useModal';
 
 interface Props {
@@ -14,20 +12,11 @@ interface Props {
 }
 
 const DangerousZoneContent: React.FC<Props> = ({ peerName }) => {
-  const [serverError, setServerError] = useState<string>('');
   const { isOpen, open, close } = useModal();
   const router = useRouter();
 
-  const onSubmit = async () => {
-    setServerError('');
-    const { error } = await handleRequest(
-      deleteIPFSPeer.bind(undefined, peerName)
-    );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
+  const deleteDepolyment = async () => {
+    await deleteIPFSPeer(peerName);
 
     const notification: NotificationInfo = {
       title: 'IPFS Peer has been deleted',
@@ -67,8 +56,7 @@ const DangerousZoneContent: React.FC<Props> = ({ peerName }) => {
         name={peerName}
         protocol="IPFS"
         resource="Peer"
-        error={serverError}
-        onSubmit={onSubmit}
+        deleteDepolyment={deleteDepolyment}
       />
     </>
   );

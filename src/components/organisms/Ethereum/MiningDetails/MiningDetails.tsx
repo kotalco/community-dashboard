@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 import { KeyedMutator } from 'swr';
 import { joiResolver } from '@hookform/resolvers/joi';
@@ -8,6 +7,7 @@ import Toggle from '@components/molecules/Toggle/Toggle';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Select from '@components/molecules/Select/Select';
 import Dialog from '@components/molecules/Dialog/Dialog';
+import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
 import { updateEthereumNode } from '@utils/requests/ethereum';
 import { Mining, API, EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { updateMiningSchema } from '@schemas/ethereum/updateNodeSchema';
@@ -22,9 +22,6 @@ interface Props extends EthereumNode {
 }
 
 function MiningDetails({ name, mutate, ...rest }: Props) {
-  const [serverError, setServerError] = useState('');
-  const [submitSuccess, setSubmitSuccess] = useState('');
-
   const { data: privateKeyOptions, isLoading: isLoadingPrivateKeys } =
     useSecretTypes(KubernetesSecretTypes.ethereumPrivatekey);
   const { data: passwordOptions, isLoading: isLoadingPasswords } =
@@ -38,7 +35,16 @@ function MiningDetails({ name, mutate, ...rest }: Props) {
     watch,
     reset,
     setValue,
-    formState: { isDirty, isSubmitting, errors },
+    setError,
+    clearErrors,
+    formState: {
+      isDirty,
+      isSubmitting,
+      isSubmitSuccessful,
+      isSubmitted,
+      isValid,
+      errors,
+    },
   } = useForm<Mining & API>({
     resolver: joiResolver(updateMiningSchema),
   });
@@ -68,22 +74,14 @@ function MiningDetails({ name, mutate, ...rest }: Props) {
   };
 
   const onSubmit: SubmitHandler<Mining> = async (values) => {
-    setSubmitSuccess('');
-    setServerError('');
-
-    const { error, response } = await handleRequest<EthereumNode>(
-      updateEthereumNode.bind(undefined, values, name)
+    const { response } = await handleRequest(
+      () => updateEthereumNode(values, name),
+      setError
     );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
 
     if (response) {
       mutate?.();
       reset(values);
-      setSubmitSuccess('Mining data data has been updated');
     }
   };
 
@@ -99,7 +97,7 @@ function MiningDetails({ name, mutate, ...rest }: Props) {
             <Toggle
               label="Miner"
               checked={field.value}
-              onChange={minerChange.bind(field.value)}
+              onChange={() => minerChange(field.value)}
             />
           )}
         />
@@ -158,23 +156,24 @@ function MiningDetails({ name, mutate, ...rest }: Props) {
             )}
           </>
         )}
+
+        <ErrorSummary
+          errors={errors}
+          isSuccess={isSubmitSuccessful}
+          successMessage="Your node updated successfuly"
+        />
       </div>
 
       <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"
-          disabled={!isDirty || isSubmitting}
+          disabled={(isSubmitted && !isValid) || isSubmitting || !isDirty}
           loading={isSubmitting}
+          onClick={() => clearErrors()}
         >
           Save
         </Button>
-        {submitSuccess && <p>{submitSuccess}</p>}
-        {serverError && (
-          <p aria-label="alert" className="text-sm text-red-600">
-            {serverError}
-          </p>
-        )}
       </div>
 
       {/* Confirmation Dialog if any APIs activated */}

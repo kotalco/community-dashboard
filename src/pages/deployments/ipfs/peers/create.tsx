@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { FieldError, SubmitHandler, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,9 +7,11 @@ import FormLayout from '@components/templates/FormLayout/FormLayout';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import CheckboxGroup from '@components/molecules/CheckBoxGroup/CheckBoxGroup';
 import Heading from '@components/templates/Heading/Heading';
+import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
+import Button from '@components/atoms/Button/Button';
 import { createIPFSPeer } from '@utils/requests/ipfs/peers';
 import { schema } from '@schemas/ipfs/peers/createPeer';
-import { CreatePeer, Peer } from '@interfaces/ipfs/Peer';
+import { CreatePeer } from '@interfaces/ipfs/Peer';
 import { IPFSConfigurationProfile } from '@enums/IPFS/Peers/IPFSConfigurationProfile';
 import { initProfilesOptions } from '@data/ipfs/peers/initProfilesOptions';
 import { handleRequest } from '@utils/helpers/handleRequest';
@@ -18,12 +19,13 @@ import { Deployments } from '@enums/Deployments';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
 
 const CreateIPFSPeerPage: React.FC = () => {
-  const [serverError, setServerError] = useState('');
   const router = useRouter();
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitted, isValid, isSubmitting },
+    setError,
+    clearErrors,
+    formState: { errors, isSubmitted, isValid, isSubmitting, isDirty },
   } = useForm<CreatePeer>({
     resolver: yupResolver(schema),
     defaultValues: {
@@ -32,15 +34,10 @@ const CreateIPFSPeerPage: React.FC = () => {
   });
 
   const onSubmit: SubmitHandler<CreatePeer> = async (values) => {
-    setServerError('');
-    const { error, response } = await handleRequest<Peer>(
-      createIPFSPeer.bind(undefined, values)
+    const { response } = await handleRequest(
+      () => createIPFSPeer(values),
+      setError
     );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
 
     if (response) {
       const notification: NotificationInfo = {
@@ -60,12 +57,7 @@ const CreateIPFSPeerPage: React.FC = () => {
     <Layout>
       <Heading title="Create New Peer" />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormLayout
-          error={serverError}
-          isSubmitted={isSubmitted}
-          isSubmitting={isSubmitting}
-          isValid={isValid}
-        >
+        <FormLayout>
           {/* Peer Name */}
           <TextInput
             label="Peer Name"
@@ -80,6 +72,20 @@ const CreateIPFSPeerPage: React.FC = () => {
             error={initProfilesError?.message}
             {...register('initProfiles')}
           />
+
+          <ErrorSummary errors={errors} />
+
+          <div className="flex flex-row-reverse items-center px-4 py-3 mt-5 -mx-6 -mb-6 bg-gray-50 sm:px-6">
+            <Button
+              type="submit"
+              className="btn btn-primary"
+              disabled={(isSubmitted && !isValid) || isSubmitting || !isDirty}
+              loading={isSubmitting}
+              onClick={() => clearErrors()}
+            >
+              Create
+            </Button>
+          </div>
         </FormLayout>
       </form>
     </Layout>

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 
 import Button from '@components/atoms/Button/Button';
@@ -8,39 +7,38 @@ import { Grafitti } from '@interfaces/ethereum2/Validator';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { Validator } from '@interfaces/ethereum2/Validator';
 import { KeyedMutator } from 'swr';
+import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
 
 interface Props extends Validator {
   mutate?: KeyedMutator<{ validator: Validator }>;
 }
 
 const ValidatorGarfittiTab: React.FC<Props> = ({ name, graffiti, mutate }) => {
-  const [serverError, setServerError] = useState('');
-  const [submitSuccess, setSubmitSuccess] = useState('');
-
   const {
     reset,
     register,
     handleSubmit,
-    formState: { isDirty, isSubmitting },
+    setError,
+    clearErrors,
+    formState: {
+      isDirty,
+      isSubmitting,
+      isSubmitSuccessful,
+      isSubmitted,
+      isValid,
+      errors,
+    },
   } = useForm<Grafitti>();
 
   const onSubmit: SubmitHandler<Grafitti> = async (values) => {
-    setServerError('');
-    setSubmitSuccess('');
-
-    const { error, response } = await handleRequest<Validator>(
-      updateValidator.bind(undefined, name, values)
+    const { response } = await handleRequest(
+      () => updateValidator(name, values),
+      setError
     );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
 
     if (response) {
       mutate?.();
       reset(values);
-      setSubmitSuccess('Validator has been updated');
     }
   };
 
@@ -52,21 +50,24 @@ const ValidatorGarfittiTab: React.FC<Props> = ({ name, graffiti, mutate }) => {
           defaultValue={graffiti}
           {...register('graffiti')}
         />
+
+        <ErrorSummary
+          errors={errors}
+          isSuccess={isSubmitSuccessful}
+          successMessage="Your validator updated successfuly"
+        />
       </div>
 
       <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"
-          disabled={!isDirty || isSubmitting}
+          disabled={(isSubmitted && !isValid) || isSubmitting || !isDirty}
           loading={isSubmitting}
+          onClick={() => clearErrors()}
         >
           Save
         </Button>
-        {serverError && (
-          <p className="mb-5 text-center text-red-500">{serverError}</p>
-        )}
-        {submitSuccess && <p>{submitSuccess}</p>}
       </div>
     </form>
   );

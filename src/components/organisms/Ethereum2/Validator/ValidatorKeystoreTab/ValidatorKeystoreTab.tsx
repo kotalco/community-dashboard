@@ -1,11 +1,11 @@
-import { useState } from 'react';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 
 import Button from '@components/atoms/Button/Button';
-import { updateValidator } from '@utils/requests/ethereum2/validators';
-import { Keystores, Validator } from '@interfaces/ethereum2/Validator';
 import Multiselect from '@components/molecules/Multiselect/Multiselect';
 import Select from '@components/molecules/Select/Select';
+import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
+import { updateValidator } from '@utils/requests/ethereum2/validators';
+import { Keystores, Validator } from '@interfaces/ethereum2/Validator';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -23,9 +23,6 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
   walletPasswordSecretName,
   mutate,
 }) => {
-  const [serverError, setServerError] = useState('');
-  const [submitSuccess, setSubmitSuccess] = useState('');
-
   const { data: keystoreOptions, isLoading: isLoadingKeystores } =
     useSecretTypes(KubernetesSecretTypes.ethereum2Keystore);
 
@@ -38,28 +35,29 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
     reset,
     handleSubmit,
     control,
-    formState: { isDirty, isSubmitting, errors },
+    setError,
+    clearErrors,
+    formState: {
+      isDirty,
+      isSubmitting,
+      errors,
+      isSubmitSuccessful,
+      isSubmitted,
+      isValid,
+    },
   } = useForm<Keystores>({
     resolver: yupResolver(schema),
   });
 
   const onSubmit: SubmitHandler<Keystores> = async (values) => {
-    setServerError('');
-    setSubmitSuccess('');
-
-    const { error, response } = await handleRequest<Validator>(
-      updateValidator.bind(undefined, name, values)
+    const { response } = await handleRequest(
+      () => updateValidator(name, values),
+      setError
     );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
 
     if (response) {
       mutate?.();
       reset(values);
-      setSubmitSuccess('Validator has been updated');
     }
   };
 
@@ -108,21 +106,24 @@ const ValidatorKeystoreTab: React.FC<Props> = ({
             />
           </div>
         )}
+
+        <ErrorSummary
+          errors={errors}
+          isSuccess={isSubmitSuccessful}
+          successMessage="Your validator updated successfuly"
+        />
       </div>
 
       <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"
-          disabled={!isDirty || isSubmitting}
+          disabled={(isSubmitted && !isValid) || isSubmitting || !isDirty}
           loading={isSubmitting}
+          onClick={() => clearErrors()}
         >
           Save
         </Button>
-        {serverError && (
-          <p className="mb-5 text-center text-red-500">{serverError}</p>
-        )}
-        {submitSuccess && <p>{submitSuccess}</p>}
       </div>
     </form>
   );

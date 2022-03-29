@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { SubmitHandler, useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useRouter } from 'next/router';
@@ -10,13 +9,15 @@ import Select from '@components/molecules/Select/Select';
 import MultiSelectWithInput from '@components/molecules/MultiSelectWithInput/MultiSelectWithInput';
 import Heading from '@components/templates/Heading/Heading';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
+import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
+import Button from '@components/atoms/Button/Button';
 import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import { clientOptions } from '@data/ethereum2/clientOptions';
 import { networkOptions } from '@data/ethereum2/networkOptions';
 import { createBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
 import { schema } from '@schemas/ethereum2/beaconNode/create';
 import { Ethereum2Client } from '@enums/Ethereum2/Ethereum2Client';
-import { BeaconNode, CreateBeaconNode } from '@interfaces/ethereum2/BeaconNode';
+import { CreateBeaconNode } from '@interfaces/ethereum2/BeaconNode';
 import { Ethereum2Network } from '@enums/Ethereum2/Ethereum2Network';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { Deployments } from '@enums/Deployments';
@@ -24,7 +25,6 @@ import { NotificationInfo } from '@interfaces/NotificationInfo';
 import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 
 const CreateBeaconNode: React.FC = () => {
-  const [serverError, setServerError] = useState('');
   const { data: ethereumNodes } =
     useInfiniteRequest<EthereumNode>('/ethereum/nodes');
   const router = useRouter();
@@ -35,25 +35,23 @@ const CreateBeaconNode: React.FC = () => {
       label: name,
       value: `http://${name}:${rpcPort}`,
     }));
+
   const {
     watch,
     control,
     register,
     handleSubmit,
-    formState: { errors, isSubmitted, isValid, isSubmitting },
+    setError,
+    clearErrors,
+    formState: { errors, isSubmitted, isValid, isSubmitting, isDirty },
   } = useForm<CreateBeaconNode>({ resolver: yupResolver(schema) });
   const [network, client] = watch(['network', 'client']);
 
   const onSubmit: SubmitHandler<CreateBeaconNode> = async (values) => {
-    setServerError('');
-    const { error, response } = await handleRequest<BeaconNode>(
-      createBeaconNode.bind(undefined, values)
+    const { response } = await handleRequest(
+      () => createBeaconNode(values),
+      setError
     );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
 
     if (response) {
       const notification: NotificationInfo = {
@@ -74,12 +72,7 @@ const CreateBeaconNode: React.FC = () => {
     <Layout>
       <Heading title="Create New Beacon Node" />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormLayout
-          error={serverError}
-          isSubmitted={isSubmitted}
-          isSubmitting={isSubmitting}
-          isValid={isValid}
-        >
+        <FormLayout>
           {/* Beacon Node Name */}
           <TextInput
             label="Node Name"
@@ -141,6 +134,20 @@ const CreateBeaconNode: React.FC = () => {
                 )}
               />
             )}
+
+          <ErrorSummary errors={errors} />
+
+          <div className="flex flex-row-reverse items-center px-4 py-3 mt-5 -mx-6 -mb-6 bg-gray-50 sm:px-6">
+            <Button
+              type="submit"
+              className="btn btn-primary"
+              disabled={(isSubmitted && !isValid) || isSubmitting || !isDirty}
+              loading={isSubmitting}
+              onClick={() => clearErrors()}
+            >
+              Create
+            </Button>
+          </div>
         </FormLayout>
       </form>
     </Layout>

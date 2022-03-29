@@ -12,6 +12,8 @@ import Select from '@components/molecules/Select/Select';
 import Heading from '@components/templates/Heading/Heading';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 import MultiSelectWithInput from '@components/molecules/MultiSelectWithInput/MultiSelectWithInput';
+import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
+import Button from '@components/atoms/Button/Button';
 import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import { createIPFSClusterPeer } from '@utils/requests/ipfs/clusterPeers';
 import { schema } from '@schemas/ipfs/clusterPeers/create';
@@ -26,7 +28,6 @@ import { Peer } from '@interfaces/ipfs/Peer';
 import { useSecretTypes } from '@hooks/useSecretTypes';
 
 const CreateClusterPeerPage: React.FC = () => {
-  const [serverError, setServerError] = useState('');
   const [isPredefined, setIsPredefined] = useState(false);
 
   const { data: peers } = useInfiniteRequest<Peer>('/ipfs/peers');
@@ -67,21 +68,18 @@ const CreateClusterPeerPage: React.FC = () => {
     register,
     control,
     watch,
-    formState: { errors, isSubmitted, isValid, isSubmitting },
+    setError,
+    clearErrors,
+    formState: { errors, isSubmitted, isValid, isSubmitting, isDirty },
   } = useForm<CreateClusterPeer>({ resolver: yupResolver(schema) });
 
   const consensusValue = watch('consensus');
 
   const onSubmit: SubmitHandler<CreateClusterPeer> = async (values) => {
-    setServerError('');
-    const { response, error } = await handleRequest<ClusterPeer>(
-      createIPFSClusterPeer.bind(undefined, values)
+    const { response } = await handleRequest(
+      () => createIPFSClusterPeer(values),
+      setError
     );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
 
     if (response) {
       const notification: NotificationInfo = {
@@ -102,12 +100,7 @@ const CreateClusterPeerPage: React.FC = () => {
     <Layout>
       <Heading title="Create New Cluster Peer" />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormLayout
-          error={serverError}
-          isSubmitted={isSubmitted}
-          isSubmitting={isSubmitting}
-          isValid={isValid}
-        >
+        <FormLayout>
           {/* Cluster Peer Name */}
           <TextInput
             label="Name"
@@ -243,6 +236,20 @@ const CreateClusterPeerPage: React.FC = () => {
               />
             )}
           />
+
+          <ErrorSummary errors={errors} />
+
+          <div className="flex flex-row-reverse items-center px-4 py-3 mt-5 -mx-6 -mb-6 bg-gray-50 sm:px-6">
+            <Button
+              type="submit"
+              className="btn btn-primary"
+              disabled={(isSubmitted && !isValid) || isSubmitting || !isDirty}
+              loading={isSubmitting}
+              onClick={() => clearErrors()}
+            >
+              Create
+            </Button>
+          </div>
         </FormLayout>
       </form>
     </Layout>

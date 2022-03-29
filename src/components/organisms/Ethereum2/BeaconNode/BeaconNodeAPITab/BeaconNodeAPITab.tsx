@@ -1,14 +1,14 @@
-import { useState } from 'react';
 import { useForm, useWatch, Controller, SubmitHandler } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 
 import Button from '@components/atoms/Button/Button';
-import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
-import { updateAPISchema } from '@schemas/ethereum2/beaconNode/updateBeaconNode';
-import { API, BeaconNode } from '@interfaces/ethereum2/BeaconNode';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Separator from '@components/atoms/Separator/Separator';
 import Toggle from '@components/molecules/Toggle/Toggle';
+import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
+import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
+import { updateAPISchema } from '@schemas/ethereum2/beaconNode/updateBeaconNode';
+import { API, BeaconNode } from '@interfaces/ethereum2/BeaconNode';
 import { Ethereum2Client } from '@enums/Ethereum2/Ethereum2Client';
 import { KeyedMutator } from 'swr';
 import { handleRequest } from '@utils/helpers/handleRequest';
@@ -31,9 +31,6 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
   client,
   mutate,
 }) => {
-  const [serverError, setServerError] = useState<string | undefined>('');
-  const [submitSuccess, setSubmitSuccess] = useState('');
-
   const defaultValues = {
     rest,
     restHost: restHost,
@@ -52,7 +49,16 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
     register,
     handleSubmit,
     control,
-    formState: { isDirty, isSubmitting, errors },
+    setError,
+    clearErrors,
+    formState: {
+      isDirty,
+      isSubmitting,
+      errors,
+      isSubmitSuccessful,
+      isSubmitted,
+      isValid,
+    },
   } = useForm<API>({
     defaultValues,
     resolver: joiResolver(updateAPISchema),
@@ -64,22 +70,14 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
   });
 
   const onSubmit: SubmitHandler<API> = async (values) => {
-    setServerError('');
-    setSubmitSuccess('');
-
-    const { error, response } = await handleRequest(
-      updateBeaconNode.bind(undefined, name, values)
+    const { response } = await handleRequest(
+      () => updateBeaconNode(name, values),
+      setError
     );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
 
     if (response) {
       mutate?.();
       reset(values);
-      setSubmitSuccess('Beacon node has been updated');
     }
   };
 
@@ -213,21 +211,24 @@ const BeaconNodeProtocolTab: React.FC<Props> = ({
             </div>
           </>
         )}
+
+        <ErrorSummary
+          errors={errors}
+          isSuccess={isSubmitSuccessful}
+          successMessage="Your beaconnode updated successfuly"
+        />
       </div>
 
       <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"
-          disabled={!isDirty || isSubmitting}
+          disabled={(isSubmitted && !isValid) || isSubmitting || !isDirty}
           loading={isSubmitting}
+          onClick={() => clearErrors()}
         >
           Save
         </Button>
-        {serverError && (
-          <p className="mb-5 text-center text-red-500">{serverError}</p>
-        )}
-        {submitSuccess && <p>{submitSuccess}</p>}
       </div>
     </form>
   );

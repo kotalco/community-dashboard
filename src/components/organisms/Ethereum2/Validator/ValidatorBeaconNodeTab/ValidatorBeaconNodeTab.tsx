@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 
 import Button from '@components/atoms/Button/Button';
 import MultiSelectWithInput from '@components/molecules/MultiSelectWithInput/MultiSelectWithInput';
 import useInfiniteRequest from '@hooks/useInfiniteRequest';
+import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
 import { BeaconEndpoints, Validator } from '@interfaces/ethereum2/Validator';
 import { updateValidator } from '@utils/requests/ethereum2/validators';
 import { Ethereum2Client } from '@enums/Ethereum2/Ethereum2Client';
@@ -26,8 +26,6 @@ const ValidatorBeaconNodeTab: React.FC<Props> = ({
   client,
   mutate,
 }) => {
-  const [serverError, setServerError] = useState('');
-  const [submitSuccess, setSubmitSuccess] = useState('');
   const { data: beaconnodes, isLoading } =
     useInfiniteRequest<BeaconNode>('/ethereum2/nodes');
 
@@ -50,7 +48,16 @@ const ValidatorBeaconNodeTab: React.FC<Props> = ({
     reset,
     handleSubmit,
     control,
-    formState: { isDirty, isSubmitting, errors },
+    setError,
+    clearErrors,
+    formState: {
+      isDirty,
+      isSubmitting,
+      errors,
+      isValid,
+      isSubmitSuccessful,
+      isSubmitted,
+    },
   } = useForm<BeaconEndpoints>({
     resolver: yupResolver(
       client === Ethereum2Client.lighthouse ? MultipleSchema : onlyOneSchema
@@ -58,27 +65,19 @@ const ValidatorBeaconNodeTab: React.FC<Props> = ({
   });
 
   const onSubmit: SubmitHandler<BeaconEndpoints> = async (values) => {
-    setServerError('');
-    setSubmitSuccess('');
-
-    const { error, response } = await handleRequest<Validator>(
-      updateValidator.bind(undefined, name, values)
+    const { response } = await handleRequest(
+      () => updateValidator(name, values),
+      setError
     );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
 
     if (response) {
       mutate?.();
       reset(values);
-      setSubmitSuccess('Validator has been updated');
     }
   };
 
   return (
-    <>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
         {!isLoading && (
           <Controller
@@ -114,23 +113,26 @@ const ValidatorBeaconNodeTab: React.FC<Props> = ({
             )}
           />
         )}
+
+        <ErrorSummary
+          errors={errors}
+          isSuccess={isSubmitSuccessful}
+          successMessage="Your validator updated successfuly"
+        />
       </div>
 
       <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
+          type="submit"
           className="btn btn-primary"
-          disabled={!isDirty || isSubmitting}
+          disabled={(isSubmitted && !isValid) || isSubmitting || !isDirty}
           loading={isSubmitting}
-          onClick={handleSubmit(onSubmit)}
+          onClick={() => clearErrors()}
         >
           Save
         </Button>
-        {serverError && (
-          <p className="mb-5 text-center text-red-500">{serverError}</p>
-        )}
-        {submitSuccess && <p>{submitSuccess}</p>}
       </div>
-    </>
+    </form>
   );
 };
 

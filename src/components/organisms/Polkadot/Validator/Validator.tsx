@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { KeyedMutator } from 'swr';
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 
 import Button from '@components/atoms/Button/Button';
 import Toggle from '@components/molecules/Toggle/Toggle';
+import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
 import { PolkadotNode, Validator } from '@interfaces/polkadot/PolkadotNode';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { updatePolkadotNode } from '@utils/requests/polkadot';
@@ -13,32 +13,31 @@ interface Props extends PolkadotNode {
 }
 
 function Validatordetails({ validator, name, mutate }: Props) {
-  const [serverError, setServerError] = useState('');
-  const [submitSuccess, setSubmitSuccess] = useState('');
-
   const {
     handleSubmit,
     control,
     reset,
-    formState: { isDirty, isSubmitting, errors },
+    setError,
+    clearErrors,
+    formState: {
+      isSubmitting,
+      errors,
+      isSubmitSuccessful,
+      isValid,
+      isSubmitted,
+      isDirty,
+    },
   } = useForm<Validator>();
 
   const onSubmit: SubmitHandler<Validator> = async (values) => {
-    setSubmitSuccess('');
-    setServerError('');
-    const { error, response } = await handleRequest<PolkadotNode>(
-      updatePolkadotNode.bind(undefined, values, name)
+    const { response } = await handleRequest(
+      () => updatePolkadotNode(values, name),
+      setError
     );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
 
     if (response) {
       mutate?.();
       reset(response);
-      setSubmitSuccess('Validator data has been updated');
     }
   };
 
@@ -59,23 +58,24 @@ function Validatordetails({ validator, name, mutate }: Props) {
             />
           )}
         />
+
+        <ErrorSummary
+          errors={errors}
+          isSuccess={isSubmitSuccessful}
+          successMessage="Your node updated successfuly"
+        />
       </div>
 
       <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"
-          disabled={!isDirty || isSubmitting}
+          disabled={(isSubmitted && !isValid) || isSubmitting || !isDirty}
           loading={isSubmitting}
+          onClick={() => clearErrors()}
         >
           Save
         </Button>
-        {submitSuccess && <p>{submitSuccess}</p>}
-        {serverError && (
-          <p aria-label="alert" className="text-sm text-red-600">
-            {serverError}
-          </p>
-        )}
       </div>
     </form>
   );

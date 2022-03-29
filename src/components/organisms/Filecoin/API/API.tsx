@@ -1,15 +1,15 @@
-import { useState } from 'react';
 import { KeyedMutator } from 'swr';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Button from '@components/atoms/Button/Button';
+import Toggle from '@components/molecules/Toggle/Toggle';
+import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
 import { API } from '@interfaces/filecoin/FilecoinNode';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FilecoinNode } from '@interfaces/filecoin/FilecoinNode';
 import { updateFilecoinNode } from '@utils/requests/filecoin';
-import Toggle from '@components/molecules/Toggle/Toggle';
 import { apiSchema } from '@schemas/filecoin/api';
 
 interface Props extends FilecoinNode {
@@ -24,16 +24,22 @@ function APIDetails({
   name,
   mutate,
 }: Props) {
-  const [serverError, setServerError] = useState('');
-  const [submitSuccess, setSubmitSuccess] = useState('');
-
   const {
     handleSubmit,
     reset,
     register,
     control,
     watch,
-    formState: { isDirty, isSubmitting, errors },
+    setError,
+    clearErrors,
+    formState: {
+      isDirty,
+      isSubmitting,
+      errors,
+      isSubmitSuccessful,
+      isSubmitted,
+      isValid,
+    },
   } = useForm<API>({
     resolver: yupResolver(apiSchema),
   });
@@ -41,21 +47,14 @@ function APIDetails({
   const [apiState, requestTimeout] = watch(['api', 'apiRequestTimeout']);
 
   const onSubmit: SubmitHandler<API> = async (values) => {
-    setSubmitSuccess('');
-    setServerError('');
-    const { error, response } = await handleRequest<FilecoinNode>(
-      updateFilecoinNode.bind(undefined, values, name)
+    const { response } = await handleRequest(
+      () => updateFilecoinNode(values, name),
+      setError
     );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
 
     if (response) {
       mutate?.();
       reset(response);
-      setSubmitSuccess('API data has been updated');
     }
   };
 
@@ -107,23 +106,24 @@ function APIDetails({
           defaultValue={apiRequestTimeout}
           {...register('apiRequestTimeout')}
         />
+
+        <ErrorSummary
+          errors={errors}
+          isSuccess={isSubmitSuccessful}
+          successMessage="Your node updated successfuly"
+        />
       </div>
 
       <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"
-          disabled={!isDirty || isSubmitting}
+          disabled={(isSubmitted && !isValid) || isSubmitting || !isDirty}
           loading={isSubmitting}
+          onClick={() => clearErrors()}
         >
           Save
         </Button>
-        {submitSuccess && <p>{submitSuccess}</p>}
-        {serverError && (
-          <p aria-label="alert" className="text-sm text-red-600">
-            {serverError}
-          </p>
-        )}
       </div>
     </form>
   );

@@ -1,9 +1,9 @@
-import { useState } from 'react';
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Button from '@components/atoms/Button/Button';
 import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
+import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
 import { updateEthereumNode } from '@utils/requests/ethereum';
 import {
   AccessControl,
@@ -18,34 +18,33 @@ interface Props extends EthereumNode {
 }
 
 function AccessControlDetails({ name, mutate, hosts, corsDomains }: Props) {
-  const [submitSuccess, setSubmitSuccess] = useState('');
-  const [serverError, setServerError] = useState('');
   const {
     handleSubmit,
     control,
     reset,
-    formState: { isDirty, isSubmitting, errors, isValid },
+    setError,
+    clearErrors,
+    formState: {
+      isDirty,
+      isSubmitting,
+      errors,
+      isValid,
+      isSubmitSuccessful,
+      isSubmitted,
+    },
   } = useForm<AccessControl>({
     resolver: yupResolver(schema),
   });
 
   const onSubmit: SubmitHandler<AccessControl> = async (values) => {
-    setSubmitSuccess('');
-    setServerError('');
-
-    const { error, response } = await handleRequest<EthereumNode>(
-      updateEthereumNode.bind(undefined, values, name)
+    const { response } = await handleRequest(
+      () => updateEthereumNode(values, name),
+      setError
     );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
 
     if (response) {
       mutate?.();
       reset(values);
-      setSubmitSuccess('Access control data has been updated');
     }
   };
 
@@ -93,23 +92,24 @@ function AccessControlDetails({ name, mutate, hosts, corsDomains }: Props) {
             )}
           />
         </div>
+
+        <ErrorSummary
+          errors={errors}
+          isSuccess={isSubmitSuccessful}
+          successMessage="Your node updated successfuly"
+        />
       </div>
 
       <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"
-          disabled={!isDirty || isSubmitting || !isValid}
+          disabled={(isSubmitted && !isValid) || isSubmitting || !isDirty}
           loading={isSubmitting}
+          onClick={() => clearErrors()}
         >
           Save
         </Button>
-        {submitSuccess && <p>{submitSuccess}</p>}
-        {serverError && (
-          <p aria-label="alert" className="text-sm text-red-600">
-            {serverError}
-          </p>
-        )}
       </div>
     </form>
   );

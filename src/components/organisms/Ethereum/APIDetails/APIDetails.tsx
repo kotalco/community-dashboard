@@ -8,6 +8,7 @@ import Toggle from '@components/molecules/Toggle/Toggle';
 import CheckboxGroup from '@components/molecules/CheckBoxGroup/CheckBoxGroup';
 import Separator from '@components/atoms/Separator/Separator';
 import Dialog from '@components/molecules/Dialog/Dialog';
+import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
 import { updateEthereumNode } from '@utils/requests/ethereum';
 import { API, EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { apiOptions } from '@data/ethereum/node/apiOptions';
@@ -23,8 +24,6 @@ interface Props extends EthereumNode {
 
 function APIDetails({ name, mutate, ...rest }: Props) {
   const { isOpen, close, open } = useModal();
-  const [submitSuccess, setSubmitSuccess] = useState('');
-  const [serverError, setServerError] = useState('');
   const [selectedApi, setSelectedApi] = useState<'rpc' | 'ws' | 'graphql'>(
     'rpc'
   );
@@ -35,7 +34,16 @@ function APIDetails({ name, mutate, ...rest }: Props) {
     reset,
     watch,
     setValue,
-    formState: { isDirty, isSubmitting, errors },
+    setError,
+    clearErrors,
+    formState: {
+      isDirty,
+      isSubmitting,
+      isSubmitSuccessful,
+      isSubmitted,
+      isValid,
+      errors,
+    },
   } = useForm<API & { miner: boolean }>({
     defaultValues: {
       miner: rest.miner,
@@ -68,23 +76,14 @@ function APIDetails({ name, mutate, ...rest }: Props) {
   };
 
   const onSubmit: SubmitHandler<API> = async (values) => {
-    console.log(values);
-    setServerError('');
-    setSubmitSuccess('');
-
-    const { error, response } = await handleRequest<EthereumNode>(
-      updateEthereumNode.bind(undefined, values, name)
+    const { response } = await handleRequest(
+      () => updateEthereumNode(values, name),
+      setError
     );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
 
     if (response) {
       mutate?.();
       reset(values);
-      setSubmitSuccess('API data has been updated');
     }
   };
 
@@ -204,23 +203,24 @@ function APIDetails({ name, mutate, ...rest }: Props) {
               )}
             </>
           )}
+
+          <ErrorSummary
+            errors={errors}
+            isSuccess={isSubmitSuccessful}
+            successMessage="Your node updated successfuly"
+          />
         </div>
 
         <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
           <Button
             type="submit"
             className="btn btn-primary"
-            disabled={!isDirty || isSubmitting}
+            disabled={(isSubmitted && !isValid) || isSubmitting || !isDirty}
             loading={isSubmitting}
+            onClick={() => clearErrors()}
           >
             Save
           </Button>
-          {submitSuccess && <p>{submitSuccess}</p>}
-          {serverError && (
-            <p aria-label="alert" className="text-sm text-red-600">
-              {serverError}
-            </p>
-          )}
         </div>
       </form>
 
