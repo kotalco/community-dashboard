@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 import Button from '@components/atoms/Button/Button';
@@ -6,7 +5,6 @@ import DeleteDialog from '@components/organisms/DeleteDialog/DeleteDialog';
 import { deleteEthereumNode } from '@utils/requests/ethereum';
 import { Deployments } from '@enums/Deployments';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
-import { handleRequest } from '@utils/helpers/handleRequest';
 import { useModal } from '@hooks/useModal';
 
 interface Props {
@@ -14,20 +12,11 @@ interface Props {
 }
 
 const DangerZone: React.FC<Props> = ({ resourceName }) => {
-  const [serverError, setServerError] = useState<string>('');
   const { isOpen, open } = useModal();
   const router = useRouter();
 
-  const onSubmit = async () => {
-    setServerError('');
-    const { error } = await handleRequest(
-      deleteEthereumNode.bind(undefined, resourceName)
-    );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
+  const deleteDeployment = async () => {
+    await deleteEthereumNode(resourceName);
 
     const notification: NotificationInfo = {
       title: 'Ethereum Node has been deleted',
@@ -67,8 +56,7 @@ const DangerZone: React.FC<Props> = ({ resourceName }) => {
         name={resourceName}
         protocol="Ethereum"
         resource="Node"
-        error={serverError}
-        onSubmit={onSubmit}
+        deleteDepolyment={deleteDeployment}
       />
     </>
   );

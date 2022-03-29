@@ -1,11 +1,9 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 import Button from '@components/atoms/Button/Button';
 import DeleteDialog from '@components/organisms/DeleteDialog/DeleteDialog';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
 import { Deployments } from '@enums/Deployments';
-import { handleRequest } from '@utils/helpers/handleRequest';
 import { useModal } from '@hooks/useModal';
 import { deleteNearNode } from '@utils/requests/near';
 
@@ -14,20 +12,11 @@ interface Props {
 }
 
 const DangerZone: React.FC<Props> = ({ nodeName }) => {
-  const [serverError, setServerError] = useState<string>('');
   const { isOpen, open, close } = useModal();
   const router = useRouter();
 
-  const onSubmit = async () => {
-    setServerError('');
-    const { error } = await handleRequest(
-      deleteNearNode.bind(undefined, nodeName)
-    );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
+  const deleteDepolyment = async () => {
+    await deleteNearNode(nodeName);
 
     const notification: NotificationInfo = {
       title: 'NEAR Node has been deleted',
@@ -67,8 +56,7 @@ const DangerZone: React.FC<Props> = ({ nodeName }) => {
         name={nodeName}
         protocol="NEAR"
         resource="Node"
-        error={serverError}
-        onSubmit={onSubmit}
+        deleteDepolyment={deleteDepolyment}
       />
     </>
   );

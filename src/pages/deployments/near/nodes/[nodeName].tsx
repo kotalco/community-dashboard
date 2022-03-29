@@ -1,9 +1,13 @@
-import { useRouter } from 'next/router';
+import { NextPage } from 'next';
+import {
+  ArrowDownIcon,
+  ArrowUpIcon,
+  RefreshIcon,
+} from '@heroicons/react/outline';
 
 import Heading from '@components/templates/Heading/Heading';
 import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
-import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
 import RPCDetails from '@components/organisms/Near/RPC/RPC';
 import DangerZone from '@components/organisms/Near/DangerZone/DangerZone';
@@ -15,40 +19,34 @@ import TelemetryDetails from '@components/organisms/Near/Telemetry/Telemetry';
 import Logging from '@components/organisms/Logging/Logging';
 import Cards from '@components/templates/Cards/Cards';
 import Card from '@components/atoms/Card/Card';
+import withParams from '@components/hoc/withParams/withParams';
 import { Resources } from '@interfaces/Resources';
 import { getLabel } from '@utils/helpers/getLabel';
 import { TITLES } from '@data/near/tabTitles';
 import { useStatus } from '@hooks/useStatus';
 import { DataList } from '@interfaces/DataList';
 import { NETWORKS } from '@data/near/networks';
-import { useNearNode } from '@hooks/useNearNode';
 import { updateNearNode } from '@utils/requests/near';
 import { useStats } from '@hooks/useStats';
-import {
-  ArrowDownIcon,
-  ArrowUpIcon,
-  RefreshIcon,
-} from '@heroicons/react/outline';
 import { ExclamationIcon } from '@heroicons/react/solid';
 import { getMigaOrKiloBit } from '@utils/helpers/getMegaOrKiloBit';
 import { NearStatsResponse } from '@interfaces/Stats';
+import { NearNode } from '@interfaces/near/NearNode';
+import { PageWithParams } from '@interfaces/PageWithParams';
 
-function NearNode() {
-  const { query, push } = useRouter();
-  const nodeName = query.nodeName as string | undefined;
-  const { status } = useStatus(nodeName && `/near/nodes/${nodeName}/status`);
+const NearNodeDetailsPage: NextPage<PageWithParams<NearNode>> = ({
+  data: node,
+  mutate,
+}) => {
+  const { status } = useStatus(`/near/nodes/${node.name}/status`);
   const { stats, error: statsError } = useStats<NearStatsResponse>(
-    nodeName && `/near/nodes/${nodeName}/stats`
+    `/near/nodes/${node.name}/stats`
   );
-  const { node, mutate, error } = useNearNode(nodeName);
 
   const updateResources = async (name: string, values: Resources) => {
     await updateNearNode(values, name);
     mutate();
   };
-
-  if (error) push('/404');
-  if (!node) return <LoadingIndicator />;
 
   const dataList: DataList[] = [
     { label: 'Protocol', value: 'NEAR' },
@@ -145,6 +143,9 @@ function NearNode() {
       </div>
     </Layout>
   );
-}
+};
 
-export default NearNode;
+export default withParams(NearNodeDetailsPage, {
+  params: 'nodeName',
+  url: '/near/nodes',
+});

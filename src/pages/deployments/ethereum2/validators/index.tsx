@@ -12,19 +12,19 @@ import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
 import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import ButtonGroup from '@components/molecules/ButtonGroup/ButtonGroup';
 import EmptyState from '@components/molecules/EmptyState/EmptyState';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import { createButtons } from '@data/ethereum2/links';
 import { getLabel } from '@utils/helpers/getLabel';
 import { networkOptions } from '@data/ethereum2/networkOptions';
 import { clientOptions } from '@data/ethereum2/clientOptions';
-import { useValidators } from '@hooks/useValidators';
-import { useBeaconNodes } from '@hooks/useBeaconNodes';
 import { useNotification } from '@hooks/useNotification';
 import { Deployments } from '@enums/Deployments';
+import { Validator } from '@interfaces/ethereum2/Validator';
 
 function Validators() {
   const { NotificationPanel } = useNotification(Deployments.validator);
   const {
-    validators,
+    data: validators,
     isEmpty,
     isInitialLoading,
     size,
@@ -33,8 +33,10 @@ function Validators() {
     isLoading,
     error,
     totalCount: validatorsCount,
-  } = useValidators();
-  const { totalCount: beaconnodesCount } = useBeaconNodes();
+  } = useInfiniteRequest<Validator>('/ethereum2/validators');
+  const { totalCount: beaconnodesCount } = useInfiniteRequest(
+    '/ethereum2/beaconnodes'
+  );
 
   const tabs = [
     {

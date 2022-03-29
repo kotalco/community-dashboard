@@ -6,12 +6,11 @@ import IconButton from '@components/atoms/IconButton/IconButton';
 
 interface Props {
   close: () => void;
-  error?: string;
   title?: string;
   open: boolean;
 }
 
-const Modal: React.FC<Props> = ({ close, title, children, open, error }) => {
+const Modal: React.FC<Props> = ({ close, title, children, open }) => {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   return (
@@ -80,11 +79,6 @@ const Modal: React.FC<Props> = ({ close, title, children, open, error }) => {
                     </Dialog.Title>
                   )}
                   <div className="mt-2">{children}</div>
-                  {error && (
-                    <p className="mt-2 text-sm font-medium text-right text-red-600">
-                      {error}
-                    </p>
-                  )}
                 </div>
               </div>
             </div>

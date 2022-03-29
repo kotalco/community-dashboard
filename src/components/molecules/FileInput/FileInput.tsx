@@ -33,23 +33,23 @@ const FileInput = React.forwardRef<HTMLInputElement, Props>(function FileInput(
   return (
     <>
       {label && <InputLabel htmlFor={name}>{label}</InputLabel>}
-      <div className="flex rounded-md shadow-sm max-w-xs">
+      <div className="flex max-w-xs mb-4 rounded-md shadow-sm">
         <input
           ref={ref}
           type="text"
           disabled
           value={fileName}
           placeholder="Choose a file..."
-          className="focus:ring-indigo-500 focus:border-indigo-500 block w-full rounded-none rounded-l-md pl-3 sm:text-sm border-gray-300 text-gray-500"
+          className="block w-full pl-3 text-gray-500 border-gray-300 rounded-none focus:ring-indigo-500 focus:border-indigo-500 rounded-l-md sm:text-sm"
         />
         <button
           type="button"
           onClick={() => {
             fileInputRef.current?.click();
           }}
-          className="-ml-px relative inline-flex items-center space-x-2 px-4 py-2 border border-gray-300 text-sm font-medium rounded-r-md text-gray-700 bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
+          className="relative inline-flex items-center px-4 py-2 -ml-px space-x-2 text-sm font-medium text-gray-700 border border-gray-300 rounded-r-md bg-gray-50 hover:bg-gray-100 focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500"
         >
-          <UploadIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+          <UploadIcon className="w-5 h-5 text-gray-400" aria-hidden="true" />
           <span>Upload</span>
         </button>
       </div>

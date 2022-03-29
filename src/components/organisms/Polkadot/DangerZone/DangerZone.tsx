@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 import Button from '@components/atoms/Button/Button';
@@ -6,7 +5,6 @@ import DeleteDialog from '@components/organisms/DeleteDialog/DeleteDialog';
 import { deletePolkadotNode } from '@utils/requests/polkadot';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
 import { Deployments } from '@enums/Deployments';
-import { handleRequest } from '@utils/helpers/handleRequest';
 import { useModal } from '@hooks/useModal';
 
 interface Props {
@@ -14,20 +12,11 @@ interface Props {
 }
 
 const DangerousZone: React.FC<Props> = ({ nodeName }) => {
-  const [serverError, setServerError] = useState<string>('');
   const { isOpen, open, close } = useModal();
   const router = useRouter();
 
-  const onSubmit = async () => {
-    setServerError('');
-    const { error } = await handleRequest(
-      deletePolkadotNode.bind(undefined, nodeName)
-    );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
+  const deleteDepolyment = async () => {
+    await deletePolkadotNode(nodeName);
 
     const notification: NotificationInfo = {
       title: 'Polkadot Node has been deleted',
@@ -67,8 +56,7 @@ const DangerousZone: React.FC<Props> = ({ nodeName }) => {
         name={nodeName}
         protocol="Polkadot"
         resource="Node"
-        error={serverError}
-        onSubmit={onSubmit}
+        deleteDepolyment={deleteDepolyment}
       />
     </>
   );

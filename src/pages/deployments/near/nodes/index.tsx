@@ -11,17 +11,18 @@ import LinkedTabs from '@components/organisms/LinkedTabs/LinkedTabs';
 import EmptyState from '@components/molecules/EmptyState/EmptyState';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
+import NearIcon from '@components/Icons/NearIcon/NearIcon';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import { useNotification } from '@hooks/useNotification';
 import { getLabel } from '@utils/helpers/getLabel';
 import { Deployments } from '@enums/Deployments';
 import { NETWORKS } from '@data/near/networks';
-import { useNearNodes } from '@hooks/useNearNodes';
-import NearIcon from '@components/Icons/NearIcon/NearIcon';
+import { NearNode } from '@interfaces/near/NearNode';
 
 function NearNodes() {
   const { NotificationPanel } = useNotification(Deployments.near);
   const {
-    nodes,
+    data: nearNodes,
     isEmpty,
     isInitialLoading,
     size,
@@ -30,7 +31,7 @@ function NearNodes() {
     isLoading,
     totalCount,
     error,
-  } = useNearNodes();
+  } = useInfiniteRequest<NearNode>('/near/nodes');
 
   const tabs = [
     {
@@ -80,7 +81,7 @@ function NearNodes() {
 
       <LinkedTabs tabs={tabs} />
       <List>
-        {nodes.map(({ name, network }) => (
+        {nearNodes.map(({ name, network }) => (
           <ListItem
             key={name}
             link={`/deployments/near/nodes/${name}`}

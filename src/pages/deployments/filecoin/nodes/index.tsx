@@ -12,16 +12,17 @@ import EmptyState from '@components/molecules/EmptyState/EmptyState';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
 import FilecoinIcon from '@components/Icons/FilecoinIcon/FilecoinIcon';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import { useNotification } from '@hooks/useNotification';
 import { getLabel } from '@utils/helpers/getLabel';
 import { Deployments } from '@enums/Deployments';
-import { useFilecoinNodes } from '@hooks/useFilecoinNodes';
 import { NETWORKS } from '@data/filecoin/networks';
+import { FilecoinNode } from '@interfaces/filecoin/FilecoinNode';
 
 function FilecoinNode() {
   const { NotificationPanel } = useNotification(Deployments.filecoin);
   const {
-    nodes,
+    data: filecoinNodes,
     isEmpty,
     isInitialLoading,
     size,
@@ -30,7 +31,7 @@ function FilecoinNode() {
     isLoading,
     totalCount,
     error,
-  } = useFilecoinNodes();
+  } = useInfiniteRequest<FilecoinNode>('/filecoin/nodes');
 
   const tabs = [
     {
@@ -80,7 +81,7 @@ function FilecoinNode() {
 
       <LinkedTabs tabs={tabs} />
       <List>
-        {nodes.map(({ name, network }) => (
+        {filecoinNodes.map(({ name, network }) => (
           <ListItem
             key={name}
             link={`/deployments/filecoin/nodes/${name}`}

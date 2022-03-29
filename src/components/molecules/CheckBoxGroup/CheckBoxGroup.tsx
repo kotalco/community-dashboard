@@ -17,7 +17,7 @@ interface Props {
 const Checkbox = React.forwardRef<HTMLInputElement, Props>(
   ({ name, label, onBlur, onChange, disabled, options, error }, ref) => {
     return (
-      <div className="flex flex-col space-y-1">
+      <div className="flex flex-col mb-2 space-y-1">
         <p className="block text-sm text-gray-900 font-md">{label}</p>
         <div className="flex flex-wrap items-center justify-start ml-5">
           {options.map(({ label, value }) => (

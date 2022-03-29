@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 import Button from '@components/atoms/Button/Button';
@@ -6,7 +5,6 @@ import DeleteDialog from '@components/organisms/DeleteDialog/DeleteDialog';
 import { deleteValidator } from '@utils/requests/ethereum2/validators';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
 import { Deployments } from '@enums/Deployments';
-import { handleRequest } from '@utils/helpers/handleRequest';
 import { useModal } from '@hooks/useModal';
 
 interface Props {
@@ -14,20 +12,11 @@ interface Props {
 }
 
 const DangerZone: React.FC<Props> = ({ validatorName }) => {
-  const [serverError, setServerError] = useState<string>('');
   const { isOpen, open, close } = useModal();
   const router = useRouter();
 
-  const onSubmit = async () => {
-    setServerError('');
-    const { error } = await handleRequest(
-      deleteValidator.bind(undefined, validatorName)
-    );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
+  const deleteDeployment = async () => {
+    await deleteValidator(validatorName);
 
     const notification: NotificationInfo = {
       title: 'Ethereum 2.0 Validator has been deleted',
@@ -67,8 +56,7 @@ const DangerZone: React.FC<Props> = ({ validatorName }) => {
         name={validatorName}
         protocol="Ethereum 2.0"
         resource="Validator"
-        error={serverError}
-        onSubmit={onSubmit}
+        deleteDepolyment={deleteDeployment}
       />
     </>
   );

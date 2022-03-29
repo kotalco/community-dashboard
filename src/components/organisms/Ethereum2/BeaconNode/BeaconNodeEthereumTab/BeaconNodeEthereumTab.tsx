@@ -1,13 +1,13 @@
-import { useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 
 import Button from '@components/atoms/Button/Button';
 import MultiSelectWithInput from '@components/molecules/MultiSelectWithInput/MultiSelectWithInput';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
+import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
 import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
 import { BeaconNode, Eth1Endpoints } from '@interfaces/ethereum2/BeaconNode';
 import { Ethereum2Client } from '@enums/Ethereum2/Ethereum2Client';
-import { useEthereumNodes } from '@hooks/useEthereumNodes';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import {
   requiredSchema,
@@ -15,6 +15,7 @@ import {
   onlyOneSchema,
 } from '@schemas/ethereum2/beaconNode/ethereum1Endpoint';
 import { KeyedMutator } from 'swr';
+import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 
 interface Props extends BeaconNode {
   mutate?: KeyedMutator<{ beaconnode: BeaconNode }>;
@@ -27,11 +28,10 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
   network,
   mutate,
 }) => {
-  const { nodes, isLoading } = useEthereumNodes();
-  const [submitSuccess, setSubmitSuccess] = useState('');
-  const [serverError, setServerError] = useState('');
+  const { data: ethereumNodes, isLoading } =
+    useInfiniteRequest<EthereumNode>('/ethereum/nodes');
 
-  const activeNodes = nodes
+  const activeNodes = ethereumNodes
     .filter(({ rpc }) => rpc)
     .map(({ rpcPort, name }) => ({
       label: name,
@@ -42,7 +42,16 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
     reset,
     handleSubmit,
     control,
-    formState: { isDirty, isSubmitting, errors },
+    setError,
+    clearErrors,
+    formState: {
+      isDirty,
+      isSubmitting,
+      isSubmitSuccessful,
+      isSubmitted,
+      isValid,
+      errors,
+    },
   } = useForm<Eth1Endpoints>({
     resolver: yupResolver(
       client === Ethereum2Client.prysm && network !== 'mainnet'
@@ -54,21 +63,14 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
   });
 
   const onSubmit: SubmitHandler<Eth1Endpoints> = async (values) => {
-    setSubmitSuccess('');
-    setServerError('');
-    const { error, response } = await handleRequest<BeaconNode>(
-      updateBeaconNode.bind(undefined, name, values)
+    const { response } = await handleRequest(
+      () => updateBeaconNode(name, values),
+      setError
     );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
 
     if (response) {
       mutate?.();
       reset(values);
-      setSubmitSuccess('Beacon node has been updated');
     }
   };
 
@@ -110,23 +112,24 @@ const BeaconNodeEthereumTab: React.FC<Props> = ({
             )}
           />
         )}
+
+        <ErrorSummary
+          errors={errors}
+          isSuccess={isSubmitSuccessful}
+          successMessage="Your beaconnode updated successfuly"
+        />
       </div>
 
       <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"
-          disabled={!isDirty || isSubmitting}
+          disabled={(isSubmitted && !isValid) || isSubmitting || !isDirty}
           loading={isSubmitting}
+          onClick={() => clearErrors()}
         >
           Save
         </Button>
-        {submitSuccess && <p>{submitSuccess}</p>}
-        {serverError && (
-          <p aria-label="alert" className="text-sm text-red-600">
-            {serverError}
-          </p>
-        )}
       </div>
     </form>
   );

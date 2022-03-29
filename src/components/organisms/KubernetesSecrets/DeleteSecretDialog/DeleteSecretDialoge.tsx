@@ -2,9 +2,10 @@ import { useState } from 'react';
 
 import Button from '@components/atoms/Button/Button';
 import Dialog from '@components/molecules/Dialog/Dialog';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import { deleteSecret as sendDeleteRequest } from '@utils/requests/secrets';
-import { useSecrets } from '@hooks/useSecrets';
 import { handleRequest } from '@utils/helpers/handleRequest';
+import { KubernetesSecret } from '@interfaces/KubernetesSecret/KubernetesSecret';
 
 interface Props {
   close: () => void;
@@ -17,25 +18,23 @@ const DeleteSecretDialoge: React.FC<Props> = ({
   isOpen,
   secretName,
 }) => {
-  const [serverError, setServerError] = useState<string | undefined>('');
+  const [error, setError] = useState<string>();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { mutate } = useSecrets();
+  const { mutate } = useInfiniteRequest<KubernetesSecret>('/core/secrets');
 
   const closeDialog = () => {
     close();
-    setServerError('');
+    setError(undefined);
   };
 
   const deleteSecret = async (secretName: string) => {
-    setServerError('');
+    setError(undefined);
     setIsSubmitting(true);
 
-    const { error } = await handleRequest(
-      sendDeleteRequest.bind(undefined, secretName)
-    );
+    const { error } = await handleRequest(() => sendDeleteRequest(secretName));
 
     if (error) {
-      setServerError(error);
+      setError(error.message);
       setIsSubmitting(false);
       return;
     }
@@ -46,11 +45,12 @@ const DeleteSecretDialoge: React.FC<Props> = ({
   };
 
   return (
-    <Dialog open={isOpen} close={closeDialog} error={serverError}>
+    <Dialog open={isOpen} close={closeDialog}>
       <p className="text-sm text-gray-500">
         Are you sure you want to delete secret:{' '}
         <span className="font-semibold">{secretName}</span>?
       </p>
+      {error && <p className="text-sm text-red-700">{error}</p>}
       <div className="flex flex-col items-center justify-end mt-5 sm:mt-4 sm:flex-row sm:space-x-4">
         <Button
           onClick={closeDialog}

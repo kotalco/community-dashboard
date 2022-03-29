@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -9,39 +8,44 @@ import TextInput from '@components/molecules/TextInput/TextInput';
 import Select from '@components/molecules/Select/Select';
 import Heading from '@components/templates/Heading/Heading';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
+import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
+import Button from '@components/atoms/Button/Button';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import { createSchema } from '@schemas/chainlink/create';
-import {
-  ChainlinkNode,
-  CreateChainlinkNode,
-} from '@interfaces/chainlink/ChainlinkNode';
-import { useSecretsByType } from '@utils/requests/secrets';
+import { CreateChainlinkNode } from '@interfaces/chainlink/ChainlinkNode';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { EVM_CHAINS } from '@data/chainlink/evmChain';
-import { useEthereumNodes } from '@hooks/useEthereumNodes';
 import { createChainlinkNode } from '@utils/requests/chainlink';
 import { Deployments } from '@enums/Deployments';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
+import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
+import { useSecretTypes } from '@hooks/useSecretTypes';
 
 function CreateChainlink() {
-  const [serverError, setServerError] = useState('');
   const router = useRouter();
-  const { nodes } = useEthereumNodes();
+  const { data: ethereumNodes } =
+    useInfiniteRequest<EthereumNode>('/ethereum/nodes');
 
-  const activeNodes = nodes
+  const activeNodes = ethereumNodes
     .filter(({ ws }) => ws)
     .map(({ name, wsPort }) => ({
       label: name,
       value: `ws://${name}:${wsPort}`,
     }));
-  const { data: passwords } = useSecretsByType(KubernetesSecretTypes.password);
+
+  const { data: passwordOptions, isLoading } = useSecretTypes(
+    KubernetesSecretTypes.password
+  );
 
   const {
     handleSubmit,
     register,
     control,
     setValue,
-    formState: { errors, isSubmitted, isValid, isSubmitting },
+    setError,
+    clearErrors,
+    formState: { errors, isSubmitted, isValid, isSubmitting, isDirty },
   } = useForm<CreateChainlinkNode>({ resolver: yupResolver(createSchema) });
 
   const handleEVMChange = (value: string | string[] | undefined) => {
@@ -53,15 +57,10 @@ function CreateChainlink() {
   };
 
   const onSubmit: SubmitHandler<CreateChainlinkNode> = async (values) => {
-    setServerError('');
-    const { error, response } = await handleRequest<ChainlinkNode>(
-      createChainlinkNode.bind(undefined, values)
+    const { response } = await handleRequest(
+      () => createChainlinkNode(values),
+      setError
     );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
 
     if (response) {
       const notification: NotificationInfo = {
@@ -79,12 +78,7 @@ function CreateChainlink() {
     <Layout>
       <Heading title="Create New Chainlink Node" />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormLayout
-          error={serverError}
-          isSubmitted={isSubmitted}
-          isSubmitting={isSubmitting}
-          isValid={isValid}
-        >
+        <FormLayout>
           {/* Node Name */}
           <TextInput
             id="name"
@@ -133,22 +127,24 @@ function CreateChainlink() {
           />
 
           {/* Keystore Password */}
-          <Controller
-            control={control}
-            name="keystorePasswordSecretName"
-            render={({ field }) => (
-              <Select
-                options={passwords}
-                label="Keystore password"
-                placeholder="Select a password..."
-                onChange={field.onChange}
-                error={errors.keystorePasswordSecretName?.message}
-                href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
-                hrefTitle="Create a password..."
-                helperText="For securing access to chainlink wallet"
-              />
-            )}
-          />
+          {!isLoading && (
+            <Controller
+              control={control}
+              name="keystorePasswordSecretName"
+              render={({ field }) => (
+                <Select
+                  options={passwordOptions}
+                  label="Keystore password"
+                  placeholder="Select a password..."
+                  onChange={field.onChange}
+                  error={errors.keystorePasswordSecretName?.message}
+                  href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
+                  hrefTitle="Create a password..."
+                  helperText="For securing access to chainlink wallet"
+                />
+              )}
+            />
+          )}
 
           <h2 className="mt-10 text-xl font-bold">API Credentials</h2>
           <p className="mb-5 text-sm text-gray-500">
@@ -165,21 +161,37 @@ function CreateChainlink() {
           />
 
           {/* Password */}
-          <Controller
-            control={control}
-            name="apiCredentials.passwordSecretName"
-            render={({ field }) => (
-              <Select
-                options={passwords}
-                label="Password"
-                placeholder="Select a password..."
-                onChange={field.onChange}
-                error={errors.apiCredentials?.passwordSecretName?.message}
-                href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
-                hrefTitle="Create New Password..."
-              />
-            )}
-          />
+          {!isLoading && (
+            <Controller
+              control={control}
+              name="apiCredentials.passwordSecretName"
+              render={({ field }) => (
+                <Select
+                  options={passwordOptions}
+                  label="Password"
+                  placeholder="Select a password..."
+                  onChange={field.onChange}
+                  error={errors.apiCredentials?.passwordSecretName?.message}
+                  href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
+                  hrefTitle="Create New Password..."
+                />
+              )}
+            />
+          )}
+
+          <ErrorSummary errors={errors} />
+
+          <div className="flex flex-row-reverse items-center px-4 py-3 mt-5 -mx-6 -mb-6 bg-gray-50 sm:px-6">
+            <Button
+              type="submit"
+              className="btn btn-primary"
+              disabled={(isSubmitted && !isValid) || isSubmitting || !isDirty}
+              loading={isSubmitting}
+              onClick={() => clearErrors()}
+            >
+              Create
+            </Button>
+          </div>
         </FormLayout>
       </form>
     </Layout>

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -6,13 +5,14 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 import MultiSelectWithInput from '@components/molecules/MultiSelectWithInput/MultiSelectWithInput';
 import Button from '@components/atoms/Button/Button';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import { ClusterPeer, Peers } from '@interfaces/ipfs/ClusterPeer';
 import { updateClusterPeer } from '@utils/requests/ipfs/clusterPeers';
 import { handleRequest } from '@utils/helpers/handleRequest';
-import { usePeers } from '@hooks/usePeers';
 import { schema } from '@schemas/ipfs/clusterPeers/peers';
-import { useClusterPeers } from '@hooks/useClusterPeers';
 import { KeyedMutator } from 'swr';
+import { Peer } from '@interfaces/ipfs/Peer';
+import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
 
 interface Props extends ClusterPeer {
   mutate?: KeyedMutator<{ clusterpeer: ClusterPeer }>;
@@ -25,10 +25,10 @@ const Peers: React.FC<Props> = ({
   bootstrapPeers,
   mutate,
 }) => {
-  const [serverError, setServerError] = useState('');
-  const [submitSuccess, setSubmitSuccess] = useState('');
-  const { peers, isLoading: isLoadingPeers } = usePeers();
-  const { clusterpeers, isLoading: isLoadingClusterpeers } = useClusterPeers();
+  const { data: peers, isLoading: isLoadingPeers } =
+    useInfiniteRequest<Peer>('/ipfs/peers');
+  const { data: clusterpeers, isLoading: isLoadingClusterpeers } =
+    useInfiniteRequest<ClusterPeer>('/ipfs/clusterpeers');
 
   // Get peers endpoints
   const peerEndpoints = peers.map(({ name }) => ({
@@ -46,28 +46,29 @@ const Peers: React.FC<Props> = ({
     handleSubmit,
     control,
     reset,
-    formState: { isDirty, isSubmitting, errors },
+    setError,
+    clearErrors,
+    formState: {
+      isValid,
+      isSubmitSuccessful,
+      isSubmitted,
+      isSubmitting,
+      errors,
+      isDirty,
+    },
   } = useForm<Peers>({
     resolver: yupResolver(schema),
   });
 
   const onSubmit: SubmitHandler<Peers> = async (values) => {
-    setServerError('');
-    setSubmitSuccess('');
-
-    const { error, response } = await handleRequest<ClusterPeer>(
-      updateClusterPeer.bind(undefined, name, values)
+    const { response } = await handleRequest(
+      () => updateClusterPeer(name, values),
+      setError
     );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
 
     if (response) {
       mutate?.();
       reset(values);
-      setSubmitSuccess('Cluster peer has been updated');
     }
   };
 
@@ -131,21 +132,24 @@ const Peers: React.FC<Props> = ({
             </ul>
           </div>
         )}
+
+        <ErrorSummary
+          errors={errors}
+          isSuccess={isSubmitSuccessful}
+          successMessage="Your peer updated successfuly"
+        />
       </div>
 
       <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"
-          disabled={!isDirty || isSubmitting}
+          disabled={(isSubmitted && !isValid) || isSubmitting || !isDirty}
           loading={isSubmitting}
+          onClick={() => clearErrors()}
         >
           Save
         </Button>
-        {serverError && (
-          <p className="mb-5 text-center text-red-500">{serverError}</p>
-        )}
-        {submitSuccess && <p>{submitSuccess}</p>}
       </div>
     </form>
   );

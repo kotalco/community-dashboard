@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -10,40 +9,35 @@ import Select from '@components/molecules/Select/Select';
 import Heading from '@components/templates/Heading/Heading';
 import Toggle from '@components/molecules/Toggle/Toggle';
 import Alert from '@components/atoms/Alert/Alert';
+import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
+import Button from '@components/atoms/Button/Button';
 import { createSchema } from '@schemas/polkadot/create';
 import { handleRequest } from '@utils/helpers/handleRequest';
-import {
-  CreatePolkadotNode,
-  PolkadotNode,
-} from '@interfaces/polkadot/PolkadotNode';
+import { CreatePolkadotNode } from '@interfaces/polkadot/PolkadotNode';
 import { NETWORKS } from '@data/polkadot/networks';
 import { createPolkadotNode } from '@utils/requests/polkadot';
 import { Deployments } from '@enums/Deployments';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
 
 function CreateNode() {
-  const [serverError, setServerError] = useState('');
   const router = useRouter();
 
   const {
     handleSubmit,
     register,
     control,
-    formState: { errors, isSubmitted, isValid, isSubmitting },
+    setError,
+    clearErrors,
+    formState: { errors, isSubmitted, isValid, isSubmitting, isDirty },
   } = useForm<CreatePolkadotNode>({
     resolver: yupResolver(createSchema),
   });
 
   const onSubmit: SubmitHandler<CreatePolkadotNode> = async (values) => {
-    setServerError('');
-    const { error, response } = await handleRequest<PolkadotNode>(
-      createPolkadotNode.bind(undefined, values)
+    const { response } = await handleRequest(
+      () => createPolkadotNode(values),
+      setError
     );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
 
     if (response) {
       const notification: NotificationInfo = {
@@ -61,12 +55,7 @@ function CreateNode() {
     <Layout>
       <Heading title="Create New Polkadot Node" />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormLayout
-          error={serverError}
-          isSubmitted={isSubmitted}
-          isSubmitting={isSubmitting}
-          isValid={isValid}
-        >
+        <FormLayout>
           {/* Node Name */}
           <TextInput
             id="name"
@@ -105,17 +94,34 @@ function CreateNode() {
               />
             )}
           />
-          <Alert role="warn">
-            <h3 className="text-sm font-medium text-yellow-800">Attension</h3>
-            <ul className="mt-2 ml-4 text-sm text-yellow-700 list-disc">
-              <li>Validator nodes must run in archive mode.</li>
-              <li>Disable pruning to enable archive mode.</li>
-              <li>
-                You can enable validator mode after node is up and running &amp;
-                fully synced
-              </li>
-            </ul>
-          </Alert>
+
+          <div className="mb-2">
+            <Alert role="warn">
+              <h3 className="text-sm font-medium text-yellow-800">Attension</h3>
+              <ul className="mt-2 ml-4 text-sm text-yellow-700 list-disc">
+                <li>Validator nodes must run in archive mode.</li>
+                <li>Disable pruning to enable archive mode.</li>
+                <li>
+                  You can enable validator mode after node is up and running
+                  &amp; fully synced
+                </li>
+              </ul>
+            </Alert>
+          </div>
+
+          <ErrorSummary errors={errors} />
+
+          <div className="flex flex-row-reverse items-center px-4 py-3 mt-5 -mx-6 -mb-6 bg-gray-50 sm:px-6">
+            <Button
+              type="submit"
+              className="btn btn-primary"
+              disabled={(isSubmitted && !isValid) || isSubmitting || !isDirty}
+              loading={isSubmitting}
+              onClick={() => clearErrors()}
+            >
+              Create
+            </Button>
+          </div>
         </FormLayout>
       </form>
     </Layout>

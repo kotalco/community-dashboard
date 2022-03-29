@@ -1,11 +1,9 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 
 import Button from '@components/atoms/Button/Button';
 import { deleteChainlinkNode } from '@utils/requests/chainlink';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
 import { Deployments } from '@enums/Deployments';
-import { handleRequest } from '@utils/helpers/handleRequest';
 import { useModal } from '@hooks/useModal';
 import DeleteDialog from '@components/organisms/DeleteDialog/DeleteDialog';
 
@@ -14,20 +12,11 @@ interface Props {
 }
 
 const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
-  const [serverError, setServerError] = useState<string>('');
   const { isOpen, open, close } = useModal();
   const router = useRouter();
 
-  const onSubmit = async () => {
-    setServerError('');
-    const { error } = await handleRequest(
-      deleteChainlinkNode.bind(undefined, nodeName)
-    );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
+  const deleteDeployment = async () => {
+    await deleteChainlinkNode(nodeName);
 
     const notification: NotificationInfo = {
       title: 'Chainlink Node has been deleted',
@@ -67,8 +56,7 @@ const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
         name={nodeName}
         protocol="Chainlink"
         resource="Node"
-        error={serverError}
-        onSubmit={onSubmit}
+        deleteDepolyment={deleteDeployment}
       />
     </>
   );

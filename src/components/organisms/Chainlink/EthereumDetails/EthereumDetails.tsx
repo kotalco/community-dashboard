@@ -1,16 +1,17 @@
-import { useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 
 import Button from '@components/atoms/Button/Button';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 import MultiselectWithInput from '@components/molecules/MultiSelectWithInput/MultiSelectWithInput';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
+import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
 import { ChainlinkNode, Ethereum } from '@interfaces/chainlink/ChainlinkNode';
 import { KeyedMutator } from 'swr';
 import { updateChainlinkNode } from '@utils/requests/chainlink';
 import { handleRequest } from '@utils/helpers/handleRequest';
-import { useEthereumNodes } from '@hooks/useEthereumNodes';
 import { ethereumSchema } from '@schemas/chainlink/ethereum';
+import { EthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 
 interface Props extends ChainlinkNode {
   mutate?: KeyedMutator<{
@@ -24,17 +25,17 @@ function EthereumDetails({
   name,
   mutate,
 }: Props) {
-  const [submitSuccess, setSubmitSuccess] = useState('');
-  const [serverError, setServerError] = useState('');
-  const { nodes, isLoading } = useEthereumNodes();
-  const wsActiveNodes = nodes
+  const { data: ethereumNodes, isLoading } =
+    useInfiniteRequest<EthereumNode>('/ethereum/nodes');
+
+  const wsActiveNodes = ethereumNodes
     .filter(({ ws }) => ws)
     .map(({ name, wsPort }) => ({
       label: name,
       value: `ws://${name}:${wsPort}`,
     }));
 
-  const rpcActiveNodes = nodes
+  const rpcActiveNodes = ethereumNodes
     .filter(({ rpc }) => rpc)
     .map(({ name, rpcPort }) => ({
       label: name,
@@ -45,24 +46,27 @@ function EthereumDetails({
     handleSubmit,
     control,
     reset,
-    formState: { isDirty, isSubmitting, errors },
+    setError,
+    clearErrors,
+    formState: {
+      isDirty,
+      isSubmitting,
+      errors,
+      isSubmitSuccessful,
+      isSubmitted,
+      isValid,
+    },
   } = useForm<Ethereum>({ resolver: yupResolver(ethereumSchema) });
 
   const onSubmit: SubmitHandler<Ethereum> = async (values) => {
-    setServerError('');
-    const { error, response } = await handleRequest<ChainlinkNode>(
-      updateChainlinkNode.bind(undefined, values, name)
+    const { response } = await handleRequest(
+      () => updateChainlinkNode(values, name),
+      setError
     );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
 
     if (response) {
       mutate?.();
       reset(values);
-      setSubmitSuccess('Ethereum data has been updated');
     }
   };
 
@@ -112,23 +116,24 @@ function EthereumDetails({
             )}
           />
         )}
+
+        <ErrorSummary
+          errors={errors}
+          isSuccess={isSubmitSuccessful}
+          successMessage="Your node updated successfuly"
+        />
       </div>
 
       <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"
-          disabled={!isDirty || isSubmitting}
+          disabled={(isSubmitted && !isValid) || isSubmitting || !isDirty}
           loading={isSubmitting}
+          onClick={() => clearErrors()}
         >
           Save
         </Button>
-        {submitSuccess && <p>{submitSuccess}</p>}
-        {serverError && (
-          <p aria-label="alert" className="text-sm text-red-600">
-            {serverError}
-          </p>
-        )}
       </div>
     </form>
   );

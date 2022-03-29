@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -8,40 +7,35 @@ import FormLayout from '@components/templates/FormLayout/FormLayout';
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Select from '@components/molecules/Select/Select';
 import Heading from '@components/templates/Heading/Heading';
+import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
+import Button from '@components/atoms/Button/Button';
 import { createSchema } from '@schemas/filecoin/create';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { NETWORKS } from '@data/filecoin/networks';
 import { Deployments } from '@enums/Deployments';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
-import {
-  CreateFilecoinNode,
-  FilecoinNode,
-} from '@interfaces/filecoin/FilecoinNode';
+import { CreateFilecoinNode } from '@interfaces/filecoin/FilecoinNode';
 import { createFilecoinNode } from '@utils/requests/filecoin';
 
 function CreateNode() {
-  const [serverError, setServerError] = useState('');
   const router = useRouter();
 
   const {
     handleSubmit,
     register,
     control,
-    formState: { errors, isSubmitted, isValid, isSubmitting },
+    setError,
+    clearErrors,
+    formState: { errors, isSubmitted, isValid, isSubmitting, isDirty },
   } = useForm<CreateFilecoinNode>({
     resolver: yupResolver(createSchema),
   });
 
   const onSubmit: SubmitHandler<CreateFilecoinNode> = async (values) => {
-    setServerError('');
-    const { error, response } = await handleRequest<FilecoinNode>(
-      createFilecoinNode.bind(undefined, values)
+    const { response } = await handleRequest(
+      () => createFilecoinNode(values),
+      setError
     );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
 
     if (response) {
       const notification: NotificationInfo = {
@@ -59,12 +53,7 @@ function CreateNode() {
     <Layout>
       <Heading title="Create New Filecoin Node" />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormLayout
-          error={serverError}
-          isSubmitted={isSubmitted}
-          isSubmitting={isSubmitting}
-          isValid={isValid}
-        >
+        <FormLayout>
           {/* Node Name */}
           <TextInput
             id="name"
@@ -88,6 +77,20 @@ function CreateNode() {
               />
             )}
           />
+
+          <ErrorSummary errors={errors} />
+
+          <div className="flex flex-row-reverse items-center px-4 py-3 mt-5 -mx-6 -mb-6 bg-gray-50 sm:px-6">
+            <Button
+              type="submit"
+              className="btn btn-primary"
+              disabled={(isSubmitted && !isValid) || isSubmitting || !isDirty}
+              loading={isSubmitting}
+              onClick={() => clearErrors()}
+            >
+              Create
+            </Button>
+          </div>
         </FormLayout>
       </form>
     </Layout>

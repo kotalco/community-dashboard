@@ -12,19 +12,19 @@ import EThereumIcon from '@components/Icons/EthereumIcon/EthereumIcon';
 import EmptyState from '@components/molecules/EmptyState/EmptyState';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import { useNotification } from '@hooks/useNotification';
-import { useBeaconNodes } from '@hooks/useBeaconNodes';
 import { createButtons } from '@data/ethereum2/links';
 import { getLabel } from '@utils/helpers/getLabel';
 import { networkOptions } from '@data/ethereum2/networkOptions';
 import { clientOptions } from '@data/ethereum2/clientOptions';
-import { useValidators } from '@hooks/useValidators';
 import { Deployments } from '@enums/Deployments';
+import { BeaconNode } from '@interfaces/ethereum2/BeaconNode';
 
 function Beaconnodes() {
   const { NotificationPanel } = useNotification(Deployments.beaconnode);
   const {
-    beaconnodes,
+    data: beaconnodes,
     error,
     isEmpty,
     isInitialLoading,
@@ -33,8 +33,10 @@ function Beaconnodes() {
     isReachedEnd,
     isLoading,
     totalCount: beaconnodesCount,
-  } = useBeaconNodes();
-  const { totalCount: validatorsCount } = useValidators();
+  } = useInfiniteRequest<BeaconNode>('/ethereum2/beaconnodes');
+  const { totalCount: validatorsCount } = useInfiniteRequest(
+    '/ethereum2/validators'
+  );
 
   const tabs = [
     {

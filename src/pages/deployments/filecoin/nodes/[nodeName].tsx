@@ -1,9 +1,8 @@
-import { useRouter } from 'next/router';
+import { NextPage } from 'next';
 
 import Heading from '@components/templates/Heading/Heading';
 import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
-import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
 import DangerZone from '@components/organisms/Filecoin/DangerZone/DangerZone';
 import APIDetails from '@components/organisms/Filecoin/API/API';
@@ -11,30 +10,27 @@ import ResourcesDetails from '@components/organisms/Resources/Resources';
 import LoggingDetails from '@components/organisms/Filecoin/Logging/Logging';
 import NetworkingDetails from '@components/organisms/Filecoin/Networking/Networking';
 import IPFSDetails from '@components/organisms/Filecoin/IPFS/IPFS';
+import withParams from '@components/hoc/withParams/withParams';
 import { Resources } from '@interfaces/Resources';
 import { getLabel } from '@utils/helpers/getLabel';
 import { TITLES } from '@data/filecoin/tabTitles';
 import { useStatus } from '@hooks/useStatus';
 import { DataList } from '@interfaces/DataList';
-import { useFilecoinNode } from '@hooks/useFilecoinNode';
 import { updateFilecoinNode } from '@utils/requests/filecoin';
 import { NETWORKS } from '@data/filecoin/networks';
+import { FilecoinNode } from '@interfaces/filecoin/FilecoinNode';
+import { PageWithParams } from '@interfaces/PageWithParams';
 
-function FilecoinNode() {
-  const { query, push } = useRouter();
-  const nodeName = query.nodeName as string | undefined;
-  const { status } = useStatus(
-    nodeName && `/filecoin/nodes/${nodeName}/status`
-  );
-  const { node, mutate, error } = useFilecoinNode(nodeName);
+const FilecoinNodeDetailsPage: NextPage<PageWithParams<FilecoinNode>> = ({
+  data: node,
+  mutate,
+}) => {
+  const { status } = useStatus(`/filecoin/nodes/${node.name}/status`);
 
   const updateResources = async (name: string, values: Resources) => {
     await updateFilecoinNode(values, name);
     mutate();
   };
-
-  if (error) push('/404');
-  if (!node) return <LoadingIndicator />;
 
   const dataList: DataList[] = [
     { label: 'Protocol', value: 'Filecoin' },
@@ -88,6 +84,9 @@ function FilecoinNode() {
       </div>
     </Layout>
   );
-}
+};
 
-export default FilecoinNode;
+export default withParams(FilecoinNodeDetailsPage, {
+  params: 'nodeName',
+  url: '/filecoin/nodes',
+});

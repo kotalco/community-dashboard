@@ -12,16 +12,17 @@ import EmptyState from '@components/molecules/EmptyState/EmptyState';
 import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import ChailinkIcon from '@components/Icons/ChainlinkIcon/ChailinkIcon';
 import LoadMoreButton from '@components/atoms/LoadMoreButton/LoadMoreButton';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
 import { useNotification } from '@hooks/useNotification';
-import { useChainlinkNodes } from '@hooks/useChainlinkNodes';
 import { getLabel } from '@utils/helpers/getLabel';
 import { EVM_CHAINS } from '@data/chainlink/evmChain';
 import { Deployments } from '@enums/Deployments';
+import { ChainlinkNode } from '@interfaces/chainlink/ChainlinkNode';
 
 function ChainlinkNode() {
   const { NotificationPanel } = useNotification(Deployments.chainlink);
   const {
-    nodes,
+    data: chainlinkNodes,
     isEmpty,
     isInitialLoading,
     size,
@@ -30,7 +31,7 @@ function ChainlinkNode() {
     isLoading,
     totalCount,
     error,
-  } = useChainlinkNodes();
+  } = useInfiniteRequest<ChainlinkNode>('/chainlink/nodes');
 
   const tabs = [
     {
@@ -78,23 +79,25 @@ function ChainlinkNode() {
 
       <LinkedTabs tabs={tabs} />
       <List>
-        {nodes.map(({ name, ethereumChainId, linkContractAddress }) => (
-          <ListItem
-            key={name}
-            link={`/deployments/chainlink/nodes/${name}`}
-            title={name}
-          >
-            <GlobeAltIcon className="shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
-            <p>
-              {getLabel(
-                `${ethereumChainId}:${linkContractAddress}`,
-                EVM_CHAINS
-              )}
-            </p>
-            <ChipIcon className="shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
-            <p>Chainlink</p>
-          </ListItem>
-        ))}
+        {chainlinkNodes.map(
+          ({ name, ethereumChainId, linkContractAddress }) => (
+            <ListItem
+              key={name}
+              link={`/deployments/chainlink/nodes/${name}`}
+              title={name}
+            >
+              <GlobeAltIcon className="shrink-0 mr-1.5 h-5 w-5 text-gray-400" />
+              <p>
+                {getLabel(
+                  `${ethereumChainId}:${linkContractAddress}`,
+                  EVM_CHAINS
+                )}
+              </p>
+              <ChipIcon className="shrink-0 ml-1.5 mr-1.5 h-5 w-5 text-gray-400" />
+              <p>Chainlink</p>
+            </ListItem>
+          )
+        )}
       </List>
       {!isReachedEnd && (
         <LoadMoreButton

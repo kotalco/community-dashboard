@@ -1,17 +1,18 @@
 import useSWR, { SWRConfiguration, SWRResponse } from 'swr';
 import { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
-import axios from '@utils/axios';
+import { api } from '@utils/axios';
+import { APIError } from '@interfaces/api/APIError';
 
 export type GetRequest = AxiosRequestConfig | null;
 
 interface Return<Data, Error>
   extends Pick<
-    SWRResponse<AxiosResponse<Data>, AxiosError<Error>>,
+    SWRResponse<AxiosResponse<{ data: Data }>, AxiosError<Error>>,
     'isValidating' | 'error' | 'mutate'
   > {
   data: Data | undefined;
-  response: AxiosResponse<Data> | undefined;
+  response: AxiosResponse<{ data: Data }> | undefined;
 }
 
 export interface Config<Data = unknown, Error = unknown>
@@ -22,19 +23,23 @@ export interface Config<Data = unknown, Error = unknown>
   fallbackData?: Data;
 }
 
-export default function useRequest<Data = unknown, Error = unknown>(
+export default function useRequest<Data = unknown, Error = APIError>(
   request: GetRequest,
-  { fallbackData, ...config }: Config<Data, Error> = {}
+  { fallbackData, ...config }: Config<{ data: Data }, Error> = {}
 ): Return<Data, Error> {
   const {
     data: response,
     error,
     isValidating,
     mutate,
-  } = useSWR<AxiosResponse<Data>, AxiosError<Error>>(
+  } = useSWR<AxiosResponse<{ data: Data }>, AxiosError<Error>>(
     request && JSON.stringify(request),
+    /**
+     * NOTE: Typescript thinks `request` can be `null` here, but the fetcher
+     * function is actually only called by `useSWR` when it isn't.
+     */
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    () => axios.request<Data>(request!),
+    () => api.request<{ data: Data }>(request!),
     {
       ...config,
       fallbackData: fallbackData && {
@@ -49,7 +54,7 @@ export default function useRequest<Data = unknown, Error = unknown>(
   );
 
   return {
-    data: response && response.data,
+    data: response && response.data.data,
     response,
     error,
     isValidating,

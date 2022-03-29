@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useRouter } from 'next/router';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -9,43 +8,42 @@ import TextInput from '@components/molecules/TextInput/TextInput';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
 import Select from '@components/molecules/Select/Select';
 import Heading from '@components/templates/Heading/Heading';
+import Button from '@components/atoms/Button/Button';
+import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
 import { clientOptions } from '@data/ethereum/node/clientOptions';
 import { networkOptions } from '@data/ethereum/node/networkOptions';
 import { createEthereumNode } from '@utils/requests/ethereum';
 import { schema } from '@schemas/ethereum/create';
-import {
-  CreateEthereumNode,
-  EthereumNode,
-} from '@interfaces/Ethereum/ِEthereumNode';
-import { useSecretsByType } from '@utils/requests/secrets';
+import { CreateEthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { Deployments } from '@enums/Deployments';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
+import { useSecretTypes } from '@hooks/useSecretTypes';
 
 function CreateNode() {
-  const [serverError, setServerError] = useState('');
   const router = useRouter();
-  const { data: privateKeys, isLoading } = useSecretsByType(
+
+  const { data: privateKeyOptions, isLoading } = useSecretTypes(
     KubernetesSecretTypes.ethereumPrivatekey
   );
+
   const {
     handleSubmit,
     register,
     control,
-    formState: { errors, isSubmitted, isValid, isSubmitting },
-  } = useForm<CreateEthereumNode>({ resolver: yupResolver(schema) });
+    setError,
+    clearErrors,
+    formState: { errors, isSubmitted, isValid, isSubmitting, isDirty },
+  } = useForm<CreateEthereumNode>({
+    resolver: yupResolver(schema),
+  });
 
   const onSubmit: SubmitHandler<CreateEthereumNode> = async (values) => {
-    setServerError('');
-    const { error, response } = await handleRequest<EthereumNode>(
-      createEthereumNode.bind(undefined, values)
+    const { response } = await handleRequest(
+      () => createEthereumNode(values),
+      setError
     );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
 
     if (response) {
       const notification: NotificationInfo = {
@@ -63,12 +61,7 @@ function CreateNode() {
     <Layout>
       <Heading title="Create New Node" />
       <form onSubmit={handleSubmit(onSubmit)}>
-        <FormLayout
-          error={serverError}
-          isSubmitted={isSubmitted}
-          isSubmitting={isSubmitting}
-          isValid={isValid}
-        >
+        <FormLayout>
           {/* Node Name */}
           <TextInput
             id="name"
@@ -122,7 +115,7 @@ function CreateNode() {
                   placeholder="Choose a private key..."
                   label="Node private key (optional)"
                   error={errors.nodePrivateKeySecretName?.message}
-                  options={privateKeys}
+                  options={privateKeyOptions}
                   onChange={field.onChange}
                   href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}
                   hrefTitle="Create new private key..."
@@ -131,6 +124,20 @@ function CreateNode() {
               )}
             />
           )}
+
+          <ErrorSummary errors={errors} />
+
+          <div className="flex flex-row-reverse items-center px-4 py-3 mt-5 -mx-6 -mb-6 bg-gray-50 sm:px-6">
+            <Button
+              type="submit"
+              className="btn btn-primary"
+              disabled={(isSubmitted && !isValid) || isSubmitting || !isDirty}
+              loading={isSubmitting}
+              onClick={() => clearErrors()}
+            >
+              Create
+            </Button>
+          </div>
         </FormLayout>
       </form>
     </Layout>

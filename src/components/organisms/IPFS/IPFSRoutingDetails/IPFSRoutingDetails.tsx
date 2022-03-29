@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
 import { KeyedMutator } from 'swr';
 import { joiResolver } from '@hookform/resolvers/joi';
 
 import Button from '@components/atoms/Button/Button';
-import { Peer, Routing } from '@interfaces/ipfs/Peer';
 import Select from '@components/molecules/Select/Select';
+import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
+import { Peer, Routing } from '@interfaces/ipfs/Peer';
 import { routingOptions } from '@data/ipfs/peers/routingOptions';
 import { updateRoutingSchema } from '@schemas/ipfs/peers/updateIPFSPeer';
 import { updateIPFSPeer } from '@utils/requests/ipfs/peers';
@@ -16,37 +16,38 @@ interface Props extends Peer {
 }
 
 const IPFSPeerDetails: React.FC<Props> = ({ routing, name, mutate }) => {
-  const [serverError, setServerError] = useState('');
-  const [submitSuccess, setSubmitSuccess] = useState('');
-
   const {
     reset,
     handleSubmit,
     control,
-    formState: { isDirty, isSubmitting, errors },
+    setError,
+    clearErrors,
+    formState: {
+      isSubmitting,
+      errors,
+      isValid,
+      isSubmitSuccessful,
+      isSubmitted,
+      isDirty,
+    },
   } = useForm<Routing>({
     resolver: joiResolver(updateRoutingSchema),
   });
 
   const onSubmit: SubmitHandler<Routing> = async (values) => {
-    setServerError('');
-    setSubmitSuccess('');
-
-    const { error, response } = await handleRequest(
-      updateIPFSPeer.bind(undefined, name, values)
+    const { response } = await handleRequest(
+      () => updateIPFSPeer(name, values),
+      setError
     );
-
-    if (error) return setServerError(error);
 
     if (response) {
       mutate?.();
       reset(values);
-      setSubmitSuccess('Peer has been updated');
     }
   };
 
   return (
-    <>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div className="max-w-xs px-4 py-5 sm:p-6">
         <Controller
           name="routing"
@@ -63,23 +64,26 @@ const IPFSPeerDetails: React.FC<Props> = ({ routing, name, mutate }) => {
             />
           )}
         />
+
+        <ErrorSummary
+          errors={errors}
+          isSuccess={isSubmitSuccessful}
+          successMessage="Your peer updated successfuly"
+        />
       </div>
 
       <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
+          type="submit"
           className="btn btn-primary"
-          disabled={!isDirty || isSubmitting}
+          disabled={(isSubmitted && !isValid) || isSubmitting || !isDirty}
           loading={isSubmitting}
-          onClick={handleSubmit(onSubmit)}
+          onClick={() => clearErrors()}
         >
           Save
         </Button>
-        {serverError && (
-          <p className="mb-5 text-center text-red-500">{serverError}</p>
-        )}
-        {submitSuccess && <p>{submitSuccess}</p>}
       </div>
-    </>
+    </form>
   );
 };
 

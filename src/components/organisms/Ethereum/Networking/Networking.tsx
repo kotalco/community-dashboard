@@ -1,19 +1,19 @@
 import { KeyedMutator } from 'swr';
-import { useState } from 'react';
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 
 import TextInput from '@components/molecules/TextInput/TextInput';
 import Button from '@components/atoms/Button/Button';
 import Select from '@components/molecules/Select/Select';
 import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
+import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
 import { updateEthereumNode } from '@utils/requests/ethereum';
 import { EthereumNode, Networking } from '@interfaces/Ethereum/ِEthereumNode';
 import { syncModeOptions } from '@data/ethereum/node/syncModeOptions';
-import { useSecretsByType } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { networkingSchema } from '@schemas/ethereum/networking';
+import { useSecretTypes } from '@hooks/useSecretTypes';
 
 interface Props extends EthereumNode {
   mutate?: KeyedMutator<{ node: EthereumNode }>;
@@ -29,38 +29,38 @@ function NetworkingDetails({
   staticNodes,
   bootnodes,
 }: Props) {
-  const [serverError, setServerError] = useState('');
-  const { data: privateKeys, isLoading } = useSecretsByType(
+  const { data: privateKeyOptions, isLoading } = useSecretTypes(
     KubernetesSecretTypes.ethereumPrivatekey
   );
 
-  const [submitSuccess, setSubmitSuccess] = useState('');
   const {
     handleSubmit,
     control,
     reset,
     register,
-    formState: { isDirty, isSubmitting, errors },
+    setError,
+    clearErrors,
+    formState: {
+      isDirty,
+      isSubmitting,
+      errors,
+      isValid,
+      isSubmitSuccessful,
+      isSubmitted,
+    },
   } = useForm<Networking>({
     resolver: yupResolver(networkingSchema),
   });
 
   const onSubmit: SubmitHandler<Networking> = async (values) => {
-    setSubmitSuccess('');
-    setServerError('');
-    const { error, response } = await handleRequest<EthereumNode>(
-      updateEthereumNode.bind(undefined, values, name)
+    const { response } = await handleRequest(
+      () => updateEthereumNode(values, name),
+      setError
     );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
 
     if (response) {
       mutate?.();
       reset(values);
-      setSubmitSuccess('Networking data has been updated');
     }
   };
 
@@ -78,7 +78,7 @@ function NetworkingDetails({
                 placeholder="Choose a private key..."
                 label="Node Private Key"
                 error={errors.nodePrivateKeySecretName?.message}
-                options={privateKeys}
+                options={privateKeyOptions}
                 onChange={field.onChange}
                 value={field.value}
                 href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}
@@ -148,23 +148,24 @@ function NetworkingDetails({
             />
           )}
         />
+
+        <ErrorSummary
+          errors={errors}
+          isSuccess={isSubmitSuccessful}
+          successMessage="Your node updated successfuly"
+        />
       </div>
 
       <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"
-          disabled={!isDirty || isSubmitting}
+          disabled={(isSubmitted && !isValid) || isSubmitting || !isDirty}
           loading={isSubmitting}
+          onClick={() => clearErrors()}
         >
           Save
         </Button>
-        {submitSuccess && <p>{submitSuccess}</p>}
-        {serverError && (
-          <p aria-label="alert" className="text-sm text-red-600">
-            {serverError}
-          </p>
-        )}
       </div>
     </form>
   );

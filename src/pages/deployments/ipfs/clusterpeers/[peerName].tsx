@@ -1,7 +1,6 @@
-import { useRouter } from 'next/router';
+import { NextPage } from 'next';
 
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
-import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import Layout from '@components/templates/Layout/Layout';
 import Heading from '@components/templates/Heading/Heading';
 import Tabs from '@components/organisms/Tabs/Tabs';
@@ -10,25 +9,22 @@ import Logging from '@components/organisms/Logging/Logging';
 import Peers from '@components/organisms/IPFS/ClusterPeer/Peers/Peers';
 import Resources from '@components/organisms/Resources/Resources';
 import DangerZone from '@components/organisms/IPFS/ClusterPeer/DangerZone/DangerZone';
-import { UpdateClusterPeer } from '@interfaces/ipfs/ClusterPeer';
+import withParams from '@components/hoc/withParams/withParams';
+import { ClusterPeer, UpdateClusterPeer } from '@interfaces/ipfs/ClusterPeer';
 import { updateClusterPeer } from '@utils/requests/ipfs/clusterPeers';
-import { useClusterPeer } from '@hooks/useClusterPeer';
 import { tabTitles } from '@data/ipfs/clusterPeers/tabTitles';
 import { getLabel } from '@utils/helpers/getLabel';
 import { consensusOptions } from '@data/ipfs/clusterPeers/consensusOptions';
 import { useStatus } from '@hooks/useStatus';
+import { PageWithParams } from '@interfaces/PageWithParams';
 
-function ClusterPeerDetailsPage() {
-  const { query, push } = useRouter();
-  const peerName = query.peerName as string | undefined;
-
-  const { clusterpeer, mutate, error } = useClusterPeer(peerName);
+const ClusterPeerDetailsPage: NextPage<PageWithParams<ClusterPeer>> = ({
+  data: clusterpeer,
+  mutate,
+}) => {
   const { status } = useStatus(
     clusterpeer && `/ipfs/clusterpeers/${clusterpeer.name}/status`
   );
-
-  if (error) push('/404');
-  if (!clusterpeer) return <LoadingIndicator />;
 
   const updateResources = async (name: string, values: UpdateClusterPeer) => {
     await updateClusterPeer(name, values);
@@ -84,6 +80,9 @@ function ClusterPeerDetailsPage() {
       </div>
     </Layout>
   );
-}
+};
 
-export default ClusterPeerDetailsPage;
+export default withParams(ClusterPeerDetailsPage, {
+  params: 'peerName',
+  url: '/ipfs/clusterpeers',
+});

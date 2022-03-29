@@ -1,10 +1,9 @@
-import { useRouter } from 'next/router';
 import { ExclamationIcon, RefreshIcon } from '@heroicons/react/outline';
+import { NextPage } from 'next';
 
 import Heading from '@components/templates/Heading/Heading';
 import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
-import LoadingIndicator from '@components/molecules/LoadingIndicator/LoadingIndicator';
 import ProtocolDetails from '@components/organisms/ProtocolDetails/ProtocolDetails';
 import DangerZone from '@components/organisms/Polkadot/DangerZone/DangerZone';
 import AccessControlDetails from '@components/organisms/Polkadot/AccessControl/AccessControl';
@@ -17,35 +16,32 @@ import PrometheusDetails from '@components/organisms/Polkadot/Prometheus/Prometh
 import APIDetails from '@components/organisms/Polkadot/API/API';
 import Cards from '@components/templates/Cards/Cards';
 import Card from '@components/atoms/Card/Card';
+import withParams from '@components/hoc/withParams/withParams';
 import { Resources } from '@interfaces/Resources';
 import { getLabel } from '@utils/helpers/getLabel';
 import { TITLES } from '@data/polkadot/tabTitles';
 import { useStatus } from '@hooks/useStatus';
-import { usePolkadotNode } from '@hooks/usePolkadotNode';
 import { NETWORKS } from '@data/polkadot/networks';
 import { updatePolkadotNode } from '@utils/requests/polkadot';
 import { DataList } from '@interfaces/DataList';
 import { useStats } from '@hooks/useStats';
 import { PolkadotStatsResponse } from '@interfaces/Stats';
+import { PolkadotNode } from '@interfaces/polkadot/PolkadotNode';
+import { PageWithParams } from '@interfaces/PageWithParams';
 
-function PolkadotNode() {
-  const { query, push } = useRouter();
-  const nodeName = query.nodeName as string | undefined;
-  const { status } = useStatus(
-    nodeName && `/polkadot/nodes/${nodeName}/status`
-  );
+const PolkadotNodeDetailsPage: NextPage<PageWithParams<PolkadotNode>> = ({
+  data: node,
+  mutate,
+}) => {
+  const { status } = useStatus(`/polkadot/nodes/${node.name}/status`);
   const { stats, error: statsError } = useStats<PolkadotStatsResponse>(
-    nodeName && `/polkadot/nodes/${nodeName}/stats`
+    `/polkadot/nodes/${node.name}/stats`
   );
-  const { node, mutate, error } = usePolkadotNode(nodeName);
 
   const updateResources = async (name: string, values: Resources) => {
     await updatePolkadotNode(values, name);
     mutate();
   };
-
-  if (error) return push('/404');
-  if (!node) return <LoadingIndicator />;
 
   const dataList: DataList[] = [
     { label: 'Protocol', value: 'Polkadot' },
@@ -131,6 +127,9 @@ function PolkadotNode() {
       </div>
     </Layout>
   );
-}
+};
 
-export default PolkadotNode;
+export default withParams(PolkadotNodeDetailsPage, {
+  params: 'nodeName',
+  url: '/polkadot/nodes',
+});

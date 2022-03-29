@@ -1,15 +1,16 @@
-import { useState } from 'react';
 import { KeyedMutator } from 'swr';
 import { useForm, SubmitHandler, Controller } from 'react-hook-form';
 
 import Button from '@components/atoms/Button/Button';
 import Toggle from '@components/molecules/Toggle/Toggle';
 import SelectWithInput from '@components/molecules/SelectWithInput/SelectWithInput';
+import useInfiniteRequest from '@hooks/useInfiniteRequest';
+import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
 import { IPFS } from '@interfaces/filecoin/FilecoinNode';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { FilecoinNode } from '@interfaces/filecoin/FilecoinNode';
 import { updateFilecoinNode } from '@utils/requests/filecoin';
-import { usePeers } from '@hooks/usePeers';
+import { Peer } from '@interfaces/ipfs/Peer';
 
 interface Props extends FilecoinNode {
   mutate?: KeyedMutator<{ node: FilecoinNode }>;
@@ -22,10 +23,7 @@ function IPFSDetails({
   name,
   mutate,
 }: Props) {
-  const [serverError, setServerError] = useState('');
-  const [submitSuccess, setSubmitSuccess] = useState('');
-
-  const { peers, isLoading } = usePeers();
+  const { data: peers, isLoading } = useInfiniteRequest<Peer>('/ipfs/peers');
   const peersOptions = peers.map(({ name }) => ({
     label: name,
     value: `/dns4/${name}/tcp/5001`,
@@ -35,25 +33,27 @@ function IPFSDetails({
     handleSubmit,
     reset,
     control,
-    formState: { isDirty, isSubmitting, errors },
+    setError,
+    clearErrors,
+    formState: {
+      isDirty,
+      isSubmitting,
+      errors,
+      isSubmitSuccessful,
+      isSubmitted,
+      isValid,
+    },
   } = useForm<IPFS>();
 
   const onSubmit: SubmitHandler<IPFS> = async (values) => {
-    setSubmitSuccess('');
-    setServerError('');
-    const { error, response } = await handleRequest<FilecoinNode>(
-      updateFilecoinNode.bind(undefined, values, name)
+    const { response } = await handleRequest(
+      () => updateFilecoinNode(values, name),
+      setError
     );
-
-    if (error) {
-      setServerError(error);
-      return;
-    }
 
     if (response) {
       mutate?.();
       reset(response);
-      setSubmitSuccess('IPFS data has been updated');
     }
   };
 
@@ -111,23 +111,24 @@ function IPFSDetails({
             )}
           />
         )}
+
+        <ErrorSummary
+          errors={errors}
+          isSuccess={isSubmitSuccessful}
+          successMessage="Your node updated successfuly"
+        />
       </div>
 
       <div className="flex flex-row-reverse items-center px-4 py-3 space-x-2 space-x-reverse bg-gray-50 sm:px-6">
         <Button
           type="submit"
           className="btn btn-primary"
-          disabled={!isDirty || isSubmitting}
+          disabled={(isSubmitted && !isValid) || isSubmitting || !isDirty}
           loading={isSubmitting}
+          onClick={() => clearErrors()}
         >
           Save
         </Button>
-        {submitSuccess && <p>{submitSuccess}</p>}
-        {serverError && (
-          <p aria-label="alert" className="text-sm text-red-600">
-            {serverError}
-          </p>
-        )}
       </div>
     </form>
   );
