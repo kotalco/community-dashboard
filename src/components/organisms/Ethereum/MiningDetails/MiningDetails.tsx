@@ -53,6 +53,7 @@ function MiningDetails({ name, mutate, ...rest }: Props) {
 
   // Open Dialog if any APIs is activated
   const minerChange = (value: boolean) => {
+    console.log(value);
     if (
       value &&
       (rest.rpc || rest.ws || rest.graphql) &&
@@ -60,6 +61,7 @@ function MiningDetails({ name, mutate, ...rest }: Props) {
     ) {
       open();
     } else {
+      console.log(value);
       setValue('miner', value, { shouldDirty: true });
     }
   };
@@ -97,7 +99,7 @@ function MiningDetails({ name, mutate, ...rest }: Props) {
             <Toggle
               label="Miner"
               checked={field.value}
-              onChange={() => minerChange(field.value)}
+              onChange={(value) => minerChange(value)}
             />
           )}
         />

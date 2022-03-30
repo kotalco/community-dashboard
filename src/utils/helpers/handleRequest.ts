@@ -23,12 +23,15 @@ export const handleRequest = async <T, K = never>(
           type: 'server',
           message: error.message,
         });
+      }
 
-        error.validations?.forEach((fieldError) => {
-          setError(Object.keys(fieldError)[0] as keyof K, {
-            type: 'validation',
-            message: fieldError[Object.keys(fieldError)[0]],
-          });
+      if (setError && error.validations) {
+        Object.keys(error.validations).forEach((fieldName) => {
+          if (error?.validations)
+            setError(fieldName as keyof K, {
+              type: 'validation',
+              message: error.validations[fieldName],
+            });
         });
       }
     }
