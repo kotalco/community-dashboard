@@ -19,7 +19,7 @@ type Props = {
 ) &
   ({ href: string; hrefTitle: string } | { href?: never; hrefTitle?: never });
 
-const Multiselect: React.FC<Props> = ({
+const Multiselect: React.FC<React.PropsWithChildren<Props>> = ({
   options,
   label,
   value,

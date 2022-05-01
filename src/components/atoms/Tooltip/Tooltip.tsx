@@ -2,7 +2,10 @@ interface Props {
   title: string;
 }
 
-const Tooltip: React.FC<Props> = ({ children, title }) => {
+const Tooltip: React.FC<React.PropsWithChildren<Props>> = ({
+  children,
+  title,
+}) => {
   return (
     <div className="relative inline-flex flex-col items-center justify-center ml-1 group">
       {children}

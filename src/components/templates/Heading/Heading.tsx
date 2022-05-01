@@ -7,7 +7,12 @@ interface Props {
   createdDate?: string;
 }
 
-const Heading: React.FC<Props> = ({ title, children, status, createdDate }) => {
+const Heading: React.FC<React.PropsWithChildren<Props>> = ({
+  title,
+  children,
+  status,
+  createdDate,
+}) => {
   return (
     <div className="flex justify-between pb-6">
       <div>

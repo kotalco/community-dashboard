@@ -1,7 +1,7 @@
 import Logo from '@components/atoms/Logo/Logo';
 import NavLinks from '@components/molecules/NavLinks/NavLinks';
 
-const SidebarDesktop: React.FC = () => {
+const SidebarDesktop: React.FC<React.PropsWithChildren<unknown>> = () => {
   return (
     <div className="hidden md:flex md:shrink-0">
       <div className="flex flex-col w-64">

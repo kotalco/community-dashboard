@@ -6,7 +6,10 @@ interface Props {
   nodeName: string;
 }
 
-const EndpointItem: React.FC<Props> = ({ name, nodeName }) => {
+const EndpointItem: React.FC<React.PropsWithChildren<Props>> = ({
+  name,
+  nodeName,
+}) => {
   return (
     <li>
       <Link href="/endpoint/id">

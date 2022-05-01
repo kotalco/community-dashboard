@@ -2,7 +2,7 @@ interface Props {
   className: string;
 }
 
-const NearIcon: React.FC<Props> = ({ className }) => {
+const NearIcon: React.FC<React.PropsWithChildren<Props>> = ({ className }) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

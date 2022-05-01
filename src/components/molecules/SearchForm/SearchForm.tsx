@@ -1,6 +1,6 @@
 import SearchIcon from '@heroicons/react/solid/SearchIcon';
 
-const SearchForm: React.FC = () => {
+const SearchForm: React.FC<React.PropsWithChildren<unknown>> = () => {
   return (
     <div className="flex w-full md:ml-0">
       <label className="sr-only" htmlFor="search_field">

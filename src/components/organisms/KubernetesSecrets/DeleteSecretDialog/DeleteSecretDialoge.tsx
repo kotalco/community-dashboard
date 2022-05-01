@@ -13,7 +13,7 @@ interface Props {
   secretName: string;
 }
 
-const DeleteSecretDialoge: React.FC<Props> = ({
+const DeleteSecretDialoge: React.FC<React.PropsWithChildren<Props>> = ({
   close,
   isOpen,
   secretName,

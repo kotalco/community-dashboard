@@ -11,7 +11,9 @@ interface Props {
   validatorName: string;
 }
 
-const DangerZone: React.FC<Props> = ({ validatorName }) => {
+const DangerZone: React.FC<React.PropsWithChildren<Props>> = ({
+  validatorName,
+}) => {
   const { isOpen, open, close } = useModal();
   const router = useRouter();
 

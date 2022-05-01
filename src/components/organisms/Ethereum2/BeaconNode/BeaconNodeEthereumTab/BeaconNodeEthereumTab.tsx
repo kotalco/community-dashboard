@@ -21,7 +21,7 @@ interface Props extends BeaconNode {
   mutate?: KeyedMutator<{ beaconnode: BeaconNode }>;
 }
 
-const BeaconNodeEthereumTab: React.FC<Props> = ({
+const BeaconNodeEthereumTab: React.FC<React.PropsWithChildren<Props>> = ({
   name,
   client,
   eth1Endpoints,

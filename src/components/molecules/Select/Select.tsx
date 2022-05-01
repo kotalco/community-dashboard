@@ -22,7 +22,7 @@ interface Props {
   withClear?: boolean;
 }
 
-const Select: React.FC<Props> = ({
+const Select: React.FC<React.PropsWithChildren<Props>> = ({
   error,
   onChange,
   label,

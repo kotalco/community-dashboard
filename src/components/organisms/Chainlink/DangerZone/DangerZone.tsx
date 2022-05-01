@@ -11,7 +11,9 @@ interface Props {
   nodeName: string;
 }
 
-const DangerousZoneContent: React.FC<Props> = ({ nodeName }) => {
+const DangerousZoneContent: React.FC<React.PropsWithChildren<Props>> = ({
+  nodeName,
+}) => {
   const { isOpen, open, close } = useModal();
   const router = useRouter();
 

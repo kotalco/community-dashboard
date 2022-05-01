@@ -20,7 +20,7 @@ interface Props extends Validator {
   mutate?: KeyedMutator<{ validator: Validator }>;
 }
 
-const ValidatorBeaconNodeTab: React.FC<Props> = ({
+const ValidatorBeaconNodeTab: React.FC<React.PropsWithChildren<Props>> = ({
   name,
   beaconEndpoints,
   client,

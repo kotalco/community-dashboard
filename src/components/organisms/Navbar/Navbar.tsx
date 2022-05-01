@@ -8,7 +8,7 @@ interface Props {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const Navbar: React.FC<Props> = ({ setIsOpen }) => {
+const Navbar: React.FC<React.PropsWithChildren<Props>> = ({ setIsOpen }) => {
   const handleClick = () => {
     // eslint-disable-next-line no-console
     console.log('Clicked');

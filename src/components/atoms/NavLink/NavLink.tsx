@@ -17,9 +17,14 @@ interface Button {
   subLinks: { name: string; href: string; protocol: string }[];
 }
 
-type Props = { Icon: React.ComponentType<IconProps> } & (URL | Button);
+type Props = {
+  Icon: React.ComponentType<React.PropsWithChildren<IconProps>>;
+} & (URL | Button);
 
-const NavLink: React.FC<Props> = ({ children, ...props }) => {
+const NavLink: React.FC<React.PropsWithChildren<Props>> = ({
+  children,
+  ...props
+}) => {
   const { pathname } = useRouter();
   const active =
     props.type === 'button' &&

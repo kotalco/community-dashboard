@@ -11,7 +11,9 @@ interface Props {
   peerName: string;
 }
 
-const DeleteDeployment: React.FC<Props> = ({ peerName }) => {
+const DeleteDeployment: React.FC<React.PropsWithChildren<Props>> = ({
+  peerName,
+}) => {
   const { isOpen, open, close } = useModal();
   const router = useRouter();
 

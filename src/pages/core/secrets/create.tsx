@@ -24,7 +24,7 @@ import { createSecret } from '@utils/requests/secrets';
 import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { handleRequest } from '@utils/helpers/handleRequest';
 
-const CreateSecret: React.FC = () => {
+const CreateSecret: React.FC<React.PropsWithChildren<unknown>> = () => {
   const router = useRouter();
   const secretTypeQuery = router.query.type as
     | KubernetesSecretTypes

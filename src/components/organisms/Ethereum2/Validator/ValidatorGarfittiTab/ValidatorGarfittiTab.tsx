@@ -13,7 +13,11 @@ interface Props extends Validator {
   mutate?: KeyedMutator<{ validator: Validator }>;
 }
 
-const ValidatorGarfittiTab: React.FC<Props> = ({ name, graffiti, mutate }) => {
+const ValidatorGarfittiTab: React.FC<React.PropsWithChildren<Props>> = ({
+  name,
+  graffiti,
+  mutate,
+}) => {
   const {
     reset,
     register,

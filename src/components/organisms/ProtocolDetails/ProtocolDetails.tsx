@@ -4,7 +4,9 @@ interface Props {
   dataList: DataList[];
 }
 
-const ProtocolDetails: React.FC<Props> = ({ dataList }) => {
+const ProtocolDetails: React.FC<React.PropsWithChildren<Props>> = ({
+  dataList,
+}) => {
   return (
     <div className="px-4 py-3 sm:px-6 sm:py-4">
       {dataList.map(({ label, value, href }) => (

@@ -11,7 +11,9 @@ interface Props {
   peerName: string;
 }
 
-const DangerousZoneContent: React.FC<Props> = ({ peerName }) => {
+const DangerousZoneContent: React.FC<React.PropsWithChildren<Props>> = ({
+  peerName,
+}) => {
   const { isOpen, open, close } = useModal();
   const router = useRouter();
 

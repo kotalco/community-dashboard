@@ -3,7 +3,10 @@ interface Props {
   date: string;
 }
 
-const PageDetailsHeader: React.FC<Props> = ({ title, date }) => {
+const PageDetailsHeader: React.FC<React.PropsWithChildren<Props>> = ({
+  title,
+  date,
+}) => {
   return (
     <div className="max-w-7xl">
       <h1 className="text-2xl font-semibold">{title}</h1>

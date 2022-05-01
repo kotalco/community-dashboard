@@ -3,7 +3,10 @@ interface Props {
   content: string;
 }
 
-const Stats: React.FC<Props> = ({ title, content }) => {
+const Stats: React.FC<React.PropsWithChildren<Props>> = ({
+  title,
+  content,
+}) => {
   return (
     <div className="bg-white overflow-hidden shadow rounded-lg">
       <div className="px-4 py-5 sm:p-6">

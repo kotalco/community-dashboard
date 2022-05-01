@@ -18,7 +18,7 @@ interface Props {
   withClear?: boolean;
 }
 
-const SelectWithInput: React.FC<Props> = ({
+const SelectWithInput: React.FC<React.PropsWithChildren<Props>> = ({
   name,
   error,
   onChange,

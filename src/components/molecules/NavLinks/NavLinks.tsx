@@ -5,7 +5,7 @@ interface Props {
   className?: string;
 }
 
-const NavLinks: React.FC<Props> = ({ className }) => {
+const NavLinks: React.FC<React.PropsWithChildren<Props>> = ({ className }) => {
   return (
     <nav className={className} aria-label="Sidebar">
       <div className="px-2 space-y-1">

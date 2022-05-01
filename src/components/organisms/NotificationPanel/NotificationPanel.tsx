@@ -11,7 +11,7 @@ interface Props {
   title?: string;
 }
 
-const NotificationPanel: React.FC<Props> = ({
+const NotificationPanel: React.FC<React.PropsWithChildren<Props>> = ({
   title,
   show,
   close,

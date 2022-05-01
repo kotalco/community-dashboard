@@ -4,7 +4,9 @@ interface Props {
   className: string;
 }
 
-const SpinnerIcon: React.FC<Props> = ({ className }) => {
+const SpinnerIcon: React.FC<React.PropsWithChildren<Props>> = ({
+  className,
+}) => {
   return (
     <svg
       className={`animate-spin ${className}`}

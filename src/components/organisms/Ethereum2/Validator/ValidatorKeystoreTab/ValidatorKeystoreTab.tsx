@@ -17,7 +17,7 @@ interface Props extends Validator {
   mutate?: KeyedMutator<{ validator: Validator }>;
 }
 
-const ValidatorKeystoreTab: React.FC<Props> = ({
+const ValidatorKeystoreTab: React.FC<React.PropsWithChildren<Props>> = ({
   name,
   keystores,
   walletPasswordSecretName,

@@ -11,7 +11,10 @@ interface Props {
   setIsOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-const SidebarMobile: React.FC<Props> = ({ isOpen, setIsOpen }) => {
+const SidebarMobile: React.FC<React.PropsWithChildren<Props>> = ({
+  isOpen,
+  setIsOpen,
+}) => {
   return (
     <div className="h-screen flex overflow-hidden bg-gray-100">
       <Transition.Root show={isOpen} as={Fragment}>
