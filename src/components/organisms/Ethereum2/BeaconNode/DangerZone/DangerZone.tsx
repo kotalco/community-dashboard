@@ -11,7 +11,9 @@ interface Props {
   nodeName: string;
 }
 
-const DeleteBeaconNode: React.FC<Props> = ({ nodeName }) => {
+const DeleteBeaconNode: React.FC<React.PropsWithChildren<Props>> = ({
+  nodeName,
+}) => {
   const { isOpen, open, close } = useModal();
   const router = useRouter();
 

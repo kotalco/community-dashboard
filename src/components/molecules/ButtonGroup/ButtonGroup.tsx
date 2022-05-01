@@ -8,7 +8,10 @@ interface Props {
   buttons: { name: string; href: string }[];
 }
 
-const ButtonGroup: React.FC<Props> = ({ buttons, label }) => {
+const ButtonGroup: React.FC<React.PropsWithChildren<Props>> = ({
+  buttons,
+  label,
+}) => {
   return (
     <span className="relative z-0 inline-flex shadow-sm rounded-md">
       <Menu as="span" className="-ml-px relative block">

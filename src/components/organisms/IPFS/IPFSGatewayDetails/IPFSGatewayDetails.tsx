@@ -14,7 +14,7 @@ interface Props extends Peer {
   mutate?: KeyedMutator<{ peer: Peer }>;
 }
 
-const IPFSPeerDetails: React.FC<Props> = ({
+const IPFSPeerDetails: React.FC<React.PropsWithChildren<Props>> = ({
   gatewayPort,
   gatewayHost,
   name,

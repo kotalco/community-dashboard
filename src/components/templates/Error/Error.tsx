@@ -6,7 +6,7 @@ interface Props {
   message?: string;
 }
 
-const Error: React.FC<Props> = ({
+const Error: React.FC<React.PropsWithChildren<Props>> = ({
   statusCode = 500,
   statusText = 'Something Wrong happened',
   message,

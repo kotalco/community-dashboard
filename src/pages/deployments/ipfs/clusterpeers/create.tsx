@@ -27,7 +27,9 @@ import { NotificationInfo } from '@interfaces/NotificationInfo';
 import { Peer } from '@interfaces/ipfs/Peer';
 import { useSecretTypes } from '@hooks/useSecretTypes';
 
-const CreateClusterPeerPage: React.FC = () => {
+const CreateClusterPeerPage: React.FC<
+  React.PropsWithChildren<unknown>
+> = () => {
   const [isPredefined, setIsPredefined] = useState(false);
 
   const { data: peers } = useInfiniteRequest<Peer>('/ipfs/peers');

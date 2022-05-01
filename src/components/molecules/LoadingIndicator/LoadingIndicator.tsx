@@ -1,6 +1,6 @@
 import SpinnerIcon from '@components/Icons/SpinnerIcon/SpinnerIcon';
 
-const LoadingIndicator: React.FC = () => {
+const LoadingIndicator: React.FC<React.PropsWithChildren<unknown>> = () => {
   return (
     <div
       data-testid="loading"

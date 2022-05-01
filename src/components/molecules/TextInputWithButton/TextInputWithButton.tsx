@@ -7,10 +7,10 @@ interface Props {
   name: string;
   value: string;
   disabled?: boolean;
-  Icon?: React.ComponentType<IconProps>;
+  Icon?: React.ComponentType<React.PropsWithChildren<IconProps>>;
 }
 
-const TextInputWithButton: React.FC<Props> = ({
+const TextInputWithButton: React.FC<React.PropsWithChildren<Props>> = ({
   label,
   name,
   value,

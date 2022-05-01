@@ -2,7 +2,9 @@ interface Props {
   className: string;
 }
 
-const ChainlinkIcon: React.FC<Props> = ({ className }) => {
+const ChainlinkIcon: React.FC<React.PropsWithChildren<Props>> = ({
+  className,
+}) => {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

@@ -4,7 +4,7 @@ import SidebarMobile from '@components/organisms/SidebarMobile/SidebarMobile';
 import SidebarDesktop from '@components/organisms/SidebarDesktop/SidebarDesktop';
 import Navbar from '@components/organisms/Navbar/Navbar';
 
-const Layout: React.FC = ({ children }) => {
+const Layout: React.FC<React.PropsWithChildren<unknown>> = ({ children }) => {
   // State for sidebar menu in mobile view
   const [isOpen, setIsOpen] = useState(false);
 

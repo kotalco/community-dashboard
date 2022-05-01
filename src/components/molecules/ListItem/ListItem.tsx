@@ -8,7 +8,11 @@ interface Props {
   children?: ReactNode;
 }
 
-const NodeItem: React.FC<Props> = ({ link, title, children }) => {
+const NodeItem: React.FC<React.PropsWithChildren<Props>> = ({
+  link,
+  title,
+  children,
+}) => {
   return (
     <li>
       <Link href={link}>

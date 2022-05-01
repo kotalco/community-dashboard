@@ -9,7 +9,7 @@ interface Props {
   onChange: (state: boolean) => void;
 }
 
-const Toggle: React.FC<Props> = ({
+const Toggle: React.FC<React.PropsWithChildren<Props>> = ({
   label,
   checked,
   helperText,

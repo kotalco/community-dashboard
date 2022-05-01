@@ -11,7 +11,7 @@ interface Props {
   type?: 'button' | 'submit' | 'reset';
 }
 
-const Button: React.FC<Props> = ({
+const Button: React.FC<React.PropsWithChildren<Props>> = ({
   children,
   onClick,
   disabled,

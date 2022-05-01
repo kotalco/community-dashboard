@@ -26,7 +26,7 @@ type Props = {
     | { error: string | undefined; errors: FieldErrors }
   );
 
-const Multiselect: React.FC<Props> = ({
+const Multiselect: React.FC<React.PropsWithChildren<Props>> = ({
   options,
   label,
   value,

@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-const Logo: React.FC = () => {
+const Logo: React.FC<React.PropsWithChildren<unknown>> = () => {
   return (
     <div className="shrink-0 flex items-center font-nunito">
       <Image src="/images/logo.svg" alt="logo" width={50} height={50} />

@@ -17,7 +17,7 @@ interface Props extends BeaconNode {
   mutate?: KeyedMutator<{ beaconnode: BeaconNode }>;
 }
 
-const BeaconNodeProtocolTab: React.FC<Props> = ({
+const BeaconNodeProtocolTab: React.FC<React.PropsWithChildren<Props>> = ({
   name,
   rest,
   restHost,

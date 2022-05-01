@@ -9,7 +9,10 @@ interface Props {
   role: 'warn' | 'sucess' | 'error';
 }
 
-const Alert: React.FC<PropsWithChildren<Props>> = ({ children, role }) => {
+const Alert: React.FC<React.PropsWithChildren<PropsWithChildren<Props>>> = ({
+  children,
+  role,
+}) => {
   return (
     <div
       className={`max-w-lg p-4 text-sm rounded-md ${

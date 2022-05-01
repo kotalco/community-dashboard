@@ -5,7 +5,7 @@ interface Props {
   tabs: { name: string; href: string; count?: number }[];
 }
 
-const Tabs: React.FC<Props> = ({ tabs }) => {
+const Tabs: React.FC<React.PropsWithChildren<Props>> = ({ tabs }) => {
   const { pathname } = useRouter();
   return (
     <nav className="flex" aria-label="Tabs">

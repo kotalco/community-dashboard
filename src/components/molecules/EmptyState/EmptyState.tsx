@@ -9,7 +9,7 @@ interface Props {
   linkUrl: string;
 }
 
-const EmptyState: React.FC<Props> = ({
+const EmptyState: React.FC<React.PropsWithChildren<Props>> = ({
   children,
   title,
   description,

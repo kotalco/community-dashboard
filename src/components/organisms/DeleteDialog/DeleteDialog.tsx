@@ -19,7 +19,7 @@ type FormFields = {
   resourceName: string;
 };
 
-const DeleteDialog: React.FC<Props> = ({
+const DeleteDialog: React.FC<React.PropsWithChildren<Props>> = ({
   isOpen,
   close,
   name,

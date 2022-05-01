@@ -9,7 +9,7 @@ interface Props {
   error?: string;
 }
 
-const CustomRadioGroup: React.FC<Props> = ({
+const CustomRadioGroup: React.FC<React.PropsWithChildren<Props>> = ({
   options,
   value,
   onChange,

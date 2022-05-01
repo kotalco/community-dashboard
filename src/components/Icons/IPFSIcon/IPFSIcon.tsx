@@ -2,7 +2,7 @@ interface Props {
   className: string;
 }
 
-const IPFSIcon: React.FC<Props> = ({ className }) => {
+const IPFSIcon: React.FC<React.PropsWithChildren<Props>> = ({ className }) => {
   return (
     <svg
       width={24}

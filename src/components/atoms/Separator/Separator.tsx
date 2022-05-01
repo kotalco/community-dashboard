@@ -2,7 +2,7 @@ interface Props {
   label?: string;
 }
 
-const Separator: React.FC<Props> = ({ label }) => {
+const Separator: React.FC<React.PropsWithChildren<Props>> = ({ label }) => {
   return (
     <div className="relative my-6">
       <div className="inset-0 flex items-center" aria-hidden="true">

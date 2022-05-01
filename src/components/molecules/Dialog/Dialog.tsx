@@ -10,7 +10,12 @@ interface Props {
   open: boolean;
 }
 
-const Modal: React.FC<Props> = ({ close, title, children, open }) => {
+const Modal: React.FC<React.PropsWithChildren<Props>> = ({
+  close,
+  title,
+  children,
+  open,
+}) => {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
 
   return (

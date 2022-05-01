@@ -18,7 +18,7 @@ import { handleRequest } from '@utils/helpers/handleRequest';
 import { Deployments } from '@enums/Deployments';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
 
-const CreateIPFSPeerPage: React.FC = () => {
+const CreateIPFSPeerPage: React.FC<React.PropsWithChildren<unknown>> = () => {
   const router = useRouter();
   const {
     register,

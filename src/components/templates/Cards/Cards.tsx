@@ -4,7 +4,10 @@ interface Props {
   error?: string;
 }
 
-const Cards: React.FC<Props> = ({ children, error }) => {
+const Cards: React.FC<React.PropsWithChildren<Props>> = ({
+  children,
+  error,
+}) => {
   return (
     <div className="relative">
       <dl

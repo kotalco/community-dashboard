@@ -19,7 +19,7 @@ const unitOptions = (value: number) => [
   { label: value === 1 ? 'Terabyte' : 'Terabytes', value: 'Ti' },
 ];
 
-const ResourcesTab: React.FC<Props> = ({
+const ResourcesTab: React.FC<React.PropsWithChildren<Props>> = ({
   cpu,
   cpuLimit,
   memory,

@@ -21,7 +21,7 @@ type Props = {
   | { error: string | undefined; errors: FieldErrors }
 );
 
-const TextareaWithInput: React.FC<Props> = ({
+const TextareaWithInput: React.FC<React.PropsWithChildren<Props>> = ({
   value,
   name,
   label,
