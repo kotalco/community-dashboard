@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState } from 'react';
+import React, { MouseEvent, useId, useState } from 'react';
 import { EyeIcon, EyeOffIcon } from '@heroicons/react/solid';
 import { ChangeHandler } from 'react-hook-form';
 
@@ -40,6 +40,7 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>(
     ref
   ) => {
     const [inputType, setInputType] = useState(type);
+    const id = useId();
 
     const togglePassword = (e: MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
@@ -52,7 +53,7 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>(
 
     return (
       <div className="mb-4">
-        {label && <InputLabel htmlFor={name}>{label}</InputLabel>}
+        {label && <InputLabel htmlFor={id}>{label}</InputLabel>}
         <fieldset
           disabled={disabled}
           className={`relative ${fullWidth ? 'w-full' : 'max-w-xs'}`}
@@ -60,7 +61,7 @@ const TextInput = React.forwardRef<HTMLInputElement, Props>(
           <input
             ref={ref}
             type={inputType}
-            id={name}
+            id={id}
             className={`appearance-none shadow-sm focus:ring-indigo-500 block w-full sm:text-sm disabled:bg-gray-100 disabled:text-gray-500 rounded-md ${
               error ? 'border-red-300' : 'border-gray-300'
             }`}
