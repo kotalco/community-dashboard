@@ -36,11 +36,13 @@ const CreateClusterPeerPage: React.FC<
   const { data: clusterpeers } =
     useInfiniteRequest<ClusterPeer>('/ipfs/clusterpeers');
 
-  const { data: privateKeyOptions, isLoading: isLoadingPrivateKeys } =
-    useSecretTypes(KubernetesSecretTypes.ipfsClusterPeerPrivatekey);
+  const { data: privateKeyOptions } = useSecretTypes(
+    KubernetesSecretTypes.ipfsClusterPeerPrivatekey
+  );
 
-  const { data: clusterSecretOptions, isLoading: isLoadingClusterSecrets } =
-    useSecretTypes(KubernetesSecretTypes.ipfsClusterSecret);
+  const { data: clusterSecretOptions } = useSecretTypes(
+    KubernetesSecretTypes.ipfsClusterSecret
+  );
 
   // Get peer endpoints opions
   const peerEndoints = peers.map(({ name }) => ({
@@ -143,23 +145,21 @@ const CreateClusterPeerPage: React.FC<
           />
 
           {/* Cluster Secret */}
-          {!isLoadingClusterSecrets && (
-            <Controller
-              name="clusterSecretName"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  label="Cluster Secret Name"
-                  placeholder="Choose a secret..."
-                  error={errors.clusterSecretName?.message}
-                  href={`/core/secrets/create?type=${KubernetesSecretTypes.ipfsClusterSecret}`}
-                  hrefTitle="Create new secret..."
-                  options={clusterSecretOptions}
-                  onChange={field.onChange}
-                />
-              )}
-            />
-          )}
+          <Controller
+            name="clusterSecretName"
+            control={control}
+            render={({ field }) => (
+              <Select
+                label="Cluster Secret Name"
+                placeholder="Choose a secret..."
+                error={errors.clusterSecretName?.message}
+                href={`/core/secrets/create?type=${KubernetesSecretTypes.ipfsClusterSecret}`}
+                hrefTitle="Create new secret..."
+                options={clusterSecretOptions}
+                onChange={field.onChange}
+              />
+            )}
+          />
 
           {/* Ask for predefined identity and private key */}
           <Toggle
@@ -177,24 +177,22 @@ const CreateClusterPeerPage: React.FC<
               />
 
               {/* Cluster Peer Private Key */}
-              {!isLoadingPrivateKeys && (
-                <Controller
-                  name="privatekeySecretName"
-                  control={control}
-                  shouldUnregister
-                  render={({ field }) => (
-                    <Select
-                      label="Private Key"
-                      options={privateKeyOptions}
-                      error={errors.privatekeySecretName?.message}
-                      placeholder="Choose a private key..."
-                      href={`/core/secrets/create?type=${KubernetesSecretTypes.ipfsClusterPeerPrivatekey}`}
-                      hrefTitle="Create new private key..."
-                      onChange={field.onChange}
-                    />
-                  )}
-                />
-              )}
+              <Controller
+                name="privatekeySecretName"
+                control={control}
+                shouldUnregister
+                render={({ field }) => (
+                  <Select
+                    label="Private Key"
+                    options={privateKeyOptions}
+                    error={errors.privatekeySecretName?.message}
+                    placeholder="Choose a private key..."
+                    href={`/core/secrets/create?type=${KubernetesSecretTypes.ipfsClusterPeerPrivatekey}`}
+                    hrefTitle="Create new private key..."
+                    onChange={field.onChange}
+                  />
+                )}
+              />
             </>
           )}
 

@@ -32,8 +32,9 @@ const CreateValidator: React.FC = () => {
   const { data: keystoreOptions, isLoading: isLoadingKeystores } =
     useSecretTypes(KubernetesSecretTypes.ethereum2Keystore);
 
-  const { data: passwordOptions, isLoading: isLoadingPasswords } =
-    useSecretTypes(KubernetesSecretTypes.password);
+  const { data: passwordOptions } = useSecretTypes(
+    KubernetesSecretTypes.password
+  );
 
   const { data: beaconnodes } = useInfiniteRequest<BeaconNode>(
     '/ethereum2/beaconnodes'
@@ -151,7 +152,7 @@ const CreateValidator: React.FC = () => {
           )}
 
           {/* Prysm Client Wallet Password */}
-          {client === Ethereum2Client.prysm && !isLoadingPasswords && (
+          {client === Ethereum2Client.prysm && (
             <Controller
               name="walletPasswordSecretName"
               control={control}

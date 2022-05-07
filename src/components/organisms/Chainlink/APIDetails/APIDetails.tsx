@@ -21,7 +21,7 @@ interface Props extends ChainlinkNode {
 }
 
 function APIDetails({ apiCredentials, name, mutate }: Props) {
-  const { data: passwordOptions, isLoading } = useSecretTypes(
+  const { data: passwordOptions } = useSecretTypes(
     KubernetesSecretTypes.password
   );
 
@@ -67,25 +67,23 @@ function APIDetails({ apiCredentials, name, mutate }: Props) {
         />
 
         {/* Password */}
-        {!isLoading && (
-          <Controller
-            control={control}
-            name="apiCredentials.passwordSecretName"
-            defaultValue={apiCredentials.passwordSecretName}
-            render={({ field }) => (
-              <Select
-                options={passwordOptions}
-                value={field.value}
-                onChange={field.onChange}
-                label="Password"
-                error={errors.apiCredentials?.passwordSecretName?.message}
-                href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
-                hrefTitle="Create New Password..."
-                placeholder="Select a password"
-              />
-            )}
-          />
-        )}
+        <Controller
+          control={control}
+          name="apiCredentials.passwordSecretName"
+          defaultValue={apiCredentials.passwordSecretName}
+          render={({ field }) => (
+            <Select
+              options={passwordOptions}
+              value={field.value}
+              onChange={field.onChange}
+              label="Password"
+              error={errors.apiCredentials?.passwordSecretName?.message}
+              href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
+              hrefTitle="Create New Password..."
+              placeholder="Select a password"
+            />
+          )}
+        />
 
         <ErrorSummary
           errors={errors}

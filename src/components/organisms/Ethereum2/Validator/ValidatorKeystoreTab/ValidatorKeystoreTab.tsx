@@ -26,8 +26,9 @@ const ValidatorKeystoreTab: React.FC<React.PropsWithChildren<Props>> = ({
   const { data: keystoreOptions, isLoading: isLoadingKeystores } =
     useSecretTypes(KubernetesSecretTypes.ethereum2Keystore);
 
-  const { data: passwordOptions, isLoading: isLoadingPasswords } =
-    useSecretTypes(KubernetesSecretTypes.password);
+  const { data: passwordOptions } = useSecretTypes(
+    KubernetesSecretTypes.password
+  );
 
   const selectedKeystores = keystores.map(({ secretName }) => secretName);
 
@@ -86,7 +87,7 @@ const ValidatorKeystoreTab: React.FC<React.PropsWithChildren<Props>> = ({
           />
         )}
 
-        {walletPasswordSecretName && !isLoadingPasswords && (
+        {walletPasswordSecretName && (
           <div className="max-w-xs mt-4">
             <Controller
               name="walletPasswordSecretName"

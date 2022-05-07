@@ -29,7 +29,7 @@ function NetworkingDetails({
   staticNodes,
   bootnodes,
 }: Props) {
-  const { data: privateKeyOptions, isLoading } = useSecretTypes(
+  const { data: privateKeyOptions } = useSecretTypes(
     KubernetesSecretTypes.ethereumPrivatekey
   );
 
@@ -68,26 +68,24 @@ function NetworkingDetails({
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
         {/* Node Private key */}
-        {!isLoading && (
-          <Controller
-            name="nodePrivateKeySecretName"
-            control={control}
-            defaultValue={nodePrivateKeySecretName}
-            render={({ field }) => (
-              <Select
-                placeholder="Choose a private key..."
-                label="Node Private Key"
-                error={errors.nodePrivateKeySecretName?.message}
-                options={privateKeyOptions}
-                onChange={field.onChange}
-                value={field.value}
-                href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}
-                hrefTitle="Create new private key..."
-                withClear
-              />
-            )}
-          />
-        )}
+        <Controller
+          name="nodePrivateKeySecretName"
+          control={control}
+          defaultValue={nodePrivateKeySecretName}
+          render={({ field }) => (
+            <Select
+              placeholder="Choose a private key..."
+              label="Node Private Key"
+              error={errors.nodePrivateKeySecretName?.message}
+              options={privateKeyOptions}
+              onChange={field.onChange}
+              value={field.value}
+              href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}
+              hrefTitle="Create new private key..."
+              withClear
+            />
+          )}
+        />
 
         {/* P2P Port */}
         <TextInput

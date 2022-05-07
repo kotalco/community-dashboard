@@ -22,10 +22,12 @@ interface Props extends EthereumNode {
 }
 
 function MiningDetails({ name, mutate, ...rest }: Props) {
-  const { data: privateKeyOptions, isLoading: isLoadingPrivateKeys } =
-    useSecretTypes(KubernetesSecretTypes.ethereumPrivatekey);
-  const { data: passwordOptions, isLoading: isLoadingPasswords } =
-    useSecretTypes(KubernetesSecretTypes.password);
+  const { data: privateKeyOptions } = useSecretTypes(
+    KubernetesSecretTypes.ethereumPrivatekey
+  );
+  const { data: passwordOptions } = useSecretTypes(
+    KubernetesSecretTypes.password
+  );
 
   const { isOpen, open, close } = useModal();
   const {
@@ -116,46 +118,42 @@ function MiningDetails({ name, mutate, ...rest }: Props) {
             />
 
             {/* Ethereum Private Keys */}
-            {!isLoadingPrivateKeys && (
-              <Controller
-                control={control}
-                name="import.privateKeySecretName"
-                defaultValue={rest.import?.privateKeySecretName}
-                render={({ field }) => (
-                  <Select
-                    label="Account Private Key"
-                    options={privateKeyOptions}
-                    placeholder="Choose a private key..."
-                    hrefTitle="Create a new ethereum private key..."
-                    href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}
-                    error={errors.import?.privateKeySecretName?.message}
-                    onChange={field.onChange}
-                    value={field.value}
-                  />
-                )}
-              />
-            )}
+            <Controller
+              control={control}
+              name="import.privateKeySecretName"
+              defaultValue={rest.import?.privateKeySecretName}
+              render={({ field }) => (
+                <Select
+                  label="Account Private Key"
+                  options={privateKeyOptions}
+                  placeholder="Choose a private key..."
+                  hrefTitle="Create a new ethereum private key..."
+                  href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}
+                  error={errors.import?.privateKeySecretName?.message}
+                  onChange={field.onChange}
+                  value={field.value}
+                />
+              )}
+            />
 
             {/* Account Password */}
-            {!isLoadingPasswords && (
-              <Controller
-                control={control}
-                name="import.passwordSecretName"
-                defaultValue={rest.import?.passwordSecretName}
-                render={({ field }) => (
-                  <Select
-                    label="Account Password"
-                    options={passwordOptions}
-                    placeholder="Choose a password..."
-                    hrefTitle="Create a new password..."
-                    href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
-                    error={errors.import?.passwordSecretName?.message}
-                    onChange={field.onChange}
-                    value={field.value}
-                  />
-                )}
-              />
-            )}
+            <Controller
+              control={control}
+              name="import.passwordSecretName"
+              defaultValue={rest.import?.passwordSecretName}
+              render={({ field }) => (
+                <Select
+                  label="Account Password"
+                  options={passwordOptions}
+                  placeholder="Choose a password..."
+                  hrefTitle="Create a new password..."
+                  href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
+                  error={errors.import?.passwordSecretName?.message}
+                  onChange={field.onChange}
+                  value={field.value}
+                />
+              )}
+            />
           </>
         )}
 

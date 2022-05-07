@@ -18,7 +18,7 @@ interface Props extends NearNode {
 }
 
 function ValidatorDetails({ validatorSecretName, name, mutate }: Props) {
-  const { data: privateKeyOptions, isLoading } = useSecretTypes(
+  const { data: privateKeyOptions } = useSecretTypes(
     KubernetesSecretTypes.nearPrivateKey
   );
 
@@ -56,26 +56,24 @@ function ValidatorDetails({ validatorSecretName, name, mutate }: Props) {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
         {/* Validator Key */}
-        {!isLoading && (
-          <Controller
-            name="validatorSecretName"
-            control={control}
-            defaultValue={validatorSecretName}
-            render={({ field }) => (
-              <Select
-                placeholder="Choose a private key..."
-                label="Validator key"
-                error={errors.validatorSecretName?.message}
-                options={privateKeyOptions}
-                onChange={field.onChange}
-                value={field.value}
-                href={`/core/secrets/create?type=${KubernetesSecretTypes.nearPrivateKey}`}
-                hrefTitle="Create new validator key..."
-                withClear
-              />
-            )}
-          />
-        )}
+        <Controller
+          name="validatorSecretName"
+          control={control}
+          defaultValue={validatorSecretName}
+          render={({ field }) => (
+            <Select
+              placeholder="Choose a private key..."
+              label="Validator key"
+              error={errors.validatorSecretName?.message}
+              options={privateKeyOptions}
+              onChange={field.onChange}
+              value={field.value}
+              href={`/core/secrets/create?type=${KubernetesSecretTypes.nearPrivateKey}`}
+              hrefTitle="Create new validator key..."
+              withClear
+            />
+          )}
+        />
 
         <ErrorSummary
           errors={errors}
