@@ -29,8 +29,9 @@ import { useSecretTypes } from '@hooks/useSecretTypes';
 const CreateValidator: React.FC = () => {
   const router = useRouter();
 
-  const { data: keystoreOptions, isLoading: isLoadingKeystores } =
-    useSecretTypes(KubernetesSecretTypes.ethereum2Keystore);
+  const { data: keystoreOptions } = useSecretTypes(
+    KubernetesSecretTypes.ethereum2Keystore
+  );
 
   const { data: passwordOptions } = useSecretTypes(
     KubernetesSecretTypes.password
@@ -131,25 +132,23 @@ const CreateValidator: React.FC = () => {
           />
 
           {/* Key Stores */}
-          {!isLoadingKeystores && (
-            <Controller
-              name="keystores"
-              control={control}
-              render={({ field }) => (
-                <Multiselect
-                  label="Ethereum 2.0 Keystores"
-                  placeholder="Choose your keystores..."
-                  options={keystoreOptions}
-                  errors={errors}
-                  error={errors.keystores && field.name}
-                  onChange={field.onChange}
-                  value={field.value}
-                  href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereum2Keystore}`}
-                  hrefTitle="Create New Keystore"
-                />
-              )}
-            />
-          )}
+          <Controller
+            name="keystores"
+            control={control}
+            render={({ field }) => (
+              <Multiselect
+                label="Ethereum 2.0 Keystores"
+                placeholder="Choose your keystores..."
+                options={keystoreOptions}
+                errors={errors}
+                error={errors.keystores && field.name}
+                onChange={field.onChange}
+                value={field.value}
+                href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereum2Keystore}`}
+                hrefTitle="Create New Keystore"
+              />
+            )}
+          />
 
           {/* Prysm Client Wallet Password */}
           {client === Ethereum2Client.prysm && (
