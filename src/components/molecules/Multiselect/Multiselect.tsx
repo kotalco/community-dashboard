@@ -30,13 +30,14 @@ const Multiselect: React.FC<React.PropsWithChildren<Props>> = ({
   href,
   hrefTitle,
 }) => {
-  const defaultValue = options?.filter((option) =>
-    value?.includes(option.value)
-  );
+  const defaultValue =
+    options?.filter((option) => value?.includes(option.value)) || [];
   const [selected, setSelected] = useState(defaultValue);
 
   useEffect(() => {
-    setSelected(options?.filter((option) => value?.includes(option.value)));
+    setSelected(
+      options?.filter((option) => value?.includes(option.value)) || []
+    );
   }, [options, value]);
 
   const handleChange = (values: SelectOption[]) => {

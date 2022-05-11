@@ -1,5 +1,5 @@
 import { FieldErrors } from 'react-hook-form';
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import Link from 'next/link';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, SelectorIcon } from '@heroicons/react/solid';
@@ -41,6 +41,8 @@ const Multiselect: React.FC<React.PropsWithChildren<Props>> = ({
   single,
   emptyLabel,
 }) => {
+  const defaultValue =
+    options?.filter((option) => value?.includes(option.value)) || [];
   const [textAreaValues, setTextareaValues] = useState<string[]>(
     value?.filter(
       (option) => !options.map(({ value }) => value).includes(option)
@@ -48,28 +50,17 @@ const Multiselect: React.FC<React.PropsWithChildren<Props>> = ({
   );
 
   const [other, setOther] = useState(!!textAreaValues.length);
-  const [text, setText] = useState<string>(
-    value
-      ?.filter((option) => options.map(({ value }) => value).includes(option))
-      .join(', ') || ''
-  );
-  const isSelected = (option: string) => {
-    return !!value?.find((el) => el === option);
-  };
+  const [selected, setSelected] = useState(defaultValue);
 
-  const handleChange = (value: string) => {
-    let newText: string;
-    if (!isSelected(value)) {
-      newText = text ? `${text}, ${value}` : value;
-      setText(newText);
-    } else {
-      newText = text
-        .split(', ')
-        .filter((text) => text !== value)
-        .join(', ');
-      setText(newText);
-    }
-    onChange([...newText.split(', '), ...textAreaValues]);
+  useEffect(() => {
+    setSelected(
+      options?.filter((option) => value?.includes(option.value)) || []
+    );
+  }, [options, value]);
+
+  const handleChange = (values: SelectOption[]) => {
+    setSelected(values);
+    onChange([...values.map(({ value }) => value), ...textAreaValues]);
   };
 
   const handleInputChange = (
@@ -77,13 +68,12 @@ const Multiselect: React.FC<React.PropsWithChildren<Props>> = ({
   ) => {
     const newTextareaValues = e.target.value.split('\n');
     setTextareaValues(newTextareaValues);
-    const selectValues = text.split(', ');
-    onChange([...selectValues, ...newTextareaValues]);
+    onChange([...selected.map(({ value }) => value), ...newTextareaValues]);
   };
 
   return (
     <div className="mb-4">
-      <Listbox as="div" value={text} onChange={handleChange}>
+      <Listbox value={selected} onChange={handleChange} multiple>
         {({ open }) => (
           <>
             <Listbox.Label className="block text-sm font-medium text-gray-700">
@@ -97,9 +87,13 @@ const Multiselect: React.FC<React.PropsWithChildren<Props>> = ({
                   } ${!other ? 'rounded-md' : 'rounded-t-md'}`}
                 >
                   <span
-                    className={`block truncate ${!text ? 'text-gray-500' : ''}`}
+                    className={`block truncate ${
+                      !selected.length ? 'text-gray-500' : ''
+                    }`}
                   >
-                    {text ? text : placeholder}
+                    {selected.length
+                      ? selected.map(({ label }) => label).join(', ')
+                      : placeholder}
                   </span>
                   <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
                     <SelectorIcon
@@ -130,21 +124,18 @@ const Multiselect: React.FC<React.PropsWithChildren<Props>> = ({
                       {emptyLabel}
                     </Listbox.Option>
                   )}
-                  {options.map((option) => {
-                    const selected = isSelected(option.value);
-                    return (
-                      <Listbox.Option
-                        key={option.value}
-                        value={option.value}
-                        className={({ active }) =>
-                          `${
-                            active
-                              ? 'text-white bg-indigo-600'
-                              : 'text-gray-900'
-                          } cursor-default select-none relative py-2 pl-3 pr-9 text-sm`
-                        }
-                      >
-                        {({ active }) => (
+                  {options.map((option) => (
+                    <Listbox.Option
+                      key={option.value}
+                      value={option}
+                      className={({ active }) =>
+                        `${
+                          active ? 'text-white bg-indigo-600' : 'text-gray-900'
+                        } cursor-default select-none relative py-2 pl-3 pr-9 text-sm`
+                      }
+                    >
+                      {({ active, selected }) => {
+                        return (
                           <>
                             <span
                               className={`${
@@ -166,10 +157,10 @@ const Multiselect: React.FC<React.PropsWithChildren<Props>> = ({
                               </span>
                             ) : null}
                           </>
-                        )}
-                      </Listbox.Option>
-                    );
-                  })}
+                        );
+                      }}
+                    </Listbox.Option>
+                  ))}
                   {href && hrefTitle && (
                     <Link href={href}>
                       <a className="py-1 pl-3 text-sm text-indigo-600 hover:underline">
