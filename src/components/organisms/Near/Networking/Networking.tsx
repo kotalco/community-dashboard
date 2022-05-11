@@ -28,7 +28,7 @@ function NetworkingDetails({
   name,
   mutate,
 }: Props) {
-  const { data: privateKeyOptions, isLoading } = useSecretTypes(
+  const { data: privateKeyOptions } = useSecretTypes(
     KubernetesSecretTypes.nearPrivateKey
   );
 
@@ -67,26 +67,24 @@ function NetworkingDetails({
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
         {/* Node Private Key */}
-        {!isLoading && (
-          <Controller
-            name="nodePrivateKeySecretName"
-            control={control}
-            defaultValue={nodePrivateKeySecretName}
-            render={({ field }) => (
-              <Select
-                placeholder="Choose a private key..."
-                label="Node private key"
-                error={errors.nodePrivateKeySecretName?.message}
-                options={privateKeyOptions}
-                onChange={field.onChange}
-                value={field.value}
-                href={`/core/secrets/create?type=${KubernetesSecretTypes.nearPrivateKey}`}
-                hrefTitle="Create new private key..."
-                withClear
-              />
-            )}
-          />
-        )}
+        <Controller
+          name="nodePrivateKeySecretName"
+          control={control}
+          defaultValue={nodePrivateKeySecretName}
+          render={({ field }) => (
+            <Select
+              placeholder="Choose a private key..."
+              label="Node private key"
+              error={errors.nodePrivateKeySecretName?.message}
+              options={privateKeyOptions}
+              onChange={field.onChange}
+              value={field.value}
+              href={`/core/secrets/create?type=${KubernetesSecretTypes.nearPrivateKey}`}
+              hrefTitle="Create new private key..."
+              withClear
+            />
+          )}
+        />
 
         {/* Minimum Peers */}
         <TextInput

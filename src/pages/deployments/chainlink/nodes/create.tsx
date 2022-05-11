@@ -34,7 +34,7 @@ function CreateChainlink() {
       value: `ws://${name}:${wsPort}`,
     }));
 
-  const { data: passwordOptions, isLoading } = useSecretTypes(
+  const { data: passwordOptions } = useSecretTypes(
     KubernetesSecretTypes.password
   );
 
@@ -127,24 +127,22 @@ function CreateChainlink() {
           />
 
           {/* Keystore Password */}
-          {!isLoading && (
-            <Controller
-              control={control}
-              name="keystorePasswordSecretName"
-              render={({ field }) => (
-                <Select
-                  options={passwordOptions}
-                  label="Keystore password"
-                  placeholder="Select a password..."
-                  onChange={field.onChange}
-                  error={errors.keystorePasswordSecretName?.message}
-                  href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
-                  hrefTitle="Create a password..."
-                  helperText="For securing access to chainlink wallet"
-                />
-              )}
-            />
-          )}
+          <Controller
+            control={control}
+            name="keystorePasswordSecretName"
+            render={({ field }) => (
+              <Select
+                options={passwordOptions}
+                label="Keystore password"
+                placeholder="Select a password..."
+                onChange={field.onChange}
+                error={errors.keystorePasswordSecretName?.message}
+                href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
+                hrefTitle="Create a password..."
+                helperText="For securing access to chainlink wallet"
+              />
+            )}
+          />
 
           <h2 className="mt-10 text-xl font-bold">API Credentials</h2>
           <p className="mb-5 text-sm text-gray-500">
@@ -161,23 +159,21 @@ function CreateChainlink() {
           />
 
           {/* Password */}
-          {!isLoading && (
-            <Controller
-              control={control}
-              name="apiCredentials.passwordSecretName"
-              render={({ field }) => (
-                <Select
-                  options={passwordOptions}
-                  label="Password"
-                  placeholder="Select a password..."
-                  onChange={field.onChange}
-                  error={errors.apiCredentials?.passwordSecretName?.message}
-                  href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
-                  hrefTitle="Create New Password..."
-                />
-              )}
-            />
-          )}
+          <Controller
+            control={control}
+            name="apiCredentials.passwordSecretName"
+            render={({ field }) => (
+              <Select
+                options={passwordOptions}
+                label="Password"
+                placeholder="Select a password..."
+                onChange={field.onChange}
+                error={errors.apiCredentials?.passwordSecretName?.message}
+                href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
+                hrefTitle="Create New Password..."
+              />
+            )}
+          />
 
           <ErrorSummary errors={errors} />
 

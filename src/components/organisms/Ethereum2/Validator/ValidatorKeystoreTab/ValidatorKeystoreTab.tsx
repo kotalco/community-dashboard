@@ -23,11 +23,13 @@ const ValidatorKeystoreTab: React.FC<React.PropsWithChildren<Props>> = ({
   walletPasswordSecretName,
   mutate,
 }) => {
-  const { data: keystoreOptions, isLoading: isLoadingKeystores } =
-    useSecretTypes(KubernetesSecretTypes.ethereum2Keystore);
+  const { data: keystoreOptions } = useSecretTypes(
+    KubernetesSecretTypes.ethereum2Keystore
+  );
 
-  const { data: passwordOptions, isLoading: isLoadingPasswords } =
-    useSecretTypes(KubernetesSecretTypes.password);
+  const { data: passwordOptions } = useSecretTypes(
+    KubernetesSecretTypes.password
+  );
 
   const selectedKeystores = keystores.map(({ secretName }) => secretName);
 
@@ -65,28 +67,26 @@ const ValidatorKeystoreTab: React.FC<React.PropsWithChildren<Props>> = ({
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
         {/* Key Stores */}
-        {!isLoadingKeystores && (
-          <Controller
-            name="keystores"
-            control={control}
-            defaultValue={selectedKeystores}
-            render={({ field }) => (
-              <Multiselect
-                label="Ethereum 2.0 Keystores"
-                placeholder="Choose your keystores..."
-                options={keystoreOptions}
-                errors={errors}
-                error={errors.keystores && field.name}
-                onChange={field.onChange}
-                value={field.value}
-                href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereum2Keystore}`}
-                hrefTitle="Create New Keystore"
-              />
-            )}
-          />
-        )}
+        <Controller
+          name="keystores"
+          control={control}
+          defaultValue={selectedKeystores}
+          render={({ field }) => (
+            <Multiselect
+              label="Ethereum 2.0 Keystores"
+              placeholder="Choose your keystores..."
+              options={keystoreOptions}
+              errors={errors}
+              error={errors.keystores && field.name}
+              onChange={field.onChange}
+              value={field.value}
+              href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereum2Keystore}`}
+              hrefTitle="Create New Keystore"
+            />
+          )}
+        />
 
-        {walletPasswordSecretName && !isLoadingPasswords && (
+        {walletPasswordSecretName && (
           <div className="max-w-xs mt-4">
             <Controller
               name="walletPasswordSecretName"

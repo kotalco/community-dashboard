@@ -24,7 +24,7 @@ import { useSecretTypes } from '@hooks/useSecretTypes';
 function CreateNode() {
   const router = useRouter();
 
-  const { data: privateKeyOptions, isLoading } = useSecretTypes(
+  const { data: privateKeyOptions } = useSecretTypes(
     KubernetesSecretTypes.ethereumPrivatekey
   );
 
@@ -106,24 +106,22 @@ function CreateNode() {
           />
 
           {/* Node Private Key */}
-          {!isLoading && (
-            <Controller
-              name="nodePrivateKeySecretName"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  placeholder="Choose a private key..."
-                  label="Node private key (optional)"
-                  error={errors.nodePrivateKeySecretName?.message}
-                  options={privateKeyOptions}
-                  onChange={field.onChange}
-                  href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}
-                  hrefTitle="Create new private key..."
-                  withClear
-                />
-              )}
-            />
-          )}
+          <Controller
+            name="nodePrivateKeySecretName"
+            control={control}
+            render={({ field }) => (
+              <Select
+                placeholder="Choose a private key..."
+                label="Node private key (optional)"
+                error={errors.nodePrivateKeySecretName?.message}
+                options={privateKeyOptions}
+                onChange={field.onChange}
+                href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}
+                hrefTitle="Create new private key..."
+                withClear
+              />
+            )}
+          />
 
           <ErrorSummary errors={errors} />
 

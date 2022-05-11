@@ -27,7 +27,7 @@ function TLSDetails({
   name,
   mutate,
 }: Props) {
-  const { data: tlsCertificateOptions, isLoading } = useSecretTypes(
+  const { data: tlsCertificateOptions } = useSecretTypes(
     KubernetesSecretTypes.tlsCertificate
   );
 
@@ -70,29 +70,27 @@ function TLSDetails({
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
         {/* Certificate */}
-        {!isLoading && (
-          <Controller
-            control={control}
-            name="certSecretName"
-            defaultValue={certSecretName}
-            render={({ field }) => (
-              <Select
-                options={tlsCertificateOptions}
-                value={field.value}
-                onChange={(value) => {
-                  if (!value) setValue('secureCookies', false);
-                  field.onChange(value);
-                }}
-                withClear
-                label="Certificate"
-                error={errors.certSecretName?.message}
-                placeholder="Select a certificate..."
-                href={`/core/secrets/create?type=${KubernetesSecretTypes.tlsCertificate}`}
-                hrefTitle="Add New Certificate..."
-              />
-            )}
-          />
-        )}
+        <Controller
+          control={control}
+          name="certSecretName"
+          defaultValue={certSecretName}
+          render={({ field }) => (
+            <Select
+              options={tlsCertificateOptions}
+              value={field.value}
+              onChange={(value) => {
+                if (!value) setValue('secureCookies', false);
+                field.onChange(value);
+              }}
+              withClear
+              label="Certificate"
+              error={errors.certSecretName?.message}
+              placeholder="Select a certificate..."
+              href={`/core/secrets/create?type=${KubernetesSecretTypes.tlsCertificate}`}
+              hrefTitle="Add New Certificate..."
+            />
+          )}
+        />
 
         {/* Secure Cookies */}
         <Controller

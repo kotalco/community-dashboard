@@ -19,7 +19,7 @@ interface Props extends ChainlinkNode {
 }
 
 function WalletDetails({ keystorePasswordSecretName, name, mutate }: Props) {
-  const { data: passwordOptions, isLoading } = useSecretTypes(
+  const { data: passwordOptions } = useSecretTypes(
     KubernetesSecretTypes.password
   );
 
@@ -55,23 +55,23 @@ function WalletDetails({ keystorePasswordSecretName, name, mutate }: Props) {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="px-4 py-5 sm:p-6">
         {/* Keystore Password */}
-        {!isLoading && (
-          <Controller
-            control={control}
-            name="keystorePasswordSecretName"
-            defaultValue={keystorePasswordSecretName}
-            render={({ field }) => (
-              <Select
-                options={passwordOptions}
-                value={field.value}
-                onChange={field.onChange}
-                label="Keystore Password"
-                error={errors.keystorePasswordSecretName?.message}
-                placeholder="Select a password"
-              />
-            )}
-          />
-        )}
+        <Controller
+          control={control}
+          name="keystorePasswordSecretName"
+          defaultValue={keystorePasswordSecretName}
+          render={({ field }) => (
+            <Select
+              options={passwordOptions}
+              value={field.value}
+              onChange={field.onChange}
+              label="Keystore Password"
+              error={errors.keystorePasswordSecretName?.message}
+              placeholder="Select a password"
+              href={`/core/secrets/create?type=${KubernetesSecretTypes.password}`}
+              hrefTitle="Create New Password..."
+            />
+          )}
+        />
 
         <ErrorSummary
           errors={errors}

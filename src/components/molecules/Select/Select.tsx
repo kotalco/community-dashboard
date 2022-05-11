@@ -10,7 +10,7 @@ import {
 import { SelectOption } from '@interfaces/SelectOption';
 
 interface Props {
-  options: SelectOption[];
+  options?: SelectOption[];
   placeholder: string;
   onChange: (value: string) => void;
   label: string;
@@ -34,7 +34,7 @@ const Select: React.FC<React.PropsWithChildren<Props>> = ({
   helperText,
   withClear,
 }) => {
-  const defaultValue = options.find((option) => option.value === value);
+  const defaultValue = options?.find((option) => option.value === value);
   const [selected, setSelected] = useState(defaultValue);
 
   const handleChange = (option: SelectOption) => {
@@ -43,7 +43,7 @@ const Select: React.FC<React.PropsWithChildren<Props>> = ({
   };
 
   useEffect(() => {
-    setSelected(options.find((option) => option.value === value));
+    setSelected(options?.find((option) => option.value === value));
   }, [options, value]);
 
   const clear = () => {
@@ -98,7 +98,7 @@ const Select: React.FC<React.PropsWithChildren<Props>> = ({
                 static
                 className="absolute z-10 w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
               >
-                {options.map((option) => (
+                {options?.map((option) => (
                   <Listbox.Option
                     key={option.value}
                     value={option}
