@@ -1,6 +1,5 @@
 import { NextPage } from 'next';
 
-import { updateEthereumNode } from '@utils/requests/ethereum';
 import Heading from '@components/templates/Heading/Heading';
 import Tabs from '@components/organisms/Tabs/Tabs';
 import Layout from '@components/templates/Layout/Layout';
@@ -16,6 +15,7 @@ import Cards from '@components/templates/Cards/Cards';
 import Card from '@components/atoms/Card/Card';
 import withParams from '@components/hoc/withParams/withParams';
 import { Resources } from '@interfaces/Resources';
+import { updateEthereumNode } from '@utils/requests/ethereum';
 import { tabTitles } from '@data/ethereum/node/tabTitles';
 import { clientOptions } from '@data/ethereum/node/clientOptions';
 import { networkOptions } from '@data/ethereum/node/networkOptions';

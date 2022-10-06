@@ -1,4 +1,4 @@
-import { ClusterPeer, Security } from '@interfaces/ipfs/ClusterPeer';
+import { ClusterPeer } from '@interfaces/ipfs/ClusterPeer';
 import { KeyedMutator } from 'swr';
 
 interface Props extends ClusterPeer {

@@ -1,16 +1,20 @@
 import Alert from '@components/atoms/Alert/Alert';
 import { ErrorMessage } from '@hookform/error-message';
 
-import { FieldErrors } from 'react-hook-form';
+import { FieldErrors, FieldValues } from 'react-hook-form';
 
-type Props<T> = {
+type Props<T extends FieldValues> = {
   errors: FieldErrors<T>;
 } & (
   | { isSuccess?: never; successMessage?: never }
   | { isSuccess: boolean; successMessage: string }
 );
 
-function ErrorSummary<T>({ errors, isSuccess, successMessage }: Props<T>) {
+function ErrorSummary<T extends FieldValues>({
+  errors,
+  isSuccess,
+  successMessage,
+}: Props<T>) {
   if (isSuccess) {
     return (
       <Alert role="sucess">
