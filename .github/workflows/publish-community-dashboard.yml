@@ -17,6 +17,7 @@ jobs:
     - name: Set Env
       run: |
         echo "BUILD_SHA=${GITHUB_SHA:0:7}" >> $GITHUB_ENV
+        echo "RELEASE_TAG=$(curl -s GET https://api.github.com/repos/kotalco/kotal/releases | jq -r '.[].name' | head -n1)" >> $GITHUB_ENV
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@v2
@@ -36,4 +37,4 @@ jobs:
         context: .
         platforms: linux/amd64,linux/arm64
         push: true
-        tags: kotalco/kotal-dashboard:develop,kotalco/kotal-dashboard:${{ env.BUILD_SHA }}
+        tags: kotalco/kotal-dashboard:latest,kotalco/kotal-dashboard:${{ env.BUILD_SHA }},kotalco/kotal-dashboard:${{ env.RELEASE_TAG }}
