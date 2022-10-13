@@ -3,6 +3,8 @@ name: Build-Push community dashboard
 on:
   push:
     branches: [ add-docker-tagv ]
+    tags:
+      - 'v*'
   pull_request:
     branches: [ main ]
 
