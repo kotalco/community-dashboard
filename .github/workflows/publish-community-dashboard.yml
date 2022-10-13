@@ -25,7 +25,7 @@ jobs:
           docker.io/kotalco/community-dashboard
         tags: |
           type=ref,event=tag
-          type=sha
+          type=sha,prefix=,suffix=,format=short
         flavor: |
           latest=true
 
