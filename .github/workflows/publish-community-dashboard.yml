@@ -24,7 +24,7 @@ jobs:
         images: |
           docker.io/kotalco/community-dashboard
         tags: |
-          type=semver,pattern={{raw}}
+          type=ref,event=tag
           type=sha
         flavor: |
           latest=true
