@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { StatusData } from '@interfaces/StatusData';
 import { getStatus, Status } from '@enums/Status';
@@ -14,13 +14,13 @@ export const useStatus = (pathname?: string) => {
   const counterRef = useRef<NodeJS.Timer>();
   const websocketRef = useRef<WebSocket>();
 
-  const onMessage = (event: MessageEvent<Status>) => {
+  const onMessage = useCallback((event: MessageEvent<Status>) => {
     setStatus(getStatus(event.data));
-  };
+  }, []);
 
-  const onClose = () => {
+  const onClose = useCallback(() => {
     setStatus(getStatus(Status.DISCONNECTED));
-  };
+  }, []);
 
   useWebsocket(pathname, onMessage, onClose);
 

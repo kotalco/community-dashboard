@@ -22,10 +22,10 @@ export const useWebsocket = <T>(
       if (
         !websocketRef.current ||
         websocketRef.current.readyState === WebSocket.CLOSED
-      )
+      ) {
         connect();
+      }
     };
-
     ws.onopen = () => {
       websocketRef.current = ws;
       if (timeoutRef.current) {
@@ -44,17 +44,19 @@ export const useWebsocket = <T>(
 
       timeoutRef.current = setTimeout(check, TIME_INTERVAL);
     };
-  }, [pathname]);
+  }, [onCloseCallback, onMessageCallback, pathname]);
 
   useEffect(() => {
     connect();
 
     return () => {
+      console.log('clear');
       // Stop listening to onclose() event then close the socket previuosly created
       if (websocketRef.current) {
         // eslint-disable-next-line @typescript-eslint/no-empty-function
         websocketRef.current.onclose = () => {};
         websocketRef.current.close();
+        console.log('clear');
       }
       // Clear timeout function to prevent memory leak
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
