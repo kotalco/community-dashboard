@@ -16,12 +16,12 @@ const SidebarMobile: React.FC<React.PropsWithChildren<Props>> = ({
   setIsOpen,
 }) => {
   return (
-    <div className="h-screen flex overflow-hidden bg-gray-100">
+    <div className="flex h-screen overflow-hidden bg-gray-100">
       <Transition.Root show={isOpen} as={Fragment}>
         <Dialog
           as="div"
           static
-          className="fixed inset-0 flex z-40 md:hidden"
+          className="fixed inset-0 z-40 flex md:hidden"
           open={isOpen}
           onClose={setIsOpen}
         >
@@ -45,7 +45,7 @@ const SidebarMobile: React.FC<React.PropsWithChildren<Props>> = ({
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
           >
-            <div className="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-white">
+            <div className="relative flex flex-col flex-1 w-full max-w-xs pt-5 pb-4 bg-white">
               <Transition.Child
                 as={Fragment}
                 enter="ease-in-out duration-300"
@@ -55,19 +55,27 @@ const SidebarMobile: React.FC<React.PropsWithChildren<Props>> = ({
                 leaveFrom="opacity-100"
                 leaveTo="opacity-0"
               >
-                <div className="absolute top-0 right-0 -mr-12 pt-2">
+                <div className="absolute top-0 right-0 pt-2 -mr-12">
                   <IconButton
-                    className="ml-1 flex items-center justify-center h-10 w-10 rounded-full"
+                    className="flex items-center justify-center w-10 h-10 ml-1 rounded-full"
                     onClick={() => setIsOpen(false)}
                   >
-                    <XIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                    <XIcon className="w-6 h-6 text-white" aria-hidden="true" />
                   </IconButton>
                 </div>
               </Transition.Child>
-              <div className="shrink-0 flex items-center px-4">
+              <div className="flex items-center px-4 shrink-0">
                 <Logo />
               </div>
-              <NavLinks className="mt-5 shrink-0 h-full divide-y divide-white-800 overflow-y-auto" />
+              <NavLinks className="h-full mt-5 overflow-y-auto divide-y shrink-0 divide-white-800" />
+              <div className="shadow-2xl">
+                <a
+                  href="https://www.kotal.co"
+                  className="block px-4 py-3 mx-2 my-3 font-semibold text-center text-white bg-red-600 rounded hover:bg-red-700"
+                >
+                  Upgrade to Pro
+                </a>
+              </div>
             </div>
           </Transition.Child>
           <div className="shrink-0 w-14" aria-hidden="true">
