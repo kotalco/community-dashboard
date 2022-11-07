@@ -71,10 +71,20 @@ const SidebarMobile: React.FC<React.PropsWithChildren<Props>> = ({
               <div className="shadow-2xl">
                 <a
                   href="https://www.kotal.co"
-                  className="block px-4 py-3 mx-2 my-3 font-semibold text-center text-white bg-red-600 rounded hover:bg-red-700"
+                  className="block px-4 py-3 mx-2 my-3 mb-1 font-semibold text-center text-white bg-red-600 rounded font-nunito hover:bg-red-700"
                 >
-                  Upgrade to Pro
+                  Upgrade to Kotal Pro
                 </a>
+                <ul className="pb-4 text-sm font-light text-center text-gray-500">
+                  <li className="m-2 font-bold text-black font-nunito">
+                    Get 1 month for free
+                  </li>
+                  <li>Secure API endpoints</li>
+                  <li>Team management</li>
+                  <li>Workspace management</li>
+                  <li>Role-based Access Control</li>
+                  <li>24/7 support</li>
+                </ul>
               </div>
             </div>
           </Transition.Child>
