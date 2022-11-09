@@ -1,6 +1,5 @@
 export const TITLES = [
   'Protocol',
-  'Networking',
   'API',
   'IPFS',
   'Logging',

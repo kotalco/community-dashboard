@@ -8,7 +8,6 @@ import DangerZone from '@components/organisms/Filecoin/DangerZone/DangerZone';
 import APIDetails from '@components/organisms/Filecoin/API/API';
 import ResourcesDetails from '@components/organisms/Resources/Resources';
 import LoggingDetails from '@components/organisms/Filecoin/Logging/Logging';
-import NetworkingDetails from '@components/organisms/Filecoin/Networking/Networking';
 import IPFSDetails from '@components/organisms/Filecoin/IPFS/IPFS';
 import withParams from '@components/hoc/withParams/withParams';
 import { Resources } from '@interfaces/Resources';
@@ -54,9 +53,6 @@ const FilecoinNodeDetailsPage: NextPage<PageWithParams<FilecoinNode>> = ({
         <Tabs tabs={TITLES} mutate={mutate}>
           {/* Protocol */}
           <ProtocolDetails dataList={dataList} />
-
-          {/* Networking */}
-          <NetworkingDetails {...node} />
 
           {/* API */}
           <APIDetails {...node} />

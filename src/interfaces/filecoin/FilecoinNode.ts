@@ -12,8 +12,6 @@ export interface Networking {
 
 export interface API {
   api: boolean;
-  apiPort: number;
-  apiHost: string;
   apiRequestTimeout: number;
 }
 
@@ -39,4 +37,6 @@ export interface FilecoinNode
     Logging,
     Resources {
   createdAt: string;
+  apiPort: number;
+  apiHost: string;
 }

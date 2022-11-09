@@ -16,14 +16,7 @@ interface Props extends FilecoinNode {
   mutate?: KeyedMutator<{ node: FilecoinNode }>;
 }
 
-function APIDetails({
-  api,
-  apiHost,
-  apiPort,
-  apiRequestTimeout,
-  name,
-  mutate,
-}: Props) {
+function APIDetails({ api, apiRequestTimeout, name, mutate }: Props) {
   const {
     handleSubmit,
     reset,
@@ -74,26 +67,6 @@ function APIDetails({
               error={errors.api?.message}
             />
           )}
-        />
-
-        {/* API Port */}
-        <TextInput
-          type="text"
-          label="API Port"
-          disabled={!apiState}
-          error={errors.apiPort?.message}
-          defaultValue={apiPort}
-          {...register('apiPort')}
-        />
-
-        {/* API Host */}
-        <TextInput
-          type="text"
-          label="API Host"
-          disabled={!apiState}
-          error={errors.apiHost?.message}
-          defaultValue={apiHost}
-          {...register('apiHost')}
         />
 
         {/* API Request Timeout */}
