@@ -2,7 +2,6 @@ import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 
 import Button from '@components/atoms/Button/Button';
-import Separator from '@components/atoms/Separator/Separator';
 import Toggle from '@components/molecules/Toggle/Toggle';
 import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
 import { updateBeaconNode } from '@utils/requests/ethereum2/beaconNodes';
@@ -128,24 +127,20 @@ const BeaconNodeProtocolTab: React.FC<React.PropsWithChildren<Props>> = ({
         {/* GRPC Gateway Server */}
         {/* Supported by Prysm only */}
         {client === Ethereum2Client.prysm && (
-          <>
-            <Separator />
-
-            <Controller
-              name="grpc"
-              control={control}
-              defaultValue={grpc}
-              render={({ field }) => (
-                <Toggle
-                  label="GRPC Gateway Server"
-                  onChange={(state) => {
-                    field.onChange(state);
-                  }}
-                  checked={!!field.value}
-                />
-              )}
-            />
-          </>
+          <Controller
+            name="grpc"
+            control={control}
+            defaultValue={grpc}
+            render={({ field }) => (
+              <Toggle
+                label="GRPC Gateway Server"
+                onChange={(state) => {
+                  field.onChange(state);
+                }}
+                checked={!!field.value}
+              />
+            )}
+          />
         )}
 
         <ErrorSummary
