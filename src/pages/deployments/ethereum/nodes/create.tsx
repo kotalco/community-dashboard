@@ -15,18 +15,12 @@ import { networkOptions } from '@data/ethereum/node/networkOptions';
 import { createEthereumNode } from '@utils/requests/ethereum';
 import { schema } from '@schemas/ethereum/create';
 import { CreateEthereumNode } from '@interfaces/Ethereum/ِEthereumNode';
-import { KubernetesSecretTypes } from '@enums/KubernetesSecret/KubernetesSecretTypes';
 import { handleRequest } from '@utils/helpers/handleRequest';
 import { Deployments } from '@enums/Deployments';
 import { NotificationInfo } from '@interfaces/NotificationInfo';
-import { useSecretTypes } from '@hooks/useSecretTypes';
 
 function CreateNode() {
   const router = useRouter();
-
-  const { data: privateKeyOptions } = useSecretTypes(
-    KubernetesSecretTypes.ethereumPrivatekey
-  );
 
   const {
     handleSubmit,
@@ -101,24 +95,6 @@ function CreateNode() {
                 name={field.name}
                 onChange={field.onChange}
                 value={field.value}
-              />
-            )}
-          />
-
-          {/* Node Private Key */}
-          <Controller
-            name="nodePrivateKeySecretName"
-            control={control}
-            render={({ field }) => (
-              <Select
-                placeholder="Choose a private key..."
-                label="Node private key (optional)"
-                error={errors.nodePrivateKeySecretName?.message}
-                options={privateKeyOptions}
-                onChange={field.onChange}
-                href={`/core/secrets/create?type=${KubernetesSecretTypes.ethereumPrivatekey}`}
-                hrefTitle="Create new private key..."
-                withClear
               />
             )}
           />

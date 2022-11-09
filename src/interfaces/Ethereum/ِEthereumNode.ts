@@ -8,11 +8,10 @@ export interface CreateEthereumNode {
   name: string;
   client: EthereumNodeClient;
   network: string;
-  nodePrivateKeySecretName: string;
 }
 
-export interface Networking
-  extends Pick<CreateEthereumNode, 'nodePrivateKeySecretName'> {
+export interface Networking {
+  nodePrivateKeySecretName: string;
   p2pPort: number;
   syncMode: SyncMode;
   staticNodes: string[];

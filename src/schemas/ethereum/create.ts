@@ -20,5 +20,4 @@ export const schema: SchemaOf<CreateEthereumNode> = object({
       '${value} is not valid value'
     ),
   network: string().required('Network is required').trim(),
-  nodePrivateKeySecretName: string().notRequired().default(''),
 });
