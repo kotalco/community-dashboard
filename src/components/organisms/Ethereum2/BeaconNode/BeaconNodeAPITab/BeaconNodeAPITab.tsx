@@ -18,29 +18,12 @@ interface Props extends BeaconNode {
 const BeaconNodeProtocolTab: React.FC<React.PropsWithChildren<Props>> = ({
   name,
   rest,
-  restHost,
-  restPort,
   rpc,
-  rpcHost,
-  rpcPort,
   grpc,
-  grpcHost,
-  grpcPort,
   client,
   mutate,
 }) => {
-  const defaultValues = {
-    rest,
-    restHost: restHost,
-    restPort: restPort,
-    rpc,
-    rpcHost: rpcHost,
-    rpcPort: rpcPort,
-    grpc,
-    grpcHost: grpcHost,
-    grpcPort: grpcPort,
-    client,
-  };
+  const defaultValues = { rest, rpc, grpc, client };
 
   const {
     reset,
