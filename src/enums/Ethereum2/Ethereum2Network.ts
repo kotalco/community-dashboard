@@ -1,6 +1,6 @@
 export enum Ethereum2Network {
   mainnet = 'mainnet',
-  pyrmont = 'pyrmont',
-  prater = 'prater',
+  goerli = 'goerli',
+  sepolia = 'sepolia',
   other = 'other',
 }
