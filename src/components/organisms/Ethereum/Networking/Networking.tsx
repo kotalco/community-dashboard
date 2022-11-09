@@ -1,7 +1,6 @@
 import { KeyedMutator } from 'swr';
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 
-import TextInput from '@components/molecules/TextInput/TextInput';
 import Button from '@components/atoms/Button/Button';
 import Select from '@components/molecules/Select/Select';
 import TextareaWithInput from '@components/molecules/TextareaWithInput/TextareaWithInput';
@@ -24,7 +23,6 @@ function NetworkingDetails({
   client,
   mutate,
   nodePrivateKeySecretName,
-  p2pPort,
   syncMode,
   staticNodes,
   bootnodes,
@@ -37,7 +35,6 @@ function NetworkingDetails({
     handleSubmit,
     control,
     reset,
-    register,
     setError,
     clearErrors,
     formState: {
@@ -85,15 +82,6 @@ function NetworkingDetails({
               withClear
             />
           )}
-        />
-
-        {/* P2P Port */}
-        <TextInput
-          type="text"
-          label="P2P Port"
-          error={errors.p2pPort?.message}
-          defaultValue={p2pPort}
-          {...register('p2pPort')}
         />
 
         {/* Sync Mode */}

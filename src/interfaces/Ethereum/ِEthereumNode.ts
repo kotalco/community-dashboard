@@ -12,7 +12,6 @@ export interface CreateEthereumNode {
 
 export interface Networking {
   nodePrivateKeySecretName: string;
-  p2pPort: number;
   syncMode: SyncMode;
   staticNodes: string[];
   bootnodes: string[];
@@ -62,4 +61,5 @@ export interface EthereumNode
     LoggingInterface,
     Resources {
   createdAt: string;
+  p2pPort: number;
 }
