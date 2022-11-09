@@ -1,8 +1,7 @@
-import { useForm, useWatch, Controller, SubmitHandler } from 'react-hook-form';
+import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 
 import Button from '@components/atoms/Button/Button';
-import TextInput from '@components/molecules/TextInput/TextInput';
 import Separator from '@components/atoms/Separator/Separator';
 import Toggle from '@components/molecules/Toggle/Toggle';
 import ErrorSummary from '@components/templates/ErrorSummary/ErrorSummary';
@@ -46,7 +45,6 @@ const BeaconNodeProtocolTab: React.FC<React.PropsWithChildren<Props>> = ({
 
   const {
     reset,
-    register,
     handleSubmit,
     control,
     setError,
@@ -62,11 +60,6 @@ const BeaconNodeProtocolTab: React.FC<React.PropsWithChildren<Props>> = ({
   } = useForm<API>({
     defaultValues,
     resolver: joiResolver(updateAPISchema),
-  });
-
-  const [restState, rpcState, grpcState] = useWatch({
-    control,
-    name: ['rest', 'rpc', 'grpc'],
   });
 
   const onSubmit: SubmitHandler<API> = async (values) => {
@@ -88,87 +81,48 @@ const BeaconNodeProtocolTab: React.FC<React.PropsWithChildren<Props>> = ({
         {/* Supported by Teku and Lighthouse only */}
         {(client === Ethereum2Client.teku ||
           client === Ethereum2Client.lighthouse) && (
-          <>
-            <Controller
-              name="rest"
-              control={control}
-              defaultValue={rest}
-              render={({ field }) => (
-                <Toggle
-                  label="REST API Server"
-                  onChange={(state) => {
-                    field.onChange(state);
-                  }}
-                  checked={!!field.value}
-                />
-              )}
-            />
-            <div className="mt-4">
-              <TextInput
-                disabled={!restState}
-                label="REST API Server Port"
-                error={errors.restPort?.message}
-                defaultValue={restPort}
-                {...register('restPort')}
+          <Controller
+            name="rest"
+            control={control}
+            defaultValue={rest}
+            render={({ field }) => (
+              <Toggle
+                label="REST API Server"
+                onChange={(state) => {
+                  field.onChange(state);
+                }}
+                checked={!!field.value}
               />
-            </div>
-            <div className="mt-4">
-              <TextInput
-                disabled={!restState}
-                label="REST API Server Host"
-                error={errors.restHost?.message}
-                {...register('restHost')}
-              />
-            </div>
-          </>
+            )}
+          />
         )}
 
         {/* JSON-RPC Server */}
         {/* Supoorted only by Prysm and Nimbus */}
         {(client === Ethereum2Client.nimbus ||
           client === Ethereum2Client.prysm) && (
-          <>
-            <Controller
-              name="rpc"
-              control={control}
-              defaultValue={rpc}
-              render={({ field }) => (
-                <Toggle
-                  label="JSON-RPC Server"
-                  onChange={(state) => {
-                    if (client === Ethereum2Client.prysm) {
-                      return;
-                    }
-                    field.onChange(state);
-                  }}
-                  helperText={
-                    client === Ethereum2Client.prysm
-                      ? ` (RPC Server couldn't turned of in case of Prysm Client)`
-                      : ''
+          <Controller
+            name="rpc"
+            control={control}
+            defaultValue={rpc}
+            render={({ field }) => (
+              <Toggle
+                label="JSON-RPC Server"
+                onChange={(state) => {
+                  if (client === Ethereum2Client.prysm) {
+                    return;
                   }
-                  checked={!!field.value}
-                />
-              )}
-            />
-            <div className="mt-4">
-              <TextInput
-                disabled={!rpcState}
-                label="JSON-RPC Server Port"
-                error={errors.rpcPort?.message}
-                defaultValue={rpcPort}
-                {...register('rpcPort')}
+                  field.onChange(state);
+                }}
+                helperText={
+                  client === Ethereum2Client.prysm
+                    ? ` (RPC Server couldn't turned of in case of Prysm Client)`
+                    : ''
+                }
+                checked={!!field.value}
               />
-            </div>
-            <div className="mt-4">
-              <TextInput
-                disabled={!rpcState}
-                label="JSON-RPC Server Host"
-                error={errors.rpcHost?.message}
-                defaultValue={rpcHost}
-                {...register('rpcHost')}
-              />
-            </div>
-          </>
+            )}
+          />
         )}
 
         {/* GRPC Gateway Server */}
@@ -191,24 +145,6 @@ const BeaconNodeProtocolTab: React.FC<React.PropsWithChildren<Props>> = ({
                 />
               )}
             />
-            <div className="mt-4">
-              <TextInput
-                disabled={!grpcState}
-                label="GRPC Gateway Server Port"
-                error={errors.grpcPort?.message}
-                defaultValue={grpcPort}
-                {...register('grpcPort')}
-              />
-            </div>
-            <div className="mt-4">
-              <TextInput
-                disabled={!grpcState}
-                label="GRPC Gateway Server Host"
-                error={errors.grpcHost?.message}
-                defaultValue={grpcHost}
-                {...register('grpcHost')}
-              />
-            </div>
           </>
         )}
 

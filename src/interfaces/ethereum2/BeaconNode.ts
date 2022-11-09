@@ -14,18 +14,18 @@ export interface Eth1Endpoints {
 
 export interface API {
   rest: boolean;
-  restHost: string;
-  restPort: number;
   rpc: boolean;
-  rpcHost: string;
-  rpcPort: number;
   grpc: boolean;
-  grpcHost: string;
-  grpcPort: number;
 }
 
 export type UpdateBeaconnode = Partial<Eth1Endpoints & API & Resources>;
 
 export interface BeaconNode extends Required<CreateBeaconNode>, API, Resources {
   createdAt: string;
+  restHost: string;
+  restPort: number;
+  rpcHost: string;
+  rpcPort: number;
+  grpcHost: string;
+  grpcPort: number;
 }

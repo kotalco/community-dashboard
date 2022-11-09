@@ -1,105 +1,18 @@
 import Joi from 'joi';
 
-const ipAddressRegex =
-  /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
-
 export const updateAPISchema = Joi.object({
   rest: Joi.boolean().when('client', {
     not: Joi.valid('teku', 'lighthouse'),
     then: Joi.boolean().strip(),
   }),
-  restPort: Joi.when('rest', {
-    is: true,
-    then: Joi.number().port().required(),
-    otherwise: Joi.any().strip(),
-  })
-    .when('client', {
-      not: Joi.valid('teku', 'lighthouse'),
-      then: Joi.any().strip(),
-    })
-    .messages({
-      'any.required': 'Please provide an API server port',
-      'number.base': 'API server port should be a valid port number',
-      'number.port': 'API server port should be a valid port number',
-    }),
-  restHost: Joi.when('rest', {
-    is: true,
-    then: Joi.string().required().trim().pattern(ipAddressRegex),
-    otherwise: Joi.any().strip(),
-  })
-    .when('client', {
-      not: Joi.valid('teku', 'lighthouse'),
-      then: Joi.any().strip(),
-    })
-    .messages({
-      'any.required': 'Please provide an API server host',
-      'string.empty': 'Please provide an API server host',
-      'string.pattern.base': 'Please provide a valid ip address',
-    }),
   rpc: Joi.boolean().when('client', {
     not: Joi.valid('prysm', 'nimbus'),
     then: Joi.boolean().strip(),
   }),
-  rpcPort: Joi.when('rpc', {
-    is: true,
-    then: Joi.number().port().required(),
-    otherwise: Joi.any().strip(),
-  })
-    .when('client', {
-      not: Joi.valid('prysm', 'nimbus'),
-      then: Joi.any().strip(),
-    })
-    .messages({
-      'any.required': 'Please provide JSON-RPC server port',
-      'number.base': 'JSON-RPC server port should be a valid port number',
-      'number.port': 'JSON-RPC server port should be a valid port number',
-    }),
-  rpcHost: Joi.when('rpc', {
-    is: true,
-    then: Joi.string().required().trim().pattern(ipAddressRegex),
-    otherwise: Joi.string().strip(),
-  })
-    .when('client', {
-      not: Joi.valid('prysm', 'nimbus'),
-      then: Joi.any().strip(),
-    })
-    .messages({
-      'any.required': 'Please provide JSON-RPC server host',
-      'string.empty': 'Please provide JSON-RPC server host',
-      'string.pattern.base': 'Please provide a valid ip address',
-    }),
   grpc: Joi.boolean().when('client', {
     not: Joi.valid('prysm'),
     then: Joi.boolean().strip(),
   }),
-  grpcPort: Joi.when('grpc', {
-    is: true,
-    then: Joi.number().port().required(),
-    otherwise: Joi.any().strip(),
-  })
-    .when('client', {
-      not: Joi.valid('prysm'),
-      then: Joi.any().strip(),
-    })
-    .messages({
-      'any.required': 'Please provide an GRPC gateway server port',
-      'number.base': 'GRPC gateway server port should be a valid port number',
-      'number.port': 'GRPC gateway server port should be a valid port number',
-    }),
-  grpcHost: Joi.when('grpc', {
-    is: true,
-    then: Joi.string().required().trim().pattern(ipAddressRegex),
-    otherwise: Joi.any().strip(),
-  })
-    .when('client', {
-      not: Joi.valid('prysm'),
-      then: Joi.any().strip(),
-    })
-    .messages({
-      'any.required': 'Please provide GRPC gateway server host',
-      'string.empty': 'Please provide an GRPC gateway server host',
-      'string.pattern.base': 'Please provide a valid ip address',
-    }),
   client: Joi.string().strip(),
 });
 
