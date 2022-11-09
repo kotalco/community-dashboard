@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { Controller, useForm, SubmitHandler } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 
-import TextInput from '@components/molecules/TextInput/TextInput';
 import Button from '@components/atoms/Button/Button';
 import Toggle from '@components/molecules/Toggle/Toggle';
 import CheckboxGroup from '@components/molecules/CheckBoxGroup/CheckBoxGroup';
@@ -53,7 +52,7 @@ function APIDetails({ name, mutate, ...rest }: Props) {
     resolver: joiResolver(updateAPISchema),
   });
 
-  const [rpc, ws, graphql, miner] = watch(['rpc', 'ws', 'graphql', 'miner']);
+  const [rpc, ws, miner] = watch(['rpc', 'ws', 'graphql', 'miner']);
 
   const handleApiChange = (
     state: boolean,
@@ -108,25 +107,14 @@ function APIDetails({ name, mutate, ...rest }: Props) {
             )}
           />
 
-          {/* JSON-RPC HTTP Server Port */}
           {rpc && (
-            <>
-              <TextInput
-                disabled={!rpc}
-                label="JSON-RPC Server Port"
-                error={errors.rpcPort?.message}
-                defaultValue={rest.rpcPort}
-                {...register('rpcPort')}
-              />
-
-              {/* JSON-RPC Server APIs */}
-              <CheckboxGroup
-                label="JSON-RPC Server APIs"
-                options={apiOptions}
-                error={errors.rpcAPI?.message}
-                {...register('rpcAPI')}
-              />
-            </>
+            // JSON-RPC Server APIs
+            <CheckboxGroup
+              label="JSON-RPC Server APIs"
+              options={apiOptions}
+              error={errors.rpcAPI?.message}
+              {...register('rpcAPI')}
+            />
           )}
 
           <Separator />
@@ -147,27 +135,14 @@ function APIDetails({ name, mutate, ...rest }: Props) {
             )}
           />
 
-          {/* Web Socket Server Port */}
           {ws && (
-            <>
-              <div className="max-w-xs mt-5">
-                <TextInput
-                  disabled={!ws}
-                  label="Web Socket Server Port"
-                  error={errors.wsPort?.message}
-                  defaultValue={rest.wsPort}
-                  {...register('wsPort')}
-                />
-              </div>
-
-              {/* Web Socket Server APIs */}
-              <CheckboxGroup
-                options={apiOptions}
-                label="Web Socket Server APIs"
-                error={errors.wsAPI?.message}
-                {...register('wsAPI')}
-              />
-            </>
+            // Web Socket Server APIs
+            <CheckboxGroup
+              options={apiOptions}
+              label="Web Socket Server APIs"
+              error={errors.wsAPI?.message}
+              {...register('wsAPI')}
+            />
           )}
           {rest.client !== EthereumNodeClient.nethermind && (
             <>
@@ -188,19 +163,6 @@ function APIDetails({ name, mutate, ...rest }: Props) {
                   />
                 )}
               />
-
-              {/* GraphQl Server Port */}
-              {graphql && (
-                <div className="max-w-xs mt-5">
-                  <TextInput
-                    disabled={!graphql}
-                    label="GraphQl Server Port"
-                    error={errors.graphqlPort?.message}
-                    defaultValue={rest.graphqlPort}
-                    {...register('graphqlPort')}
-                  />
-                </div>
-              )}
             </>
           )}
 

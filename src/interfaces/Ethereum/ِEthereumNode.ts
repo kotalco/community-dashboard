@@ -19,13 +19,10 @@ export interface Networking {
 
 export interface API {
   rpc: boolean;
-  rpcPort: number;
   rpcAPI: EthereumAPI;
   ws: boolean;
-  wsPort: number;
   wsAPI: EthereumAPI;
   graphql: boolean;
-  graphqlPort: number;
 }
 
 export interface AccessControl {
@@ -62,4 +59,7 @@ export interface EthereumNode
     Resources {
   createdAt: string;
   p2pPort: number;
+  rpcPort: number;
+  graphqlPort: number;
+  wsPort: number;
 }

@@ -28,15 +28,6 @@ export const updateAPISchema = Joi.object<
       otherwise: Joi.boolean(),
     }),
   }),
-  rpcPort: Joi.when('rpc', {
-    is: false,
-    then: Joi.number().strip(),
-    otherwise: Joi.number().port().invalid(0).messages({
-      'number.base': 'Please proivde a valid port number',
-      'number.port': 'Please provide a valid port number',
-      'any.invalid': 'Please provide a valid port number',
-    }),
-  }),
   rpcAPI: Joi.when('rpc', {
     is: false,
     then: Joi.array().default([]),
@@ -48,15 +39,6 @@ export const updateAPISchema = Joi.object<
       }),
   }),
   ws: Joi.boolean(),
-  wsPort: Joi.when('ws', {
-    is: false,
-    then: Joi.number().strip(),
-    otherwise: Joi.number().port().invalid(0).messages({
-      'number.base': 'Please proivde a valid port number',
-      'number.port': 'Please provide a valid port number',
-      'any.invalid': 'Please provide a valid port number',
-    }),
-  }),
   wsAPI: Joi.when('ws', {
     is: false,
     then: Joi.array().default([]),
@@ -71,15 +53,6 @@ export const updateAPISchema = Joi.object<
     is: 'nethermind',
     then: Joi.any().strip(),
     otherwise: Joi.boolean(),
-  }),
-  graphqlPort: Joi.when('graphql', {
-    is: false,
-    then: Joi.number().strip(),
-    otherwise: Joi.number().port().invalid(0).messages({
-      'number.base': 'Please proivde a valid port number',
-      'number.port': 'Please provide a valid port number',
-      'any.invalid': 'Please provide a valid port number',
-    }),
   }),
 });
 
