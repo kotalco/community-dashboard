@@ -26,8 +26,9 @@ const ValidatorBeaconNodeTab: React.FC<React.PropsWithChildren<Props>> = ({
   client,
   mutate,
 }) => {
-  const { data: beaconnodes, isLoading } =
-    useInfiniteRequest<BeaconNode>('/ethereum2/nodes');
+  const { data: beaconnodes, isLoading } = useInfiniteRequest<BeaconNode>(
+    '/ethereum2/beaconnodes'
+  );
 
   const activeBeaconnodes = beaconnodes
     .filter(({ client, rest, rpc }) =>
