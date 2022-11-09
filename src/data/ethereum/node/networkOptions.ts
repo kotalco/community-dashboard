@@ -3,7 +3,6 @@ import { EthereumNodeNetwork } from '@enums/Ethereum/EthereumNodeNetwork';
 
 export const networkOptions: SelectOption[] = [
   { label: 'Mainnet', value: EthereumNodeNetwork.mainnet },
-  { label: 'Rinkeby', value: EthereumNodeNetwork.rinkeby },
-  { label: 'Ropsten', value: EthereumNodeNetwork.ropsten },
+  { label: 'Sepolia', value: EthereumNodeNetwork.sepolia },
   { label: 'Goerli', value: EthereumNodeNetwork.goerli },
 ];

@@ -1,7 +1,6 @@
 export enum EthereumNodeNetwork {
   mainnet = 'mainnet',
-  rinkeby = 'rinkeby',
-  ropsten = 'ropsten',
+  sepolia = 'sepolia',
   goerli = 'goerli',
   other = 'other',
 }
