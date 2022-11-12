@@ -9,17 +9,11 @@ interface Props {
 }
 
 function Logging({ wsUrl }: Props) {
-  const { logs, setLogs, timeoutId, intervalId, ws } = useLogs(wsUrl);
-
-  const cancelConnect = () => {
-    setLogs((logs) => [...logs, 'Canceled']);
-    if (timeoutId) clearTimeout(timeoutId);
-    if (intervalId) clearInterval(intervalId);
-  };
+  const { logs, cancelConnect } = useLogs(wsUrl);
 
   return (
     <div className="p-3 sm:p-6">
-      <div className="border border-black h-96 bg-black overflow-y-auto text-white text-sm px-3 overscroll-container">
+      <div className="px-3 overflow-y-auto text-sm text-white bg-black border border-black h-96 overscroll-container">
         <ul>
           {logs.map((log, i) => (
             <li
@@ -38,7 +32,6 @@ function Logging({ wsUrl }: Props) {
                   {` `}
                   <button
                     type="button"
-                    disabled={ws?.readyState === WebSocket.OPEN}
                     onClick={cancelConnect}
                     className={`underline hover:no-underline text-xs text-red-500 disabled:sr-only`}
                   >

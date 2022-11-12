@@ -34,9 +34,9 @@ const EthereumNodeDetailsPage: NextPage<PageWithParams<EthereumNode>> = ({
   data: node,
   mutate,
 }) => {
-  // const { stats, error: statsError } = useStats<EthereumStatsResponse>(
-  //   `/ethereum/nodes/${node.name}/stats`
-  // );
+  const { stats, error: statsError } = useStats<EthereumStatsResponse>(
+    `/ethereum/nodes/${node.name}/stats`
+  );
   const { status } = useStatus(`/ethereum/nodes/${node.name}/status`);
 
   // Update Resources Funtion
@@ -59,29 +59,31 @@ const EthereumNodeDetailsPage: NextPage<PageWithParams<EthereumNode>> = ({
     <Layout>
       <Heading title={node.name} status={status} createdDate={node.createdAt} />
       {/* Stats Cards */}
-      {/* <Cards error={statsError?.error}>
+      <Cards error={statsError?.error}>
         {stats && (
-          <Card
-            title="Blocks"
-            tooltipTitle={`${(
-              (stats.currentBlock / stats.highestBlock) *
-              100
-            ).toFixed(2)}%`}
-          >
-            <div className="flex items-center space-x-1">
-              {stats?.peersCount ? (
-                <RefreshIcon className="w-3 h-3 text-gray-700 animate-spin" />
-              ) : (
-                <ExclamationIcon className="w-4 h-4 text-yellow-500" />
-              )}
-              <span>
-                {new Intl.NumberFormat('en-US').format(stats.currentBlock)}
-              </span>
-            </div>
-          </Card>
+          <>
+            <Card
+              title="Blocks"
+              tooltipTitle={`${(
+                (stats.currentBlock / stats.highestBlock) *
+                100
+              ).toFixed(2)}%`}
+            >
+              <div className="flex items-center space-x-1">
+                {stats?.peersCount ? (
+                  <RefreshIcon className="w-3 h-3 text-gray-700 animate-spin" />
+                ) : (
+                  <ExclamationIcon className="w-4 h-4 text-yellow-500" />
+                )}
+                <span>
+                  {new Intl.NumberFormat('en-US').format(stats.currentBlock)}
+                </span>
+              </div>
+            </Card>
+            <Card title="Peers">{stats?.peersCount}</Card>
+          </>
         )}
-        <Card title="Peers">{stats?.peersCount}</Card>
-      </Cards> */}
+      </Cards>
 
       <div className="bg-white rounded-lg shadow divided-y divided-gray-200">
         <Tabs tabs={tabTitles(node.client)} mutate={mutate}>
